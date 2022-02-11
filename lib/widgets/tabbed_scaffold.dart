@@ -1,4 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+/// The directions for the [SwitchPageIntent] class.
+enum SwitchPageDirections {
+  /// Go to the next page.
+  forwards,
+
+  /// Go to the previous page.
+  backwards,
+}
+
+/// An intent to switch pages.
+class SwitchPageIntent extends Intent {
+  /// Create an instance.
+  const SwitchPageIntent(this.direction);
+
+  /// The direction to switch in.
+  final SwitchPageDirections direction;
+}
+
+/// The intent to change pages in a [TabbedScaffold].
+class GotoPageIntent extends Intent {
+  /// Create an instance.
+  const GotoPageIntent(this.page);
+
+  /// The page number to go to.
+  final int page;
+}
+
+const _pageNumbers = [
+  LogicalKeyboardKey.digit1,
+  LogicalKeyboardKey.digit2,
+  LogicalKeyboardKey.digit3,
+  LogicalKeyboardKey.digit4,
+  LogicalKeyboardKey.digit5,
+  LogicalKeyboardKey.digit6,
+  LogicalKeyboardKey.digit7,
+  LogicalKeyboardKey.digit8,
+  LogicalKeyboardKey.digit9,
+  LogicalKeyboardKey.digit0,
+];
 
 /// A tab for a [TabbedScaffold].
 class TabbedScaffoldTab {
@@ -57,26 +98,80 @@ class _TabbedScaffoldState extends State<TabbedScaffold> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final gotoPageAction = CallbackAction<GotoPageIntent>(
+      onInvoke: (intent) {
+        final page = intent.page;
+        if (page < widget.tabs.length) {
+          setState(() {
+            _index = page;
+          });
+        }
+        return null;
+      },
+    );
+    final switchPageAction = CallbackAction<SwitchPageIntent>(
+      onInvoke: (intent) {
+        final direction = intent.direction;
+        var index = _index;
+        switch (direction) {
+          case SwitchPageDirections.forwards:
+            index += 1;
+            if (index >= widget.tabs.length) {
+              index = 0;
+            }
+            break;
+          case SwitchPageDirections.backwards:
+            index -= 1;
+            if (index < 0) {
+              index = widget.tabs.length - 1;
+            }
+            break;
+        }
+        setState(() => _index = index);
+        return null;
+      },
+    );
     final tab = widget.tabs[_index];
-    return Scaffold(
-      appBar: AppBar(
-        actions: tab.actions,
-        title: Text(tab.title),
+    return Shortcuts(
+      child: Actions(
+        actions: {
+          GotoPageIntent: gotoPageAction,
+          SwitchPageIntent: switchPageAction
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            actions: tab.actions,
+            title: Text(tab.title),
+          ),
+          body: tab.child,
+          floatingActionButton: tab.floatingActionButton,
+          bottomNavigationBar: BottomNavigationBar(
+            items: widget.tabs
+                .map(
+                  (e) => BottomNavigationBarItem(
+                    icon: e.icon,
+                    label: e.title,
+                  ),
+                )
+                .toList(),
+            currentIndex: _index,
+            onTap: (index) => setState(() => _index = index),
+          ),
+        ),
       ),
-      body: tab.child,
-      floatingActionButton: tab.floatingActionButton,
-      bottomNavigationBar: BottomNavigationBar(
-        items: widget.tabs
-            .map(
-              (e) => BottomNavigationBarItem(
-                icon: e.icon,
-                label: e.title,
-              ),
-            )
-            .toList(),
-        currentIndex: _index,
-        onTap: (index) => setState(() => _index = index),
-      ),
+      shortcuts: {
+        for (var i = 0; i < _pageNumbers.length; i++)
+          SingleActivator(_pageNumbers[i], control: true): GotoPageIntent(i),
+        const SingleActivator(
+          LogicalKeyboardKey.tab,
+          control: true,
+        ): const SwitchPageIntent(SwitchPageDirections.forwards),
+        const SingleActivator(
+          LogicalKeyboardKey.tab,
+          control: true,
+          shift: true,
+        ): const SwitchPageIntent(SwitchPageDirections.backwards)
+      },
     );
   }
 }
