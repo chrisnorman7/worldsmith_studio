@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as path;
-import 'package:ziggurat/sound.dart';
 
 import '../../intents.dart';
 import '../../project_context.dart';
@@ -53,23 +51,6 @@ class _ProjectSettingsWidgetState extends State<ProjectSettingsWidget> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             );
-            setState(() {});
-          },
-        ),
-        ListTile(
-          title: const Text('Default Panning Strategy'),
-          subtitle: Text(
-            path.extension(world.soundOptions.defaultPannerStrategy.toString()),
-          ),
-          onTap: () {
-            final soundOptions = world.soundOptions;
-            var index = soundOptions.defaultPannerStrategy.index + 1;
-            if (index >= DefaultPannerStrategy.values.length) {
-              index = 0;
-            }
-            world.soundOptions.defaultPannerStrategy =
-                DefaultPannerStrategy.values[index];
-            widget.projectContext.save();
             setState(() {});
           },
         ),

@@ -9,6 +9,7 @@ import '../../util.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_reverbs.dart';
 import 'project_settings_widget.dart';
+import 'project_sound_settings.dart';
 
 /// A widget for editing its [projectContext].
 class ProjectContextWidget extends StatefulWidget {
@@ -64,6 +65,13 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                 autofocus: widget.projectContext.world.reverbs.isEmpty,
                 child: createIcon,
                 tooltip: 'Add Reverb',
+              ),
+            ),
+            TabbedScaffoldTab(
+              title: 'Sound Settings',
+              icon: const Icon(Icons.speaker_outlined),
+              child: ProjectSoundSettings(
+                projectContext: widget.projectContext,
               ),
             )
           ],
