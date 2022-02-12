@@ -51,7 +51,10 @@ class _GetNumberState extends State<GetNumber> {
     _formKey = GlobalKey<FormState>();
     _textEditingController = TextEditingController(
       text: widget.value.toString(),
-    );
+    )..selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: widget.value.toString().length,
+      );
   }
 
   /// Build a widget.
