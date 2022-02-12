@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as path;
 import 'package:ziggurat/sound.dart';
 
-import '../../intents.dart';
 import '../../project_context.dart';
-import '../../util.dart';
-import '../../widgets/get_number.dart';
+import '../sound/gain_list_tile.dart';
+import '../sound/sound_list_tile.dart';
 
 /// A widget for configuring sound-related settings.
 class ProjectSoundSettings extends StatefulWidget {
@@ -31,13 +27,16 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final soundOptions = world.soundOptions;
+    final menuMoveSound = soundOptions.menuMoveSound;
+    final menuActivateSound = soundOptions.menuActivateSound;
     return ListView(
       children: [
         ListTile(
           autofocus: true,
           title: const Text('Default Panning Strategy'),
           subtitle: Text(
-            path.extension(world.soundOptions.defaultPannerStrategy.toString()),
+            soundOptions.defaultPannerStrategy.name,
           ),
           onTap: () {
             final soundOptions = world.soundOptions;
@@ -51,41 +50,42 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
             setState(() {});
           },
         ),
-        Shortcuts(
-          child: Actions(
-            actions: {
-              IncreaseIntent: CallbackAction<IncreaseIntent>(
-                onInvoke: (intent) =>
-                    defaultGain = world.soundOptions.defaultGain += 0.1,
-              ),
-              DecreaseIntent: CallbackAction<DecreaseIntent>(
-                onInvoke: (intent) => defaultGain = max(
-                  0.1,
-                  world.soundOptions.defaultGain - 0.1,
-                ),
-              )
-            },
-            child: ListTile(
-              title: const Text('Default Gain'),
-              subtitle: Text(world.soundOptions.defaultGain.toString()),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetNumber(
-                  value: world.soundOptions.defaultGain,
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    defaultGain = value;
-                  },
-                  min: 0.0,
-                  title: 'Default Gain',
-                ),
-              ),
-            ),
-          ),
-          shortcuts: const {
-            IncreaseIntent.hotkey: IncreaseIntent(),
-            DecreaseIntent.hotkey: DecreaseIntent()
+        GainListTile(
+          gain: soundOptions.defaultGain,
+          onChange: (value) {
+            soundOptions.defaultGain = value;
+            widget.projectContext.save();
+            setState(() {});
           },
+          title: 'Default Gain',
+        ),
+        SoundListTile(
+          context: context,
+          projectContext: widget.projectContext,
+          value: menuMoveSound,
+          onDone: (value) {
+            soundOptions.menuMoveSound = value;
+            widget.projectContext.save();
+            setState(() {});
+          },
+          assetStore: world.interfaceSoundsAssetStore,
+          defaultGain: soundOptions.defaultGain,
+          nullable: true,
+          title: 'Menu Move Sound',
+        ),
+        SoundListTile(
+          context: context,
+          projectContext: widget.projectContext,
+          value: menuActivateSound,
+          onDone: (value) {
+            soundOptions.menuActivateSound = value;
+            widget.projectContext.save();
+            setState(() {});
+          },
+          assetStore: world.interfaceSoundsAssetStore,
+          nullable: true,
+          title: 'Menu Activate Sound',
+          defaultGain: soundOptions.defaultGain,
         )
       ],
     );

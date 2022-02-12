@@ -75,3 +75,8 @@ void showSnackBar({
     ),
   );
 }
+
+/// Make a printable string from the given [assetReferenceReference].
+String assetString(AssetReferenceReference assetReferenceReference) =>
+    '${assetReferenceReference.comment} '
+    '(${assetReferenceReference.reference.type.name})';
