@@ -34,3 +34,10 @@ String? validatePath({
   }
   return invalidPathMessage;
 }
+
+/// Ensure the given [value] is an integer.
+String? validateInt(
+        {required String? value, String message = 'Invalid number'}) =>
+    value == null || value.isEmpty || int.tryParse(value) == null
+        ? message
+        : null;
