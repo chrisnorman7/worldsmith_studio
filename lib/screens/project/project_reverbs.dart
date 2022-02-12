@@ -34,13 +34,17 @@ class _ProjectReverbsState extends State<ProjectReverbs> {
       itemBuilder: (context, index) {
         final reverbReference = widget.projectContext.world.reverbs[index];
         return ListTile(
+          autofocus: index == 0,
           title: Text(reverbReference.reverbPreset.name),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (context) => EditReverbPreset(
-                projectContext: widget.projectContext,
-                reverbPresetReference: reverbReference),
-          ),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditReverbPreset(
+                  projectContext: widget.projectContext,
+                  reverbPresetReference: reverbReference),
+            );
+            setState(() {});
+          },
         );
       },
       itemCount: widget.projectContext.world.reverbs.length,
