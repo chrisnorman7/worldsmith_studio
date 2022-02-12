@@ -10,6 +10,7 @@ import '../../widgets/tabbed_scaffold.dart';
 import 'project_reverbs.dart';
 import 'project_settings_widget.dart';
 import 'project_sound_settings.dart';
+import 'project_zones.dart';
 
 /// A widget for editing its [projectContext].
 class ProjectContextWidget extends StatefulWidget {
@@ -32,6 +33,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final world = widget.projectContext.world;
     final closeProjectAction = CallbackAction<CloseProjectIntent>(
       onInvoke: (intent) => Navigator.pop(context),
     );
@@ -47,13 +49,32 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                   ProjectSettingsWidget(projectContext: widget.projectContext),
             ),
             TabbedScaffoldTab(
+                title: 'Zones',
+                icon: const Icon(Icons.map_outlined),
+                child: ProjectZones(projectContext: widget.projectContext),
+                floatingActionButton: world.terrains.isEmpty
+                    ? null
+                    : FloatingActionButton(
+                        onPressed: () {
+                          final zone = Zone(
+                            id: newId(),
+                            name: 'Untitled Zone',
+                            boxes: [],
+                            defaultTerrainId: world.terrains.first.id,
+                          );
+                          world.zones.add(zone);
+                          widget.projectContext.save();
+                          setState(() {});
+                        },
+                      )),
+            TabbedScaffoldTab(
               title: 'Reverb Presets',
               icon: const Icon(Icons.room_outlined),
               child: ProjectReverbs(projectContext: widget.projectContext),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
-                  widget.projectContext.world.reverbs.add(
+                  world.reverbs.add(
                     ReverbPresetReference(
                       id: newId(),
                       reverbPreset: reverbPreset,
@@ -62,7 +83,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                   widget.projectContext.save();
                   setState(() {});
                 },
-                autofocus: widget.projectContext.world.reverbs.isEmpty,
+                autofocus: world.reverbs.isEmpty,
                 child: createIcon,
                 tooltip: 'Add Reverb',
               ),
