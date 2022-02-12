@@ -1,6 +1,8 @@
 /// Provides the [GetText] class.
 import 'package:flutter/material.dart';
 
+import 'cancel.dart';
+
 /// A widget for getting text.
 class GetText extends StatefulWidget {
   /// Create an instance.
@@ -67,29 +69,31 @@ class _GetTextState extends State<GetText> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          actions: widget.actions,
-          title: Text(widget.title),
-        ),
-        body: Form(
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                controller: _controller,
-                decoration: InputDecoration(labelText: widget.labelText),
-                onFieldSubmitted: (value) => onSubmit(),
-                validator: widget.validator,
-              )
-            ],
+  Widget build(BuildContext context) => Cancel(
+        child: Scaffold(
+          appBar: AppBar(
+            actions: widget.actions,
+            title: Text(widget.title),
           ),
-          key: _formKey,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: onSubmit,
-          child: widget.icon,
-          tooltip: widget.tooltip,
+          body: Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  autofocus: true,
+                  controller: _controller,
+                  decoration: InputDecoration(labelText: widget.labelText),
+                  onFieldSubmitted: (value) => onSubmit(),
+                  validator: widget.validator,
+                )
+              ],
+            ),
+            key: _formKey,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: onSubmit,
+            child: widget.icon,
+            tooltip: widget.tooltip,
+          ),
         ),
       );
 
