@@ -12,15 +12,6 @@ class CancelIntent extends Intent {
   static const hotkey = SingleActivator(LogicalKeyboardKey.escape);
 }
 
-/// The intent to rename a project.
-class RenameProjectIntent extends Intent {
-  /// Create an instance.
-  const RenameProjectIntent();
-
-  /// The hotkey.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyR, control: true);
-}
-
 /// The intent to create a new project.
 class CreateProjectIntent extends Intent {
   /// Create an instance.
@@ -37,16 +28,6 @@ class OpenProjectIntent extends Intent {
 
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyO, control: true);
-}
-
-/// The open recent project intent.
-class OpenRecentProjectIntent extends Intent {
-  /// Create an instance.
-  const OpenRecentProjectIntent();
-
-  /// The hotkey to use.
-  static const hotkey =
-      SingleActivator(LogicalKeyboardKey.keyO, control: true, shift: true);
 }
 
 /// Close the current project and return to the main menu.
