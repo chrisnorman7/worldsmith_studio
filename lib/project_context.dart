@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
+import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import 'constants.dart';
 
@@ -59,4 +60,29 @@ class ProjectContext {
         assetReference.type,
         encryptionKey: assetReference.encryptionKey,
       );
+
+  /// Delete the given [assetReferenceReference] from the given [assetStore].
+  void deleteAssetReferenceReference(
+      {required AssetStore assetStore,
+      required AssetReferenceReference assetReferenceReference}) {
+    assetStore.assets.remove(assetReferenceReference);
+    save();
+    final reference = getRelativeAssetReference(
+      assetReferenceReference.reference,
+    );
+    switch (reference.type) {
+      case AssetType.file:
+        final file = File(reference.name);
+        if (file.existsSync() == true) {
+          file.deleteSync(recursive: true);
+        }
+        break;
+      case AssetType.collection:
+        final directory = Directory(reference.name);
+        if (directory.existsSync() == true) {
+          directory.deleteSync(recursive: true);
+        }
+        break;
+    }
+  }
 }

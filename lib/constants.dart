@@ -26,3 +26,12 @@ const saveIcon = Icon(
   Icons.save_outlined,
   semanticLabel: 'Save',
 );
+
+/// The icon for deleting things.
+const deleteIcon = Icon(
+  Icons.delete_outline,
+  semanticLabel: 'Delete',
+);
+
+/// The type of a callback that is used for validating a delete operation.
+typedef CanDelete<T> = String? Function(T value);

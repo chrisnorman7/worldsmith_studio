@@ -46,7 +46,7 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
               builder: (context) => EditAssetStore(
                 projectContext: widget.projectContext,
                 assetStore: assetStore,
-                canDelete: (reference) => 'You cannot currently delete assets.',
+                canDelete: (reference) => null,
               ),
             );
             setState(() {});

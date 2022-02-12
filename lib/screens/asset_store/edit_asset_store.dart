@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
+import '../../constants.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
@@ -29,7 +30,7 @@ class EditAssetStore extends StatefulWidget {
   final AssetStore assetStore;
 
   /// The function to call before deleting an asset.
-  final String? Function(AssetReferenceReference reference) canDelete;
+  final CanDelete<AssetReferenceReference> canDelete;
 
   /// Create state for this widget.
   @override
@@ -87,6 +88,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                                   projectContext: widget.projectContext,
                                   assetStore: widget.assetStore,
                                   assetReferenceReference: assetReference,
+                                  canDelete: widget.canDelete,
                                 ),
                               );
                               setState(() {});
