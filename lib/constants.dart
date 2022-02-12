@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:short_uuids/short_uuids.dart';
 
 /// The app name.
@@ -13,3 +14,9 @@ const assetsPath = 'assets';
 
 /// The ID generator.
 const shortUuid = ShortUuid();
+
+/// The new icon.
+const createIcon = Icon(
+  Icons.create_outlined,
+  semanticLabel: 'Create',
+);
