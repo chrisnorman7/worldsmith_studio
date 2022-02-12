@@ -23,6 +23,9 @@ class ProjectContext {
   /// The filename that [world] has been loaded from.
   final File file;
 
+  /// The directory where project files are stored.
+  Directory get directory => file.parent;
+
   /// The world that has been loaded.
   World world;
 
@@ -52,7 +55,7 @@ class ProjectContext {
   /// Convert the given [assetReference] to have a relative filename.
   AssetReference getRelativeAssetReference(AssetReference assetReference) =>
       AssetReference(
-        path.absolute(assetReference.name, path.dirname(file.path)),
+        path.join(directory.path, assetReference.name),
         assetReference.type,
         encryptionKey: assetReference.encryptionKey,
       );

@@ -20,3 +20,9 @@ const createIcon = Icon(
   Icons.create_outlined,
   semanticLabel: 'Create',
 );
+
+/// The save icon to use.
+const saveIcon = Icon(
+  Icons.save_outlined,
+  semanticLabel: 'Save',
+);
