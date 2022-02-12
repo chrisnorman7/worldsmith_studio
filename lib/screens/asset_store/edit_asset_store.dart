@@ -57,7 +57,12 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         return null;
       },
     );
-    final assets = widget.assetStore.assets;
+    final assets = [for (final reference in widget.assetStore.assets) reference]
+      ..sort(
+        (a, b) => a.comment.toString().toLowerCase().compareTo(
+              b.comment.toString().toLowerCase(),
+            ),
+      );
     return Cancel(
       child: Shortcuts(
         child: Actions(
