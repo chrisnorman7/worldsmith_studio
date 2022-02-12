@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,7 @@ class AppPreferences {
   factory AppPreferences.load(SharedPreferences preferences) {
     final data = preferences.getString(_key);
     if (data == null) {
-      return const AppPreferences(recentProjects: []);
+      return AppPreferences(recentProjects: List<String>.empty(growable: true));
     }
     final json = jsonDecode(data) as JsonType;
     return AppPreferences.fromJson(json);
@@ -40,6 +41,10 @@ class AppPreferences {
   Map<String, dynamic> toJson() => _$AppPreferencesToJson(this);
 
   /// Save this instance.
-  void save(SharedPreferences preferences) =>
-      preferences.setString(_key, indentedJsonEncoder.convert(toJson()));
+  void save(SharedPreferences preferences) {
+    recentProjects
+        .removeWhere((element) => File(element).existsSync() == false);
+    final json = indentedJsonEncoder.convert(toJson());
+    preferences.setString(_key, json);
+  }
 }

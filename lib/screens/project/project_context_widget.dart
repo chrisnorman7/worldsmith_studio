@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_reverbs.dart';
@@ -25,18 +26,30 @@ class ProjectContextWidget extends StatefulWidget {
 class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => TabbedScaffold(
-        tabs: [
-          TabbedScaffoldTab(
-            title: 'World Options',
-            icon: const Icon(Icons.map_outlined),
-            child: ProjectSettingsWidget(projectContext: widget.projectContext),
-          ),
-          TabbedScaffoldTab(
-            title: 'Reverb Presets',
-            icon: const Icon(Icons.room_outlined),
-            child: ProjectReverbs(projectContext: widget.projectContext),
-          )
-        ],
-      );
+  Widget build(BuildContext context) {
+    final closeProjectAction = CallbackAction<CloseProjectIntent>(
+      onInvoke: (intent) => Navigator.pop(context),
+    );
+    return Shortcuts(
+      child: Actions(
+        actions: {CloseProjectIntent: closeProjectAction},
+        child: TabbedScaffold(
+          tabs: [
+            TabbedScaffoldTab(
+              title: 'World Options',
+              icon: const Icon(Icons.map_outlined),
+              child:
+                  ProjectSettingsWidget(projectContext: widget.projectContext),
+            ),
+            TabbedScaffoldTab(
+              title: 'Reverb Presets',
+              icon: const Icon(Icons.room_outlined),
+              child: ProjectReverbs(projectContext: widget.projectContext),
+            )
+          ],
+        ),
+      ),
+      shortcuts: const {CloseProjectIntent.hotkey: CloseProjectIntent()},
+    );
+  }
 }

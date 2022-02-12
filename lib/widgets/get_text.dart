@@ -54,7 +54,14 @@ class _GetTextState extends State<GetText> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.text ?? '');
+    _controller = TextEditingController(
+      text: widget.text ?? '',
+    );
+    final textLength = widget.text?.length ?? 0;
+    _controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: textLength,
+    );
     _formKey = GlobalKey<FormState>();
   }
 
