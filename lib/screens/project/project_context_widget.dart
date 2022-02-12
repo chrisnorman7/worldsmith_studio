@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/sound.dart';
 
+import '../../constants.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_reverbs.dart';
 import 'project_settings_widget.dart';
@@ -45,6 +49,22 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               title: 'Reverb Presets',
               icon: const Icon(Icons.room_outlined),
               child: ProjectReverbs(projectContext: widget.projectContext),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
+                  widget.projectContext.world.reverbs.add(
+                    ReverbPresetReference(
+                      id: newId(),
+                      reverbPreset: reverbPreset,
+                    ),
+                  );
+                  widget.projectContext.save();
+                  setState(() {});
+                },
+                autofocus: widget.projectContext.world.reverbs.isEmpty,
+                child: createIcon,
+                tooltip: 'Add Reverb',
+              ),
             )
           ],
         ),
