@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'screens/home_page.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 /// The main app class.
 class MyApp extends StatelessWidget {
