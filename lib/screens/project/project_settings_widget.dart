@@ -34,7 +34,7 @@ class _ProjectSettingsWidgetState extends State<ProjectSettingsWidget> {
       children: [
         ListTile(
           autofocus: true,
-          title: const Text('Rename World'),
+          title: const Text('World Name'),
           subtitle: Text(world.title),
           onTap: () async {
             await pushWidget(
