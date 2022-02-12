@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as path;
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -9,6 +8,7 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import 'add_asset.dart';
+import 'edit_asset_reference.dart';
 
 const _openProjectIntent = OpenProjectIntent();
 
@@ -62,56 +62,68 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         child: Actions(
           actions: {OpenProjectIntent: addAssetAction},
           child: Builder(
-              builder: (context) => Scaffold(
-                    appBar: AppBar(
-                      title: Text('${widget.assetStore.comment}'),
-                    ),
-                    body: assets.isEmpty
-                        ? const CenterText(
-                            text: 'There are no assets in this store.')
-                        : ListView.builder(
-                            itemBuilder: (context, index) {
-                              final assetReference = assets[index];
-                              return Semantics(
-                                child: ListTile(
-                                  autofocus: index == 0,
-                                  title: Text('${assetReference.comment}'),
-                                  subtitle: Text(path.extension(
-                                      assetReference.reference.type.name)),
-                                  onTap: () {},
+            builder: (context) => Scaffold(
+              appBar: AppBar(
+                title: Text('${widget.assetStore.comment}'),
+              ),
+              body: assets.isEmpty
+                  ? const CenterText(text: 'There are no assets in this store.')
+                  : ListView.builder(
+                      itemBuilder: (context, index) {
+                        final assetReference = assets[index];
+                        return Semantics(
+                          child: ListTile(
+                            autofocus: index == 0,
+                            title: Text('${assetReference.comment}'),
+                            subtitle: Text(
+                              assetReference.reference.type.name,
+                            ),
+                            onTap: () async {
+                              _playSound?.destroy();
+                              _playSound = null;
+                              await pushWidget(
+                                context: context,
+                                builder: (context) => EditAssetReference(
+                                  projectContext: widget.projectContext,
+                                  assetStore: widget.assetStore,
+                                  assetReferenceReference: assetReference,
                                 ),
-                                onDidGainAccessibilityFocus: () {
-                                  final oldSound = _playSound;
-                                  _playSound = null;
-                                  oldSound?.destroy();
-                                  _playSound = widget
-                                      .projectContext.game.interfaceSounds
-                                      .playSound(
-                                    widget.projectContext
-                                        .getRelativeAssetReference(
-                                      assetReference.reference,
-                                    ),
-                                    keepAlive: true,
-                                  );
-                                },
-                                onDidLoseAccessibilityFocus: () {
-                                  _playSound?.destroy();
-                                  _playSound = null;
-                                },
                               );
+                              setState(() {});
                             },
-                            itemCount: assets.length,
                           ),
-                    floatingActionButton: FloatingActionButton(
-                      autofocus: assets.isEmpty,
-                      child: const Icon(Icons.add_outlined),
-                      onPressed: Actions.handler<OpenProjectIntent>(
-                        context,
-                        _openProjectIntent,
-                      ),
-                      tooltip: 'Add Asset',
+                          onDidGainAccessibilityFocus: () {
+                            final oldSound = _playSound;
+                            _playSound = null;
+                            oldSound?.destroy();
+                            _playSound = widget
+                                .projectContext.game.interfaceSounds
+                                .playSound(
+                              widget.projectContext.getRelativeAssetReference(
+                                assetReference.reference,
+                              ),
+                              keepAlive: true,
+                            );
+                          },
+                          onDidLoseAccessibilityFocus: () {
+                            _playSound?.destroy();
+                            _playSound = null;
+                          },
+                        );
+                      },
+                      itemCount: assets.length,
                     ),
-                  )),
+              floatingActionButton: FloatingActionButton(
+                autofocus: assets.isEmpty,
+                child: const Icon(Icons.add_outlined),
+                onPressed: Actions.handler<OpenProjectIntent>(
+                  context,
+                  _openProjectIntent,
+                ),
+                tooltip: 'Add Asset',
+              ),
+            ),
+          ),
         ),
         shortcuts: const {OpenProjectIntent.hotkey: _openProjectIntent},
       ),
