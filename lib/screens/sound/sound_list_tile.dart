@@ -5,23 +5,50 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../widgets/play_sound_semantics.dart';
 import 'edit_sound.dart';
 
 /// A list tile to display and edit a [Sound] instance.
-class SoundListTile extends ListTile {
+class SoundListTile extends StatelessWidget {
   /// Create an instance.
-  SoundListTile({
-    required BuildContext context,
-    required ProjectContext projectContext,
-    required Sound? value,
-    required ValueChanged<Sound?> onDone,
-    required AssetStore assetStore,
-    required double defaultGain,
-    bool nullable = false,
-    String title = 'Sound',
-    bool autofocus = false,
+  const SoundListTile({
+    required this.projectContext,
+    required this.value,
+    required this.onDone,
+    required this.assetStore,
+    required this.defaultGain,
+    this.nullable = false,
+    this.title = 'Sound',
+    this.autofocus = false,
     Key? key,
-  }) : super(
+  }) : super(key: key);
+
+  /// The project context to use.
+  final ProjectContext projectContext;
+
+  /// The current sound.
+  final Sound? value;
+
+  /// The function to be called when a sound is selected.
+  final ValueChanged<Sound?> onDone;
+
+  /// The asset store to get assets from.
+  final AssetStore assetStore;
+
+  /// The default gain to use.
+  final double defaultGain;
+
+  /// Whether or not the resulting sound can be `null`.
+  final bool nullable;
+
+  /// The title of the resulting `ListTile].
+  final String title;
+
+  /// The `autofocus` value for the resulting [ListTile].
+  final bool autofocus;
+  @override
+  Widget build(BuildContext context) => PlaySoundSemantics(
+        child: ListTile(
           autofocus: autofocus,
           key: key,
           title: Text(title),
@@ -31,9 +58,9 @@ class SoundListTile extends ListTile {
                 : '${assetString(
                     getAssetReferenceReference(
                       assets: assetStore.assets,
-                      id: value.id,
+                      id: value?.id,
                     )!,
-                  )} (${value.gain})',
+                  )} (${value?.gain})',
           ),
           isThreeLine: nullable,
           trailing: nullable
@@ -66,5 +93,16 @@ class SoundListTile extends ListTile {
             );
             onDone(sound);
           },
-        );
+        ),
+        soundChannel: projectContext.game.interfaceSounds,
+        assetReference: value == null
+            ? null
+            : projectContext.getRelativeAssetReference(
+                getAssetReferenceReference(
+                  assets: assetStore.assets,
+                  id: value?.id,
+                )!
+                    .reference,
+              ),
+      );
 }

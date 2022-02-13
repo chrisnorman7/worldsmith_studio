@@ -129,7 +129,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
           TabbedScaffoldTab(
             title: 'Reverb Presets',
-            icon: const Icon(Icons.room_outlined),
+            icon: const Icon(Icons.crop_outlined),
             child: ProjectReverbs(projectContext: widget.projectContext),
             floatingActionButton: FloatingActionButton(
               onPressed: () {

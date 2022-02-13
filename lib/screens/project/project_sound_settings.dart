@@ -60,7 +60,6 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           title: 'Default Gain',
         ),
         SoundListTile(
-          context: context,
           projectContext: widget.projectContext,
           value: menuMoveSound,
           onDone: (value) {
@@ -74,7 +73,6 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           title: 'Menu Move Sound',
         ),
         SoundListTile(
-          context: context,
           projectContext: widget.projectContext,
           value: menuActivateSound,
           onDone: (value) {
