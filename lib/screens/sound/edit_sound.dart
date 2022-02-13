@@ -6,6 +6,7 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/play_sound_semantics.dart';
 import '../asset_store/select_asset.dart';
 import 'gain_list_tile.dart';
 
@@ -60,26 +61,40 @@ class _EditSoundState extends State<EditSound> {
         ),
         body: ListView(
           children: [
-            ListTile(
-              autofocus: true,
-              title: const Text('Asset'),
-              subtitle: Text(
-                asset == null ? 'Not set' : assetString(asset),
-              ),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => SelectAsset(
-                  projectContext: widget.projectContext,
-                  assetStore: widget.assetStore,
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    widget.sound.id = value!.variableName;
-                    widget.projectContext.save();
-                    setState(() {});
+            PlaySoundSemantics(
+              child: Builder(
+                builder: (context) => ListTile(
+                  autofocus: true,
+                  title: const Text('Asset'),
+                  subtitle: Text(
+                    asset == null ? 'Not set' : assetString(asset),
+                  ),
+                  onTap: () {
+                    PlaySoundSemantics.of(context)!.stop();
+                    pushWidget(
+                      context: context,
+                      builder: (context) => SelectAsset(
+                        projectContext: widget.projectContext,
+                        assetStore: widget.assetStore,
+                        onDone: (value) {
+                          Navigator.pop(context);
+                          widget.sound.id = value!.variableName;
+                          widget.projectContext.save();
+                          setState(() {});
+                        },
+                        currentId: widget.sound.id,
+                      ),
+                    );
                   },
-                  currentId: widget.sound.id,
                 ),
               ),
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: asset == null
+                  ? null
+                  : widget.projectContext.getRelativeAssetReference(
+                      asset.reference,
+                    ),
+              gain: gain,
             ),
             GainListTile(
               gain: gain,

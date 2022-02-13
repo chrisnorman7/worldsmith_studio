@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
@@ -8,8 +7,7 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/get_text.dart';
-import '../../widgets/play_sound_semantics.dart';
-import '../asset_store/select_asset.dart';
+import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the given [walkingOptions].
 class EditWalkingOptions extends StatefulWidget {
@@ -42,11 +40,6 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     final sound = widget.walkingOptions.sound;
-    final terrainAssets = widget.projectContext.world.terrainAssets;
-    final assetReference = getAssetReferenceReference(
-      assets: terrainAssets,
-      id: sound.id,
-    )!;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -106,57 +99,17 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
                 ),
               ),
             ),
-            PlaySoundSemantics(
-              child: Builder(
-                builder: (context) => ListTile(
-                  title: const Text('Sound'),
-                  subtitle: Text(
-                    assetString(assetReference),
-                  ),
-                  onTap: () {
-                    PlaySoundSemantics.of(context)!.stop();
-                    pushWidget(
-                      context: context,
-                      builder: (context) => SelectAsset(
-                        projectContext: widget.projectContext,
-                        assetStore: world.terrainAssetStore,
-                        onDone: (value) {
-                          Navigator.pop(context);
-                          sound.id = value!.variableName;
-                          widget.projectContext.save();
-                          setState(() {});
-                        },
-                        currentId: sound.id,
-                        title: 'Footstep Sound',
-                      ),
-                    );
-                  },
-                ),
-              ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: widget.projectContext.getRelativeAssetReference(
-                assetReference.reference,
-              ),
-              gain: sound.gain,
-            ),
-            ListTile(
-              title: const Text('Gain'),
-              subtitle: Text('${sound.gain}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetNumber(
-                  value: sound.gain,
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    sound.gain = value;
-                    widget.projectContext.save();
-                    setState(() {});
-                  },
-                  labelText: 'Gain',
-                  min: 0.001,
-                  title: 'Footstep Gain',
-                ),
-              ),
+            SoundListTile(
+              projectContext: widget.projectContext,
+              value: sound,
+              onDone: (value) {
+                Navigator.pop(context);
+                widget.projectContext.save();
+                setState(() {});
+              },
+              assetStore: world.terrainAssetStore,
+              defaultGain: world.soundOptions.defaultGain,
+              title: 'Terrain Sound',
             ),
             ListTile(
               title: const Text('Minimum Joystick Value'),
