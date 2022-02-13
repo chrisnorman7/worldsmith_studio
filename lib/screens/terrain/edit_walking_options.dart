@@ -43,11 +43,26 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
     final world = widget.projectContext.world;
     final sound = widget.walkingOptions.sound;
     final terrainAssets = widget.projectContext.world.terrainAssets;
-    final assetReference =
-        getAssetReferenceReference(assets: terrainAssets, id: sound.id)!;
+    final assetReference = getAssetReferenceReference(
+      assets: terrainAssets,
+      id: sound.id,
+    )!;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            TextButton(
+              onPressed: () {
+                widget.walkingOptions
+                  ..distance = 0.1
+                  ..interval = 1000
+                  ..joystickValue = 0.1;
+                widget.projectContext.save();
+                setState(() {});
+              },
+              child: const Text('Restore Defaults'),
+            )
+          ],
           title: Text(widget.title),
         ),
         body: ListView(
