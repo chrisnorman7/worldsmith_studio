@@ -280,15 +280,33 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
                 title: const Text('Edit Reverb Preset'),
                 actions: [
                   IconButton(
-                    onPressed: () => confirm(
-                      context: context,
-                      yesCallback: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        widget.projectContext.world.reverbs
-                            .remove(widget.reverbPresetReference);
-                      },
-                    ),
+                    onPressed: () {
+                      final id = widget.reverbPresetReference.id;
+                      for (final zone in widget.projectContext.world.zones) {
+                        for (final box in zone.boxes) {
+                          if (box.reverbId == id) {
+                            return showSnackBar(
+                              context: context,
+                              message: 'You cannot delete the reverb for the '
+                                  '${box.name} of the ${zone.name} zone.',
+                            );
+                          }
+                        }
+                      }
+                      confirm(
+                        context: context,
+                        yesCallback: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          widget.projectContext.world.reverbs.removeWhere(
+                            (element) => element.id == id,
+                          );
+                        },
+                        message: 'Are you sure you want to delete the '
+                            '${preset.name} reverb?',
+                        title: 'Confirm Delete',
+                      );
+                    },
                     icon: const Icon(Icons.delete_rounded),
                     tooltip: 'Delete Reverb Preset',
                   ),
