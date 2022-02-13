@@ -71,6 +71,7 @@ class SoundListTile extends StatelessWidget {
                 )
               : null,
           onTap: () async {
+            PlaySoundSemantics.of(context)?.stop();
             if (assetStore.assets.isEmpty) {
               return showSnackBar(
                 context: context,
@@ -104,5 +105,6 @@ class SoundListTile extends StatelessWidget {
                 )!
                     .reference,
               ),
+        gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
       );
 }
