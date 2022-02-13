@@ -53,7 +53,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
         tabs: [
           TabbedScaffoldTab(
             title: 'World Options',
-            icon: const Icon(Icons.map_outlined),
+            icon: const Icon(Icons.settings_outlined),
             child: ProjectSettingsWidget(projectContext: widget.projectContext),
           ),
           TabbedScaffoldTab(
@@ -81,7 +81,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
           TabbedScaffoldTab(
             title: 'Terrain Types',
-            icon: const Icon(Icons.carpenter_outlined),
+            icon: const Icon(Icons.add_location_outlined),
             child: ProjectTerrains(
               projectContext: widget.projectContext,
             ),
