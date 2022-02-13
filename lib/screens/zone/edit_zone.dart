@@ -7,6 +7,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/center_text.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/tabbed_scaffold.dart';
@@ -194,20 +195,34 @@ class _EditZoneState extends State<EditZone> {
               terrains: widget.projectContext.world.terrains,
             ),
           ),
-        )
+        ),
+        CheckboxListTile(
+          value: widget.zone.topDownMap,
+          onChanged: (value) {
+            widget.zone.topDownMap = !widget.zone.topDownMap;
+            widget.projectContext.save();
+            setState(() {});
+          },
+          title: const Text('Top-down Map Visible'),
+        ),
       ],
     );
   }
 
   /// Get the boxes list view.
-  ListView get boxesListView => ListView.builder(
-        itemBuilder: (context, index) {
-          final box = widget.zone.boxes[index];
-          return ListTile(
-            title: Text(box.name),
-            onTap: () {},
-          );
-        },
-        itemCount: widget.zone.boxes.length,
-      );
+  Widget get boxesListView {
+    if (widget.zone.boxes.isEmpty) {
+      return const CenterText(text: 'There are currently no boxes.');
+    }
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        final box = widget.zone.boxes[index];
+        return ListTile(
+          title: Text(box.name),
+          onTap: () {},
+        );
+      },
+      itemCount: widget.zone.boxes.length,
+    );
+  }
 }
