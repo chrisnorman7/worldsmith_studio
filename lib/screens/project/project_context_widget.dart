@@ -11,6 +11,7 @@ import 'project_asset_stores.dart';
 import 'project_reverbs.dart';
 import 'project_settings_widget.dart';
 import 'project_sound_settings.dart';
+import 'project_terrains.dart';
 import 'project_zones.dart';
 
 /// A widget for editing its [projectContext].
@@ -73,6 +74,46 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                       widget.projectContext.save();
                       setState(() {});
                     },
+                  ),
+          ),
+          TabbedScaffoldTab(
+            title: 'Terrain Types',
+            icon: const Icon(Icons.carpenter_outlined),
+            child: ProjectTerrains(
+              projectContext: widget.projectContext,
+            ),
+            floatingActionButton: world.terrainAssets.isEmpty
+                ? null
+                : FloatingActionButton(
+                    onPressed: () {
+                      final sound = world.terrainAssets.first;
+                      final terrain = Terrain(
+                        id: newId(),
+                        name: sound.comment ?? sound.reference.name,
+                        slowWalk: WalkingOptions(
+                          interval: 1000,
+                          distance: 0.1,
+                          sound: Sound(
+                              id: sound.variableName,
+                              gain: world.soundOptions.defaultGain),
+                          joystickValue: 0.1,
+                        ),
+                        fastWalk: WalkingOptions(
+                          interval: 500,
+                          distance: 0.1,
+                          sound: Sound(
+                              id: sound.variableName,
+                              gain: world.soundOptions.defaultGain),
+                          joystickValue: 0.5,
+                        ),
+                      );
+                      world.terrains.add(terrain);
+                      widget.projectContext.save();
+                      setState(() {});
+                    },
+                    autofocus: world.terrains.isEmpty,
+                    child: createIcon,
+                    tooltip: 'Add Terrain',
                   ),
           ),
           TabbedScaffoldTab(
