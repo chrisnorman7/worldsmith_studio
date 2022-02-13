@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../constants.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
@@ -41,6 +42,46 @@ class _EditTerrainState extends State<EditTerrain> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                final world = widget.projectContext.world;
+                final id = widget.terrain.id;
+                String? message;
+                for (final zone in world.zones) {
+                  if (zone.defaultTerrainId == id) {
+                    message = 'You cannot delete the default terrain of the '
+                        '${zone.name} zone.';
+                  } else {
+                    for (final box in zone.boxes) {
+                      if (box.terrainId == id) {
+                        message = 'You cannot delete the terrain for the '
+                            '${box.name} box of the ${zone.name} zone.';
+                      }
+                    }
+                  }
+                }
+                if (message != null) {
+                  return showSnackBar(context: context, message: message);
+                }
+                confirm(
+                  context: context,
+                  message: 'Are you sure you want to delete the '
+                      '${widget.terrain.name} terrain?',
+                  title: 'Confirm Delete',
+                  yesCallback: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    world.terrains.removeWhere(
+                      (element) => element.id == id,
+                    );
+                    widget.projectContext.save();
+                  },
+                );
+              },
+              child: deleteIcon,
+            )
+          ],
           title: Text(terrain.name),
         ),
         body: ListView(
