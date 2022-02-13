@@ -146,8 +146,9 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     }
     final preset = widget.reverbPresetReference.reverbPreset;
     final testAssetReference = getAssetReferenceReference(
-        assets: widget.projectContext.world.interfaceSoundsAssets,
-        id: widget.reverbPresetReference.sound?.id);
+      assets: widget.projectContext.world.interfaceSoundsAssets,
+      id: widget.reverbPresetReference.sound?.id,
+    );
     final listTiles = [
       ListTile(
         title: const Text('Test asset'),
