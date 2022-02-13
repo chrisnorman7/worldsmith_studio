@@ -7,6 +7,7 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/play_sound_semantics.dart';
+import 'edit_walking_options.dart';
 
 /// A widget for editing the given [terrain].
 class EditTerrain extends StatefulWidget {
@@ -65,8 +66,41 @@ class _EditTerrainState extends State<EditTerrain> {
             ),
             PlaySoundSemantics(
               child: ListTile(
+                title: const Text('Slow Walk Settings'),
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => EditWalkingOptions(
+                      projectContext: widget.projectContext,
+                      walkingOptions: terrain.slowWalk,
+                      title: 'Slow Walk Settings',
+                    ),
+                  );
+                  setState(() {});
+                },
+              ),
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: widget.projectContext.getRelativeAssetReference(
+                getAssetReferenceReference(
+                        assets: terrainAssets, id: slowWalkSound.id)!
+                    .reference,
+              ),
+              gain: slowWalkSound.gain,
+            ),
+            PlaySoundSemantics(
+              child: ListTile(
                 title: const Text('Fast Walk Settings'),
-                onTap: () {},
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => EditWalkingOptions(
+                      projectContext: widget.projectContext,
+                      walkingOptions: terrain.fastWalk,
+                      title: 'Fast Walk Settings',
+                    ),
+                  );
+                  setState(() {});
+                },
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: widget.projectContext.getRelativeAssetReference(
@@ -77,19 +111,6 @@ class _EditTerrainState extends State<EditTerrain> {
                     .reference,
               ),
               gain: fastWalkSound.gain,
-            ),
-            PlaySoundSemantics(
-              child: ListTile(
-                title: const Text('Slow Walk Settings'),
-                onTap: () {},
-              ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: widget.projectContext.getRelativeAssetReference(
-                getAssetReferenceReference(
-                        assets: terrainAssets, id: slowWalkSound.id)!
-                    .reference,
-              ),
-              gain: slowWalkSound.gain,
             ),
           ],
         ),

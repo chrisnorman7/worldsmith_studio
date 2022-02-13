@@ -30,6 +30,7 @@ class _ProjectTerrainsState extends State<ProjectTerrains> {
       itemBuilder: (context, index) {
         final terrain = world.terrains[index];
         return ListTile(
+          autofocus: index == 0,
           title: Text(terrain.name),
           onTap: () async {
             await pushWidget(
