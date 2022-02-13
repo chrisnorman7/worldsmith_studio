@@ -14,6 +14,7 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/get_text.dart';
+import '../asset_store/select_asset.dart';
 import 'reverb_setting.dart';
 
 const _synthizerReverbUrl =
@@ -144,15 +145,40 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
       resetReverb();
     }
     final preset = widget.reverbPresetReference.reverbPreset;
+    final testAssetReference = getAssetReferenceReference(
+        assets: widget.projectContext.world.interfaceSoundsAssets,
+        id: widget.reverbPresetReference.sound?.id);
     final listTiles = [
       ListTile(
         title: const Text('Test asset'),
-        subtitle: Text(getAssetReferenceReference(
-              assets: widget.projectContext.world.interfaceSoundsAssets,
-              id: widget.reverbPresetReference.sound?.id,
-            )?.comment ??
-            'Not set'),
-        onTap: () {},
+        subtitle: Text(
+          testAssetReference == null
+              ? 'Not set'
+              : assetString(testAssetReference),
+        ),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectAsset(
+            projectContext: widget.projectContext,
+            assetStore: widget.projectContext.world.interfaceSoundsAssetStore,
+            onDone: (value) {
+              Navigator.pop(context);
+              if (value == null) {
+                widget.reverbPresetReference.sound = null;
+              } else {
+                widget.reverbPresetReference.sound = Sound(
+                  id: value.variableName,
+                  gain: widget.projectContext.world.soundOptions.defaultGain,
+                );
+              }
+              widget.projectContext.save();
+              setState(play);
+            },
+            currentId: widget.reverbPresetReference.sound?.id,
+            nullable: true,
+            title: 'Reverb Test Sound',
+          ),
+        ),
       ),
       ListTile(
         autofocus: true,
@@ -370,10 +396,13 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     final sound = widget.reverbPresetReference.sound;
     if (sound != null) {
       resetReverb();
-      _playSound = playSound(
-        channel: channel,
-        sound: sound,
+      final reference = getAssetReferenceReference(
         assets: widget.projectContext.world.interfaceSoundsAssets,
+        id: sound.id,
+      );
+      _playSound = channel.playSound(
+        widget.projectContext.getRelativeAssetReference(reference!.reference),
+        gain: sound.gain,
         keepAlive: true,
         looping: true,
       );
