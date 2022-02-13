@@ -94,8 +94,9 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                           interval: 1000,
                           distance: 0.1,
                           sound: Sound(
-                              id: sound.variableName,
-                              gain: world.soundOptions.defaultGain),
+                            id: sound.variableName,
+                            gain: world.soundOptions.defaultGain,
+                          ),
                           joystickValue: 0.1,
                         ),
                         fastWalk: WalkingOptions(
