@@ -17,6 +17,7 @@ class EditSound extends StatefulWidget {
     required this.assetStore,
     required this.sound,
     this.title = 'Edit Sound',
+    this.actions = const [],
     Key? key,
   }) : super(key: key);
 
@@ -31,6 +32,9 @@ class EditSound extends StatefulWidget {
 
   /// The title of the resulting scaffold.
   final String title;
+
+  /// The actions for the resulting app bar.
+  final List<Widget> actions;
 
   /// Create state for this widget.
   @override
@@ -51,6 +55,7 @@ class _EditSoundState extends State<EditSound> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: widget.actions,
           title: Text(widget.title),
         ),
         body: ListView(
