@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/center_text.dart';
+import '../zone/edit_zone.dart';
 
 /// A widget for displaying and editing [Zone] instances.
 class ProjectZones extends StatefulWidget {
@@ -36,6 +38,16 @@ class _ProjectZonesState extends State<ProjectZones> {
           autofocus: index == 0,
           title: Text(zone.name),
           subtitle: Text('Boxes: ${zone.boxes.length}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditZone(
+                projectContext: widget.projectContext,
+                zone: zone,
+              ),
+            );
+            setState(() {});
+          },
         );
       },
       itemCount: world.zones.length,

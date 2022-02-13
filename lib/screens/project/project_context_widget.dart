@@ -74,6 +74,9 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                       widget.projectContext.save();
                       setState(() {});
                     },
+                    autofocus: world.zones.isEmpty,
+                    child: createIcon,
+                    tooltip: 'Add Zone',
                   ),
           ),
           TabbedScaffoldTab(
