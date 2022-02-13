@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ziggurat/sound.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/play_sound_semantics.dart';
 
 /// A widget for selecting an asset reference.
 class SelectAsset extends StatefulWidget {
@@ -44,8 +44,6 @@ class SelectAsset extends StatefulWidget {
 
 /// State for [SelectAsset].
 class _SelectAssetState extends State<SelectAsset> {
-  PlaySound? _playSound;
-
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -69,51 +67,26 @@ class _SelectAssetState extends State<SelectAsset> {
             if (asset == null) {
               return ListTile(
                 title: const Text('Clear'),
-                onTap: () {
-                  _playSound?.destroy();
-                  _playSound = null;
-                  widget.onDone(null);
-                },
+                onTap: () => widget.onDone(null),
               );
             }
-            return Semantics(
+            return PlaySoundSemantics(
               child: ListTile(
                 autofocus: asset == selectedAsset,
                 title: Text(assetString(asset)),
-                selected: asset.variableName == widget.currentId,
-                onTap: () {
-                  _playSound?.destroy();
-                  _playSound = null;
-                  widget.onDone(asset);
-                },
+                selected: asset == selectedAsset,
+                onTap: () => widget.onDone(asset),
               ),
-              onDidGainAccessibilityFocus: () {
-                _playSound?.destroy();
-                _playSound =
-                    widget.projectContext.game.interfaceSounds.playSound(
-                  widget.projectContext.getRelativeAssetReference(
-                    asset.reference,
-                  ),
-                  keepAlive: true,
-                );
-              },
-              onDidLoseAccessibilityFocus: () {
-                _playSound?.destroy();
-                _playSound = null;
-              },
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: widget.projectContext.getRelativeAssetReference(
+                asset.reference,
+              ),
+              gain: widget.projectContext.world.soundOptions.defaultGain,
             );
           },
           itemCount: assets.length,
         ),
       ),
     );
-  }
-
-  /// Stop the playing sound.
-  @override
-  void dispose() {
-    super.dispose();
-    _playSound?.destroy();
-    _playSound = null;
   }
 }

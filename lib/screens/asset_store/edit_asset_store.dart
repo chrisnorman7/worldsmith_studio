@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ziggurat/sound.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../constants.dart';
@@ -8,6 +7,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
+import '../../widgets/play_sound_semantics.dart';
 import 'add_asset.dart';
 import 'edit_asset_reference.dart';
 
@@ -39,8 +39,6 @@ class EditAssetStore extends StatefulWidget {
 
 /// State for [EditAssetStore].
 class _EditAssetStoreState extends State<EditAssetStore> {
-  PlaySound? _playSound;
-
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -77,45 +75,37 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                   : ListView.builder(
                       itemBuilder: (context, index) {
                         final assetReference = assets[index];
-                        return Semantics(
-                          child: ListTile(
-                            autofocus: index == 0,
-                            title: Text('${assetReference.comment}'),
-                            subtitle: Text(
-                              assetReference.reference.type.name,
-                            ),
-                            onTap: () async {
-                              _playSound?.destroy();
-                              _playSound = null;
-                              await pushWidget(
-                                context: context,
-                                builder: (context) => EditAssetReference(
-                                  projectContext: widget.projectContext,
-                                  assetStore: widget.assetStore,
-                                  assetReferenceReference: assetReference,
-                                  canDelete: widget.canDelete,
-                                ),
-                              );
-                              setState(() {});
-                            },
-                          ),
-                          onDidGainAccessibilityFocus: () {
-                            final oldSound = _playSound;
-                            _playSound = null;
-                            oldSound?.destroy();
-                            _playSound = widget
-                                .projectContext.game.interfaceSounds
-                                .playSound(
+                        return PlaySoundSemantics(
+                          child: Builder(
+                              builder: (context) => ListTile(
+                                    autofocus: index == 0,
+                                    title: Text('${assetReference.comment}'),
+                                    subtitle: Text(
+                                      assetReference.reference.type.name,
+                                    ),
+                                    onTap: () async {
+                                      PlaySoundSemantics.of(context)!.stop();
+                                      await pushWidget(
+                                        context: context,
+                                        builder: (context) =>
+                                            EditAssetReference(
+                                          projectContext: widget.projectContext,
+                                          assetStore: widget.assetStore,
+                                          assetReferenceReference:
+                                              assetReference,
+                                          canDelete: widget.canDelete,
+                                        ),
+                                      );
+                                      setState(() {});
+                                    },
+                                  )),
+                          soundChannel:
+                              widget.projectContext.game.interfaceSounds,
+                          assetReference:
                               widget.projectContext.getRelativeAssetReference(
-                                assetReference.reference,
-                              ),
-                              keepAlive: true,
-                            );
-                          },
-                          onDidLoseAccessibilityFocus: () {
-                            _playSound?.destroy();
-                            _playSound = null;
-                          },
+                            assetReference.reference,
+                          ),
+                          looping: true,
                         );
                       },
                       itemCount: assets.length,
@@ -135,12 +125,5 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         shortcuts: const {OpenProjectIntent.hotkey: _openProjectIntent},
       ),
     );
-  }
-
-  /// Dispose of any playing sound.
-  @override
-  void dispose() {
-    super.dispose();
-    _playSound?.destroy();
   }
 }

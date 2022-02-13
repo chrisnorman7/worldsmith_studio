@@ -14,6 +14,10 @@ class PlaySoundSemantics extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Find an instance by the given [context].
+  static PlaySoundSemanticsState? of(BuildContext context) =>
+      context.findAncestorStateOfType<PlaySoundSemanticsState>();
+
   /// The widget below this one in the tree.
   final Widget child;
 
@@ -33,39 +37,45 @@ class PlaySoundSemantics extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _PlaySoundSemanticsState createState() => _PlaySoundSemanticsState();
+  PlaySoundSemanticsState createState() => PlaySoundSemanticsState();
 }
 
 /// State for [PlaySoundSemantics].
-class _PlaySoundSemanticsState extends State<PlaySoundSemantics> {
+class PlaySoundSemanticsState extends State<PlaySoundSemantics> {
   PlaySound? _playSound;
 
   /// Build a widget.
   @override
   Widget build(BuildContext context) => Semantics(
         child: widget.child,
-        onDidGainAccessibilityFocus: () {
-          _playSound?.destroy();
-          final assetReference = widget.assetReference;
-          if (assetReference != null) {
-            _playSound = widget.soundChannel.playSound(
-              assetReference,
-              gain: widget.gain,
-              keepAlive: true,
-              looping: widget.looping,
-            );
-          }
-        },
-        onDidLoseAccessibilityFocus: () {
-          _playSound?.destroy();
-          _playSound = null;
-        },
+        onDidGainAccessibilityFocus: play,
+        onDidLoseAccessibilityFocus: stop,
       );
 
   /// Dispose of the play sound instance.
   @override
   void dispose() {
     super.dispose();
+    _playSound?.destroy();
+    _playSound = null;
+  }
+
+  /// Play the sound.
+  void play() {
+    _playSound?.destroy();
+    final assetReference = widget.assetReference;
+    if (assetReference != null) {
+      _playSound = widget.soundChannel.playSound(
+        assetReference,
+        gain: widget.gain,
+        keepAlive: true,
+        looping: widget.looping,
+      );
+    }
+  }
+
+  /// Stop the current sound.
+  void stop() {
     _playSound?.destroy();
     _playSound = null;
   }
