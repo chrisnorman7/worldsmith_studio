@@ -144,7 +144,7 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
               ),
             ),
             ListTile(
-              title: const Text('Min Joystick Value'),
+              title: const Text('Minimum Joystick Value'),
               subtitle: Text('${widget.walkingOptions.joystickValue}'),
               onTap: () => pushWidget(
                 context: context,
