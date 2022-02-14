@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -9,9 +8,8 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/get_text.dart';
-import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/tabbed_scaffold.dart';
-import '../sound/edit_sound.dart';
+import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 
 /// A widget for editing its [zone].
@@ -87,10 +85,6 @@ class _EditZoneState extends State<EditZone> {
   ListView get settingsListView {
     final world = widget.projectContext.world;
     final music = widget.zone.music;
-    final assetReference = getAssetReferenceReference(
-      assets: world.musicAssets,
-      id: music?.id,
-    );
     return ListView(
       children: [
         ListTile(
@@ -113,66 +107,20 @@ class _EditZoneState extends State<EditZone> {
             ),
           ),
         ),
-        PlaySoundSemantics(
-          child: Builder(
-            builder: (context) => ListTile(
-              title: const Text('Music'),
-              subtitle: Text(
-                assetReference == null
-                    ? 'Not Set'
-                    : assetString(assetReference),
-              ),
-              onTap: () async {
-                if (world.musicAssets.isEmpty) {
-                  return showSnackBar(
-                    context: context,
-                    message: 'There are no music assets to use.',
-                  );
-                }
-                PlaySoundSemantics.of(context)!.stop();
-                final Sound sound;
-                if (music == null) {
-                  sound = Sound(
-                    id: world.musicAssets.first.variableName,
-                    gain: world.soundOptions.defaultGain,
-                  );
-                  widget.zone.music = sound;
-                  widget.projectContext.save();
-                } else {
-                  sound = music;
-                }
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditSound(
-                    projectContext: widget.projectContext,
-                    assetStore: world.musicAssetStore,
-                    sound: sound,
-                    title: 'Zone Music',
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          widget.zone.music = null;
-                          widget.projectContext.save();
-                          setState(() {});
-                        },
-                        child: deleteIcon,
-                      )
-                    ],
-                  ),
-                );
-                setState(() {});
-              },
-            ),
-          ),
-          soundChannel: widget.projectContext.game.interfaceSounds,
-          assetReference: assetReference == null
-              ? null
-              : widget.projectContext.getRelativeAssetReference(
-                  assetReference.reference,
-                ),
-          gain: music?.gain ?? world.soundOptions.defaultGain,
+        SoundListTile(
+          projectContext: widget.projectContext,
+          value: music,
+          onDone: (value) {
+            Navigator.pop(context);
+            widget.zone.music = value;
+            widget.projectContext.save();
+            setState(() {});
+          },
+          assetStore: world.musicAssetStore,
+          defaultGain: world.soundOptions.defaultGain,
           looping: true,
+          nullable: true,
+          title: 'Zone Music',
         ),
         ListTile(
           title: const Text('Default Terrain'),
