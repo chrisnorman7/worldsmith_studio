@@ -17,8 +17,9 @@ class EditSound extends StatefulWidget {
     required this.projectContext,
     required this.assetStore,
     required this.sound,
+    required this.onChanged,
+    this.nullable = false,
     this.title = 'Edit Sound',
-    this.actions = const [],
     Key? key,
   }) : super(key: key);
 
@@ -31,11 +32,14 @@ class EditSound extends StatefulWidget {
   /// The sound to work with.
   final Sound sound;
 
+  /// The function to be called when the value changes.
+  final ValueChanged<Sound?> onChanged;
+
+  /// Whether or not the sound can be set to `null`.
+  final bool nullable;
+
   /// The title of the resulting scaffold.
   final String title;
-
-  /// The actions for the resulting app bar.
-  final List<Widget> actions;
 
   /// Create state for this widget.
   @override
@@ -56,7 +60,19 @@ class _EditSoundState extends State<EditSound> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
-          actions: widget.actions,
+          actions: [
+            if (widget.nullable)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onChanged(null);
+                },
+                child: const Icon(
+                  Icons.clear_all_outlined,
+                  semanticLabel: 'Clear Sound',
+                ),
+              )
+          ],
           title: Text(widget.title),
         ),
         body: ListView(
@@ -79,7 +95,7 @@ class _EditSoundState extends State<EditSound> {
                         onDone: (value) {
                           Navigator.pop(context);
                           widget.sound.id = value!.variableName;
-                          widget.projectContext.save();
+                          saveSound();
                           setState(() {});
                         },
                         currentId: widget.sound.id,
@@ -100,7 +116,7 @@ class _EditSoundState extends State<EditSound> {
               gain: gain,
               onChange: (value) {
                 widget.sound.gain = value;
-                widget.projectContext.save();
+                saveSound();
                 setState(() {});
               },
             )
@@ -108,5 +124,10 @@ class _EditSoundState extends State<EditSound> {
         ),
       ),
     );
+  }
+
+  /// Save the sound.
+  void saveSound() {
+    widget.onChanged(widget.sound);
   }
 }

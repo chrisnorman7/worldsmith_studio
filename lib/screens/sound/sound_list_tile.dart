@@ -6,6 +6,7 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../asset_store/select_asset.dart';
 import 'edit_sound.dart';
 
 /// A list tile to display and edit a [Sound] instance.
@@ -67,14 +68,6 @@ class SoundListTile extends StatelessWidget {
                       )!,
                     )} (${value?.gain})',
             ),
-            isThreeLine: nullable,
-            trailing: nullable
-                ? IconButton(
-                    onPressed: () => onDone(null),
-                    icon: const Icon(Icons.clear_outlined),
-                    tooltip: 'Clear',
-                  )
-                : null,
             onTap: () async {
               PlaySoundSemantics.of(context)!.stop();
               if (assetStore.assets.isEmpty) {
@@ -83,21 +76,27 @@ class SoundListTile extends StatelessWidget {
                   message: 'There are no valid assets.',
                 );
               }
-              final sound = value ??
-                  Sound(
-                    id: assetStore.assets.first.variableName,
-                    gain: defaultGain,
-                  );
-              await pushWidget(
-                context: context,
-                builder: (context) => EditSound(
-                  projectContext: projectContext,
-                  assetStore: assetStore,
-                  sound: sound,
-                  title: title,
-                ),
-              );
-              onDone(sound);
+              final v = value;
+              if (v == null) {
+                pushWidget(
+                  context: context,
+                  builder: (context) => SelectAsset(
+                    projectContext: projectContext,
+                    assetStore: assetStore,
+                    onDone: (value) {
+                      Navigator.pop(context);
+                      final sound = Sound(
+                        id: value!.variableName,
+                        gain: projectContext.world.soundOptions.defaultGain,
+                      );
+                      onDone(sound);
+                      pushEditSoundWidget(context: context, sound: sound);
+                    },
+                  ),
+                );
+              } else {
+                pushEditSoundWidget(context: context, sound: v);
+              }
             },
           ),
         ),
@@ -113,5 +112,22 @@ class SoundListTile extends StatelessWidget {
               ),
         gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
         looping: looping,
+      );
+
+  /// Push the [EditSound] widget.
+  Future<void> pushEditSoundWidget({
+    required BuildContext context,
+    required Sound sound,
+  }) async =>
+      pushWidget(
+        context: context,
+        builder: (context) => EditSound(
+          projectContext: projectContext,
+          assetStore: assetStore,
+          sound: sound,
+          onChanged: onDone,
+          nullable: nullable,
+          title: title,
+        ),
       );
 }

@@ -111,7 +111,6 @@ class _EditZoneState extends State<EditZone> {
           projectContext: widget.projectContext,
           value: music,
           onDone: (value) {
-            Navigator.pop(context);
             widget.zone.music = value;
             widget.projectContext.save();
             setState(() {});
