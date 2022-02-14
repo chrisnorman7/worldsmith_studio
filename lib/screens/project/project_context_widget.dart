@@ -41,10 +41,14 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
     );
     return Shortcuts(
       child: Actions(
-        actions: {CloseProjectIntent: closeProjectAction},
-        child: getTabbedScaffold(world),
+        actions: {
+          CloseProjectIntent: closeProjectAction,
+        },
+        child: Builder(builder: (context) => getTabbedScaffold(world)),
       ),
-      shortcuts: const {CloseProjectIntent.hotkey: CloseProjectIntent()},
+      shortcuts: const {
+        CloseProjectIntent.hotkey: CloseProjectIntent(),
+      },
     );
   }
 
