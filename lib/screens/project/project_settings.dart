@@ -9,9 +9,9 @@ import '../../validators.dart';
 import '../../widgets/get_text.dart';
 
 /// A widget for customising the main settings for the given [projectContext].
-class ProjectSettingsWidget extends StatefulWidget {
+class ProjectSettings extends StatefulWidget {
   /// Create an instance.
-  const ProjectSettingsWidget({
+  const ProjectSettings({
     required this.projectContext,
     Key? key,
   }) : super(key: key);
@@ -21,11 +21,11 @@ class ProjectSettingsWidget extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectSettingsWidgetState createState() => _ProjectSettingsWidgetState();
+  _ProjectSettingsState createState() => _ProjectSettingsState();
 }
 
-/// State for [ProjectSettingsWidget].
-class _ProjectSettingsWidgetState extends State<ProjectSettingsWidget> {
+/// State for [ProjectSettings].
+class _ProjectSettingsState extends State<ProjectSettings> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import '../../util.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_asset_stores.dart';
 import 'project_reverbs.dart';
-import 'project_settings_widget.dart';
+import 'project_settings.dart';
 import 'project_sound_settings.dart';
 import 'project_terrains.dart';
 import 'project_zones.dart';
@@ -54,7 +54,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'World Options',
             icon: const Icon(Icons.settings_outlined),
-            child: ProjectSettingsWidget(projectContext: widget.projectContext),
+            child: ProjectSettings(projectContext: widget.projectContext),
           ),
           TabbedScaffoldTab(
             title: 'Zones',
