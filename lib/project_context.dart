@@ -85,4 +85,19 @@ class ProjectContext {
         break;
     }
   }
+
+  /// Play the menu activate sound.
+  void playActivateSound() {
+    final activateSound = world.menuActivateSound;
+    if (activateSound != null) {
+      final sound = getRelativeAssetReference(
+        activateSound,
+      );
+      game.interfaceSounds.playSound(
+        sound,
+        gain: world.soundOptions.menuActivateSound?.gain ??
+            world.soundOptions.defaultGain,
+      );
+    }
+  }
 }
