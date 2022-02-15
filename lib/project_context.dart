@@ -100,4 +100,15 @@ class ProjectContext {
       );
     }
   }
+
+  /// Get the proper menu move sound.
+  /// The value from the [world] will be passed through
+  /// [getRelativeAssetReference].
+  AssetReference? get menuMoveSound {
+    final reference = world.menuMoveSound;
+    if (reference != null) {
+      return getRelativeAssetReference(reference);
+    }
+    return null;
+  }
 }
