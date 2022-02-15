@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/get_text.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/text_list_tile.dart';
+import '../sound/fade_time_list_tile.dart';
 import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 
@@ -59,9 +59,6 @@ class _EditMainMenuState extends State<EditMainMenu> {
       }
       _musicPlayer = musicPlayer;
     }
-    final moveSound = widget.projectContext.menuMoveSound;
-    final moveSoundGain = world.soundOptions.menuMoveSound?.gain ?? defaultGain;
-    final channel = widget.projectContext.game.interfaceSounds;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -69,39 +66,26 @@ class _EditMainMenuState extends State<EditMainMenu> {
         ),
         body: ListView(
           children: [
-            PlaySoundSemantics(
-              child: ListTile(
-                autofocus: true,
-                title: const Text('Title'),
-                subtitle: Text(options.title),
-                onTap: () {
-                  widget.projectContext.playActivateSound();
-                  pushWidget(
-                    context: context,
-                    builder: (context) => GetText(
-                      onDone: (value) {
-                        options.title = value;
-                        save(context: context);
-                      },
-                      labelText: 'Title',
-                      text: options.title,
-                      title: 'Main Menu Title',
-                      validator: (value) => validateNonEmptyValue(value: value),
-                    ),
-                  );
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.title,
+                onChanged: (value) {
+                  options.title = value;
+                  save();
                 },
+                header: 'Title',
+                autofocus: true,
+                title: 'Menu Title',
+                validator: (value) => validateNonEmptyValue(value: value),
               ),
-              soundChannel: channel,
-              assetReference: moveSound,
-              gain: moveSoundGain,
             ),
-            PlaySoundSemantics(
+            getPlaySoundSemantics(
               child: SoundListTile(
                 projectContext: widget.projectContext,
                 value: options.music,
                 onDone: (value) {
                   options.music = value;
-                  save(context: context, pop: false);
+                  save();
                 },
                 assetStore: world.musicAssetStore,
                 defaultGain: defaultGain,
@@ -109,9 +93,70 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 title: 'Main Menu Music',
                 playSound: false,
               ),
-              soundChannel: channel,
-              assetReference: moveSound,
-              gain: moveSoundGain,
+            ),
+            getPlaySoundSemantics(
+              child: FadeTimeListTile(
+                value: options.fadeTime,
+                onChanged: (value) {
+                  options.fadeTime = value;
+                  save();
+                },
+              ),
+            ),
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.newGameTitle,
+                onChanged: (value) {
+                  options.newGameTitle = value;
+                  save();
+                },
+                header: 'New Game Title',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            ),
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.savedGameTitle,
+                onChanged: (value) {
+                  options.savedGameTitle = value;
+                  save();
+                },
+                header: 'Play Saved Game Title',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            ),
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.creditsTitle,
+                onChanged: (value) {
+                  options.creditsTitle = value;
+                  save();
+                },
+                header: 'Credits Title',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            ),
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.exitTitle,
+                onChanged: (value) {
+                  options.exitTitle = value;
+                  save();
+                },
+                header: 'Exit Title',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            ),
+            getPlaySoundSemantics(
+              child: TextListTile(
+                value: options.exitMessage,
+                onChanged: (value) {
+                  options.exitMessage = value;
+                  save();
+                },
+                header: 'Exit Message',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
             )
           ],
         ),
@@ -127,11 +172,18 @@ class _EditMainMenuState extends State<EditMainMenu> {
     _musicPlayer = null;
   }
 
-  void save({required BuildContext context, bool pop = true}) {
-    if (pop) {
-      Navigator.pop(context);
-    }
+  void save() {
     widget.projectContext.save();
     setState(() {});
   }
+
+  /// Get a play sound semantics widget.
+  PlaySoundSemantics getPlaySoundSemantics({required Widget child}) =>
+      PlaySoundSemantics(
+        child: child,
+        soundChannel: widget.projectContext.game.interfaceSounds,
+        assetReference: widget.projectContext.menuMoveSound,
+        gain: widget.projectContext.world.soundOptions.menuMoveSound?.gain ??
+            widget.projectContext.world.soundOptions.defaultGain,
+      );
 }
