@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../widgets/cancel.dart';
+
 /// A widget for selecting a terrain.
 class SelectTerrain extends StatelessWidget {
   /// Create an instance.
@@ -26,22 +28,24 @@ class SelectTerrain extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            final terrain = terrains[index];
-            final selected = terrain.id == currentTerrainId;
-            return ListTile(
-              autofocus: selected,
-              title: Text(terrain.name),
-              onTap: () => onDone(terrain),
-              selected: selected,
-            );
-          },
-          itemCount: terrains.length,
+  Widget build(BuildContext context) => Cancel(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+          ),
+          body: ListView.builder(
+            itemBuilder: (context, index) {
+              final terrain = terrains[index];
+              final selected = terrain.id == currentTerrainId;
+              return ListTile(
+                autofocus: selected,
+                title: Text(terrain.name),
+                onTap: () => onDone(terrain),
+                selected: selected,
+              );
+            },
+            itemCount: terrains.length,
+          ),
         ),
       );
 }
