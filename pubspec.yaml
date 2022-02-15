@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dart_synthizer: ^0.7.7
   file_picker: ^4.3.3
+  filesize: ^2.0.1
   flutter:
     sdk: flutter
   json_annotation: ^4.4.0

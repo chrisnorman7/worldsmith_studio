@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
+import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../constants.dart';
@@ -75,36 +79,60 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                   : ListView.builder(
                       itemBuilder: (context, index) {
                         final assetReference = assets[index];
+                        final relativeAssetReference =
+                            widget.projectContext.getRelativeAssetReference(
+                          assetReference.reference,
+                        );
+                        final String assetSize;
+                        switch (assetReference.reference.type) {
+                          case AssetType.file:
+                            assetSize = filesize(
+                              relativeAssetReference
+                                  .getFile(widget.projectContext.game.random)
+                                  .statSync()
+                                  .size,
+                            );
+                            break;
+                          case AssetType.collection:
+                            final directory = Directory(
+                              relativeAssetReference.name,
+                            );
+                            final fileSizes = [
+                              for (final file
+                                  in directory.listSync().whereType<File>())
+                                file.statSync().size
+                            ];
+                            assetSize = filesize(
+                              fileSizes.reduce(
+                                (value, element) => value + element,
+                              ),
+                            );
+                            break;
+                        }
                         return PlaySoundSemantics(
                           child: Builder(
-                              builder: (context) => ListTile(
-                                    autofocus: index == 0,
-                                    title: Text('${assetReference.comment}'),
-                                    subtitle: Text(
-                                      assetReference.reference.type.name,
-                                    ),
-                                    onTap: () async {
-                                      PlaySoundSemantics.of(context)!.stop();
-                                      await pushWidget(
-                                        context: context,
-                                        builder: (context) =>
-                                            EditAssetReference(
-                                          projectContext: widget.projectContext,
-                                          assetStore: widget.assetStore,
-                                          assetReferenceReference:
-                                              assetReference,
-                                          canDelete: widget.canDelete,
-                                        ),
-                                      );
-                                      setState(() {});
-                                    },
-                                  )),
+                            builder: (context) => ListTile(
+                              autofocus: index == 0,
+                              title: Text(assetString(assetReference)),
+                              subtitle: Text(assetSize),
+                              onTap: () async {
+                                PlaySoundSemantics.of(context)!.stop();
+                                await pushWidget(
+                                  context: context,
+                                  builder: (context) => EditAssetReference(
+                                    projectContext: widget.projectContext,
+                                    assetStore: widget.assetStore,
+                                    assetReferenceReference: assetReference,
+                                    canDelete: widget.canDelete,
+                                  ),
+                                );
+                                setState(() {});
+                              },
+                            ),
+                          ),
                           soundChannel:
                               widget.projectContext.game.interfaceSounds,
-                          assetReference:
-                              widget.projectContext.getRelativeAssetReference(
-                            assetReference.reference,
-                          ),
+                          assetReference: relativeAssetReference,
                           looping: true,
                         );
                       },
