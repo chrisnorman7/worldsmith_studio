@@ -28,10 +28,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
-    final moveSound = world.menuMoveSound;
-    final sound = moveSound == null
-        ? null
-        : widget.projectContext.getRelativeAssetReference(moveSound);
+    final moveSound = widget.projectContext.menuMoveSound;
     final channel = widget.projectContext.game.interfaceSounds;
     return ListView(
       children: [
@@ -51,7 +48,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
             },
           ),
           soundChannel: channel,
-          assetReference: sound,
+          assetReference: moveSound,
           gain: world.soundOptions.menuMoveSound?.gain ?? defaultGain,
         ),
         PlaySoundSemantics(
@@ -62,7 +59,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
             },
           ),
           soundChannel: channel,
-          assetReference: sound,
+          assetReference: moveSound,
           gain: world.creditsMenuOptions.music?.gain ?? defaultGain,
         ),
         PlaySoundSemantics(
@@ -73,7 +70,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
             },
           ),
           soundChannel: channel,
-          assetReference: sound,
+          assetReference: moveSound,
           gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
         )
       ],

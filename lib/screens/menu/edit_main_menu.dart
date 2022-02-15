@@ -59,10 +59,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
       }
       _musicPlayer = musicPlayer;
     }
-    var moveSound = world.menuMoveSound;
-    if (moveSound != null) {
-      moveSound = widget.projectContext.getRelativeAssetReference(moveSound);
-    }
+    final moveSound = widget.projectContext.menuMoveSound;
     final moveSoundGain = world.soundOptions.menuMoveSound?.gain ?? defaultGain;
     final channel = widget.projectContext.game.interfaceSounds;
     return Cancel(
