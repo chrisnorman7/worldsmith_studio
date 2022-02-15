@@ -27,12 +27,9 @@ class _ProjectMenusState extends State<ProjectMenus> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    final defaultGain = world.soundOptions.defaultGain;
-    final moveSound = widget.projectContext.menuMoveSound;
-    final channel = widget.projectContext.game.interfaceSounds;
     return ListView(
       children: [
-        PlaySoundSemantics(
+        getPlaySoundSemantics(
           child: ListTile(
             autofocus: true,
             title: Text(world.mainMenuOptions.title),
@@ -47,33 +44,36 @@ class _ProjectMenusState extends State<ProjectMenus> {
               setState(() {});
             },
           ),
-          soundChannel: channel,
-          assetReference: moveSound,
-          gain: world.soundOptions.menuMoveSound?.gain ?? defaultGain,
         ),
-        PlaySoundSemantics(
+        getPlaySoundSemantics(
           child: ListTile(
             title: Text(world.creditsMenuOptions.title),
             onTap: () {
               widget.projectContext.playActivateSound();
             },
           ),
-          soundChannel: channel,
-          assetReference: moveSound,
-          gain: world.creditsMenuOptions.music?.gain ?? defaultGain,
         ),
-        PlaySoundSemantics(
+        getPlaySoundSemantics(
           child: ListTile(
             title: Text(world.pauseMenuOptions.title),
             onTap: () {
               widget.projectContext.playActivateSound();
             },
           ),
-          soundChannel: channel,
-          assetReference: moveSound,
-          gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
         )
       ],
+    );
+  }
+
+  /// Get a play sound semantics widget.
+  PlaySoundSemantics getPlaySoundSemantics({required Widget child}) {
+    final world = widget.projectContext.world;
+    return PlaySoundSemantics(
+      child: child,
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: widget.projectContext.menuMoveSound,
+      gain:
+          world.pauseMenuOptions.music?.gain ?? world.soundOptions.defaultGain,
     );
   }
 }
