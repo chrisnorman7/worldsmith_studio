@@ -215,6 +215,7 @@ class _HomePageState extends State<HomePage> {
     required File file,
     World? world,
   }) async {
+    final filename = file.path;
     final projectContext = ProjectContext(
       game: game,
       file: file,
@@ -224,8 +225,12 @@ class _HomePageState extends State<HomePage> {
       projectContext.save();
     }
     final prefs = await SharedPreferences.getInstance();
-    preferences.recentProjects.remove(file.path);
-    preferences.recentProjects.add(file.path);
+    preferences.recentProjects.removeWhere((element) => element == filename);
+    if (preferences.recentProjects.isEmpty) {
+      preferences.recentProjects.add(filename);
+    } else {
+      preferences.recentProjects.insert(0, filename);
+    }
     preferences.save(prefs);
     await pushWidget(
       context: context,
