@@ -22,6 +22,7 @@ class SoundListTile extends StatelessWidget {
     this.nullable = false,
     this.title = 'Sound',
     this.autofocus = false,
+    this.playSound = true,
     Key? key,
   }) : super(key: key);
 
@@ -51,55 +52,62 @@ class SoundListTile extends StatelessWidget {
 
   /// The `autofocus` value for the resulting [ListTile].
   final bool autofocus;
+
+  /// Whether or not the sound should play when the [ListTile] is focused.
+  final bool playSound;
+
   @override
-  Widget build(BuildContext context) => PlaySoundSemantics(
-        child: Builder(
-          builder: (context) => ListTile(
-            autofocus: autofocus,
-            key: key,
-            title: Text(title),
-            subtitle: Text(
-              value == null
-                  ? 'Not set'
-                  : '${assetString(
-                      getAssetReferenceReference(
-                        assets: assetStore.assets,
-                        id: value?.id,
-                      )!,
-                    )} (${value?.gain})',
-            ),
-            onTap: () async {
-              PlaySoundSemantics.of(context)!.stop();
-              if (assetStore.assets.isEmpty) {
-                return showSnackBar(
-                  context: context,
-                  message: 'There are no valid assets.',
-                );
-              }
-              final v = value;
-              if (v == null) {
-                pushWidget(
-                  context: context,
-                  builder: (context) => SelectAsset(
-                    projectContext: projectContext,
-                    assetStore: assetStore,
-                    onDone: (value) {
-                      Navigator.pop(context);
-                      final sound = Sound(
-                        id: value!.variableName,
-                        gain: projectContext.world.soundOptions.defaultGain,
-                      );
-                      onDone(sound);
-                      pushEditSoundWidget(context: context, sound: sound);
-                    },
-                  ),
-                );
-              } else {
-                pushEditSoundWidget(context: context, sound: v);
-              }
-            },
-          ),
+  Widget build(BuildContext context) {
+    final builder = Builder(
+      builder: (context) => ListTile(
+        autofocus: autofocus,
+        key: key,
+        title: Text(title),
+        subtitle: Text(
+          value == null
+              ? 'Not set'
+              : '${assetString(
+                  getAssetReferenceReference(
+                    assets: assetStore.assets,
+                    id: value?.id,
+                  )!,
+                )} (${value?.gain})',
         ),
+        onTap: () async {
+          PlaySoundSemantics.of(context)!.stop();
+          if (assetStore.assets.isEmpty) {
+            return showSnackBar(
+              context: context,
+              message: 'There are no valid assets.',
+            );
+          }
+          final v = value;
+          if (v == null) {
+            pushWidget(
+              context: context,
+              builder: (context) => SelectAsset(
+                projectContext: projectContext,
+                assetStore: assetStore,
+                onDone: (value) {
+                  Navigator.pop(context);
+                  final sound = Sound(
+                    id: value!.variableName,
+                    gain: projectContext.world.soundOptions.defaultGain,
+                  );
+                  onDone(sound);
+                  pushEditSoundWidget(context: context, sound: sound);
+                },
+              ),
+            );
+          } else {
+            pushEditSoundWidget(context: context, sound: v);
+          }
+        },
+      ),
+    );
+    if (playSound) {
+      return PlaySoundSemantics(
+        child: builder,
         soundChannel: projectContext.game.interfaceSounds,
         assetReference: value == null
             ? null
@@ -113,6 +121,10 @@ class SoundListTile extends StatelessWidget {
         gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
         looping: looping,
       );
+    } else {
+      return builder;
+    }
+  }
 
   /// Push the [EditSound] widget.
   Future<void> pushEditSoundWidget({
