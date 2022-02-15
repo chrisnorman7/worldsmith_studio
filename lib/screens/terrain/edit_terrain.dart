@@ -5,9 +5,10 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../constants.dart';
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/get_text.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/text_list_tile.dart';
 import 'edit_walking_options.dart';
 
 /// A widget for editing the given [terrain].
@@ -86,24 +87,16 @@ class _EditTerrainState extends State<EditTerrain> {
         ),
         body: ListView(
           children: [
-            ListTile(
+            TextListTile(
+              value: terrain.name,
+              onChanged: (value) {
+                terrain.name = value;
+                widget.projectContext.save();
+                setState(() {});
+              },
+              header: 'Name',
               autofocus: true,
-              title: const Text('Name'),
-              subtitle: Text(terrain.name),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    terrain.name = value;
-                    widget.projectContext.save();
-                    setState(() {});
-                  },
-                  labelText: 'Terrain Name',
-                  text: terrain.name,
-                  title: 'Rename Terrain',
-                ),
-              ),
+              validator: (value) => validateNonEmptyValue(value: value),
             ),
             PlaySoundSemantics(
               child: ListTile(

@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../intents.dart';
 import '../../project_context.dart';
-import '../../util.dart';
 import '../../validators.dart';
-import '../../widgets/get_text.dart';
+import '../../widgets/text_list_tile.dart';
 
 /// A widget for customising the main settings for the given [projectContext].
 class ProjectSettings extends StatefulWidget {
@@ -32,27 +31,16 @@ class _ProjectSettingsState extends State<ProjectSettings> {
     final world = widget.projectContext.world;
     return ListView(
       children: [
-        ListTile(
-          autofocus: true,
-          title: const Text('World Name'),
-          subtitle: Text(world.title),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => GetText(
-                onDone: (value) {
-                  Navigator.pop(context);
-                  world.title = value;
-                  widget.projectContext.save();
-                },
-                labelText: 'World Name',
-                text: world.title,
-                title: 'Rename World',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
-            );
+        TextListTile(
+          value: world.title,
+          onChanged: (value) {
+            world.title = value;
+            widget.projectContext.save();
             setState(() {});
           },
+          header: 'Title',
+          autofocus: true,
+          validator: (value) => validateNonEmptyValue(value: value),
         ),
         Shortcuts(
           child: Actions(
@@ -68,22 +56,13 @@ class _ProjectSettingsState extends State<ProjectSettings> {
                 ),
               )
             },
-            child: ListTile(
-              title: const Text('Frames Per Second'),
-              subtitle: Text(world.globalOptions.framesPerSecond.toString()),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    framesPerSecond = int.parse(value);
-                  },
-                  labelText: 'FPS',
-                  text: world.globalOptions.framesPerSecond.toString(),
-                  title: 'Frames Per Second',
-                  validator: (value) => validateInt(value: value),
-                ),
-              ),
+            child: TextListTile(
+              value: world.globalOptions.framesPerSecond.toString(),
+              onChanged: (value) {
+                framesPerSecond = int.parse(value);
+              },
+              header: 'Frames Per Second',
+              validator: (value) => validateInt(value: value),
             ),
           ),
           shortcuts: const {

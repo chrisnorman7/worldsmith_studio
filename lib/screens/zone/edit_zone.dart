@@ -7,8 +7,8 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
-import '../../widgets/get_text.dart';
 import '../../widgets/tabbed_scaffold.dart';
+import '../../widgets/text_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 
@@ -87,26 +87,16 @@ class _EditZoneState extends State<EditZone> {
     final music = widget.zone.music;
     return ListView(
       children: [
-        ListTile(
-          autofocus: true,
-          title: const Text('Name'),
-          subtitle: Text(widget.zone.name),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (context) => GetText(
-              onDone: (value) {
-                Navigator.pop(context);
-                widget.zone.name = value;
-                widget.projectContext.save();
-                setState(() {});
-              },
-              labelText: 'Name',
-              text: widget.zone.name,
-              title: 'Rename Zone',
-              validator: (value) => validateNonEmptyValue(value: value),
-            ),
-          ),
-        ),
+        TextListTile(
+            value: widget.zone.name,
+            onChanged: (value) {
+              widget.zone.name = value;
+              widget.projectContext.save();
+              setState(() {});
+            },
+            header: 'Name',
+            autofocus: true,
+            validator: (value) => validateNonEmptyValue(value: value)),
         SoundListTile(
           projectContext: widget.projectContext,
           value: music,

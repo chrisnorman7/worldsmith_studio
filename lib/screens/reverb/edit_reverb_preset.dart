@@ -13,7 +13,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
-import '../../widgets/get_text.dart';
+import '../../widgets/text_list_tile.dart';
 import '../asset_store/select_asset.dart';
 import 'reverb_setting.dart';
 
@@ -181,23 +181,14 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
           ),
         ),
       ),
-      ListTile(
+      TextListTile(
+        value: preset.name,
+        onChanged: (value) {
+          setReverbValue(name: value);
+        },
+        header: 'Name',
         autofocus: true,
-        title: const Text('Name'),
-        subtitle: Text(preset.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (context) => GetText(
-            onDone: (value) {
-              Navigator.pop(context);
-              setReverbValue(name: value);
-            },
-            labelText: 'Name',
-            text: widget.reverbPresetReference.reverbPreset.name,
-            title: 'Edit Reverb Name',
-            validator: (value) => validateNonEmptyValue(value: value),
-          ),
-        ),
+        validator: (value) => validateNonEmptyValue(value: value),
       ),
       getSettingTile(
         context: context,

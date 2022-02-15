@@ -6,7 +6,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
-import '../../widgets/get_text.dart';
+import '../../widgets/text_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the given [walkingOptions].
@@ -80,24 +80,15 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
                 ),
               ),
             ),
-            ListTile(
-              title: const Text('Milliseconds Between Steps'),
-              subtitle: Text('${widget.walkingOptions.interval}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    widget.walkingOptions.interval = int.parse(value);
-                    widget.projectContext.save();
-                    setState(() {});
-                  },
-                  labelText: 'Interval',
-                  text: widget.walkingOptions.interval.toString(),
-                  title: 'Step Interval',
-                  validator: (value) => validateInt(value: value),
-                ),
-              ),
+            TextListTile(
+              value: widget.walkingOptions.interval.toString(),
+              onChanged: (value) {
+                widget.walkingOptions.interval = int.parse(value);
+                widget.projectContext.save();
+                setState(() {});
+              },
+              header: 'Milliseconds Between Steps',
+              validator: (value) => validateInt(value: value),
             ),
             SoundListTile(
               projectContext: widget.projectContext,

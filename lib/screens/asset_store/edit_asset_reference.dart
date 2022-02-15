@@ -6,7 +6,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/get_text.dart';
+import '../../widgets/text_list_tile.dart';
 
 /// A widget for editing an asset reference.
 class EditAssetReference extends StatefulWidget {
@@ -79,31 +79,23 @@ class _EditAssetReferenceState extends State<EditAssetReference> {
         ),
         body: ListView(
           children: [
-            ListTile(
+            TextListTile(
               autofocus: true,
-              title: const Text('Comment'),
-              subtitle: Text('${reference.comment}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    widget.assetStore.assets.remove(reference!);
-                    final newReference = AssetReferenceReference(
-                      variableName: reference.variableName,
-                      reference: reference.reference,
-                      comment: value,
-                    );
-                    widget.assetStore.assets.add(newReference);
-                    widget.projectContext.save();
-                    setState(() => _assetReferenceReference = newReference);
-                  },
-                  labelText: 'Comment',
-                  text: reference?.comment ?? '',
-                  title: 'Asset Comment',
-                  validator: (value) => validateNonEmptyValue(value: value),
-                ),
-              ),
+              header: 'Comment',
+              value: reference.comment ?? 'Comment Me!',
+              title: 'Comment',
+              onChanged: (value) {
+                widget.assetStore.assets.remove(reference!);
+                final newReference = AssetReferenceReference(
+                  variableName: reference.variableName,
+                  reference: reference.reference,
+                  comment: value,
+                );
+                widget.assetStore.assets.add(newReference);
+                widget.projectContext.save();
+                setState(() => _assetReferenceReference = newReference);
+              },
+              validator: (value) => validateNonEmptyValue(value: value),
             ),
             ListTile(
               title: const Text('Filename'),
