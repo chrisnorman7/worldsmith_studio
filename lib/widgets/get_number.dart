@@ -11,6 +11,7 @@ class GetNumber extends StatefulWidget {
     required this.onDone,
     this.min,
     this.max,
+    this.actions = const [],
     this.title = 'Enter Value',
     this.labelText = 'New value',
     Key? key,
@@ -21,6 +22,9 @@ class GetNumber extends StatefulWidget {
 
   /// What to do with the resulting number.
   final ValueChanged<double> onDone;
+
+  /// The actions for the resulting [AppBar].
+  final List<Widget> actions;
 
   /// The title for the resulting scaffold.
   final String title;
@@ -62,6 +66,7 @@ class _GetNumberState extends State<GetNumber> {
   Widget build(BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
+            actions: widget.actions,
             title: Text(widget.title),
           ),
           body: Form(
