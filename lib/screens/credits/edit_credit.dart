@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/text_list_tile.dart';
@@ -34,19 +36,33 @@ class _EditCreditState extends State<EditCredit> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final url = widget.credit.url;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
           actions: [
             ElevatedButton(
-              onPressed: () {
-                world.credits.removeWhere(
-                  (element) => element.id == widget.credit.id,
-                );
-                widget.projectContext.save();
-                Navigator.pop(context);
-              },
+              onPressed: () => confirm(
+                context: context,
+                message: 'Are you sure you want to delete this credit?',
+                title: 'Delete Credit',
+                yesCallback: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  world.credits.removeWhere(
+                    (element) => element.id == widget.credit.id,
+                  );
+                  widget.projectContext.save();
+                },
+              ),
               child: deleteIcon,
+            ),
+            ElevatedButton(
+              onPressed: url == null ? null : () => launch(url),
+              child: const Icon(
+                Icons.open_in_browser_outlined,
+                semanticLabel: 'Test URL',
+              ),
             )
           ],
           title: const Text('Edit Credit'),

@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:worldsmith/util.dart';
-import 'package:worldsmith/worldsmith.dart';
-import 'package:ziggurat/ziggurat.dart';
 
-import '../../constants.dart';
 import '../../project_context.dart';
-import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/text_list_tile.dart';
-import '../credits/edit_credit.dart';
 import '../sound/fade_time_list_tile.dart';
 import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 
-/// A widget for editing the credits menu.
-class EditCreditsMenu extends StatefulWidget {
+/// A menu for editing pause men options.
+class EditPauseMenu extends StatefulWidget {
   /// Create an instance.
-  const EditCreditsMenu({
+  const EditPauseMenu({
     required this.projectContext,
     Key? key,
   }) : super(key: key);
@@ -28,11 +21,11 @@ class EditCreditsMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCreditsMenuState createState() => _EditCreditsMenuState();
+  _EditPauseMenuState createState() => _EditPauseMenuState();
 }
 
-/// State for [EditCreditsMenu].
-class _EditCreditsMenuState extends State<EditCreditsMenu> {
+/// State for [EditPauseMenu].
+class _EditPauseMenuState extends State<EditPauseMenu> {
   MusicPlayer? _musicPlayer;
 
   /// Build a widget.
@@ -41,8 +34,8 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     var musicPlayer = _musicPlayer;
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
-    final options = world.creditsMenuOptions;
-    final music = world.creditsMenuMusic;
+    final options = world.pauseMenuOptions;
+    final music = world.pauseMenuMusic;
     if (music == null) {
       _musicPlayer?.stop();
       _musicPlayer = null;
@@ -68,7 +61,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Credits Menu'),
+          title: Text(options.title),
         ),
         body: ListView(
           children: [
@@ -81,7 +74,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
                 },
                 header: 'Title',
                 autofocus: true,
-                title: 'Menu Title',
+                title: 'Pause Menu Title',
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
@@ -96,7 +89,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
                 assetStore: world.musicAssetStore,
                 defaultGain: defaultGain,
                 nullable: true,
-                title: 'Credits Menu Music',
+                title: 'Pause Menu Music',
                 playSound: false,
               ),
             ),
@@ -109,21 +102,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
                 },
               ),
             ),
-            for (final credit in world.credits)
-              getCreditListTile(context: context, credit: credit)
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final credit = WorldCredit(
-              id: newId(),
-              title: 'Person: Responsibility',
-            );
-            world.credits.add(credit);
-            save();
-          },
-          child: createIcon,
-          tooltip: 'Add Credit',
         ),
       ),
     );
@@ -137,50 +116,8 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     _musicPlayer = null;
   }
 
-  /// Save the project context and set state.
   void save() {
     widget.projectContext.save();
     setState(() {});
-  }
-
-  /// Return  list tile suitable for editing the given [credit].
-  Widget getCreditListTile({
-    required BuildContext context,
-    required WorldCredit credit,
-  }) {
-    final world = widget.projectContext.world;
-    final defaultGain = world.soundOptions.defaultGain;
-    final sound = credit.sound;
-    final AssetReference? assetReference;
-    if (sound != null) {
-      assetReference = widget.projectContext.getRelativeAssetReference(
-        getAssetReferenceReference(assets: world.creditsAssets, id: sound.id)!
-            .reference,
-      );
-    } else {
-      assetReference = widget.projectContext.menuMoveSound;
-    }
-    final gain =
-        sound?.gain ?? world.soundOptions.menuMoveSound?.gain ?? defaultGain;
-    return PlaySoundSemantics(
-      child: ListTile(
-        title: Text(credit.title),
-        subtitle: Text(credit.url ?? 'Not set'),
-        onTap: () async {
-          widget.projectContext.playActivateSound();
-          await pushWidget(
-            context: context,
-            builder: (context) => EditCredit(
-              projectContext: widget.projectContext,
-              credit: credit,
-            ),
-          );
-          setState(() {});
-        },
-      ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: assetReference,
-      gain: gain,
-    );
   }
 }

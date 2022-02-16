@@ -10,6 +10,7 @@ class TextListTile extends StatelessWidget {
     required this.value,
     required this.onChanged,
     required this.header,
+    this.actions = const [],
     this.title,
     this.labelText,
     this.validator,
@@ -25,6 +26,9 @@ class TextListTile extends StatelessWidget {
 
   /// The function to be called when the value changes.
   final ValueChanged<String> onChanged;
+
+  /// The actions for the resulting [GetText] widget.
+  final List<Widget> actions;
 
   /// The title of the [GetText] widget.
   final String? title;
@@ -51,6 +55,7 @@ class TextListTile extends StatelessWidget {
             },
             labelText: labelText ?? title ?? header,
             text: value,
+            actions: actions,
             title: title ?? header,
             validator: validator,
           ),
