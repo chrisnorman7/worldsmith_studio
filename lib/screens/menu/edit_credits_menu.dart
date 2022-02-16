@@ -3,6 +3,7 @@ import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
 
+import '../../constants.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
@@ -111,14 +112,18 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
               getCreditListTile(context: context, credit: credit)
           ],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          final credit = WorldCredit(
-            id: newId(),
-            title: 'Person: Responsibility',
-          );
-          world.credits.add(credit);
-          save();
-        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final credit = WorldCredit(
+              id: newId(),
+              title: 'Person: Responsibility',
+            );
+            world.credits.add(credit);
+            save();
+          },
+          child: createIcon,
+          tooltip: 'Add Credit',
+        ),
       ),
     );
   }
