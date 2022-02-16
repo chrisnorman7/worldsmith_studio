@@ -102,6 +102,30 @@ class _EditPauseMenuState extends State<EditPauseMenu> {
                 },
               ),
             ),
+            widget.projectContext.getMenuMoveSemantics(
+              child: TextListTile(
+                value: options.zoneOverviewLabel,
+                onChanged: (value) {
+                  options.zoneOverviewLabel = value;
+                  save();
+                },
+                header: 'Zone Overview Label',
+                labelText: 'Label',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            ),
+            widget.projectContext.getMenuMoveSemantics(
+              child: TextListTile(
+                value: options.returnToGameTitle,
+                onChanged: (value) {
+                  options.returnToGameTitle = value;
+                  save();
+                },
+                header: 'Return To Game Label',
+                labelText: 'Label',
+                validator: (value) => validateNonEmptyValue(value: value),
+              ),
+            )
           ],
         ),
       ),
