@@ -18,7 +18,7 @@ dependencies:
   shared_preferences: ^2.0.13
   short_uuids: ^2.0.0
   url_launcher: ^6.0.20
-  worldsmith: ^0.2.1
+  worldsmith: ^0.3.0
   ziggurat: ^0.33.0
   ziggurat_sounds: ^0.13.0
 
