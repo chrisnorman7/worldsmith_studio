@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
-import '../../widgets/play_sound_semantics.dart';
+import '../menu/edit_credits_menu.dart';
 import '../menu/edit_main_menu.dart';
 
 /// A widget for editing various game menus.
@@ -29,7 +29,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
     final world = widget.projectContext.world;
     return ListView(
       children: [
-        getPlaySoundSemantics(
+        widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             autofocus: true,
             title: Text(world.mainMenuOptions.title),
@@ -45,15 +45,22 @@ class _ProjectMenusState extends State<ProjectMenus> {
             },
           ),
         ),
-        getPlaySoundSemantics(
+        widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             title: Text(world.creditsMenuOptions.title),
-            onTap: () {
+            onTap: () async {
               widget.projectContext.playActivateSound();
+              pushWidget(
+                context: context,
+                builder: (context) => EditCreditsMenu(
+                  projectContext: widget.projectContext,
+                ),
+              );
+              setState(() {});
             },
           ),
         ),
-        getPlaySoundSemantics(
+        widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             title: Text(world.pauseMenuOptions.title),
             onTap: () {
@@ -62,18 +69,6 @@ class _ProjectMenusState extends State<ProjectMenus> {
           ),
         )
       ],
-    );
-  }
-
-  /// Get a play sound semantics widget.
-  PlaySoundSemantics getPlaySoundSemantics({required Widget child}) {
-    final world = widget.projectContext.world;
-    return PlaySoundSemantics(
-      child: child,
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: widget.projectContext.menuMoveSound,
-      gain:
-          world.pauseMenuOptions.music?.gain ?? world.soundOptions.defaultGain,
     );
   }
 }
