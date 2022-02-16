@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/text_list_tile.dart';
 import '../sound/fade_time_list_tile.dart';
 import '../sound/music_player.dart';
@@ -66,7 +65,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
         ),
         body: ListView(
           children: [
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.title,
                 onChanged: (value) {
@@ -79,7 +78,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: SoundListTile(
                 projectContext: widget.projectContext,
                 value: options.music,
@@ -94,7 +93,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 playSound: false,
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: FadeTimeListTile(
                 value: options.fadeTime,
                 onChanged: (value) {
@@ -103,7 +102,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 },
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.newGameTitle,
                 onChanged: (value) {
@@ -114,7 +113,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.savedGameTitle,
                 onChanged: (value) {
@@ -125,7 +124,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.creditsTitle,
                 onChanged: (value) {
@@ -136,7 +135,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.exitTitle,
                 onChanged: (value) {
@@ -147,7 +146,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 validator: (value) => validateNonEmptyValue(value: value),
               ),
             ),
-            getPlaySoundSemantics(
+            widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.exitMessage,
                 onChanged: (value) {
@@ -176,14 +175,4 @@ class _EditMainMenuState extends State<EditMainMenu> {
     widget.projectContext.save();
     setState(() {});
   }
-
-  /// Get a play sound semantics widget.
-  PlaySoundSemantics getPlaySoundSemantics({required Widget child}) =>
-      PlaySoundSemantics(
-        child: child,
-        soundChannel: widget.projectContext.game.interfaceSounds,
-        assetReference: widget.projectContext.menuMoveSound,
-        gain: widget.projectContext.world.soundOptions.menuMoveSound?.gain ??
-            widget.projectContext.world.soundOptions.defaultGain,
-      );
 }
