@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:worldsmith/functions.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -8,6 +9,7 @@ import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import 'constants.dart';
+import 'widgets/play_sound_semantics.dart';
 
 /// A class to hold information about the current project.
 class ProjectContext {
@@ -111,5 +113,16 @@ class ProjectContext {
       return getRelativeAssetReference(reference);
     }
     return null;
+  }
+
+  /// Get a play sound semantics widget which will play the [menuMoveSound].
+  PlaySoundSemantics getMenuMoveSemantics({required Widget child}) {
+    final defaultGain = world.soundOptions.defaultGain;
+    return PlaySoundSemantics(
+      child: child,
+      soundChannel: game.interfaceSounds,
+      assetReference: menuMoveSound,
+      gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
+    );
   }
 }
