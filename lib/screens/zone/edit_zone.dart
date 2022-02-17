@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/ziggurat.dart';
 
 import '../../constants.dart';
 import '../../intents.dart';
@@ -244,7 +245,44 @@ class _EditZoneState extends State<EditZone> {
           distance: 1.0,
           sound: terrain.fastWalk.sound,
         );
-        _level.walk(options);
+        final oldBox = _level.getBox();
+        final destination = coordinatesInDirection(
+          _level.coordinates,
+          _level.heading.toDouble(),
+          1.0,
+        );
+        final newBox = _level.getBox(destination);
+        if (newBox != oldBox) {
+          // Boxes are different.
+          final String text;
+          if (newBox == null) {
+            _level.affectedInterfaceSounds.setReverb(null);
+            if (oldBox != null) {
+              text = 'Leaving ${oldBox.name}.';
+            } else {
+              text = 'Both boxes are null, new box was tested first.';
+            }
+          } else {
+            _level.affectedInterfaceSounds.setReverb(_level.getReverb(newBox));
+            if (oldBox == null) {
+              text = 'Entering ${newBox.name}.';
+            } else {
+              text = 'Both boxes are null, old box was tested first.';
+            }
+          }
+          showSnackBar(context: context, message: text);
+        }
+        _level.affectedInterfaceSounds.playSound(
+          widget.projectContext.getRelativeAssetReference(
+            getAssetReferenceReference(
+              assets: widget.projectContext.world.terrainAssets,
+              id: options.sound.id,
+            )!
+                .reference,
+          ),
+          gain: options.sound.gain,
+        );
+        _level.coordinates = destination;
         setState(() {});
         return null;
       },
