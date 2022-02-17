@@ -60,12 +60,14 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'World Options',
             icon: const Icon(Icons.settings_outlined),
-            child: ProjectSettings(projectContext: widget.projectContext),
+            builder: (context) =>
+                ProjectSettings(projectContext: widget.projectContext),
           ),
           TabbedScaffoldTab(
             title: 'Zones',
             icon: const Icon(Icons.map_outlined),
-            child: ProjectZones(projectContext: widget.projectContext),
+            builder: (context) =>
+                ProjectZones(projectContext: widget.projectContext),
             floatingActionButton: world.terrains.isEmpty
                 ? null
                 : FloatingActionButton(
@@ -88,7 +90,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'Terrain Types',
             icon: const Icon(Icons.add_location_outlined),
-            child: ProjectTerrains(
+            builder: (context) => ProjectTerrains(
               projectContext: widget.projectContext,
             ),
             floatingActionButton: world.terrainAssets.isEmpty
@@ -129,14 +131,15 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'Asset Stores',
             icon: const Icon(Icons.store_mall_directory_outlined),
-            child: ProjectAssetStores(
+            builder: (context) => ProjectAssetStores(
               projectContext: widget.projectContext,
             ),
           ),
           TabbedScaffoldTab(
             title: 'Reverb Presets',
             icon: const Icon(Icons.crop_outlined),
-            child: ProjectReverbs(projectContext: widget.projectContext),
+            builder: (context) =>
+                ProjectReverbs(projectContext: widget.projectContext),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
@@ -157,19 +160,21 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'Sound Settings',
             icon: const Icon(Icons.speaker_outlined),
-            child: ProjectSoundSettings(
+            builder: (context) => ProjectSoundSettings(
               projectContext: widget.projectContext,
             ),
           ),
           TabbedScaffoldTab(
             title: 'Menus',
             icon: const Icon(Icons.menu_book_outlined),
-            child: ProjectMenus(projectContext: widget.projectContext),
+            builder: (context) =>
+                ProjectMenus(projectContext: widget.projectContext),
           ),
           TabbedScaffoldTab(
             title: 'More',
             icon: const Icon(Icons.more_outlined),
-            child: ProjectMoreMenu(projectContext: widget.projectContext),
+            builder: (context) =>
+                ProjectMoreMenu(projectContext: widget.projectContext),
           )
         ],
       );

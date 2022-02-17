@@ -102,7 +102,7 @@ class _EditZoneState extends State<EditZone> {
           TabbedScaffoldTab(
               title: 'Zone Settings',
               icon: const Icon(Icons.settings_display_outlined),
-              child: settingsListView,
+              builder: getSettingsListView,
               actions: [
                 ElevatedButton(
                   onPressed: () {
@@ -127,12 +127,12 @@ class _EditZoneState extends State<EditZone> {
             TabbedScaffoldTab(
               title: 'Canvas',
               icon: const Icon(Icons.brush_rounded),
-              child: canvas,
+              builder: getCanvas,
             ),
           TabbedScaffoldTab(
             title: 'Boxes',
             icon: const Icon(Icons.map_outlined),
-            child: boxesListView,
+            builder: getBoxesListView,
           ),
         ],
       ),
@@ -149,7 +149,7 @@ class _EditZoneState extends State<EditZone> {
   }
 
   /// Get the zone settings list view.
-  ListView get settingsListView {
+  ListView getSettingsListView(BuildContext context) {
     final world = widget.projectContext.world;
     final music = widget.zone.music;
     return ListView(
@@ -216,7 +216,7 @@ class _EditZoneState extends State<EditZone> {
   }
 
   /// Get the boxes list view.
-  Widget get boxesListView {
+  Widget getBoxesListView(BuildContext context) {
     if (widget.zone.boxes.isEmpty) {
       return const CenterText(text: 'There are currently no boxes.');
     }
@@ -233,7 +233,7 @@ class _EditZoneState extends State<EditZone> {
   }
 
   /// Get the WYSIWYG editor.
-  Widget get canvas {
+  Widget getCanvas(BuildContext context) {
     final x = _level.coordinates.x;
     final y = _level.coordinates.y;
     final moveAction = CallbackAction<MoveIntent>(

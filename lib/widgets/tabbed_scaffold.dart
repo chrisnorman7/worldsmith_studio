@@ -47,7 +47,7 @@ class TabbedScaffoldTab {
   const TabbedScaffoldTab({
     required this.title,
     required this.icon,
-    required this.child,
+    required this.builder,
     this.actions,
     this.floatingActionButton,
   });
@@ -59,7 +59,7 @@ class TabbedScaffoldTab {
   final Widget icon;
 
   /// The child to use.
-  final Widget child;
+  final WidgetBuilder builder;
 
   /// The actions to use for the app bar.
   final List<Widget>? actions;
@@ -143,7 +143,7 @@ class _TabbedScaffoldState extends State<TabbedScaffold> {
             actions: tab.actions,
             title: Text(tab.title),
           ),
-          body: tab.child,
+          body: tab.builder(context),
           floatingActionButton: tab.floatingActionButton,
           bottomNavigationBar: BottomNavigationBar(
             items: widget.tabs
