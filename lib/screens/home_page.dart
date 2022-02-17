@@ -107,8 +107,10 @@ class _HomePageState extends State<HomePage> {
                 semanticLabel: 'Open Project',
               ),
             );
+          } else if (index == 2) {
+            return const Divider();
           } else {
-            final filename = recentProjectPaths[index - 2];
+            final filename = recentProjectPaths[index - 3];
             return ListTile(
               autofocus: index == 2,
               title: Text(filename),
