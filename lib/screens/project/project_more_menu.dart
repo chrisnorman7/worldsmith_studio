@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../directions/directions_list.dart';
+import '../equipment/equipment_positions_menu.dart';
 
 /// The "more" menu.
 class ProjectMoreMenu extends StatefulWidget {
@@ -30,6 +31,18 @@ class _ProjectMoreMenuState extends State<ProjectMoreMenu> {
       children: [
         ListTile(
           autofocus: true,
+          title: const Text('Equipment Positions'),
+          subtitle: Text('${world.equipmentPositions.length}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) =>
+                  EquipmentPositionsMenu(projectContext: widget.projectContext),
+            );
+            setState(() {});
+          },
+        ),
+        ListTile(
           title: const Text('Directions'),
           subtitle: Text('${world.directions.length}'),
           onTap: () async {
