@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -9,6 +10,7 @@ import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 
@@ -34,10 +36,38 @@ class EditZone extends StatefulWidget {
 
 /// State for [EditZone].
 class _EditZoneState extends State<EditZone> {
+  MusicPlayer? _musicPlayer;
+
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final musicPlayer = _musicPlayer;
+    final music = widget.zone.music;
+    if (music == null) {
+      _musicPlayer?.stop();
+      _musicPlayer = null;
+    } else {
+      final assetReference = widget.projectContext.getRelativeAssetReference(
+        getAssetReferenceReference(
+          assets: world.musicAssets,
+          id: music.id,
+        )!
+            .reference,
+      );
+      if (musicPlayer == null) {
+        _musicPlayer = MusicPlayer(
+          channel: widget.projectContext.game.ambianceSounds,
+          assetReference: assetReference,
+          gain: music.gain,
+          fadeBuilder: () => 0.5,
+        )..play();
+      } else {
+        musicPlayer
+          ..assetReference = assetReference
+          ..gain = music.gain;
+      }
+    }
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -81,6 +111,14 @@ class _EditZoneState extends State<EditZone> {
     );
   }
 
+  /// Stop the music playing.
+  @override
+  void dispose() {
+    super.dispose();
+    _musicPlayer?.stop();
+    _musicPlayer = null;
+  }
+
   /// Get the zone settings list view.
   ListView get settingsListView {
     final world = widget.projectContext.world;
@@ -88,15 +126,16 @@ class _EditZoneState extends State<EditZone> {
     return ListView(
       children: [
         TextListTile(
-            value: widget.zone.name,
-            onChanged: (value) {
-              widget.zone.name = value;
-              widget.projectContext.save();
-              setState(() {});
-            },
-            header: 'Name',
-            autofocus: true,
-            validator: (value) => validateNonEmptyValue(value: value)),
+          value: widget.zone.name,
+          onChanged: (value) {
+            widget.zone.name = value;
+            widget.projectContext.save();
+            setState(() {});
+          },
+          header: 'Name',
+          autofocus: true,
+          validator: (value) => validateNonEmptyValue(value: value),
+        ),
         SoundListTile(
           projectContext: widget.projectContext,
           value: music,
@@ -110,6 +149,7 @@ class _EditZoneState extends State<EditZone> {
           looping: true,
           nullable: true,
           title: 'Zone Music',
+          playSound: false,
         ),
         ListTile(
           title: const Text('Default Terrain'),
