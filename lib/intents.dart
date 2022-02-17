@@ -74,3 +74,12 @@ class BuildProjectIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyB, control: true);
 }
+
+/// An intent to move within a zone.
+class MoveIntent extends Intent {
+  /// Create an instance.
+  const MoveIntent(this.heading);
+
+  /// The direction to move in.
+  final int heading;
+}
