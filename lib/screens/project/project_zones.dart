@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/center_text.dart';
+import '../../widgets/play_sound_semantics.dart';
 import '../zone/edit_zone.dart';
 
 /// A widget for displaying and editing [Zone] instances.
@@ -34,20 +36,37 @@ class _ProjectZonesState extends State<ProjectZones> {
     return ListView.builder(
       itemBuilder: (context, index) {
         final zone = world.zones[index];
-        return ListTile(
-          autofocus: index == 0,
-          title: Text(zone.name),
-          subtitle: Text('Boxes: ${zone.boxes.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditZone(
-                projectContext: widget.projectContext,
-                zone: zone,
-              ),
-            );
-            setState(() {});
-          },
+        final music = zone.music;
+        return PlaySoundSemantics(
+          child: Builder(
+              builder: (context) => ListTile(
+                    autofocus: index == 0,
+                    title: Text(zone.name),
+                    subtitle: Text('Boxes: ${zone.boxes.length}'),
+                    onTap: () async {
+                      PlaySoundSemantics.of(context)?.stop();
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditZone(
+                          projectContext: widget.projectContext,
+                          zone: zone,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  )),
+          soundChannel: widget.projectContext.game.interfaceSounds,
+          assetReference: music == null
+              ? null
+              : widget.projectContext.getRelativeAssetReference(
+                  getAssetReferenceReference(
+                    assets: world.musicAssets,
+                    id: music.id,
+                  )!
+                      .reference,
+                ),
+          gain: music?.gain ?? world.soundOptions.defaultGain,
+          looping: true,
         );
       },
       itemCount: world.zones.length,
