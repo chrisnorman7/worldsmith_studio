@@ -17,9 +17,11 @@ import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import '../reverb/reverb_list_tile.dart';
 import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
+import '../terrain/terrain_list_tile.dart';
 
 const _helpIntent = HelpIntent();
 
@@ -167,6 +169,12 @@ class _EditZoneState extends State<EditZone> {
         ],
       ),
     );
+  }
+
+  /// Save the project context, and call[setState].
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 
   /// Stop the music playing and dispose of the focus node..
@@ -370,11 +378,7 @@ class _EditZoneState extends State<EditZone> {
                 ),
               ),
             ),
-            box == null
-                ? const ListTile(
-                    title: Text('Add Box'),
-                  )
-                : getBoxListTile(context, box)
+            ...getBoxListTiles(context: context, box: box)
           ],
         ),
       ),
@@ -400,7 +404,70 @@ class _EditZoneState extends State<EditZone> {
   }
 
   /// Get a list tile for the given [box].
-  Widget getBoxListTile(BuildContext context, Box box) => ListTile(
-        title: Text(box.name),
-      );
+  List<Widget> getBoxListTiles({
+    required BuildContext context,
+    required Box? box,
+  }) {
+    if (box == null) {
+      return [
+        ListTile(
+          title: const Text('There is no box at these coordinates.'),
+          onTap: () {},
+        ),
+      ];
+    }
+    final world = widget.projectContext.world;
+    final start = widget.zone.getAbsoluteCoordinates(box.start);
+    final end = widget.zone.getAbsoluteCoordinates(box.end);
+    return [
+      TextListTile(
+        value: box.name,
+        onChanged: (value) {
+          box.name = value;
+          save();
+        },
+        header: 'Box Name',
+        labelText: 'Name',
+        validator: (value) => validateNonEmptyValue(value: value),
+      ),
+      ListTile(
+        title: const Text('Start Coordinates'),
+        subtitle: Text('${start.x},${start.y}'),
+        onTap: () {},
+      ),
+      ListTile(
+        title: const Text('End Coordinates'),
+        subtitle: Text('${end.x},${end.y}'),
+        onTap: () {},
+      ),
+      TerrainListTile(
+        onDone: (value) {
+          Navigator.pop(context);
+          box.terrainId = value.id;
+          save();
+        },
+        terrains: world.terrains,
+        currentTerrainId: box.terrainId,
+      ),
+      ReverbListTile(
+        projectContext: widget.projectContext,
+        onDone: (value) {
+          Navigator.pop(context);
+          box.reverbId = value?.id;
+          save();
+        },
+        reverbPresets: world.reverbs,
+        currentReverbId: box.reverbId,
+        nullable: true,
+      ),
+      CheckboxListTile(
+        value: box.enclosed,
+        onChanged: (value) {
+          box.enclosed = value == null;
+          save();
+        },
+        title: const Text('Soundproof Box'),
+      )
+    ];
+  }
 }
