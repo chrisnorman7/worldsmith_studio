@@ -17,6 +17,7 @@ import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import '../box/coordinates_list_tile.dart';
 import '../reverb/reverb_list_tile.dart';
 import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
@@ -36,7 +37,17 @@ const canvasKeyboardShortcuts = [
     description: 'Move around in the level',
     keyName: 'Arrow keys',
     control: true,
-  )
+  ),
+  KeyboardShortcut(
+    description: 'Increase and decrease x coordinate',
+    keyName: 'Left and Right Arrows',
+    alt: true,
+  ),
+  KeyboardShortcut(
+    description: 'Increase and decrease y coordinate',
+    keyName: 'Up or Down Arrows',
+    alt: true,
+  ),
 ];
 
 /// A widget for editing its [zone].
@@ -62,14 +73,12 @@ class EditZone extends StatefulWidget {
 /// State for [EditZone].
 class _EditZoneState extends State<EditZone> {
   MusicPlayer? _musicPlayer;
-  late FocusNode _focusNode;
   late ZoneLevel _level;
 
   /// Initialise stuff.
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
     if (widget.zone.boxes.isEmpty) {
       widget.zone.boxes.add(
         Box(
@@ -183,7 +192,6 @@ class _EditZoneState extends State<EditZone> {
     super.dispose();
     _musicPlayer?.stop();
     _musicPlayer = null;
-    _focusNode.dispose();
   }
 
   /// Get the zone settings list view.
@@ -417,8 +425,6 @@ class _EditZoneState extends State<EditZone> {
       ];
     }
     final world = widget.projectContext.world;
-    final start = widget.zone.getAbsoluteCoordinates(box.start);
-    final end = widget.zone.getAbsoluteCoordinates(box.end);
     return [
       TextListTile(
         value: box.name,
@@ -430,15 +436,25 @@ class _EditZoneState extends State<EditZone> {
         labelText: 'Name',
         validator: (value) => validateNonEmptyValue(value: value),
       ),
-      ListTile(
-        title: const Text('Start Coordinates'),
-        subtitle: Text('${start.x},${start.y}'),
-        onTap: () {},
+      CoordinatesListTile(
+        value: box.start,
+        zone: widget.zone,
+        onChanged: (value) {
+          box.start = value;
+          save();
+          resetLevel();
+        },
+        title: 'Start Coordinates',
       ),
-      ListTile(
-        title: const Text('End Coordinates'),
-        subtitle: Text('${end.x},${end.y}'),
-        onTap: () {},
+      CoordinatesListTile(
+        value: box.end,
+        zone: widget.zone,
+        onChanged: (value) {
+          box.end = value;
+          save();
+          resetLevel();
+        },
+        title: 'End Coordinates',
       ),
       TerrainListTile(
         onDone: (value) {
@@ -469,5 +485,20 @@ class _EditZoneState extends State<EditZone> {
         title: const Text('Soundproof Box'),
       )
     ];
+  }
+
+  /// Recreate the zone level.
+  void resetLevel() {
+    final coordinates = _level.coordinates;
+    _level.onPop(null);
+    _level = ZoneLevel(
+      worldContext: widget.projectContext.worldContext,
+      zone: widget.zone,
+    );
+    final size = _level.size;
+    _level.coordinates = Point(
+      min(coordinates.x, size.x - 1).toDouble(),
+      min(coordinates.y, size.y - 1).toDouble(),
+    );
   }
 }
