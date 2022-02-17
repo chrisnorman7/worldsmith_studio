@@ -83,3 +83,13 @@ class MoveIntent extends Intent {
   /// The direction to move in.
   final int heading;
 }
+
+/// An intent to get help.
+class HelpIntent extends Intent {
+  /// Create an instance.
+  const HelpIntent();
+
+  /// The hotkey to use.
+  static const hotkey =
+      SingleActivator(LogicalKeyboardKey.slash, control: true);
+}
