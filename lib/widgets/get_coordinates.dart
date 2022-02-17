@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'get_text.dart';
 
-final _regExp = RegExp(r'^(\d+)[, ]?(\d+)$');
+final _regExp = RegExp(r'^([-]?\d+)[, ]+([-]?\d+)$');
 
 /// A widget for getting a pair of coordinates.
 class GetCoordinates extends StatelessWidget {
