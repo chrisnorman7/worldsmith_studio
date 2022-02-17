@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../project_context.dart';
 import '../../util.dart';
 import 'edit_coordinates.dart';
 
@@ -30,56 +31,70 @@ class ModifyCoordinateIntent extends Intent {
 }
 
 /// A list tile that shows the given [value].
-class CoordinatesListTile extends StatelessWidget {
+class CoordinatesListTile extends StatefulWidget {
   /// Create an instance.
   const CoordinatesListTile({
-    required this.value,
+    required this.projectContext,
     required this.zone,
+    required this.box,
+    required this.value,
     required this.onChanged,
     this.title = 'Coordinates',
     Key? key,
   }) : super(key: key);
 
-  /// The coordinates to edit.
-  final Coordinates value;
+  /// The project context to use.
+  final ProjectContext projectContext;
 
   /// The zone that contains the box who the given coordinates belong to.
   final Zone zone;
 
-  /// The function to call when the value changes.
-  final ValueChanged<Coordinates> onChanged;
+  /// The box which owns the coordinates.
+  final Box box;
+
+  /// The coordinates to edit.
+  final Coordinates value;
+
+  /// The function to call when [value] has been updated.
+  final VoidCallback onChanged;
 
   /// The title of the resulting [ListTile].
   final String title;
 
   @override
+  State<CoordinatesListTile> createState() => _CoordinatesListTileState();
+}
+
+class _CoordinatesListTileState extends State<CoordinatesListTile> {
+  @override
   Widget build(BuildContext context) {
-    final coordinates = zone.getAbsoluteCoordinates(value);
+    final coordinates = widget.zone.getAbsoluteCoordinates(widget.value);
     final modifyCoordinateAction = CallbackAction<ModifyCoordinateIntent>(
       onInvoke: (intent) {
         final int x;
         final int y;
         switch (intent.modification) {
           case CoordinateModification.increaseX:
-            x = value.x + 1;
-            y = value.y;
+            x = widget.value.x + 1;
+            y = widget.value.y;
             break;
           case CoordinateModification.decreaseX:
-            x = value.x - 1;
-            y = value.y;
+            x = widget.value.x - 1;
+            y = widget.value.y;
             break;
           case CoordinateModification.increaseY:
-            x = value.x;
-            y = value.y + 1;
+            x = widget.value.x;
+            y = widget.value.y + 1;
             break;
           case CoordinateModification.decreaseY:
-            x = value.x;
-            y = value.y - 1;
+            x = widget.value.x;
+            y = widget.value.y - 1;
             break;
         }
-        onChanged(
-          Coordinates(x, y, clamp: value.clamp),
-        );
+        widget.value
+          ..x = x
+          ..y = y;
+        save();
         return null;
       },
     );
@@ -87,17 +102,20 @@ class CoordinatesListTile extends StatelessWidget {
       child: Actions(
         actions: {ModifyCoordinateIntent: modifyCoordinateAction},
         child: ListTile(
-          title: Text(title),
+          title: Text(widget.title),
           subtitle: Text('${coordinates.x},${coordinates.y}'),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (context) => EditCoordinates(
-              zone: zone,
-              value: value,
-              onChanged: onChanged,
-              title: title,
-            ),
-          ),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditCoordinates(
+                zone: widget.zone,
+                box: widget.box,
+                value: widget.value,
+                title: widget.title,
+              ),
+            );
+            save();
+          },
         ),
       ),
       shortcuts: const {
@@ -119,5 +137,11 @@ class CoordinatesListTile extends StatelessWidget {
         ),
       },
     );
+  }
+
+  /// Save the project context.
+  void save() {
+    widget.projectContext.save();
+    setState(widget.onChanged);
   }
 }

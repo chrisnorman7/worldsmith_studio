@@ -305,6 +305,10 @@ class _EditZoneState extends State<EditZone> {
           _level.heading.toDouble(),
           1.0,
         );
+        if (destination.x < 0 || destination.y < 0) {
+          // Avoid getting `RangeError` thrown.
+          return;
+        }
         final newBox = _level.getBox(destination);
         if (newBox != oldBox) {
           // Boxes are different.
@@ -437,23 +441,19 @@ class _EditZoneState extends State<EditZone> {
         validator: (value) => validateNonEmptyValue(value: value),
       ),
       CoordinatesListTile(
-        value: box.start,
+        projectContext: widget.projectContext,
         zone: widget.zone,
-        onChanged: (value) {
-          box.start = value;
-          save();
-          resetLevel();
-        },
+        box: box,
+        value: box.start,
+        onChanged: () => setState(resetLevel),
         title: 'Start Coordinates',
       ),
       CoordinatesListTile(
-        value: box.end,
+        projectContext: widget.projectContext,
         zone: widget.zone,
-        onChanged: (value) {
-          box.end = value;
-          save();
-          resetLevel();
-        },
+        box: box,
+        value: box.end,
+        onChanged: () => setState(resetLevel),
         title: 'End Coordinates',
       ),
       TerrainListTile(

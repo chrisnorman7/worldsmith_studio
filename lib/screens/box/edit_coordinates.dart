@@ -6,14 +6,15 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_coordinates.dart';
+import 'select_box.dart';
 
 /// A widget that allows full editing of its [value].
 class EditCoordinates extends StatefulWidget {
   /// Create an instance.
   const EditCoordinates({
     required this.zone,
+    required this.box,
     required this.value,
-    required this.onChanged,
     this.title = 'Edit Coordinates',
     Key? key,
   }) : super(key: key);
@@ -21,11 +22,11 @@ class EditCoordinates extends StatefulWidget {
   /// The zone which contains the box whose [value] this widget will edit.
   final Zone zone;
 
+  /// The box that the coordinates are part of.
+  final Box box;
+
   /// The coordinates to edit.
   final Coordinates value;
-
-  /// The function to be called when making changes.
-  final ValueChanged<Coordinates> onChanged;
 
   /// The title of the resulting [Scaffold].
   final String title;
@@ -48,12 +49,32 @@ class _EditCoordinatesState extends State<EditCoordinates> {
         ),
         body: ListView(
           children: [
-            if (clamp != null)
+            if (clamp != null) ...[
               ListTile(
                 autofocus: true,
                 title: const Text('Clamped To'),
                 subtitle: Text(widget.zone.getBox(clamp.boxId).name),
+                onTap: () => pushWidget(
+                  context: context,
+                  builder: (context) => SelectBox(
+                    boxes: widget.zone.boxes
+                        .where(
+                          (element) => element.id != widget.box.id,
+                        )
+                        .toList(),
+                    onDone: (value) {
+                      setState(() => widget.value.clamp!.boxId = value.id);
+                    },
+                    currentBoxId: clamp.boxId,
+                  ),
+                ),
               ),
+              ListTile(
+                title: const Text('Clamp Corner'),
+                subtitle: Text(clamp.corner.name),
+                onTap: () {},
+              )
+            ],
             ListTile(
               autofocus: clamp == null,
               title: Text(clamp == null ? 'Coordinates' : 'Coordinates Offset'),
@@ -64,11 +85,9 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                   value: Point(widget.value.x, widget.value.y),
                   onDone: (value) {
                     Navigator.pop(context);
-                    widget.value
+                    setState(() => widget.value
                       ..x = value.x
-                      ..y = value.y;
-                    widget.onChanged(widget.value);
-                    setState(() {});
+                      ..y = value.y);
                   },
                   labelText:
                       clamp == null ? 'Coordinates' : 'Coordinates Offset',
