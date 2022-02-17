@@ -15,6 +15,7 @@ class GetCoordinates extends StatelessWidget {
     this.labelText = 'Coordinates',
     this.actions = const [],
     this.title = 'Get Coordinates',
+    this.validator,
     Key? key,
   }) : super(key: key);
 
@@ -33,13 +34,14 @@ class GetCoordinates extends StatelessWidget {
   /// The label text for the resulting text field.
   final String labelText;
 
+  /// A validator for the coordinates.
+  final FormFieldValidator<Point<int>>? validator;
+
   @override
   Widget build(BuildContext context) => GetText(
         onDone: (value) {
-          final match = _regExp.firstMatch(value)!;
-          final x = int.parse(match.group(1)!);
-          final y = int.parse(match.group(2)!);
-          onDone(Point(x, y));
+          final Point<int> coordinates = getPoint(value);
+          onDone(coordinates);
         },
         actions: actions,
         labelText: labelText,
@@ -49,10 +51,24 @@ class GetCoordinates extends StatelessWidget {
           if (value == null || value.isEmpty) {
             return 'You must supply a value.';
           } else if (_regExp.hasMatch(value)) {
-            return null;
+            final coordinates = getPoint(value);
+            final func = validator;
+            if (func == null) {
+              return null;
+            }
+            return func(coordinates);
           } else {
             return 'Invalid number.';
           }
         },
       );
+
+  /// Get a valid set of coordinates from the given [value].
+  Point<int> getPoint(String value) {
+    final match = _regExp.firstMatch(value)!;
+    final x = int.parse(match.group(1)!);
+    final y = int.parse(match.group(2)!);
+    final coordinates = Point(x, y);
+    return coordinates;
+  }
 }
