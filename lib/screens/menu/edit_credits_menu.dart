@@ -109,6 +109,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
                 },
               ),
             ),
+            const Divider(),
             for (final credit in world.credits)
               getCreditListTile(context: context, credit: credit)
           ],
@@ -164,6 +165,21 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
         sound?.gain ?? world.soundOptions.menuMoveSound?.gain ?? defaultGain;
     return PlaySoundSemantics(
       child: ListTile(
+        leading: credit.id == world.credits.first.id
+            ? null
+            : IconButton(
+                onPressed: () {
+                  final index = world.credits.indexWhere(
+                    (element) => element.id == credit.id,
+                  );
+                  world.credits.removeAt(index);
+                  world.credits.insert(index - 1, credit);
+                  widget.projectContext.save();
+                  setState(() {});
+                },
+                icon: const Icon(Icons.move_up),
+                tooltip: 'Move Up',
+              ),
         title: Text(credit.title),
         subtitle: Text(credit.url ?? 'Not set'),
         onTap: () async {
