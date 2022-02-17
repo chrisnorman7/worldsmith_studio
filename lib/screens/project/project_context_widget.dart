@@ -9,6 +9,7 @@ import '../../util.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_asset_stores.dart';
 import 'project_menus.dart';
+import 'project_more_menu.dart';
 import 'project_reverbs.dart';
 import 'project_settings.dart';
 import 'project_sound_settings.dart';
@@ -164,6 +165,11 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
             title: 'Menus',
             icon: const Icon(Icons.menu_book_outlined),
             child: ProjectMenus(projectContext: widget.projectContext),
+          ),
+          TabbedScaffoldTab(
+            title: 'More',
+            icon: const Icon(Icons.more_outlined),
+            child: ProjectMoreMenu(projectContext: widget.projectContext),
           )
         ],
       );
