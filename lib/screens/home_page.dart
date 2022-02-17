@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
           } else {
             final filename = recentProjectPaths[index - 3];
             return ListTile(
-              autofocus: index == 2,
+              autofocus: index == 3,
               title: Text(filename),
               onTap: () => openProject(
                 context: context,
