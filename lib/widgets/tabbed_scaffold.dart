@@ -143,7 +143,7 @@ class _TabbedScaffoldState extends State<TabbedScaffold> {
             actions: tab.actions,
             title: Text(tab.title),
           ),
-          body: tab.builder(context),
+          body: Builder(builder: tab.builder),
           floatingActionButton: tab.floatingActionButton,
           bottomNavigationBar: BottomNavigationBar(
             items: widget.tabs
