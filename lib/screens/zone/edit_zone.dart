@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
@@ -37,6 +39,31 @@ class EditZone extends StatefulWidget {
 /// State for [EditZone].
 class _EditZoneState extends State<EditZone> {
   MusicPlayer? _musicPlayer;
+  late FocusNode _focusNode;
+  late ZoneLevel _level;
+
+  /// Initialise stuff.
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    if (widget.zone.boxes.isEmpty) {
+      widget.zone.boxes.add(
+        Box(
+          id: newId(),
+          name: 'First Box',
+          start: Coordinates(0, 0),
+          end: Coordinates(10, 10),
+          terrainId: widget.projectContext.world.terrains.first.id,
+        ),
+      );
+      widget.projectContext.save();
+    }
+    _level = ZoneLevel(
+      worldContext: widget.projectContext.worldContext,
+      zone: widget.zone,
+    );
+  }
 
   /// Build a widget.
   @override
@@ -69,54 +96,55 @@ class _EditZoneState extends State<EditZone> {
       }
     }
     return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                final id = widget.zone.id;
-                confirm(
-                  context: context,
-                  message: 'Are you sure you want to delete the '
-                      '${widget.zone.name} zone?',
-                  title: 'Confirm Delete',
-                  yesCallback: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    world.zones.removeWhere((element) => element.id == id);
-                    widget.projectContext.save();
-                  },
-                );
-              },
-              child: deleteIcon,
-            )
-          ],
-          title: Text(widget.zone.name),
-        ),
-        body: TabbedScaffold(
-          tabs: [
-            TabbedScaffoldTab(
+      child: TabbedScaffold(
+        tabs: [
+          TabbedScaffoldTab(
               title: 'Zone Settings',
               icon: const Icon(Icons.settings_display_outlined),
               child: settingsListView,
-            ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    final id = widget.zone.id;
+                    confirm(
+                      context: context,
+                      message: 'Are you sure you want to delete the '
+                          '${widget.zone.name} zone?',
+                      title: 'Confirm Delete',
+                      yesCallback: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        world.zones.removeWhere((element) => element.id == id);
+                        widget.projectContext.save();
+                      },
+                    );
+                  },
+                  child: deleteIcon,
+                )
+              ]),
+          if (widget.zone.boxes.isNotEmpty)
             TabbedScaffoldTab(
-              title: 'Boxes',
-              icon: const Icon(Icons.map_outlined),
-              child: boxesListView,
-            )
-          ],
-        ),
+              title: 'Canvas',
+              icon: const Icon(Icons.brush_rounded),
+              child: canvas,
+            ),
+          TabbedScaffoldTab(
+            title: 'Boxes',
+            icon: const Icon(Icons.map_outlined),
+            child: boxesListView,
+          ),
+        ],
       ),
     );
   }
 
-  /// Stop the music playing.
+  /// Stop the music playing and dispose of the focus node..
   @override
   void dispose() {
     super.dispose();
     _musicPlayer?.stop();
     _musicPlayer = null;
+    _focusNode.dispose();
   }
 
   /// Get the zone settings list view.
@@ -174,13 +202,13 @@ class _EditZoneState extends State<EditZone> {
           ),
         ),
         CheckboxListTile(
+          title: const Text('Top-down Map Visible'),
           value: widget.zone.topDownMap,
           onChanged: (value) {
             widget.zone.topDownMap = !widget.zone.topDownMap;
             widget.projectContext.save();
             setState(() {});
           },
-          title: const Text('Top-down Map Visible'),
         ),
       ],
     );
@@ -200,6 +228,52 @@ class _EditZoneState extends State<EditZone> {
         );
       },
       itemCount: widget.zone.boxes.length,
+    );
+  }
+
+  /// Get the WYSIWYG editor.
+  Widget get canvas {
+    final x = _level.coordinates.x;
+    final y = _level.coordinates.y;
+    final moveAction = CallbackAction<MoveIntent>(
+      onInvoke: (intent) {
+        _level.heading = intent.heading;
+        final terrain = _level.getTerrain();
+        final options = WalkingOptions(
+          interval: 0,
+          distance: 1.0,
+          sound: terrain.fastWalk.sound,
+        );
+        _level.walk(options);
+        setState(() {});
+        return null;
+      },
+    );
+    return Shortcuts(
+      child: Actions(
+        actions: {MoveIntent: moveAction},
+        child: ListView(
+          children: [
+            ListTile(
+              title: const Text('Coordinates'),
+              subtitle: Text('${x.floor()}, ${y.floor()}'),
+              onTap: () {},
+            )
+          ],
+        ),
+      ),
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.arrowUp, control: true):
+            MoveIntent(0),
+        SingleActivator(LogicalKeyboardKey.arrowRight, control: true):
+            MoveIntent(90),
+        SingleActivator(LogicalKeyboardKey.arrowDown, control: true):
+            MoveIntent(
+          180,
+        ),
+        SingleActivator(LogicalKeyboardKey.arrowLeft, control: true):
+            MoveIntent(270)
+      },
     );
   }
 }
