@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../util.dart';
+import 'edit_coordinates.dart';
+
 /// What should happen to a coordinate.
 enum CoordinateModification {
   /// Increase x coordinate.
@@ -86,7 +89,15 @@ class CoordinatesListTile extends StatelessWidget {
         child: ListTile(
           title: Text(title),
           subtitle: Text('${coordinates.x},${coordinates.y}'),
-          onTap: () {},
+          onTap: () => pushWidget(
+            context: context,
+            builder: (context) => EditCoordinates(
+              zone: zone,
+              value: value,
+              onChanged: onChanged,
+              title: title,
+            ),
+          ),
         ),
       ),
       shortcuts: const {
