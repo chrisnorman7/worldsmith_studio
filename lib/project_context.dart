@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:worldsmith/functions.dart';
+import 'package:worldsmith/world_context.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
@@ -125,4 +126,7 @@ class ProjectContext {
       gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
     );
   }
+
+  /// Get a world context.
+  WorldContext get worldContext => WorldContext(game: game, world: world);
 }
