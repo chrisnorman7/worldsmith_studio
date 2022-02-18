@@ -169,6 +169,7 @@ class _ImportDirectoryState extends State<ImportDirectory> {
                 );
               }
             }
+            widget.projectContext.save();
           },
           child: const Icon(Icons.done_outline),
           tooltip: 'Done',
