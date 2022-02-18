@@ -17,6 +17,7 @@ import '../intents.dart';
 import '../project_context.dart';
 import '../src/json/app_preferences.dart';
 import '../util.dart';
+import '../widgets/keyboard_shortcuts_list.dart';
 import 'project/project_context_widget.dart';
 
 const _createProjectIntent = CreateProjectIntent();
@@ -88,42 +89,56 @@ class _HomePageState extends State<HomePage> {
       final recentProjectPaths = preferences.recentProjects
           .where((element) => File(element).existsSync() == true)
           .toList();
-      child = ListView.builder(
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return ElevatedButton(
-              onPressed: Actions.handler(context, _createProjectIntent),
-              child: const Icon(
-                Icons.create_sharp,
-                semanticLabel: 'Create Project',
-              ),
-              autofocus: recentProjectPaths.isEmpty,
-            );
-          } else if (index == 1) {
-            return ElevatedButton(
-              onPressed: Actions.handler(context, _openProjectIntent),
-              child: const Icon(
-                Icons.file_open,
-                semanticLabel: 'Open Project',
-              ),
-            );
-          } else if (index == 2) {
-            return const Divider();
-          } else {
-            final filename = recentProjectPaths[index - 3];
-            return ListTile(
-              autofocus: index == 3,
-              title: Text(filename),
-              onTap: () => openProject(
-                context: context,
-                preferences: preferences,
-                game: game!,
-                filename: filename,
-              ),
-            );
-          }
-        },
-        itemCount: recentProjectPaths.length + 2,
+      child = WithKeyboardShortcuts(
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return ElevatedButton(
+                onPressed: Actions.handler(context, _createProjectIntent),
+                child: const Icon(
+                  Icons.create_sharp,
+                  semanticLabel: 'Create Project',
+                ),
+                autofocus: recentProjectPaths.isEmpty,
+              );
+            } else if (index == 1) {
+              return ElevatedButton(
+                onPressed: Actions.handler(context, _openProjectIntent),
+                child: const Icon(
+                  Icons.file_open,
+                  semanticLabel: 'Open Project',
+                ),
+              );
+            } else if (index == 2) {
+              return const Divider();
+            } else {
+              final filename = recentProjectPaths[index - 3];
+              return ListTile(
+                autofocus: index == 3,
+                title: Text(filename),
+                onTap: () => openProject(
+                  context: context,
+                  preferences: preferences,
+                  game: game!,
+                  filename: filename,
+                ),
+              );
+            }
+          },
+          itemCount: recentProjectPaths.length + 2,
+        ),
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Create a new project.',
+            keyName: 'n',
+            control: true,
+          ),
+          KeyboardShortcut(
+            description: 'Open an existing project',
+            keyName: 'o',
+            control: true,
+          ),
+        ],
       );
     }
     final scaffold = Scaffold(

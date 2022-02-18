@@ -6,6 +6,7 @@ import '../../constants.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import 'project_asset_stores.dart';
 import 'project_menus.dart';
@@ -41,16 +42,25 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
     final closeProjectAction = CallbackAction<CloseProjectIntent>(
       onInvoke: (intent) => Navigator.pop(context),
     );
-    return Shortcuts(
-      child: Actions(
-        actions: {
-          CloseProjectIntent: closeProjectAction,
+    return WithKeyboardShortcuts(
+      child: Shortcuts(
+        child: Actions(
+          actions: {
+            CloseProjectIntent: closeProjectAction,
+          },
+          child: Builder(builder: (context) => getTabbedScaffold(world)),
+        ),
+        shortcuts: const {
+          CloseProjectIntent.hotkey: CloseProjectIntent(),
         },
-        child: Builder(builder: (context) => getTabbedScaffold(world)),
       ),
-      shortcuts: const {
-        CloseProjectIntent.hotkey: CloseProjectIntent(),
-      },
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'CLose the project and return to the main menu.',
+          keyName: 'w',
+          control: true,
+        )
+      ],
     );
   }
 
