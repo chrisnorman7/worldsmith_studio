@@ -139,31 +139,51 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                               );
                               break;
                           }
-                          return PlaySoundSemantics(
-                            child: Builder(
-                              builder: (context) => ListTile(
-                                autofocus: index == 0,
-                                title: Text(assetString(assetReference)),
-                                subtitle: Text(assetSize),
-                                onTap: () async {
-                                  PlaySoundSemantics.of(context)!.stop();
-                                  await pushWidget(
-                                    context: context,
-                                    builder: (context) => EditAssetReference(
-                                      projectContext: widget.projectContext,
-                                      assetStore: widget.assetStore,
+                          return Shortcuts(
+                            child: Actions(
+                              actions: {
+                                DeleteIntent: CallbackAction<DeleteIntent>(
+                                  onInvoke: (intent) {
+                                    deleteAsset(
                                       assetReferenceReference: assetReference,
-                                      canDelete: widget.canDelete,
-                                    ),
-                                  );
-                                  setState(() {});
-                                },
+                                      context: context,
+                                    );
+                                    return null;
+                                  },
+                                )
+                              },
+                              child: PlaySoundSemantics(
+                                child: Builder(
+                                  builder: (context) => ListTile(
+                                    autofocus: index == 0,
+                                    title: Text(assetString(assetReference)),
+                                    subtitle: Text(assetSize),
+                                    onTap: () async {
+                                      PlaySoundSemantics.of(context)!.stop();
+                                      await pushWidget(
+                                        context: context,
+                                        builder: (context) =>
+                                            EditAssetReference(
+                                          projectContext: widget.projectContext,
+                                          assetStore: widget.assetStore,
+                                          assetReferenceReference:
+                                              assetReference,
+                                          canDelete: widget.canDelete,
+                                        ),
+                                      );
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                                soundChannel:
+                                    widget.projectContext.game.interfaceSounds,
+                                assetReference: relativeAssetReference,
+                                looping: true,
                               ),
                             ),
-                            soundChannel:
-                                widget.projectContext.game.interfaceSounds,
-                            assetReference: relativeAssetReference,
-                            looping: true,
+                            shortcuts: const {
+                              DeleteIntent.hotkey: DeleteIntent()
+                            },
                           );
                         },
                         itemCount: assets.length,
@@ -191,8 +211,36 @@ class _EditAssetStoreState extends State<EditAssetStore> {
           description: 'Add a new asset',
           keyName: 'o',
           control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Import a directory as different assets',
+          keyName: 'i',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Delete the currently selected asset',
+          keyName: 'Delete',
         )
       ],
     );
+  }
+
+  /// Delete the given [assetReferenceReference].
+  void deleteAsset(
+      {required BuildContext context,
+      required AssetReferenceReference assetReferenceReference}) {
+    confirm(
+        context: context,
+        message: 'Are you sure you want to delete the '
+            '${assetReferenceReference.comment} asset?',
+        title: 'Delete Asset',
+        yesCallback: () {
+          Navigator.pop(context);
+          widget.projectContext.deleteAssetReferenceReference(
+            assetStore: widget.assetStore,
+            assetReferenceReference: assetReferenceReference,
+          );
+          setState(() {});
+        });
   }
 }
