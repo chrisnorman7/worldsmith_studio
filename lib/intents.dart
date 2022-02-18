@@ -84,3 +84,12 @@ class HelpIntent extends Intent {
   static const hotkey =
       SingleActivator(LogicalKeyboardKey.slash, control: true);
 }
+
+/// The intent to import a directory.
+class ImportDirectoryIntent extends Intent {
+  /// Create an instance.
+  const ImportDirectoryIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyI, control: true);
+}
