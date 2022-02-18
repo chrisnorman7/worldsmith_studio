@@ -93,3 +93,12 @@ class ImportDirectoryIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyI, control: true);
 }
+
+/// An intent to delete something.
+class DeleteIntent extends Intent {
+  /// Create an instance.
+  const DeleteIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.delete);
+}
