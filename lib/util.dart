@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -80,3 +81,9 @@ void showSnackBar({
 String assetString(AssetReferenceReference assetReferenceReference) =>
     '${assetReferenceReference.comment} '
     '(${assetReferenceReference.reference.type.name})';
+
+/// Copy the given [text] to the [Clipboard].
+void setClipboardText(String text) {
+  final data = ClipboardData(text: text);
+  Clipboard.setData(data);
+}

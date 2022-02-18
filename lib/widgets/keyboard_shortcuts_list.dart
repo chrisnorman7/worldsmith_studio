@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../intents.dart';
 import '../util.dart';
@@ -79,7 +78,7 @@ class KeyboardShortcuts extends StatelessWidget {
                 onTap: () {
                   final string = '${keyboardShortcut.keyDescription}: '
                       '${keyboardShortcut.description}';
-                  Clipboard.setData(ClipboardData(text: string));
+                  setClipboardText(string);
                 },
               );
             },
