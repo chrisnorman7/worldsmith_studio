@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../intents.dart';
+import '../util.dart';
 import 'cancel.dart';
 
 /// A keyboard shortcut and a description.
@@ -85,4 +87,37 @@ class KeyboardShortcuts extends StatelessWidget {
           ),
         ),
       );
+}
+
+/// A widget with a list of [keyboardShortcuts] for display.
+class WithKeyboardShortcuts extends StatelessWidget {
+  /// Create an instance.
+  const WithKeyboardShortcuts({
+    required this.child,
+    required this.keyboardShortcuts,
+    Key? key,
+  }) : super(key: key);
+
+  /// The widget below this one in the tree.
+  final Widget child;
+
+  /// The keyboard shortcuts to show.
+  final List<KeyboardShortcut> keyboardShortcuts;
+  @override
+  Widget build(BuildContext context) {
+    final helpAction = CallbackAction<HelpIntent>(
+      onInvoke: (intent) => pushWidget(
+        context: context,
+        builder: (context) =>
+            KeyboardShortcuts(keyboardShortcuts: keyboardShortcuts),
+      ),
+    );
+    return Shortcuts(
+      shortcuts: const {HelpIntent.hotkey: HelpIntent()},
+      child: Actions(
+        actions: {HelpIntent: helpAction},
+        child: child,
+      ),
+    );
+  }
 }
