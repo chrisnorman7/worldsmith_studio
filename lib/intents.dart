@@ -66,15 +66,6 @@ class DecreaseIntent extends Intent {
   static const hotkey = SingleActivator(LogicalKeyboardKey.minus);
 }
 
-/// Build a project.
-class BuildProjectIntent extends Intent {
-  /// Create an instance.
-  const BuildProjectIntent();
-
-  /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyB, control: true);
-}
-
 /// An intent to move within a zone.
 class MoveIntent extends Intent {
   /// Create an instance.
