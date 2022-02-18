@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
               );
             } else if (index == 1) {
               return ElevatedButton(
+                autofocus: recentProjectPaths.isEmpty,
                 onPressed: Actions.handler(context, _openProjectIntent),
                 child: const Icon(
                   Icons.file_open,
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
               );
             }
           },
-          itemCount: recentProjectPaths.length + 2,
+          itemCount: recentProjectPaths.length + 3,
         ),
         keyboardShortcuts: const [
           KeyboardShortcut(
