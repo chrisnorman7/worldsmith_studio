@@ -26,30 +26,6 @@ import '../terrain/terrain_list_tile.dart';
 
 const _helpIntent = HelpIntent();
 
-/// The keyboard shortcuts for the canvas view.
-const canvasKeyboardShortcuts = [
-  KeyboardShortcut(
-    description: 'Show keyboard shortcuts',
-    keyName: 'slash (/)',
-    control: true,
-  ),
-  KeyboardShortcut(
-    description: 'Move around in the level',
-    keyName: 'Arrow keys',
-    control: true,
-  ),
-  KeyboardShortcut(
-    description: 'Increase and decrease x coordinate',
-    keyName: 'Left and Right Arrows',
-    alt: true,
-  ),
-  KeyboardShortcut(
-    description: 'Increase and decrease y coordinate',
-    keyName: 'Up or Down Arrows',
-    alt: true,
-  ),
-];
-
 /// A widget for editing its [zone].
 class EditZone extends StatefulWidget {
   /// Create an instance.
@@ -280,14 +256,6 @@ class _EditZoneState extends State<EditZone> {
 
   /// Get the WYSIWYG editor.
   Widget getCanvas(BuildContext context) {
-    final helpAction = CallbackAction<HelpIntent>(
-      onInvoke: (intent) => pushWidget(
-        context: context,
-        builder: (context) => const KeyboardShortcuts(
-          keyboardShortcuts: canvasKeyboardShortcuts,
-        ),
-      ),
-    );
     final x = _level.coordinates.x;
     final y = _level.coordinates.y;
     final moveAction = CallbackAction<MoveIntent>(
@@ -346,72 +314,95 @@ class _EditZoneState extends State<EditZone> {
       },
     );
     final box = _level.getBox();
-    return Shortcuts(
-      child: Actions(
-        actions: {
-          MoveIntent: moveAction,
-          HelpIntent: helpAction,
-        },
-        child: ListView(
-          children: [
-            ListTile(
-              autofocus: true,
-              title: const Text('Coordinates'),
-              subtitle: Text('${x.floor()}, ${y.floor()}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetCoordinates(
-                  value: Point(x.floor(), y.floor()),
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    _level.coordinates = Point(
-                      value.x.toDouble(),
-                      value.y.toDouble(),
-                    );
-                    setState(() {});
-                  },
-                  title: 'Focus Coordinates',
-                  validator: (value) {
-                    if (value == null) {
-                      return 'You must provide a value.';
-                    }
-                    final size = _level.size;
-                    if (value.x >= size.x) {
-                      return 'x coordinate too high.';
-                    } else if (value.y >= size.y) {
-                      return 'y coordinate too high.';
-                    } else if (value.x < 0) {
-                      return 'x coordinate too low';
-                    } else if (value.y < 0) {
-                      return 'y coordinate too low.';
-                    }
-                    return null;
-                  },
+    return WithKeyboardShortcuts(
+      child: Shortcuts(
+        child: Actions(
+          actions: {
+            MoveIntent: moveAction,
+          },
+          child: ListView(
+            children: [
+              ListTile(
+                autofocus: true,
+                title: const Text('Coordinates'),
+                subtitle: Text('${x.floor()}, ${y.floor()}'),
+                onTap: () => pushWidget(
+                  context: context,
+                  builder: (context) => GetCoordinates(
+                    value: Point(x.floor(), y.floor()),
+                    onDone: (value) {
+                      Navigator.pop(context);
+                      _level.coordinates = Point(
+                        value.x.toDouble(),
+                        value.y.toDouble(),
+                      );
+                      setState(() {});
+                    },
+                    title: 'Focus Coordinates',
+                    validator: (value) {
+                      if (value == null) {
+                        return 'You must provide a value.';
+                      }
+                      final size = _level.size;
+                      if (value.x >= size.x) {
+                        return 'x coordinate too high.';
+                      } else if (value.y >= size.y) {
+                        return 'y coordinate too high.';
+                      } else if (value.x < 0) {
+                        return 'x coordinate too low';
+                      } else if (value.y < 0) {
+                        return 'y coordinate too low.';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ),
-            ),
-            ...getBoxListTiles(context: context, box: box)
-          ],
+              ...getBoxListTiles(context: context, box: box)
+            ],
+          ),
         ),
+        shortcuts: const {
+          SingleActivator(LogicalKeyboardKey.arrowUp, control: true):
+              MoveIntent(
+            0,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowRight, control: true):
+              MoveIntent(
+            90,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowDown, control: true):
+              MoveIntent(
+            180,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowLeft, control: true):
+              MoveIntent(
+            270,
+          )
+        },
       ),
-      shortcuts: const {
-        HelpIntent.hotkey: _helpIntent,
-        SingleActivator(LogicalKeyboardKey.arrowUp, control: true): MoveIntent(
-          0,
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Show keyboard shortcuts',
+          keyName: 'slash (/)',
+          control: true,
         ),
-        SingleActivator(LogicalKeyboardKey.arrowRight, control: true):
-            MoveIntent(
-          90,
+        KeyboardShortcut(
+          description: 'Move around in the level',
+          keyName: 'Arrow keys',
+          control: true,
         ),
-        SingleActivator(LogicalKeyboardKey.arrowDown, control: true):
-            MoveIntent(
-          180,
+        KeyboardShortcut(
+          description: 'Increase and decrease x coordinate',
+          keyName: 'Left and Right Arrows',
+          alt: true,
         ),
-        SingleActivator(LogicalKeyboardKey.arrowLeft, control: true):
-            MoveIntent(
-          270,
-        )
-      },
+        KeyboardShortcut(
+          description: 'Increase and decrease y coordinate',
+          keyName: 'Up or Down Arrows',
+          alt: true,
+        ),
+      ],
     );
   }
 
