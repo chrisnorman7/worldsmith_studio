@@ -8,6 +8,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
+import '../terrain/edit_terrain.dart';
 import 'project_asset_stores.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
@@ -106,7 +107,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
             floatingActionButton: world.terrainAssets.isEmpty
                 ? null
                 : FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final sound = world.terrainAssets.first;
                       final terrain = Terrain(
                         id: newId(),
@@ -131,6 +132,13 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                       );
                       world.terrains.add(terrain);
                       widget.projectContext.save();
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditTerrain(
+                          projectContext: widget.projectContext,
+                          terrain: terrain,
+                        ),
+                      );
                       setState(() {});
                     },
                     autofocus: world.terrains.isEmpty,
