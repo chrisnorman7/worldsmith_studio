@@ -15,8 +15,10 @@ import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
 import 'add_asset.dart';
 import 'edit_asset_reference.dart';
+import 'import_directory.dart';
 
 const _openProjectIntent = OpenProjectIntent();
+const _importDirectoryIntent = ImportDirectoryIntent();
 
 /// A Widget for editing an [AssetStore] instance.
 class EditAssetStore extends StatefulWidget {
@@ -60,6 +62,19 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         return null;
       },
     );
+    final importDirectoryAction = CallbackAction<ImportDirectoryIntent>(
+      onInvoke: (intent) async {
+        await pushWidget(
+          context: context,
+          builder: (context) => ImportDirectory(
+            projectContext: widget.projectContext,
+            assetStore: widget.assetStore,
+          ),
+        );
+        setState(() {});
+        return null;
+      },
+    );
     final assets = [for (final reference in widget.assetStore.assets) reference]
       ..sort(
         (a, b) => a.comment.toString().toLowerCase().compareTo(
@@ -70,10 +85,22 @@ class _EditAssetStoreState extends State<EditAssetStore> {
       child: Cancel(
         child: Shortcuts(
           child: Actions(
-            actions: {OpenProjectIntent: addAssetAction},
+            actions: {
+              OpenProjectIntent: addAssetAction,
+              ImportDirectoryIntent: importDirectoryAction
+            },
             child: Builder(
               builder: (context) => Scaffold(
                 appBar: AppBar(
+                  actions: [
+                    TextButton(
+                      onPressed: Actions.handler<ImportDirectoryIntent>(
+                        context,
+                        _importDirectoryIntent,
+                      ),
+                      child: const Text('Import Directory'),
+                    )
+                  ],
                   title: Text('${widget.assetStore.comment}'),
                 ),
                 body: assets.isEmpty
@@ -153,7 +180,10 @@ class _EditAssetStoreState extends State<EditAssetStore> {
               ),
             ),
           ),
-          shortcuts: const {OpenProjectIntent.hotkey: _openProjectIntent},
+          shortcuts: const {
+            OpenProjectIntent.hotkey: _openProjectIntent,
+            ImportDirectoryIntent.hotkey: _importDirectoryIntent
+          },
         ),
       ),
       keyboardShortcuts: const [
