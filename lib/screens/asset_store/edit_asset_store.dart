@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:filesize/filesize.dart';
@@ -150,6 +151,21 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                                     );
                                     return null;
                                   },
+                                ),
+                                CopyAssetIntent:
+                                    CallbackAction<CopyAssetIntent>(
+                                  onInvoke: (intent) {
+                                    final asset = assetReference.reference;
+                                    final stringBuffer = StringBuffer()
+                                      ..write('AssetReference(')
+                                      ..write(jsonEncode(asset.name))
+                                      ..write(', ${asset.type}, ')
+                                      ..write('encryptionKey: ')
+                                      ..write(jsonEncode(asset.encryptionKey))
+                                      ..write(',)');
+                                    setClipboardText(stringBuffer.toString());
+                                    return null;
+                                  },
                                 )
                               },
                               child: PlaySoundSemantics(
@@ -182,7 +198,8 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                               ),
                             ),
                             shortcuts: const {
-                              DeleteIntent.hotkey: DeleteIntent()
+                              DeleteIntent.hotkey: DeleteIntent(),
+                              CopyAssetIntent.hotkey: CopyAssetIntent()
                             },
                           );
                         },
@@ -220,7 +237,12 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         KeyboardShortcut(
           description: 'Delete the currently selected asset',
           keyName: 'Delete',
-        )
+        ),
+        KeyboardShortcut(
+          description: 'Copy the dart of the current asset to the clipboard.',
+          keyName: 'c',
+          control: true,
+        ),
       ],
     );
   }
