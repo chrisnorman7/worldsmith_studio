@@ -8,7 +8,9 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
+import '../reverb/edit_reverb_preset.dart';
 import '../terrain/edit_terrain.dart';
+import '../zone/edit_zone.dart';
 import 'project_asset_stores.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
@@ -71,18 +73,20 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'World Options',
             icon: const Icon(Icons.settings_outlined),
-            builder: (context) =>
-                ProjectSettings(projectContext: widget.projectContext),
+            builder: (context) => ProjectSettings(
+              projectContext: widget.projectContext,
+            ),
           ),
           TabbedScaffoldTab(
             title: 'Zones',
             icon: const Icon(Icons.map_outlined),
-            builder: (context) =>
-                ProjectZones(projectContext: widget.projectContext),
+            builder: (context) => ProjectZones(
+              projectContext: widget.projectContext,
+            ),
             floatingActionButton: world.terrains.isEmpty
                 ? null
                 : FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final zone = Zone(
                         id: newId(),
                         name: 'Untitled Zone',
@@ -91,6 +95,13 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                       );
                       world.zones.add(zone);
                       widget.projectContext.save();
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditZone(
+                          projectContext: widget.projectContext,
+                          zone: zone,
+                        ),
+                      );
                       setState(() {});
                     },
                     autofocus: world.zones.isEmpty,
@@ -156,18 +167,25 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'Reverb Presets',
             icon: const Icon(Icons.crop_outlined),
-            builder: (context) =>
-                ProjectReverbs(projectContext: widget.projectContext),
+            builder: (context) => ProjectReverbs(
+              projectContext: widget.projectContext,
+            ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
-                world.reverbs.add(
-                  ReverbPresetReference(
-                    id: newId(),
-                    reverbPreset: reverbPreset,
+                final reverbPresetReference = ReverbPresetReference(
+                  id: newId(),
+                  reverbPreset: reverbPreset,
+                );
+                world.reverbs.add(reverbPresetReference);
+                widget.projectContext.save();
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditReverbPreset(
+                    projectContext: widget.projectContext,
+                    reverbPresetReference: reverbPresetReference,
                   ),
                 );
-                widget.projectContext.save();
                 setState(() {});
               },
               autofocus: world.reverbs.isEmpty,
@@ -191,8 +209,9 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'More',
             icon: const Icon(Icons.more_outlined),
-            builder: (context) =>
-                ProjectMoreMenu(projectContext: widget.projectContext),
+            builder: (context) => ProjectMoreMenu(
+              projectContext: widget.projectContext,
+            ),
           )
         ],
       );
