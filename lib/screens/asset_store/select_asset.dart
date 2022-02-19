@@ -66,6 +66,8 @@ class _SelectAssetState extends State<SelectAsset> {
             final asset = assets[index];
             if (asset == null) {
               return ListTile(
+                autofocus: widget.currentId == null,
+                selected: widget.currentId == null,
                 title: const Text('Clear'),
                 onTap: () => widget.onDone(null),
               );
