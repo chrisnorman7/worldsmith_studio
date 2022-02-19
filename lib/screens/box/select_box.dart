@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../widgets/cancel.dart';
+
 /// A widget for selecting a box from a list of [boxes].
 class SelectBox extends StatelessWidget {
   /// Create an instance.
@@ -32,21 +34,23 @@ class SelectBox extends StatelessWidget {
         (element) => element.id == currentBoxId,
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final box = boxes[index];
-          return ListTile(
-            autofocus:
-                currentBox == null ? index == 0 : box.id == currentBox.id,
-            title: Text(box.name),
-            onTap: () => onDone(box),
-          );
-        },
-        itemCount: boxes.length,
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: ListView.builder(
+          itemBuilder: (context, index) {
+            final box = boxes[index];
+            return ListTile(
+              autofocus:
+                  currentBox == null ? index == 0 : box.id == currentBox.id,
+              title: Text(box.name),
+              onTap: () => onDone(box),
+            );
+          },
+          itemCount: boxes.length,
+        ),
       ),
     );
   }
