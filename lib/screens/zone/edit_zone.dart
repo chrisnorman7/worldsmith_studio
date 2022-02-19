@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
 
@@ -13,6 +12,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
+import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
@@ -204,6 +204,11 @@ class _EditZoneState extends State<EditZone> {
             setState(() {});
           },
         ),
+        CustomMessageListTile(
+          projectContext: widget.projectContext,
+          customMessage: widget.zone.edgeMessage,
+          title: 'Edge Of Zone Message',
+        ),
       ],
     );
   }
@@ -238,46 +243,16 @@ class _EditZoneState extends State<EditZone> {
           distance: 1.0,
           sound: terrain.fastWalk.sound,
         );
-        final oldBox = _level.getBox();
         final destination = coordinatesInDirection(
           _level.coordinates,
           _level.heading.toDouble(),
           1.0,
         );
-        if (destination.x < 0 || destination.y < 0) {
-          // Avoid getting `RangeError` thrown.
-          return;
-        }
-        final newBox = _level.getBox(destination);
-        if (newBox != oldBox) {
-          // Boxes are different.
-          final String text;
-          if (newBox == null) {
-            _level.affectedInterfaceSounds.setReverb(null);
-            if (oldBox != null) {
-              text = 'Leaving ${oldBox.name}.';
-            } else {
-              text = 'Both boxes are null, new box was tested first.';
-            }
-          } else {
-            _level.affectedInterfaceSounds.setReverb(_level.getReverb(newBox));
-            if (oldBox == null) {
-              text = 'Entering ${newBox.name}.';
-            } else {
-              text = 'Both boxes are null, old box was tested first.';
-            }
-          }
-          showSnackBar(context: context, message: text);
-        }
-        _level.affectedInterfaceSounds.playSound(
-          getAssetReferenceReference(
-            assets: widget.projectContext.world.terrainAssets,
-            id: options.sound.id,
-          )!
-              .reference,
-          gain: options.sound.gain,
+        _level.moveTo(
+          destination: destination,
+          options: options,
+          updateLastWalked: false,
         );
-        _level.coordinates = destination;
         setState(() {});
         return null;
       },
