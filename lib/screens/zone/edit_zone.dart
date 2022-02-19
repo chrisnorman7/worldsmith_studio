@@ -418,7 +418,17 @@ class _EditZoneState extends State<EditZone> {
           save();
         },
         title: const Text('Soundproof Box'),
-      )
+      ),
+      CustomMessageListTile(
+        projectContext: widget.projectContext,
+        customMessage: box.enterMessage,
+        title: 'Enter Message',
+      ),
+      CustomMessageListTile(
+        projectContext: widget.projectContext,
+        customMessage: box.leaveMessage,
+        title: 'Leave Message',
+      ),
     ];
   }
 
