@@ -117,12 +117,23 @@ class ProjectContext {
   }
 
   /// Get a play sound semantics widget which will play the [menuMoveSound].
-  PlaySoundSemantics getMenuMoveSemantics({required Widget child}) {
-    final defaultGain = world.soundOptions.defaultGain;
+  PlaySoundSemantics getMenuMoveSemantics({
+    required Widget child,
+    CustomSound? sound,
+  }) {
+    final defaultGain = sound?.gain ??
+        world.soundOptions.menuMoveSound?.gain ??
+        world.soundOptions.defaultGain;
+    AssetReference? assetReference;
+    if (sound != null) {
+      assetReference = worldContext.getCustomSound(sound);
+    } else {
+      assetReference = world.menuMoveSound;
+    }
     return PlaySoundSemantics(
       child: child,
       soundChannel: game.interfaceSounds,
-      assetReference: menuMoveSound,
+      assetReference: assetReference,
       gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
 import '../sound/fade_time_list_tile.dart';
 import '../sound/music_player.dart';
@@ -102,29 +103,15 @@ class _EditPauseMenuState extends State<EditPauseMenu> {
                 },
               ),
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.zoneOverviewLabel,
-                onChanged: (value) {
-                  options.zoneOverviewLabel = value;
-                  save();
-                },
-                header: 'Zone Overview Label',
-                labelText: 'Label',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.zoneOverviewMessage,
+              title: 'Zone Overview Label',
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.returnToGameTitle,
-                onChanged: (value) {
-                  options.returnToGameTitle = value;
-                  save();
-                },
-                header: 'Return To Game Label',
-                labelText: 'Label',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.returnToGameMessage,
+              title: 'Return To Game',
             )
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
 import '../sound/fade_time_list_tile.dart';
 import '../sound/music_player.dart';
@@ -102,60 +103,35 @@ class _EditMainMenuState extends State<EditMainMenu> {
                 },
               ),
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.newGameTitle,
-                onChanged: (value) {
-                  options.newGameTitle = value;
-                  save();
-                },
-                header: 'New Game Title',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              customMessage: options.newGameMessage,
+              projectContext: widget.projectContext,
+              title: 'Play New Game Menu Item',
+              assetReference: world.menuMoveSound,
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.savedGameTitle,
-                onChanged: (value) {
-                  options.savedGameTitle = value;
-                  save();
-                },
-                header: 'Play Saved Game Title',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.savedGameMessage,
+              title: 'Play Saved Game Menu Item',
+              assetReference: world.menuMoveSound,
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.creditsTitle,
-                onChanged: (value) {
-                  options.creditsTitle = value;
-                  save();
-                },
-                header: 'Credits Title',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.creditsMessage,
+              title: 'Show Credits Menu Item',
+              assetReference: world.menuMoveSound,
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.exitTitle,
-                onChanged: (value) {
-                  options.exitTitle = value;
-                  save();
-                },
-                header: 'Exit Title',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.exitMessage,
+              title: 'Exit Game Menu Item',
+              assetReference: world.menuMoveSound,
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.exitMessage,
-                onChanged: (value) {
-                  options.exitMessage = value;
-                  save();
-                },
-                header: 'Exit Message',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.onExitMessage,
+              title: 'Game Exiting',
+              assetReference: world.menuMoveSound,
             )
           ],
         ),
