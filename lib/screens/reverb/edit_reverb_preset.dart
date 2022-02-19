@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -12,9 +11,9 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/custom_sound/custom_sound_list_tile.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/text_list_tile.dart';
-import '../asset_store/select_asset.dart';
 import 'reverb_setting.dart';
 
 const _synthizerReverbUrl =
@@ -145,41 +144,19 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
       resetReverb();
     }
     final preset = widget.reverbPresetReference.reverbPreset;
-    final testAssetReference = getAssetReferenceReference(
-      assets: widget.projectContext.world.interfaceSoundsAssets,
-      id: widget.reverbPresetReference.sound?.id,
-    );
     final listTiles = [
-      ListTile(
-        title: const Text('Test asset'),
-        subtitle: Text(
-          testAssetReference == null
-              ? 'Not set'
-              : assetString(testAssetReference),
-        ),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (context) => SelectAsset(
-            projectContext: widget.projectContext,
-            assetStore: widget.projectContext.world.interfaceSoundsAssetStore,
-            onDone: (value) {
-              Navigator.pop(context);
-              if (value == null) {
-                widget.reverbPresetReference.sound = null;
-              } else {
-                widget.reverbPresetReference.sound = Sound(
-                  id: value.variableName,
-                  gain: widget.projectContext.world.soundOptions.defaultGain,
-                );
-              }
-              widget.projectContext.save();
-              setState(play);
-            },
-            currentId: widget.reverbPresetReference.sound?.id,
-            nullable: true,
-            title: 'Reverb Test Sound',
-          ),
-        ),
+      CustomSoundListTile(
+        projectContext: widget.projectContext,
+        value: widget.reverbPresetReference.sound,
+        title: 'Preview Sound',
+        onClear: () {
+          widget.reverbPresetReference.sound = null;
+          save();
+        },
+        onCreate: (value) {
+          widget.reverbPresetReference.sound = value;
+          save();
+        },
       ),
       TextListTile(
         value: preset.name,
@@ -376,8 +353,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
       meanFreePath: meanFreePath ?? oldPreset.meanFreePath,
       t60: t60 ?? oldPreset.t60,
     );
-    widget.projectContext.save();
-    setState(() {});
+    save();
   }
 
   /// Stop the sound.
@@ -393,6 +369,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
 
   /// Reset the reverb.
   void resetReverb() {
+    channel.reverb = null;
     reverb?.destroy();
     reverb = widget.projectContext.game.createReverb(
       widget.reverbPresetReference.reverbPreset,
@@ -406,12 +383,11 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     final sound = widget.reverbPresetReference.sound;
     if (sound != null) {
       resetReverb();
-      final reference = getAssetReferenceReference(
-        assets: widget.projectContext.world.interfaceSoundsAssets,
-        id: sound.id,
+      final reference = widget.projectContext.worldContext.getCustomSound(
+        sound,
       );
       _playSound = channel.playSound(
-        reference!.reference,
+        reference,
         gain: sound.gain,
         keepAlive: true,
         looping: true,
@@ -478,5 +454,11 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
         DecreaseIntent.hotkey: DecreaseIntent(),
       },
     );
+  }
+
+  /// Save the project.
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 }
