@@ -416,6 +416,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     final decreaseAction = CallbackAction<DecreaseIntent>(
       onInvoke: (intent) => onDone(max(setting.min, value - setting.modify)),
     );
+    final valueString = value.toString();
     return Shortcuts(
       child: Actions(
         actions: {
@@ -423,9 +424,8 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
           DecreaseIntent: decreaseAction,
         },
         child: ListTile(
-          title: Text(setting.name),
-          subtitle: TextButton(
-            child: Text(value.toString()),
+          title: TextButton(
+            child: Text('${setting.name}: $valueString'),
             onPressed: () => pushWidget(
               context: context,
               builder: (context) => GetNumber(
@@ -441,12 +441,11 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
               ),
             ),
           ),
-          trailing: IconButton(
+          subtitle: IconButton(
             icon: const Icon(Icons.restore_rounded),
-            tooltip: 'Restore to ${setting.defaultValue}',
+            tooltip: 'Restore ${setting.name} to ${setting.defaultValue}',
             onPressed: () => onDone(setting.defaultValue),
           ),
-          isThreeLine: true,
         ),
       ),
       shortcuts: const {
