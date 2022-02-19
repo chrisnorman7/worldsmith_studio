@@ -13,6 +13,7 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/custom_sound/custom_sound_list_tile.dart';
 import '../../widgets/get_number.dart';
+import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/text_list_tile.dart';
 import 'reverb_setting.dart';
 
@@ -236,80 +237,99 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
         onDone: (value) => setReverbValue(lateReflectionsDelay: value),
       )
     ];
-    return Cancel(
-      child: Shortcuts(
-        child: Actions(
-          actions: {
-            PlayPauseIntent: playPauseAction,
-          },
-          child: Builder(
-            builder: (context) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Edit Reverb Preset'),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      final id = widget.reverbPresetReference.id;
-                      for (final zone in widget.projectContext.world.zones) {
-                        for (final box in zone.boxes) {
-                          if (box.reverbId == id) {
-                            return showSnackBar(
-                              context: context,
-                              message: 'You cannot delete the reverb for the '
-                                  '${box.name} of the ${zone.name} zone.',
-                            );
+    return WithKeyboardShortcuts(
+      child: Cancel(
+        child: Shortcuts(
+          child: Actions(
+            actions: {
+              PlayPauseIntent: playPauseAction,
+            },
+            child: Builder(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  title: const Text('Edit Reverb Preset'),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        final id = widget.reverbPresetReference.id;
+                        for (final zone in widget.projectContext.world.zones) {
+                          for (final box in zone.boxes) {
+                            if (box.reverbId == id) {
+                              return showSnackBar(
+                                context: context,
+                                message: 'You cannot delete the reverb for the '
+                                    '${box.name} of the ${zone.name} zone.',
+                              );
+                            }
                           }
                         }
-                      }
-                      confirm(
-                        context: context,
-                        yesCallback: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          widget.projectContext.world.reverbs.removeWhere(
-                            (element) => element.id == id,
-                          );
-                        },
-                        message: 'Are you sure you want to delete the '
-                            '${preset.name} reverb?',
-                        title: 'Confirm Delete',
-                      );
-                    },
-                    icon: const Icon(Icons.delete_rounded),
-                    tooltip: 'Delete Reverb Preset',
-                  ),
-                  IconButton(
-                    onPressed: () => launch(_synthizerReverbUrl),
-                    icon: const Icon(Icons.help_rounded),
-                    tooltip: 'Synthizer Help',
-                  ),
-                  ElevatedButton(
-                    onPressed: Actions.handler<PlayPauseIntent>(
-                      context,
-                      const PlayPauseIntent(),
+                        confirm(
+                          context: context,
+                          yesCallback: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            widget.projectContext.world.reverbs.removeWhere(
+                              (element) => element.id == id,
+                            );
+                          },
+                          message: 'Are you sure you want to delete the '
+                              '${preset.name} reverb?',
+                          title: 'Confirm Delete',
+                        );
+                      },
+                      icon: const Icon(Icons.delete_rounded),
+                      tooltip: 'Delete Reverb Preset',
                     ),
-                    child: _playSound == null
-                        ? const Icon(
-                            Icons.play_arrow_rounded,
-                            semanticLabel: 'Play',
-                          )
-                        : const Icon(
-                            Icons.pause_rounded,
-                            semanticLabel: 'Pause',
-                          ),
-                  )
-                ],
-              ),
-              body: ListView(
-                children: listTiles,
+                    IconButton(
+                      onPressed: () => launch(_synthizerReverbUrl),
+                      icon: const Icon(Icons.help_rounded),
+                      tooltip: 'Synthizer Help',
+                    ),
+                    ElevatedButton(
+                      onPressed: Actions.handler<PlayPauseIntent>(
+                        context,
+                        const PlayPauseIntent(),
+                      ),
+                      child: _playSound == null
+                          ? const Icon(
+                              Icons.play_arrow_rounded,
+                              semanticLabel: 'Play',
+                            )
+                          : const Icon(
+                              Icons.pause_rounded,
+                              semanticLabel: 'Pause',
+                            ),
+                    )
+                  ],
+                ),
+                body: ListView(
+                  children: listTiles,
+                ),
               ),
             ),
           ),
+          shortcuts: const {
+            PlayPauseIntent.hotkey: PlayPauseIntent(),
+          },
         ),
-        shortcuts: const {
-          PlayPauseIntent.hotkey: PlayPauseIntent(),
-        },
       ),
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Play or pause the preview sound.',
+          keyName: 'P',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Increase the selected value.',
+          keyName: 'Equals (=)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Decrease the selected value',
+          keyName: 'Dash (-)',
+          control: true,
+        )
+      ],
     );
   }
 
