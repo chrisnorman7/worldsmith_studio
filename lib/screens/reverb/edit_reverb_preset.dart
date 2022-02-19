@@ -385,7 +385,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     _playSound?.destroy();
     _playSound = null;
     if (destroyReverb) {
-      channel.setReverb(null);
+      channel.reverb = null;
       reverb?.destroy();
       reverb = null;
     }
@@ -397,7 +397,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     reverb = widget.projectContext.game.createReverb(
       widget.reverbPresetReference.reverbPreset,
     );
-    channel.setReverb(reverb);
+    channel.reverb = reverb?.id;
   }
 
   /// Play the sound (if any).

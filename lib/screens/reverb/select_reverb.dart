@@ -97,7 +97,7 @@ class _SelectReverbState extends State<SelectReverb> {
                     );
                     _channel = channel;
                   } else {
-                    channel.setReverb(reverb);
+                    channel.reverb = reverb.id;
                   }
                   stopSound();
                   final assetReference = getAssetReferenceReference(

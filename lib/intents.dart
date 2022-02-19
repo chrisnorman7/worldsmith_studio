@@ -135,3 +135,27 @@ class CreateBoxIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
 }
+
+/// An intent to go to the next box.
+class NextBoxIntent extends Intent {
+  /// Create an instance.
+  const NextBoxIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(
+    LogicalKeyboardKey.period,
+    control: true,
+  );
+}
+
+/// An intent to go to the previous box.
+class PreviousBoxIntent extends Intent {
+  /// Create an instance.
+  const PreviousBoxIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(
+    LogicalKeyboardKey.comma,
+    control: true,
+  );
+}

@@ -5,6 +5,7 @@ import '../../project_context.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
+import '../reverb/reverb_list_tile.dart';
 import '../terrain/terrain_list_tile.dart';
 import 'coordinates_list_tile.dart';
 
@@ -77,6 +78,15 @@ class _EditBoxState extends State<EditBox> {
                 },
                 terrains: widget.projectContext.world.terrains,
                 currentTerrainId: widget.box.terrainId,
+              ),
+              ReverbListTile(
+                projectContext: widget.projectContext,
+                onDone: (value) {
+                  widget.box.reverbId = value?.id;
+                  save();
+                },
+                reverbPresets: widget.projectContext.world.reverbs,
+                currentReverbId: widget.box.reverbId,
               ),
               CustomMessageListTile(
                 projectContext: widget.projectContext,

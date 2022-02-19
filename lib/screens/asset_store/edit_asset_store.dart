@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -115,16 +116,22 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                           final String assetSize;
                           switch (assetReference.reference.type) {
                             case AssetType.file:
+                              final file = File(
+                                path.join(
+                                  widget.projectContext.directory.path,
+                                  assetReference.reference.name,
+                                ),
+                              );
                               assetSize = filesize(
-                                relativeAssetReference
-                                    .getFile(widget.projectContext.game.random)
-                                    .statSync()
-                                    .size,
+                                file.statSync().size,
                               );
                               break;
                             case AssetType.collection:
                               final directory = Directory(
-                                relativeAssetReference.name,
+                                path.join(
+                                  widget.projectContext.directory.path,
+                                  relativeAssetReference.name,
+                                ),
                               );
                               final fileSizes = [
                                 for (final file

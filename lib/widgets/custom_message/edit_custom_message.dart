@@ -78,9 +78,9 @@ class _EditCustomMessageState extends State<EditCustomMessage> {
                   builder: (context) => SelectAssetStore(
                     projectContext: widget.projectContext,
                     onDone: (customSoundAssetStore) {
-                      Navigator.pop(context);
                       if (customSoundAssetStore == null) {
                         widget.customMessage.sound = null;
+                        Navigator.pop(context);
                         save();
                       } else {
                         pushWidget(
@@ -90,6 +90,7 @@ class _EditCustomMessageState extends State<EditCustomMessage> {
                             assetStore: widget.projectContext.worldContext
                                 .getAssetStore(customSoundAssetStore),
                             onDone: (newAssetReference) {
+                              Navigator.pop(context);
                               Navigator.pop(context);
                               if (newAssetReference == null) {
                                 widget.customMessage.sound = null;

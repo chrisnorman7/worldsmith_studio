@@ -311,6 +311,12 @@ class _EditZoneState extends State<EditZone> {
         return null;
       },
     );
+    final previousBoxAction = CallbackAction<PreviousBoxIntent>(
+      onInvoke: (intent) => switchBox(-1),
+    );
+    final nextBoxAction = CallbackAction<NextBoxIntent>(
+      onInvoke: (intent) => switchBox(1),
+    );
     final createBoxAction = CallbackAction<CreateBoxIntent>(
       onInvoke: (intent) => pushWidget(
         context: context,
@@ -356,6 +362,8 @@ class _EditZoneState extends State<EditZone> {
           actions: {
             MoveIntent: moveAction,
             CreateBoxIntent: createBoxAction,
+            PreviousBoxIntent: previousBoxAction,
+            NextBoxIntent: nextBoxAction,
           },
           child: ListView(
             children: [
@@ -417,27 +425,40 @@ class _EditZoneState extends State<EditZone> {
             MoveDirections.west,
           ),
           CreateBoxIntent.hotkey: _createBoxIntent,
+          PreviousBoxIntent.hotkey: PreviousBoxIntent(),
+          NextBoxIntent.hotkey: NextBoxIntent(),
         },
       ),
       keyboardShortcuts: const [
-        KeyboardShortcut(description: 'New box.', keyName: 'N', control: true),
         KeyboardShortcut(
-          description: 'Move around in the level',
+            description: 'Create new box.', keyName: 'N', control: true),
+        KeyboardShortcut(
+          description: 'Move north, east, south, or west.',
           keyName: 'Arrow keys',
           control: true,
         ),
         KeyboardShortcut(
-          description: 'Increase and decrease x coordinate',
+          description: 'Increase and decrease x coordinate.',
           keyName: 'Left and Right Arrows',
           alt: true,
         ),
         KeyboardShortcut(
-          description: 'Increase and decrease y coordinate',
+          description: 'Increase and decrease y coordinate.',
           keyName: 'Up or Down Arrows',
           alt: true,
         ),
         KeyboardShortcut(
-          description: 'Show keyboard shortcuts',
+          description: 'Move to the previous box.',
+          keyName: 'comma (,)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Move to the next box.',
+          keyName: 'Period (.)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Show keyboard shortcuts.',
           keyName: 'slash (/)',
           control: true,
         ),
@@ -540,5 +561,27 @@ class _EditZoneState extends State<EditZone> {
       min(coordinates.x, size.x - 1).toDouble(),
       min(coordinates.y, size.y - 1).toDouble(),
     );
+  }
+
+  /// Switch boxes.
+  void switchBox(int direction) {
+    final box = _currentBox;
+    int index;
+    if (box == null) {
+      index = 0;
+    } else {
+      index = widget.zone.boxes.indexWhere((element) => element.id == box.id);
+    }
+    index++;
+    if (index >= widget.zone.boxes.length) {
+      index = 0;
+    }
+    final newBox = widget.zone.boxes[index];
+    final coordinates = widget.zone.getAbsoluteCoordinates(newBox.start);
+    _currentBox = _level.moveTo(
+      destination: Point(coordinates.x.toDouble(), coordinates.y.toDouble()),
+      walkingMode: WalkingMode.fast,
+    );
+    setState(() {});
   }
 }
