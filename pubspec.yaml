@@ -21,7 +21,7 @@ dependencies:
   worldsmith: 
     path: ../worldsmith
   ziggurat: ^0.35.0
-  ziggurat_sounds: ^0.15.0
+  ziggurat_sounds: ^0.17.0
 
 dev_dependencies:
   build_runner: ^2.1.7
