@@ -7,6 +7,7 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_coordinates.dart';
 import 'select_box.dart';
+import 'select_box_corner.dart';
 
 /// A widget that allows full editing of its [value].
 class EditCoordinates extends StatefulWidget {
@@ -72,7 +73,13 @@ class _EditCoordinatesState extends State<EditCoordinates> {
               ListTile(
                 title: const Text('Clamp Corner'),
                 subtitle: Text(clamp.corner.name),
-                onTap: () {},
+                onTap: () => pushWidget(
+                  context: context,
+                  builder: (context) => SelectBoxCorner(
+                    onDone: (value) => setState(() => clamp.corner = value),
+                    value: clamp.corner,
+                  ),
+                ),
               )
             ],
             ListTile(
