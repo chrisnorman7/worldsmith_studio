@@ -37,6 +37,7 @@ class ProjectSoundManager extends SoundManager {
       gain: event.gain,
       looping: event.looping,
       pitchBend: event.pitchBend,
+      id: event.id,
     );
     super.handlePlaySound(newEvent);
   }

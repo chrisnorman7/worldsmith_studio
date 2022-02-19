@@ -39,22 +39,23 @@ class _ProjectZonesState extends State<ProjectZones> {
         final music = zone.music;
         return PlaySoundSemantics(
           child: Builder(
-              builder: (context) => ListTile(
-                    autofocus: index == 0,
-                    title: Text(zone.name),
-                    subtitle: Text('Boxes: ${zone.boxes.length}'),
-                    onTap: () async {
-                      PlaySoundSemantics.of(context)?.stop();
-                      await pushWidget(
-                        context: context,
-                        builder: (context) => EditZone(
-                          projectContext: widget.projectContext,
-                          zone: zone,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                  )),
+            builder: (context) => ListTile(
+              autofocus: index == 0,
+              title: Text(zone.name),
+              subtitle: Text('Boxes: ${zone.boxes.length}'),
+              onTap: () async {
+                PlaySoundSemantics.of(context)?.stop();
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditZone(
+                    projectContext: widget.projectContext,
+                    zone: zone,
+                  ),
+                );
+                setState(() {});
+              },
+            ),
+          ),
           soundChannel: widget.projectContext.game.interfaceSounds,
           assetReference: music == null
               ? null
