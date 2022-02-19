@@ -3,6 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Move directions.
+enum MoveDirections {
+  /// 0 degrees.
+  north,
+
+  /// 90 degrees.
+  east,
+
+  /// 180 degrees.
+  south,
+
+  /// 270 degrees.
+  west,
+}
+
 /// Cancel something.
 class CancelIntent extends Intent {
   /// Create an instance.
@@ -69,10 +84,10 @@ class DecreaseIntent extends Intent {
 /// An intent to move within a zone.
 class MoveIntent extends Intent {
   /// Create an instance.
-  const MoveIntent(this.heading);
+  const MoveIntent(this.direction);
 
   /// The direction to move in.
-  final int heading;
+  final MoveDirections direction;
 }
 
 /// An intent to get help.
@@ -110,4 +125,13 @@ class CopyAssetIntent extends Intent {
 
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyC, control: true);
+}
+
+/// An intent to create a new box.
+class CreateBoxIntent extends Intent {
+  /// Create an instance.
+  const CreateBoxIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
 }

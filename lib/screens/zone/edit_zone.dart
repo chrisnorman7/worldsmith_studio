@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/worldsmith.dart';
-import 'package:ziggurat/ziggurat.dart';
 
 import '../../constants.dart';
 import '../../intents.dart';
@@ -18,12 +17,16 @@ import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
+import '../box/edit_box.dart';
+import '../box/select_box.dart';
+import '../box/select_box_corner.dart';
 import '../reverb/reverb_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
 
 const _helpIntent = HelpIntent();
+const _createBoxIntent = CreateBoxIntent();
 
 /// A widget for editing its [zone].
 class EditZone extends StatefulWidget {
@@ -48,6 +51,7 @@ class EditZone extends StatefulWidget {
 /// State for [EditZone].
 class _EditZoneState extends State<EditZone> {
   late ZoneLevel _level;
+  Box? _currentBox;
 
   /// Initialise stuff.
   @override
@@ -69,6 +73,7 @@ class _EditZoneState extends State<EditZone> {
       worldContext: widget.projectContext.worldContext,
       zone: widget.zone,
     )..onPush();
+    _currentBox = _level.getBox();
   }
 
   /// Build a widget.
@@ -218,51 +223,139 @@ class _EditZoneState extends State<EditZone> {
     if (widget.zone.boxes.isEmpty) {
       return const CenterText(text: 'There are currently no boxes.');
     }
+    final startCoordinates = <String, Point<int>>{};
+    final endCoordinates = <String, Point<int>>{};
+    final boxes = List<Box>.from(widget.zone.boxes, growable: false)
+      ..sort(
+        (a, b) {
+          final aStart = startCoordinates[a.id] ??
+              widget.zone.getAbsoluteCoordinates(a.start);
+          startCoordinates[a.id] = aStart;
+          final aEnd =
+              endCoordinates[a.id] ?? widget.zone.getAbsoluteCoordinates(a.end);
+          endCoordinates[a.id] = aEnd;
+          final bStart = startCoordinates[b.id] ??
+              widget.zone.getAbsoluteCoordinates(b.start);
+          startCoordinates[b.id] = bStart;
+          final bEnd =
+              endCoordinates[b.id] ?? widget.zone.getAbsoluteCoordinates(b.end);
+          endCoordinates[b.id] = bEnd;
+          if (aStart.x == bStart.x) {
+            if (aStart.y == bStart.y) {
+              if (aEnd.x == bEnd.x) {
+                if (aEnd.y == bEnd.y) {
+                  return 0;
+                }
+                return aEnd.y.compareTo(bEnd.y);
+              }
+              return aEnd.x.compareTo(bEnd.x);
+            }
+            return aStart.y.compareTo(bStart.y);
+          }
+          return aStart.x.compareTo(bStart.x);
+        },
+      );
     return ListView.builder(
       itemBuilder: (context, index) {
-        final box = widget.zone.boxes[index];
+        final box = boxes[index];
+        final start = startCoordinates[box.id]!;
+        final end = endCoordinates[box.id]!;
         return ListTile(
+          autofocus: index == 0,
           title: Text(box.name),
-          onTap: () {},
+          subtitle: Text('${start.x},${start.y} --- ${end.x},${end.y}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditBox(
+                projectContext: widget.projectContext,
+                zone: widget.zone,
+                box: box,
+              ),
+            );
+            resetLevel();
+            save();
+          },
         );
       },
-      itemCount: widget.zone.boxes.length,
+      itemCount: boxes.length,
     );
   }
 
   /// Get the WYSIWYG editor.
   Widget getCanvas(BuildContext context) {
-    final x = _level.coordinates.x;
-    final y = _level.coordinates.y;
+    var x = _level.coordinates.x;
+    var y = _level.coordinates.y;
     final moveAction = CallbackAction<MoveIntent>(
       onInvoke: (intent) {
-        _level.heading = intent.heading;
-        final terrain = _level.getTerrain();
-        final options = WalkingOptions(
-          interval: 0,
-          distance: 1.0,
-          sound: terrain.fastWalk.sound,
-        );
-        final destination = coordinatesInDirection(
-          _level.coordinates,
-          _level.heading.toDouble(),
-          1.0,
-        );
-        _level.moveTo(
-          destination: destination,
-          options: options,
+        switch (intent.direction) {
+          case MoveDirections.north:
+            y++;
+            break;
+          case MoveDirections.east:
+            x++;
+            break;
+          case MoveDirections.south:
+            y--;
+            break;
+          case MoveDirections.west:
+            x--;
+            break;
+        }
+        _currentBox = _level.moveTo(
+          destination: Point(x, y),
+          walkingMode: WalkingMode.fast,
           updateLastWalked: false,
         );
         setState(() {});
         return null;
       },
     );
-    final box = _level.getBox();
+    final createBoxAction = CallbackAction<CreateBoxIntent>(
+      onInvoke: (intent) => pushWidget(
+        context: context,
+        builder: (context) => SelectBox(
+          boxes: widget.zone.boxes,
+          onDone: (box) => pushWidget(
+            context: context,
+            builder: (context) => SelectBoxCorner(
+              onDone: (corner) async {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                final clamp = CoordinateClamp(boxId: box.id, corner: corner);
+                final start = Coordinates(0, 0, clamp: clamp);
+                final end = Coordinates(0, 0, clamp: clamp);
+                final newBox = Box(
+                  id: newId(),
+                  name: 'Untitled Box',
+                  start: start,
+                  end: end,
+                  terrainId: widget.projectContext.world.terrains.first.id,
+                );
+                widget.zone.boxes.add(newBox);
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditBox(
+                    projectContext: widget.projectContext,
+                    zone: widget.zone,
+                    box: newBox,
+                  ),
+                );
+                resetLevel();
+                save();
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    final box = _currentBox;
     return WithKeyboardShortcuts(
       child: Shortcuts(
         child: Actions(
           actions: {
             MoveIntent: moveAction,
+            CreateBoxIntent: createBoxAction,
           },
           child: ListView(
             children: [
@@ -309,28 +402,25 @@ class _EditZoneState extends State<EditZone> {
         shortcuts: const {
           SingleActivator(LogicalKeyboardKey.arrowUp, control: true):
               MoveIntent(
-            0,
+            MoveDirections.north,
           ),
           SingleActivator(LogicalKeyboardKey.arrowRight, control: true):
               MoveIntent(
-            90,
+            MoveDirections.east,
           ),
           SingleActivator(LogicalKeyboardKey.arrowDown, control: true):
               MoveIntent(
-            180,
+            MoveDirections.south,
           ),
           SingleActivator(LogicalKeyboardKey.arrowLeft, control: true):
               MoveIntent(
-            270,
-          )
+            MoveDirections.west,
+          ),
+          CreateBoxIntent.hotkey: _createBoxIntent,
         },
       ),
       keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Show keyboard shortcuts',
-          keyName: 'slash (/)',
-          control: true,
-        ),
+        KeyboardShortcut(description: 'New box.', keyName: 'N', control: true),
         KeyboardShortcut(
           description: 'Move around in the level',
           keyName: 'Arrow keys',
@@ -345,6 +435,11 @@ class _EditZoneState extends State<EditZone> {
           description: 'Increase and decrease y coordinate',
           keyName: 'Up or Down Arrows',
           alt: true,
+        ),
+        KeyboardShortcut(
+          description: 'Show keyboard shortcuts',
+          keyName: 'slash (/)',
+          control: true,
         ),
       ],
     );

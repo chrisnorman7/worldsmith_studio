@@ -64,6 +64,7 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                         )
                         .toList(),
                     onDone: (value) {
+                      Navigator.pop(context);
                       setState(() => widget.value.clamp!.boxId = value.id);
                     },
                     currentBoxId: clamp.boxId,
@@ -76,7 +77,10 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                 onTap: () => pushWidget(
                   context: context,
                   builder: (context) => SelectBoxCorner(
-                    onDone: (value) => setState(() => clamp.corner = value),
+                    onDone: (value) {
+                      Navigator.pop(context);
+                      setState(() => clamp.corner = value);
+                    },
                     value: clamp.corner,
                   ),
                 ),
