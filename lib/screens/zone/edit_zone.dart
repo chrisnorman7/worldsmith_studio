@@ -19,7 +19,6 @@ import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
 import '../reverb/reverb_list_tile.dart';
-import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
@@ -48,7 +47,6 @@ class EditZone extends StatefulWidget {
 
 /// State for [EditZone].
 class _EditZoneState extends State<EditZone> {
-  MusicPlayer? _musicPlayer;
   late ZoneLevel _level;
 
   /// Initialise stuff.
@@ -70,39 +68,13 @@ class _EditZoneState extends State<EditZone> {
     _level = ZoneLevel(
       worldContext: widget.projectContext.worldContext,
       zone: widget.zone,
-    );
+    )..onPush();
   }
 
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    final musicPlayer = _musicPlayer;
-    final music = widget.zone.music;
-    if (music == null) {
-      _musicPlayer?.stop();
-      _musicPlayer = null;
-    } else {
-      final assetReference = widget.projectContext.getRelativeAssetReference(
-        getAssetReferenceReference(
-          assets: world.musicAssets,
-          id: music.id,
-        )!
-            .reference,
-      );
-      if (musicPlayer == null) {
-        _musicPlayer = MusicPlayer(
-          channel: widget.projectContext.game.ambianceSounds,
-          assetReference: assetReference,
-          gain: music.gain,
-          fadeBuilder: () => 0.5,
-        )..play();
-      } else {
-        musicPlayer
-          ..assetReference = assetReference
-          ..gain = music.gain;
-      }
-    }
     return Cancel(
       child: TabbedScaffold(
         tabs: [
@@ -166,8 +138,7 @@ class _EditZoneState extends State<EditZone> {
   @override
   void dispose() {
     super.dispose();
-    _musicPlayer?.stop();
-    _musicPlayer = null;
+    _level.onPop(0.5);
   }
 
   /// Get the zone settings list view.
@@ -299,13 +270,11 @@ class _EditZoneState extends State<EditZone> {
           showSnackBar(context: context, message: text);
         }
         _level.affectedInterfaceSounds.playSound(
-          widget.projectContext.getRelativeAssetReference(
-            getAssetReferenceReference(
-              assets: widget.projectContext.world.terrainAssets,
-              id: options.sound.id,
-            )!
-                .reference,
-          ),
+          getAssetReferenceReference(
+            assets: widget.projectContext.world.terrainAssets,
+            id: options.sound.id,
+          )!
+              .reference,
           gain: options.sound.gain,
         );
         _level.coordinates = destination;
@@ -485,7 +454,7 @@ class _EditZoneState extends State<EditZone> {
     _level = ZoneLevel(
       worldContext: widget.projectContext.worldContext,
       zone: widget.zone,
-    );
+    )..onPush();
     final size = _level.size;
     _level.coordinates = Point(
       min(coordinates.x, size.x - 1).toDouble(),

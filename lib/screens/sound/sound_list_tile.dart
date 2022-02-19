@@ -108,13 +108,11 @@ class SoundListTile extends StatelessWidget {
         soundChannel: projectContext.game.interfaceSounds,
         assetReference: value == null
             ? null
-            : projectContext.getRelativeAssetReference(
-                getAssetReferenceReference(
-                  assets: assetStore.assets,
-                  id: value?.id,
-                )!
-                    .reference,
-              ),
+            : (getAssetReferenceReference(
+                assets: assetStore.assets,
+                id: value?.id,
+              )!
+                .reference),
         gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
         looping: looping,
       );

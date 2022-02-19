@@ -44,18 +44,14 @@ class _EditMainMenuState extends State<EditMainMenu> {
       if (musicPlayer == null) {
         musicPlayer = MusicPlayer(
           channel: widget.projectContext.game.ambianceSounds,
-          assetReference: widget.projectContext.getRelativeAssetReference(
-            music.sound,
-          ),
+          assetReference: music.sound,
           gain: music.gain,
           fadeBuilder: () => options.fadeTime,
         )..play();
       } else {
         musicPlayer
           ..gain = music.gain
-          ..assetReference = widget.projectContext.getRelativeAssetReference(
-            music.sound,
-          );
+          ..assetReference = music.sound;
       }
       _musicPlayer = musicPlayer;
     }

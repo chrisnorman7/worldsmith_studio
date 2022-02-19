@@ -111,9 +111,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                         itemBuilder: (context, index) {
                           final assetReference = assets[index];
                           final relativeAssetReference =
-                              widget.projectContext.getRelativeAssetReference(
-                            assetReference.reference,
-                          );
+                              assetReference.reference;
                           final String assetSize;
                           switch (assetReference.reference.type) {
                             case AssetType.file:

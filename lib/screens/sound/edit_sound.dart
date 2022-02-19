@@ -105,11 +105,7 @@ class _EditSoundState extends State<EditSound> {
                 ),
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: asset == null
-                  ? null
-                  : widget.projectContext.getRelativeAssetReference(
-                      asset.reference,
-                    ),
+              assetReference: asset?.reference,
               gain: gain,
             ),
             GainListTile(

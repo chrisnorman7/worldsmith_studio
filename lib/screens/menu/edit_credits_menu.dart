@@ -50,18 +50,14 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
       if (musicPlayer == null) {
         musicPlayer = MusicPlayer(
           channel: widget.projectContext.game.ambianceSounds,
-          assetReference: widget.projectContext.getRelativeAssetReference(
-            music.sound,
-          ),
+          assetReference: music.sound,
           gain: music.gain,
           fadeBuilder: () => options.fadeTime,
         )..play();
       } else {
         musicPlayer
           ..gain = music.gain
-          ..assetReference = widget.projectContext.getRelativeAssetReference(
-            music.sound,
-          );
+          ..assetReference = music.sound;
       }
       _musicPlayer = musicPlayer;
     }
@@ -154,12 +150,11 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     final sound = credit.sound;
     final AssetReference? assetReference;
     if (sound != null) {
-      assetReference = widget.projectContext.getRelativeAssetReference(
-        getAssetReferenceReference(assets: world.creditsAssets, id: sound.id)!
-            .reference,
-      );
+      assetReference =
+          getAssetReferenceReference(assets: world.creditsAssets, id: sound.id)!
+              .reference;
     } else {
-      assetReference = widget.projectContext.menuMoveSound;
+      assetReference = world.menuMoveSound;
     }
     final gain =
         sound?.gain ?? world.soundOptions.menuMoveSound?.gain ?? defaultGain;

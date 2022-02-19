@@ -51,31 +51,28 @@ class _CustomMessageListTileState extends State<CustomMessageListTile> {
     final text = widget.customMessage.text;
     final sound = widget.customMessage.sound;
     return PlaySoundSemantics(
-      child: Builder(
-        builder: (context) => ListTile(
-          autofocus: widget.autofocus,
-          title: Text(widget.title),
-          subtitle: Text('$text'),
-          onTap: () async {
-            PlaySoundSemantics.of(context)?.stop();
-            await pushWidget(
-              context: context,
-              builder: (context) => EditCustomMessage(
-                projectContext: widget.projectContext,
-                customMessage: widget.customMessage,
-              ),
-            );
-            widget.projectContext.save();
-            setState(() {});
-          },
+        child: Builder(
+          builder: (context) => ListTile(
+            autofocus: widget.autofocus,
+            title: Text(widget.title),
+            subtitle: Text('$text'),
+            onTap: () async {
+              PlaySoundSemantics.of(context)?.stop();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditCustomMessage(
+                  projectContext: widget.projectContext,
+                  customMessage: widget.customMessage,
+                ),
+              );
+              widget.projectContext.save();
+              setState(() {});
+            },
+          ),
         ),
-      ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: sound == null
-          ? widget.assetReference
-          : widget.projectContext.getRelativeAssetReference(
-              widget.projectContext.worldContext.getCustomSound(sound),
-            ),
-    );
+        soundChannel: widget.projectContext.game.interfaceSounds,
+        assetReference: sound == null
+            ? widget.assetReference
+            : widget.projectContext.worldContext.getCustomSound(sound));
   }
 }

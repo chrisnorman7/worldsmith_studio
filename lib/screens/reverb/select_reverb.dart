@@ -106,9 +106,7 @@ class _SelectReverbState extends State<SelectReverb> {
                   )!
                       .reference;
                   _playSound = channel.playSound(
-                    widget.projectContext.getRelativeAssetReference(
-                      assetReference,
-                    ),
+                    assetReference,
                     gain: sound.gain,
                     keepAlive: true,
                   );

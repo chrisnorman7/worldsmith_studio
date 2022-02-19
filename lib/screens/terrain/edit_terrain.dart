@@ -114,11 +114,9 @@ class _EditTerrainState extends State<EditTerrain> {
                 },
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: widget.projectContext.getRelativeAssetReference(
-                getAssetReferenceReference(
-                        assets: terrainAssets, id: slowWalkSound.id)!
-                    .reference,
-              ),
+              assetReference: getAssetReferenceReference(
+                      assets: terrainAssets, id: slowWalkSound.id)!
+                  .reference,
               gain: slowWalkSound.gain,
             ),
             PlaySoundSemantics(
@@ -137,13 +135,11 @@ class _EditTerrainState extends State<EditTerrain> {
                 },
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: widget.projectContext.getRelativeAssetReference(
-                getAssetReferenceReference(
-                  assets: terrainAssets,
-                  id: fastWalkSound.id,
-                )!
-                    .reference,
-              ),
+              assetReference: getAssetReferenceReference(
+                assets: terrainAssets,
+                id: fastWalkSound.id,
+              )!
+                  .reference,
               gain: fastWalkSound.gain,
             ),
           ],

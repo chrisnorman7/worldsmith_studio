@@ -57,23 +57,13 @@ class ProjectContext {
     }
   }
 
-  /// Convert the given [assetReference] to have a relative filename.
-  AssetReference getRelativeAssetReference(AssetReference assetReference) =>
-      AssetReference(
-        path.join(directory.path, assetReference.name),
-        assetReference.type,
-        encryptionKey: assetReference.encryptionKey,
-      );
-
   /// Delete the given [assetReferenceReference] from the given [assetStore].
   void deleteAssetReferenceReference(
       {required AssetStore assetStore,
       required AssetReferenceReference assetReferenceReference}) {
     assetStore.assets.remove(assetReferenceReference);
     save();
-    final reference = getRelativeAssetReference(
-      assetReferenceReference.reference,
-    );
+    final reference = assetReferenceReference.reference;
     switch (reference.type) {
       case AssetType.file:
         final file = File(reference.name);
@@ -94,29 +84,16 @@ class ProjectContext {
   void playActivateSound() {
     final activateSound = world.menuActivateSound;
     if (activateSound != null) {
-      final sound = getRelativeAssetReference(
-        activateSound,
-      );
       game.interfaceSounds.playSound(
-        sound,
+        activateSound,
         gain: world.soundOptions.menuActivateSound?.gain ??
             world.soundOptions.defaultGain,
       );
     }
   }
 
-  /// Get the proper menu move sound.
-  /// The value from the [world] will be passed through
-  /// [getRelativeAssetReference].
-  AssetReference? get menuMoveSound {
-    final reference = world.menuMoveSound;
-    if (reference != null) {
-      return getRelativeAssetReference(reference);
-    }
-    return null;
-  }
-
-  /// Get a play sound semantics widget which will play the [menuMoveSound].
+  /// Get a play sound semantics widget which will play the [world]'s
+  /// `menuMoveSound`.
   PlaySoundSemantics getMenuMoveSemantics({
     required Widget child,
     CustomSound? sound,

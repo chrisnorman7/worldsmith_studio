@@ -15,6 +15,7 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 import '../constants.dart';
 import '../intents.dart';
 import '../project_context.dart';
+import '../project_sound_manager.dart';
 import '../src/json/app_preferences.dart';
 import '../util.dart';
 import '../widgets/keyboard_shortcuts_list.dart';
@@ -37,45 +38,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   SharedPreferences? _preferences;
   Game? _game;
-  SoundManager? _soundManager;
+  ProjectSoundManager? _soundManager;
 
   /// Build the widget.
   @override
   Widget build(BuildContext context) {
-    var game = _game;
-    if (game == null) {
-      game = Game(appName);
-      _game = game;
-    }
-    var soundManager = _soundManager;
-    if (soundManager == null) {
-      final synthizer = Synthizer()..initialize();
-      final context = synthizer.createContext();
-      final bufferCache = BufferCache(
-        synthizer: synthizer,
-        maxSize: pow(1024, 3).floor(),
-        random: game.random,
-      );
-      soundManager = SoundManager(
-        game: game,
-        context: context,
-        bufferCache: bufferCache,
-      );
-      _soundManager = soundManager;
-      game.sounds.listen(
-        (event) {
-          print('Sound: $event');
-          soundManager!.handleEvent(event);
-        },
-        onDone: () => print('Sound stream finished.'),
-        onError: (Object e, StackTrace? s) {
-          print(e);
-          if (s != null) {
-            print(s);
-          }
-        },
-      );
-    }
     final prefs = _preferences;
     final Widget child;
     if (prefs == null) {
@@ -120,7 +87,6 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => openProject(
                   context: context,
                   preferences: preferences,
-                  game: game!,
                   filename: filename,
                 ),
               );
@@ -163,14 +129,12 @@ class _HomePageState extends State<HomePage> {
             onInvoke: (intent) => newProject(
               context: context,
               preferences: preferences,
-              game: game!,
             ),
           ),
           OpenProjectIntent: CallbackAction<OpenProjectIntent>(
             onInvoke: (intent) => openProject(
               context: context,
               preferences: preferences,
-              game: game!,
             ),
           )
         },
@@ -189,7 +153,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> newProject({
     required BuildContext context,
     required AppPreferences preferences,
-    required Game game,
   }) async {
     final filename = await FilePicker.platform.saveFile(
       allowedExtensions: ['json'],
@@ -211,7 +174,6 @@ class _HomePageState extends State<HomePage> {
           createProjectContext(
             context: context,
             preferences: preferences,
-            game: game,
             file: file,
           );
         },
@@ -220,7 +182,6 @@ class _HomePageState extends State<HomePage> {
       createProjectContext(
         context: context,
         preferences: preferences,
-        game: game,
         file: file,
       );
     }
@@ -230,10 +191,46 @@ class _HomePageState extends State<HomePage> {
   Future<void> createProjectContext({
     required BuildContext context,
     required AppPreferences preferences,
-    required Game game,
     required File file,
     World? world,
   }) async {
+    var game = _game;
+    if (game == null) {
+      game = Game(appName);
+      _game = game;
+    }
+    var soundManager = _soundManager;
+    if (soundManager == null) {
+      final synthizer = Synthizer()..initialize();
+      final context = synthizer.createContext();
+      final bufferCache = BufferCache(
+        synthizer: synthizer,
+        maxSize: pow(1024, 3).floor(),
+        random: game.random,
+      );
+      soundManager = ProjectSoundManager(
+        game: game,
+        context: context,
+        bufferCache: bufferCache,
+        soundsDirectory: file.parent.path,
+      );
+      _soundManager = soundManager;
+      game.sounds.listen(
+        (event) {
+          print('Sound: $event');
+          soundManager!.handleEvent(event);
+        },
+        onDone: () => print('Sound stream finished.'),
+        onError: (Object e, StackTrace? s) {
+          print(e);
+          if (s != null) {
+            print(s);
+          }
+        },
+      );
+    } else {
+      soundManager.soundsDirectory = file.parent.path;
+    }
     final filename = file.path;
     final projectContext = ProjectContext(
       game: game,
@@ -266,7 +263,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> openProject({
     required BuildContext context,
     required AppPreferences preferences,
-    required Game game,
     String? filename,
   }) async {
     if (filename == null) {
@@ -297,7 +293,6 @@ class _HomePageState extends State<HomePage> {
     return createProjectContext(
       context: context,
       preferences: preferences,
-      game: game,
       file: file,
       world: world,
     );

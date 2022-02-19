@@ -411,7 +411,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
         id: sound.id,
       );
       _playSound = channel.playSound(
-        widget.projectContext.getRelativeAssetReference(reference!.reference),
+        reference!.reference,
         gain: sound.gain,
         keepAlive: true,
         looping: true,

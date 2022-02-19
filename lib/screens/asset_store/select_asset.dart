@@ -80,9 +80,7 @@ class _SelectAssetState extends State<SelectAsset> {
                 onTap: () => widget.onDone(asset),
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: widget.projectContext.getRelativeAssetReference(
-                asset.reference,
-              ),
+              assetReference: asset.reference,
               gain: widget.projectContext.world.soundOptions.defaultGain,
             );
           },

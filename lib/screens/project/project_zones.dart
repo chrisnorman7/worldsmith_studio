@@ -58,13 +58,11 @@ class _ProjectZonesState extends State<ProjectZones> {
           soundChannel: widget.projectContext.game.interfaceSounds,
           assetReference: music == null
               ? null
-              : widget.projectContext.getRelativeAssetReference(
-                  getAssetReferenceReference(
-                    assets: world.musicAssets,
-                    id: music.id,
-                  )!
-                      .reference,
-                ),
+              : getAssetReferenceReference(
+                  assets: world.musicAssets,
+                  id: music.id,
+                )!
+                  .reference,
           gain: music?.gain ?? world.soundOptions.defaultGain,
           looping: true,
         );
