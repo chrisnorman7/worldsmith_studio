@@ -6,6 +6,7 @@ import '../../intents.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/text_list_tile.dart';
+import '../world_command/world_command_list_tile.dart';
 
 /// A widget for customising the main settings for the given [projectContext].
 class ProjectSettings extends StatefulWidget {
@@ -50,6 +51,16 @@ class _ProjectSettingsState extends State<ProjectSettings> {
           header: 'Version',
           labelText: 'Version',
           validator: (value) => validateNonEmptyValue(value: value),
+        ),
+        WorldCommandListTile(
+          projectContext: widget.projectContext,
+          currentId: world.mainMenuOptions.startGameCommandId,
+          onChanged: (value) {
+            world.mainMenuOptions.startGameCommandId = value?.id;
+            save();
+          },
+          title: 'Start Game Command',
+          nullable: true,
         ),
         Shortcuts(
           child: Actions(
