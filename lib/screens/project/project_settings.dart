@@ -35,11 +35,20 @@ class _ProjectSettingsState extends State<ProjectSettings> {
           value: world.title,
           onChanged: (value) {
             world.title = value;
-            widget.projectContext.save();
-            setState(() {});
+            save();
           },
           header: 'Title',
           autofocus: true,
+          validator: (value) => validateNonEmptyValue(value: value),
+        ),
+        TextListTile(
+          value: world.globalOptions.version,
+          onChanged: (value) {
+            world.globalOptions.version = value;
+            save();
+          },
+          header: 'Version',
+          labelText: 'Version',
           validator: (value) => validateNonEmptyValue(value: value),
         ),
         Shortcuts(
@@ -77,6 +86,11 @@ class _ProjectSettingsState extends State<ProjectSettings> {
   /// Set frames per second.
   set framesPerSecond(int value) {
     widget.projectContext.world.globalOptions.framesPerSecond = value;
+    save();
+  }
+
+  /// Save the project context.
+  void save() {
     widget.projectContext.save();
     setState(() {});
   }
