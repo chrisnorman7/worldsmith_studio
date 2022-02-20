@@ -10,8 +10,10 @@ import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../reverb/edit_reverb_preset.dart';
 import '../terrain/edit_terrain.dart';
+import '../world_command/edit_command_category.dart';
 import '../zone/edit_zone.dart';
 import 'project_asset_stores.dart';
+import 'project_command_categories.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
 import 'project_reverbs.dart';
@@ -75,6 +77,34 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
             icon: const Icon(Icons.settings_outlined),
             builder: (context) => ProjectSettings(
               projectContext: widget.projectContext,
+            ),
+          ),
+          TabbedScaffoldTab(
+            title: 'Commands',
+            icon: const Icon(Icons.category_outlined),
+            builder: (context) => ProjectCommandCategories(
+              projectContext: widget.projectContext,
+            ),
+            floatingActionButton: FloatingActionButton(
+              autofocus: world.commandCategories.isEmpty,
+              onPressed: () async {
+                final category = CommandCategory(
+                  id: newId(),
+                  name: 'Untitled Command Category',
+                  commands: [],
+                );
+                world.commandCategories.add(category);
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditCommandCategory(
+                    projectContext: widget.projectContext,
+                    category: category,
+                  ),
+                );
+                setState(() {});
+              },
+              child: createIcon,
+              tooltip: 'Add Command Category',
             ),
           ),
           TabbedScaffoldTab(
