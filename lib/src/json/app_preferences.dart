@@ -3,9 +3,7 @@ import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:worldsmith/functions.dart';
-
-import '../../constants.dart';
+import 'package:worldsmith/constants.dart';
 
 part 'app_preferences.g.dart';
 

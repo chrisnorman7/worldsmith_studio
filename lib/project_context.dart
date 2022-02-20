@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-import 'package:worldsmith/functions.dart';
 import 'package:worldsmith/world_context.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -23,7 +21,7 @@ class ProjectContext {
 
   /// Load a project from the given [file].
   ProjectContext.fromFile({required this.file, required this.game})
-      : world = World.fromJson(jsonDecode(file.readAsStringSync()) as JsonType);
+      : world = World.fromFilename(file.path);
 
   /// The filename that [world] has been loaded from.
   final File file;

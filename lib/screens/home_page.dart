@@ -7,7 +7,6 @@ import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:worldsmith/functions.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
@@ -289,7 +288,7 @@ class _HomePageState extends State<HomePage> {
         message: 'The file $filename no longer exists.',
       );
     }
-    final world = loadJson(filename);
+    final world = World.fromFilename(filename);
     return createProjectContext(
       context: context,
       preferences: preferences,

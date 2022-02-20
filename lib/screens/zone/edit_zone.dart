@@ -304,7 +304,6 @@ class _EditZoneState extends State<EditZone> {
         }
         _currentBox = _level.moveTo(
           destination: Point(x, y),
-          walkingMode: WalkingMode.fast,
           updateLastWalked: false,
         );
         setState(() {});
@@ -580,7 +579,6 @@ class _EditZoneState extends State<EditZone> {
     final coordinates = widget.zone.getAbsoluteCoordinates(newBox.start);
     _currentBox = _level.moveTo(
       destination: Point(coordinates.x.toDouble(), coordinates.y.toDouble()),
-      walkingMode: WalkingMode.fast,
     );
     setState(() {});
   }
