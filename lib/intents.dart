@@ -159,3 +159,36 @@ class PreviousBoxIntent extends Intent {
     control: true,
   );
 }
+
+/// An intent to create a new equipment position.
+class CreateEquipmentPositionIntent extends Intent {
+  /// Create an instance.
+  const CreateEquipmentPositionIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+}
+
+/// An intent to move something up.
+class MoveUpIntent extends Intent {
+  /// Create an instance.
+  const MoveUpIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(
+    LogicalKeyboardKey.arrowUp,
+    alt: true,
+  );
+}
+
+/// An intent to move something down.
+class MoveDownIntent extends Intent {
+  /// Create an instance.
+  const MoveDownIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(
+    LogicalKeyboardKey.arrowDown,
+    alt: true,
+  );
+}

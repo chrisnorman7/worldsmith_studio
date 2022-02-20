@@ -39,19 +39,15 @@ class _EditEquipmentPositionState extends State<EditEquipmentPosition> {
         appBar: AppBar(
           actions: [
             ElevatedButton(
-              onPressed: () => confirm(
-                  context: context,
-                  message: 'Are you sure you want to delete the '
-                      '${widget.equipmentPosition.name} equipment position?',
-                  title: 'Delete Equipment Position',
-                  yesCallback: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    world.equipmentPositions.removeWhere(
-                      (element) => element.id == widget.equipmentPosition.id,
-                    );
-                    widget.projectContext.save();
-                  }),
+              onPressed: () => deleteEquipmentPosition(
+                context: context,
+                equipmentPosition: widget.equipmentPosition,
+                world: world,
+                onDone: () {
+                  Navigator.pop(context);
+                  widget.projectContext.save();
+                },
+              ),
               child: deleteIcon,
             )
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
+import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import 'constants.dart';
@@ -87,3 +88,24 @@ void setClipboardText(String text) {
   final data = ClipboardData(text: text);
   Clipboard.setData(data);
 }
+
+/// Delete the given [equipmentPosition].
+void deleteEquipmentPosition({
+  required BuildContext context,
+  required EquipmentPosition equipmentPosition,
+  required World world,
+  required VoidCallback onDone,
+}) =>
+    confirm(
+      context: context,
+      message: 'Are you sure you want to delete the ${equipmentPosition.name} '
+          'equipment position?',
+      title: 'Delete Equipment Position',
+      yesCallback: () {
+        Navigator.pop(context);
+        world.equipmentPositions.removeWhere(
+          (element) => element.id == equipmentPosition.id,
+        );
+        onDone();
+      },
+    );
