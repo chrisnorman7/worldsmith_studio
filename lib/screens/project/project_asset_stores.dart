@@ -32,7 +32,6 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
           afterOnTap: () => setState(() {}),
           assetStore: world.equipmentAssetStore,
           canDelete: (reference) => null,
-          context: context,
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
@@ -55,7 +54,6 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
             }
             return null;
           },
-          context: context,
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
@@ -76,7 +74,6 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
             }
             return null;
           },
-          context: context,
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
@@ -98,7 +95,6 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
             }
             return null;
           },
-          context: context,
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
@@ -114,7 +110,6 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
             }
             return null;
           },
-          context: context,
           projectContext: widget.projectContext,
         ),
       ],
