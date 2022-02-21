@@ -16,6 +16,7 @@ class EditCoordinates extends StatefulWidget {
     required this.zone,
     required this.box,
     required this.value,
+    this.actions = const [],
     this.title = 'Edit Coordinates',
     Key? key,
   }) : super(key: key);
@@ -24,10 +25,13 @@ class EditCoordinates extends StatefulWidget {
   final Zone zone;
 
   /// The box that the coordinates are part of.
-  final Box box;
+  final Box? box;
 
   /// The coordinates to edit.
   final Coordinates value;
+
+  /// The actions for the resulting [AppBar];
+  final List<Widget> actions;
 
   /// The title of the resulting [Scaffold].
   final String title;
@@ -46,6 +50,7 @@ class _EditCoordinatesState extends State<EditCoordinates> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: widget.actions,
           title: Text(widget.title),
         ),
         body: ListView(
@@ -60,7 +65,7 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                   builder: (context) => SelectBox(
                     boxes: widget.zone.boxes
                         .where(
-                          (element) => element.id != widget.box.id,
+                          (element) => element.id != widget.box?.id,
                         )
                         .toList(),
                     onDone: (value) {

@@ -36,9 +36,10 @@ class CoordinatesListTile extends StatefulWidget {
   const CoordinatesListTile({
     required this.projectContext,
     required this.zone,
-    required this.box,
     required this.value,
     required this.onChanged,
+    this.box,
+    this.actions = const [],
     this.title = 'Coordinates',
     Key? key,
   }) : super(key: key);
@@ -50,13 +51,16 @@ class CoordinatesListTile extends StatefulWidget {
   final Zone zone;
 
   /// The box which owns the coordinates.
-  final Box box;
+  final Box? box;
 
   /// The coordinates to edit.
   final Coordinates value;
 
   /// The function to call when [value] has been updated.
   final VoidCallback onChanged;
+
+  /// The actions for the resulting [AppBar].
+  final List<Widget> actions;
 
   /// The title of the resulting [ListTile].
   final String title;

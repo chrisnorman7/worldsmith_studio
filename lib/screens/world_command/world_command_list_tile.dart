@@ -16,6 +16,7 @@ class WorldCommandListTile extends StatelessWidget {
     required this.onChanged,
     required this.title,
     this.nullable = false,
+    this.autofocus = false,
     Key? key,
   }) : super(key: key);
 
@@ -34,6 +35,9 @@ class WorldCommandListTile extends StatelessWidget {
   /// Whether or not the value can be set to `null`.
   final bool nullable;
 
+  /// Whether or not the resulting [ListTile] is autofocused.
+  final bool autofocus;
+
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -47,11 +51,12 @@ class WorldCommandListTile extends StatelessWidget {
     final currentCategory = location?.category;
     final currentValue = location?.command;
     return ListTile(
+      autofocus: autofocus,
       title: Text(title),
       subtitle: Text(
-        currentValue != null && currentCategory != null
-            ? '${currentCategory.name} -> ${currentValue.name}'
-            : 'Not set',
+        location == null
+            ? 'Not set'
+            : '${location.category.name} -> ${location.command.name}',
       ),
       onTap: () => pushWidget(
         context: context,

@@ -35,4 +35,7 @@ class WorldCommandLocation {
 
   /// The command to use.
   final WorldCommand command;
+
+  /// Get a description of this location.
+  String get description => '${category.name} -> ${command.name}';
 }

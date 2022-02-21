@@ -11,6 +11,11 @@ import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
+import '../zone/select_zone.dart';
+import 'call_command_list_tile.dart';
+import 'edit_zone_teleport.dart';
+import 'select_command_category.dart';
+import 'select_world_command.dart';
 
 const _renameIntent = RenameIntent();
 
@@ -106,6 +111,8 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
   ListView getCommandListView({required BuildContext context}) {
     final walkingMode = widget.command.walkingMode;
     final customCommandName = widget.command.customCommandName;
+    final callCommand = widget.command.callCommand;
+    final zoneTeleport = widget.command.zoneTeleport;
     return ListView(
       children: [
         ListTile(
@@ -118,6 +125,99 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           projectContext: widget.projectContext,
           customMessage: widget.command.message,
           title: 'Message',
+        ),
+        callCommand == null
+            ? ListTile(
+                title: const Text('Call Another Command'),
+                onTap: () => pushWidget(
+                  context: context,
+                  builder: (context) => SelectCommandCategory(
+                    projectContext: widget.projectContext,
+                    onDone: (category) {
+                      if (category == null) {
+                        Navigator.pop(context);
+                      } else {
+                        pushWidget(
+                          context: context,
+                          builder: (context) => SelectWorldCommand(
+                            category: category,
+                            onDone: (command) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              if (command != null) {
+                                final callCommand = CallCommand(
+                                  commandId: command.id,
+                                );
+                                widget.command.callCommand = callCommand;
+                                save();
+                              }
+                            },
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              )
+            : CallCommandListTile(
+                projectContext: widget.projectContext,
+                callCommand: callCommand,
+                onChanged: (value) {
+                  widget.command.callCommand = value;
+                  save();
+                },
+              ),
+        ListTile(
+          title: const Text('Teleport To Zone'),
+          subtitle: Text(zoneTeleport == null
+              ? 'Not set'
+              : widget.projectContext.world
+                  .getZone(
+                    zoneTeleport.zoneId,
+                  )
+                  .name),
+          onTap: () async {
+            if (zoneTeleport == null) {
+              await pushWidget(
+                context: context,
+                builder: (context) => SelectZone(
+                  projectContext: widget.projectContext,
+                  onDone: (zone) async {
+                    Navigator.pop(context);
+                    final teleport = ZoneTeleport(
+                      zoneId: zone.id,
+                      minCoordinates: Coordinates(0, 0),
+                    );
+                    widget.command.zoneTeleport = teleport;
+                    save();
+                    await pushWidget(
+                      context: context,
+                      builder: (context) => EditZoneTeleport(
+                        projectContext: widget.projectContext,
+                        zoneTeleport: teleport,
+                        onChanged: (value) {
+                          widget.command.zoneTeleport = value;
+                          save();
+                        },
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditZoneTeleport(
+                  projectContext: widget.projectContext,
+                  zoneTeleport: zoneTeleport,
+                  onChanged: (value) {
+                    widget.command.zoneTeleport = value;
+                    save();
+                  },
+                ),
+              );
+            }
+          },
         ),
         ListTile(
           title: const Text('Change Walking Mode'),
