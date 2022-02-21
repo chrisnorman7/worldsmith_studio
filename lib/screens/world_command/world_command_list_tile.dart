@@ -3,6 +3,7 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../world_command_location.dart';
 import 'select_command_category.dart';
 import 'select_world_command.dart';
 
@@ -36,22 +37,15 @@ class WorldCommandListTile extends StatelessWidget {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
-    CommandCategory? currentCategory;
-    WorldCommand? currentValue;
-    if (currentId != null) {
-      for (final category in projectContext.world.commandCategories) {
-        final possibles = category.commands
-            .where(
-              (element) => element.id == currentId,
-            )
-            .toList();
-        if (possibles.isNotEmpty) {
-          currentValue = possibles.first;
-          currentCategory = category;
-          break;
-        }
-      }
-    }
+    final id = currentId;
+    final WorldCommandLocation? location = id == null
+        ? null
+        : WorldCommandLocation.find(
+            categories: projectContext.world.commandCategories,
+            commandId: id,
+          );
+    final currentCategory = location?.category;
+    final currentValue = location?.command;
     return ListTile(
       title: Text(title),
       subtitle: Text(

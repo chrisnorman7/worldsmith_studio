@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 
 /// A widget for selecting a [CommandCategory].
@@ -45,21 +46,24 @@ class SelectCommandCategory extends StatelessWidget {
       listTiles.add(
         ListTile(
           autofocus: currentId == category.id || (nullable == false && i == 0),
+          selected: category.id == currentId,
           title: Text(category.name),
           onTap: () => onDone(category),
         ),
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Category'),
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Select Category'),
+        ),
+        body: listTiles.isEmpty
+            ? const CenterText(text: 'There are no command categories.')
+            : ListView.builder(
+                itemBuilder: (context, index) => listTiles[index],
+                itemCount: listTiles.length,
+              ),
       ),
-      body: listTiles.isEmpty
-          ? const CenterText(text: 'There are no command categories.')
-          : ListView.builder(
-              itemBuilder: (context, index) => listTiles[index],
-              itemCount: listTiles.length,
-            ),
     );
   }
 }

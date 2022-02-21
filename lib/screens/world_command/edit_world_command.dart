@@ -6,8 +6,11 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/select_item.dart';
+import '../../widgets/text_list_tile.dart';
 
 const _renameIntent = RenameIntent();
 
@@ -100,14 +103,50 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
   }
 
   /// Get the list view for the [Scaffold] to use.
-  ListView getCommandListView({required BuildContext context}) => ListView(
-        children: [
-          ListTile(
-            autofocus: true,
-            title: const Text('Command Name'),
-            subtitle: Text(widget.command.name),
-            onTap: Actions.handler<RenameIntent>(context, _renameIntent),
-          )
-        ],
-      );
+  ListView getCommandListView({required BuildContext context}) {
+    final walkingMode = widget.command.walkingMode;
+    final customCommandName = widget.command.customCommandName;
+    return ListView(
+      children: [
+        ListTile(
+          autofocus: true,
+          title: const Text('Command Name'),
+          subtitle: Text(widget.command.name),
+          onTap: Actions.handler<RenameIntent>(context, _renameIntent),
+        ),
+        CustomMessageListTile(
+          projectContext: widget.projectContext,
+          customMessage: widget.command.message,
+          title: 'Message',
+        ),
+        ListTile(
+          title: const Text('Change Walking Mode'),
+          subtitle: Text(walkingMode == null ? 'Not set' : walkingMode.name),
+          onTap: () => pushWidget(
+            context: context,
+            builder: (context) => SelectItem<WalkingMode?>(
+              getDescription: (value) => value == null ? 'Clear' : value.name,
+              onDone: (value) {
+                Navigator.pop(context);
+                widget.command.walkingMode = value;
+                save();
+              },
+              values: const [null, ...WalkingMode.values],
+              title: 'Walking Mode',
+              value: walkingMode,
+            ),
+          ),
+        ),
+        TextListTile(
+          value: customCommandName ?? '',
+          onChanged: (value) {
+            widget.command.customCommandName = value.isEmpty ? null : value;
+            save();
+          },
+          header: 'Custom Event Name',
+          labelText: 'Event Name',
+        ),
+      ],
+    );
+  }
 }

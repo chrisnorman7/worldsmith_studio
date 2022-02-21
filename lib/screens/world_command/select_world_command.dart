@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 
 /// Select a [WorldCommand] from the given [category].
@@ -43,21 +44,24 @@ class SelectWorldCommand extends StatelessWidget {
       listTiles.add(
         ListTile(
           autofocus: currentId == command.id || (nullable == false && i == 0),
+          selected: command.id == currentId,
           title: Text(command.name),
           onTap: () => onDone(command),
         ),
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Command'),
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Select Command'),
+        ),
+        body: listTiles.isEmpty
+            ? const CenterText(text: 'There are no commands to show.')
+            : ListView.builder(
+                itemBuilder: (context, index) => listTiles[index],
+                itemCount: listTiles.length,
+              ),
       ),
-      body: listTiles.isEmpty
-          ? const CenterText(text: 'There are no commands to show.')
-          : ListView.builder(
-              itemBuilder: (context, index) => listTiles[index],
-              itemCount: listTiles.length,
-            ),
     );
   }
 }
