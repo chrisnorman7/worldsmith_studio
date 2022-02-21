@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/center_text.dart';
+import '../world_command/edit_command_category.dart';
 
 /// A widget for showing the [CommandCategory] list.
 class ProjectCommandCategories extends StatefulWidget {
@@ -31,18 +33,35 @@ class _ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
       return const CenterText(text: 'There are no command categories to show.');
     }
     return GridView.builder(
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 5,
+      ),
       itemBuilder: (context, index) {
         final category = categories[index];
         return GridTile(
           child: TextButton(
-            onPressed: () {},
+            autofocus: index == 0,
+            onPressed: () async {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditCommandCategory(
+                  projectContext: widget.projectContext,
+                  category: category,
+                ),
+              );
+              save();
+            },
             child: Text(category.name),
           ),
         );
       },
       itemCount: categories.length,
     );
+  }
+
+  /// Save the project.
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 }

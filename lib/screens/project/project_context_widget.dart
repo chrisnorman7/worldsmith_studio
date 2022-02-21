@@ -94,6 +94,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
                   commands: [],
                 );
                 world.commandCategories.add(category);
+                widget.projectContext.save();
                 await pushWidget(
                   context: context,
                   builder: (context) => EditCommandCategory(

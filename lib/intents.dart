@@ -192,3 +192,12 @@ class MoveDownIntent extends Intent {
     alt: true,
   );
 }
+
+/// The intent to rename something.
+class RenameIntent extends Intent {
+  /// Create an instance.
+  const RenameIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyR, control: true);
+}
