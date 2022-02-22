@@ -20,7 +20,7 @@ dependencies:
   url_launcher: ^6.0.20
   worldsmith: 
     path: ../worldsmith
-  ziggurat: ^0.35.0
+  ziggurat: ^0.36.0
   ziggurat_sounds: ^0.17.0
 
 dev_dependencies:
