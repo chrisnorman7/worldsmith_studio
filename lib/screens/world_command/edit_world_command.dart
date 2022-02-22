@@ -168,7 +168,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
                 },
               ),
         ListTile(
-          title: const Text('Teleport To Zone'),
+          title: const Text('Set Current Zone'),
           subtitle: Text(zoneTeleport == null
               ? 'Not set'
               : widget.projectContext.world
