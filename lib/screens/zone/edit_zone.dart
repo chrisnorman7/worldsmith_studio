@@ -14,6 +14,7 @@ import '../../widgets/center_text.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/number_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
@@ -199,6 +200,17 @@ class _EditZoneState extends State<EditZone> {
               terrains: widget.projectContext.world.terrains,
             ),
           ),
+        ),
+        NumberListTile(
+          value: widget.zone.turnAmount.toDouble(),
+          onChanged: (value) {
+            Navigator.pop(context);
+            widget.zone.turnAmount = value.floor();
+            save();
+          },
+          min: 1,
+          max: 360,
+          title: 'Turn Amount',
         ),
         CheckboxListTile(
           title: const Text('Top-down Map Visible'),
