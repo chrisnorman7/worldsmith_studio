@@ -6,6 +6,7 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/number_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
 import '../zone/zone_list_tile.dart';
 
@@ -46,6 +47,7 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
     final directionName = widget.projectContext.worldContext.getDirectionName(
       heading,
     );
+    final fadeTime = widget.zoneTeleport.fadeTime;
     return WithKeyboardShortcuts(
       child: Cancel(
         child: Scaffold(
@@ -133,7 +135,17 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                           max: 360.0,
                           title: 'Heading',
                         )),
-              )
+              ),
+              NumberListTile(
+                value: fadeTime?.toDouble() ?? 0.0,
+                onChanged: (value) {
+                  Navigator.pop(context);
+                  widget.zoneTeleport.fadeTime = value == 0 ? null : value;
+                  save();
+                },
+                min: 0.0,
+                title: 'Fade Time',
+              ),
             ],
           ),
         ),
