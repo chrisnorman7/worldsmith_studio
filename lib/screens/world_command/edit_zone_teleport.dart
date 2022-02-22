@@ -79,7 +79,9 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                 zone: zone,
                 value: minCoordinates,
                 onChanged: save,
-                title: 'Minimum Coordinates',
+                title: maxCoordinates == null
+                    ? 'Target Coordinates'
+                    : 'Minimum Coordinates',
               ),
               maxCoordinates == null
                   ? ListTile(
