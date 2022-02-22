@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/get_number.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../box/coordinates_list_tile.dart';
 import '../zone/zone_list_tile.dart';
@@ -40,6 +42,10 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
     final zone = widget.projectContext.world.getZone(zoneId);
     final minCoordinates = widget.zoneTeleport.minCoordinates;
     final maxCoordinates = widget.zoneTeleport.maxCoordinates;
+    final heading = widget.zoneTeleport.heading;
+    final directionName = widget.projectContext.worldContext.getDirectionName(
+      heading,
+    );
     return WithKeyboardShortcuts(
       child: Cancel(
         child: Scaffold(
@@ -110,7 +116,24 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                         )
                       ],
                       title: 'Maximum Coordinates',
-                    )
+                    ),
+              ListTile(
+                title: const Text('Heading'),
+                subtitle: Text('$directionName ($heading)'),
+                onTap: () => pushWidget(
+                    context: context,
+                    builder: (context) => GetNumber(
+                          value: heading.toDouble(),
+                          onDone: (value) {
+                            Navigator.pop(context);
+                            widget.zoneTeleport.heading = value.floor();
+                            save();
+                          },
+                          min: 0.0,
+                          max: 360.0,
+                          title: 'Heading',
+                        )),
+              )
             ],
           ),
         ),
