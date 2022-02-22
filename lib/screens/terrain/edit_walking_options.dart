@@ -94,7 +94,6 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
               projectContext: widget.projectContext,
               value: sound,
               onDone: (value) {
-                Navigator.pop(context);
                 widget.projectContext.save();
                 setState(() {});
               },
