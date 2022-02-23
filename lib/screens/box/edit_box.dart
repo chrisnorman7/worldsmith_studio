@@ -3,10 +3,10 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
 import '../reverb/reverb_list_tile.dart';
 import '../terrain/terrain_list_tile.dart';
+import '../world_command/world_command_list_tile.dart';
 import 'coordinates_list_tile.dart';
 
 /// A widget for editing the given [box].
@@ -94,15 +94,33 @@ class _EditBoxState extends State<EditBox> {
                 currentReverbId: widget.box.reverbId,
                 nullable: true,
               ),
-              CustomMessageListTile(
+              WorldCommandListTile(
                 projectContext: widget.projectContext,
-                customMessage: widget.box.enterMessage,
-                title: 'Enter Message',
+                currentId: widget.box.enterCommandId,
+                onChanged: (command) {
+                  widget.box.enterCommandId = command?.id;
+                  save();
+                },
+                title: 'Enter command',
+                nullable: true,
               ),
-              CustomMessageListTile(
+              WorldCommandListTile(
                 projectContext: widget.projectContext,
-                customMessage: widget.box.leaveMessage,
-                title: 'Leave Message',
+                currentId: widget.box.leaveCommandId,
+                onChanged: (command) {
+                  widget.box.leaveCommandId = command?.id;
+                  save();
+                },
+                title: 'Leave Command',
+                nullable: true,
+              ),
+              CheckboxListTile(
+                value: widget.box.enclosed,
+                onChanged: (value) {
+                  widget.box.enclosed = value == true;
+                  save();
+                },
+                title: const Text('Soundproof Box'),
               )
             ],
           ),

@@ -11,7 +11,6 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
-import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
@@ -25,6 +24,7 @@ import '../reverb/reverb_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
+import '../world_command/world_command_list_tile.dart';
 import '../zone_object/edit_zone_object.dart';
 import '../zone_object/zone_object_list_tile.dart';
 
@@ -237,11 +237,16 @@ class _EditZoneState extends State<EditZone> {
             setState(() {});
           },
         ),
-        CustomMessageListTile(
+        WorldCommandListTile(
           projectContext: widget.projectContext,
-          customMessage: widget.zone.edgeMessage,
-          title: 'Edge Of Zone Message',
-        ),
+          currentId: widget.zone.edgeCommandId,
+          onChanged: (command) {
+            widget.zone.edgeCommandId = command?.id;
+            save();
+          },
+          title: 'Edge Command',
+          nullable: true,
+        )
       ],
     );
   }
@@ -502,7 +507,7 @@ class _EditZoneState extends State<EditZone> {
       return [
         ListTile(
           title: const Text('There is no box at these coordinates.'),
-          onTap: () {},
+          onTap: () => switchBox(1),
         ),
       ];
     }
@@ -561,16 +566,6 @@ class _EditZoneState extends State<EditZone> {
           save();
         },
         title: const Text('Soundproof Box'),
-      ),
-      CustomMessageListTile(
-        projectContext: widget.projectContext,
-        customMessage: box.enterMessage,
-        title: 'Enter Message',
-      ),
-      CustomMessageListTile(
-        projectContext: widget.projectContext,
-        customMessage: box.leaveMessage,
-        title: 'Leave Message',
       ),
     ];
   }
