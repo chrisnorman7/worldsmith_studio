@@ -25,9 +25,12 @@ import '../reverb/reverb_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
+import '../zone_object/edit_zone_object.dart';
+import '../zone_object/zone_object_list_tile.dart';
 
 const _helpIntent = HelpIntent();
 const _createBoxIntent = CreateBoxIntent();
+const _createZoneObjectIntent = CreateZoneObjectIntent();
 
 /// A widget for editing its [zone].
 class EditZone extends StatefulWidget {
@@ -124,6 +127,20 @@ class _EditZoneState extends State<EditZone> {
                 )
               ],
             ),
+          TabbedScaffoldTab(
+            title: 'Objects',
+            icon: const Icon(Icons.local_post_office_outlined),
+            builder: (context) => getObjectsListView(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: Actions.handler<CreateZoneObjectIntent>(
+                context,
+                _createZoneObjectIntent,
+              ),
+              autofocus: widget.zone.objects.isEmpty,
+              child: createIcon,
+              tooltip: 'Add Object',
+            ),
+          ),
           TabbedScaffoldTab(
             title: 'Boxes',
             icon: const Icon(Icons.map_outlined),
@@ -557,6 +574,42 @@ class _EditZoneState extends State<EditZone> {
         title: 'Leave Message',
       ),
     ];
+  }
+
+  /// Get the list of objects.
+  Widget getObjectsListView() {
+    final createZoneObjectAction = CallbackAction<CreateZoneObjectIntent>(
+      onInvoke: (intent) async {
+        final object = ZoneObject(id: newId(), name: 'Untitled Object');
+        widget.zone.objects.add(object);
+        widget.projectContext.save();
+        await pushWidget(
+          context: context,
+          builder: (context) => EditZoneObject(
+            projectContext: widget.projectContext,
+            zone: widget.zone,
+            zoneObject: object,
+          ),
+        );
+        setState(() {});
+        return null;
+      },
+    );
+    return Shortcuts(
+      child: Actions(
+        actions: {CreateZoneObjectIntent: createZoneObjectAction},
+        child: ListView.builder(
+          itemBuilder: (context, index) => ZoneObjectListTile(
+            projectContext: widget.projectContext,
+            zone: widget.zone,
+            zoneObject: widget.zone.objects[index],
+            autofocus: index == 0,
+          ),
+          itemCount: widget.zone.objects.length,
+        ),
+      ),
+      shortcuts: const {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
+    );
   }
 
   /// Recreate the zone level.

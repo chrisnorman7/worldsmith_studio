@@ -201,3 +201,12 @@ class RenameIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyR, control: true);
 }
+
+/// The intent to create a zone object.
+class CreateZoneObjectIntent extends Intent {
+  /// Create an instance.
+  const CreateZoneObjectIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+}
