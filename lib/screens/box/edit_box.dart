@@ -16,6 +16,7 @@ class EditBox extends StatefulWidget {
     required this.projectContext,
     required this.zone,
     required this.box,
+    required this.onDone,
     Key? key,
   }) : super(key: key);
 
@@ -27,6 +28,9 @@ class EditBox extends StatefulWidget {
 
   /// The box to edit.
   final Box box;
+
+  /// The function to be called when editing is complete.
+  final VoidCallback onDone;
 
   /// Create state for this widget.
   @override
@@ -83,10 +87,12 @@ class _EditBoxState extends State<EditBox> {
                 projectContext: widget.projectContext,
                 onDone: (value) {
                   widget.box.reverbId = value?.id;
+                  widget.onDone();
                   save();
                 },
                 reverbPresets: widget.projectContext.world.reverbs,
                 currentReverbId: widget.box.reverbId,
+                nullable: true,
               ),
               CustomMessageListTile(
                 projectContext: widget.projectContext,
@@ -107,5 +113,6 @@ class _EditBoxState extends State<EditBox> {
   void save() {
     widget.projectContext.save();
     setState(() {});
+    widget.onDone();
   }
 }

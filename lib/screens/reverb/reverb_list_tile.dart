@@ -55,9 +55,13 @@ class ReverbListTile extends StatelessWidget {
         context: context,
         builder: (context) => SelectReverb(
           projectContext: projectContext,
-          onDone: onDone,
+          onDone: (reverb) {
+            Navigator.pop(context);
+            onDone(reverb);
+          },
           reverbPresets: reverbPresets,
           currentReverbId: currentReverbId,
+          nullable: nullable,
         ),
       ),
     );

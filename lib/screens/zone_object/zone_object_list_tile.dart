@@ -14,6 +14,7 @@ class ZoneObjectListTile extends StatefulWidget {
     required this.projectContext,
     required this.zone,
     required this.zoneObject,
+    required this.onDone,
     this.autofocus = false,
     Key? key,
   }) : super(key: key);
@@ -26,6 +27,9 @@ class ZoneObjectListTile extends StatefulWidget {
 
   /// THe zone object to edit.
   final ZoneObject zoneObject;
+
+  /// The function to call when editing is complete.
+  final VoidCallback onDone;
 
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
@@ -64,8 +68,10 @@ class _ZoneObjectListTileState extends State<ZoneObjectListTile> {
                 projectContext: widget.projectContext,
                 zone: widget.zone,
                 zoneObject: widget.zoneObject,
+                onDone: widget.onDone,
               ),
             );
+            widget.onDone();
             setState(() {});
           },
         ),

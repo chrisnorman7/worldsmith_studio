@@ -15,6 +15,7 @@ class EditZoneObject extends StatefulWidget {
     required this.projectContext,
     required this.zone,
     required this.zoneObject,
+    required this.onDone,
     Key? key,
   }) : super(key: key);
 
@@ -26,6 +27,9 @@ class EditZoneObject extends StatefulWidget {
 
   /// The zone object to edit.
   final ZoneObject zoneObject;
+
+  /// The function to call when editing is complete.
+  final VoidCallback onDone;
 
   /// Create state for this widget.
   @override
@@ -55,6 +59,7 @@ class _EditZoneObjectState extends State<EditZoneObject> {
                   Navigator.pop(context);
                   widget.zone.objects.remove(widget.zoneObject);
                   save();
+                  widget.onDone();
                 },
               ),
               child: const Icon(
@@ -105,6 +110,7 @@ class _EditZoneObjectState extends State<EditZoneObject> {
   /// Save the project.
   void save() {
     widget.projectContext.save();
+    widget.onDone();
     setState(() {});
   }
 }

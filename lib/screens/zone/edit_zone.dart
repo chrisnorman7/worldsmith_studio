@@ -77,6 +77,7 @@ class _EditZoneState extends State<EditZone> {
       worldContext: widget.projectContext.worldContext,
       zone: widget.zone,
     )..onPush();
+    _level.currentWalkingOptions = _level.currentTerrain.fastWalk;
     _currentBox = _level.getBox();
   }
 
@@ -130,12 +131,9 @@ class _EditZoneState extends State<EditZone> {
           TabbedScaffoldTab(
             title: 'Objects',
             icon: const Icon(Icons.local_post_office_outlined),
-            builder: (context) => getObjectsListView(),
+            builder: getObjectsListView,
             floatingActionButton: FloatingActionButton(
-              onPressed: Actions.handler<CreateZoneObjectIntent>(
-                context,
-                _createZoneObjectIntent,
-              ),
+              onPressed: () => createZoneObject(context),
               autofocus: widget.zone.objects.isEmpty,
               child: createIcon,
               tooltip: 'Add Object',
@@ -155,6 +153,7 @@ class _EditZoneState extends State<EditZone> {
   void save() {
     widget.projectContext.save();
     setState(() {});
+    resetLevel();
   }
 
   /// Stop the music playing and dispose of the focus node..
@@ -300,9 +299,9 @@ class _EditZoneState extends State<EditZone> {
                 projectContext: widget.projectContext,
                 zone: widget.zone,
                 box: box,
+                onDone: save,
               ),
             );
-            resetLevel();
             save();
           },
         );
@@ -373,9 +372,9 @@ class _EditZoneState extends State<EditZone> {
                     projectContext: widget.projectContext,
                     zone: widget.zone,
                     box: newBox,
+                    onDone: save,
                   ),
                 );
-                resetLevel();
                 save();
               },
             ),
@@ -524,7 +523,7 @@ class _EditZoneState extends State<EditZone> {
         zone: widget.zone,
         box: box,
         value: box.start,
-        onChanged: () => setState(resetLevel),
+        onChanged: () => save,
         title: 'Start Coordinates',
       ),
       CoordinatesListTile(
@@ -532,7 +531,7 @@ class _EditZoneState extends State<EditZone> {
         zone: widget.zone,
         box: box,
         value: box.end,
-        onChanged: () => setState(resetLevel),
+        onChanged: save,
         title: 'End Coordinates',
       ),
       TerrainListTile(
@@ -576,24 +575,28 @@ class _EditZoneState extends State<EditZone> {
     ];
   }
 
+  /// Create a new object.
+  Future<void> createZoneObject(BuildContext context) async {
+    final object = ZoneObject(id: newId(), name: 'Untitled Object');
+    widget.zone.objects.add(object);
+    widget.projectContext.save();
+    await pushWidget(
+      context: context,
+      builder: (context) => EditZoneObject(
+        projectContext: widget.projectContext,
+        zone: widget.zone,
+        zoneObject: object,
+        onDone: () => setState(() {}),
+      ),
+    );
+    setState(() {});
+    return;
+  }
+
   /// Get the list of objects.
-  Widget getObjectsListView() {
+  Widget getObjectsListView(BuildContext context) {
     final createZoneObjectAction = CallbackAction<CreateZoneObjectIntent>(
-      onInvoke: (intent) async {
-        final object = ZoneObject(id: newId(), name: 'Untitled Object');
-        widget.zone.objects.add(object);
-        widget.projectContext.save();
-        await pushWidget(
-          context: context,
-          builder: (context) => EditZoneObject(
-            projectContext: widget.projectContext,
-            zone: widget.zone,
-            zoneObject: object,
-          ),
-        );
-        setState(() {});
-        return null;
-      },
+      onInvoke: (intent) => createZoneObject(context),
     );
     return Shortcuts(
       child: Actions(
@@ -603,6 +606,7 @@ class _EditZoneState extends State<EditZone> {
             projectContext: widget.projectContext,
             zone: widget.zone,
             zoneObject: widget.zone.objects[index],
+            onDone: () => setState(resetLevel),
             autofocus: index == 0,
           ),
           itemCount: widget.zone.objects.length,
@@ -620,6 +624,7 @@ class _EditZoneState extends State<EditZone> {
       worldContext: widget.projectContext.worldContext,
       zone: widget.zone,
     )..onPush();
+    _level.currentWalkingOptions = _level.currentTerrain.fastWalk;
     final size = _level.size;
     _level.coordinates = Point(
       min(coordinates.x, size.x - 1).toDouble(),
