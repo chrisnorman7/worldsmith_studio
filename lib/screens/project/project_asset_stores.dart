@@ -77,6 +77,22 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
+          projectContext: widget.projectContext,
+          assetStore: world.ambianceAssetStore,
+          afterOnTap: () => setState(() {}),
+          canDelete: (asset) {
+            for (final zone in world.zones) {
+              for (final object in zone.objects) {
+                if (object.ambiance?.id == asset.variableName) {
+                  return 'You cannot delete the ambiance for the '
+                      '${object.name} object in the ${zone.name} zone.';
+                }
+              }
+            }
+            return null;
+          },
+        ),
+        AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.interfaceSoundsAssetStore,
           canDelete: (reference) {
