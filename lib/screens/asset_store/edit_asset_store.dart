@@ -253,10 +253,13 @@ class _EditAssetStoreState extends State<EditAssetStore> {
   }
 
   /// Delete the given [assetReferenceReference].
-  void deleteAsset(
-      {required BuildContext context,
-      required AssetReferenceReference assetReferenceReference}) {
-    confirm(
+  void deleteAsset({
+    required BuildContext context,
+    required AssetReferenceReference assetReferenceReference,
+  }) {
+    final result = widget.canDelete(assetReferenceReference);
+    if (result == null) {
+      confirm(
         context: context,
         message: 'Are you sure you want to delete the '
             '${assetReferenceReference.comment} asset?',
@@ -268,6 +271,10 @@ class _EditAssetStoreState extends State<EditAssetStore> {
             assetReferenceReference: assetReferenceReference,
           );
           setState(() {});
-        });
+        },
+      );
+    } else {
+      showSnackBar(context: context, message: result);
+    }
   }
 }
