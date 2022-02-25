@@ -51,6 +51,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
         callAfterString += 's';
       }
     }
+    final chance = widget.callCommand.chance;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -111,11 +112,13 @@ class _EditCallCommandState extends State<EditCallCommand> {
             NumberListTile(
               value: widget.callCommand.chance.toDouble(),
               onChanged: (value) {
+                Navigator.pop(context);
                 widget.callCommand.chance = value.floor();
                 save();
               },
               min: 1,
               title: 'Call Chance',
+              subtitle: chance == 1 ? 'Every time' : '1 in $chance',
             )
           ],
         ),

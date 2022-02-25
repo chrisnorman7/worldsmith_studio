@@ -12,6 +12,7 @@ class NumberListTile extends StatelessWidget {
     this.min,
     this.max,
     this.title = 'Number',
+    this.subtitle,
     this.autofocus = false,
     Key? key,
   }) : super(key: key);
@@ -31,6 +32,9 @@ class NumberListTile extends StatelessWidget {
   /// The title for the resulting [ListTile].
   final String title;
 
+  /// The subtitle to use for the resulting [ListTile].
+  final String? subtitle;
+
   /// Whether the resulting [ListTile] should be autofocused.
   final bool autofocus;
 
@@ -38,7 +42,7 @@ class NumberListTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
         autofocus: autofocus,
         title: Text(title),
-        subtitle: Text(value.toString()),
+        subtitle: Text(subtitle ?? value.toString()),
         onTap: () => pushWidget(
           context: context,
           builder: (context) => GetNumber(
