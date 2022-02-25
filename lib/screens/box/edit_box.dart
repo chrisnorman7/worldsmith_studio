@@ -6,7 +6,7 @@ import '../../widgets/cancel.dart';
 import '../../widgets/text_list_tile.dart';
 import '../reverb/reverb_list_tile.dart';
 import '../terrain/terrain_list_tile.dart';
-import '../world_command/world_command_list_tile.dart';
+import '../world_command/call_command_list_tile.dart';
 import 'coordinates_list_tile.dart';
 
 /// A widget for editing the given [box].
@@ -94,25 +94,23 @@ class _EditBoxState extends State<EditBox> {
                 currentReverbId: widget.box.reverbId,
                 nullable: true,
               ),
-              WorldCommandListTile(
+              CallCommandListTile(
                 projectContext: widget.projectContext,
-                currentId: widget.box.enterCommandId,
-                onChanged: (command) {
-                  widget.box.enterCommandId = command?.id;
+                callCommand: widget.box.enterCommand,
+                onChanged: (value) {
+                  widget.box.enterCommand = value;
                   save();
                 },
-                title: 'Enter command',
-                nullable: true,
+                title: 'Enter Command',
               ),
-              WorldCommandListTile(
+              CallCommandListTile(
                 projectContext: widget.projectContext,
-                currentId: widget.box.leaveCommandId,
-                onChanged: (command) {
-                  widget.box.leaveCommandId = command?.id;
+                callCommand: widget.box.leaveCommand,
+                onChanged: (value) {
+                  widget.box.leaveCommand = value;
                   save();
                 },
                 title: 'Leave Command',
-                nullable: true,
               ),
               CheckboxListTile(
                 value: widget.box.enclosed,

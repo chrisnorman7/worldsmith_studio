@@ -24,7 +24,7 @@ import '../reverb/reverb_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
-import '../world_command/world_command_list_tile.dart';
+import '../world_command/call_command_list_tile.dart';
 import '../zone_object/edit_zone_object.dart';
 import '../zone_object/zone_object_list_tile.dart';
 
@@ -237,15 +237,14 @@ class _EditZoneState extends State<EditZone> {
             setState(() {});
           },
         ),
-        WorldCommandListTile(
+        CallCommandListTile(
           projectContext: widget.projectContext,
-          currentId: widget.zone.edgeCommandId,
-          onChanged: (command) {
-            widget.zone.edgeCommandId = command?.id;
+          callCommand: widget.zone.edgeCommand,
+          onChanged: (value) {
+            widget.zone.edgeCommand = value;
             save();
           },
           title: 'Edge Command',
-          nullable: true,
         )
       ],
     );

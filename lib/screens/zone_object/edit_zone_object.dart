@@ -7,7 +7,7 @@ import '../../widgets/cancel.dart';
 import '../../widgets/text_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
 import '../sound/sound_list_tile.dart';
-import '../world_command/world_command_list_tile.dart';
+import '../world_command/call_command_list_tile.dart';
 
 /// A widget for editing a [zoneObject].
 class EditZoneObject extends StatefulWidget {
@@ -102,15 +102,14 @@ class _EditZoneObjectState extends State<EditZoneObject> {
               defaultGain: world.soundOptions.defaultGain,
               looping: true,
             ),
-            WorldCommandListTile(
+            CallCommandListTile(
               projectContext: widget.projectContext,
-              currentId: widget.zoneObject.collideCommandId,
-              onChanged: (command) {
-                widget.zoneObject.collideCommandId = command?.id;
+              callCommand: widget.zoneObject.collideCommand,
+              onChanged: (value) {
+                widget.zoneObject.collideCommand = value;
                 save();
               },
               title: 'Collide Command',
-              nullable: true,
             )
           ],
         ),
