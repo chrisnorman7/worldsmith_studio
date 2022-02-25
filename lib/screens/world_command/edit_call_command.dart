@@ -6,6 +6,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_text.dart';
+import '../../widgets/number_list_tile.dart';
 import '../../world_command_location.dart';
 import 'world_command_list_tile.dart';
 
@@ -106,6 +107,15 @@ class _EditCallCommandState extends State<EditCallCommand> {
                   validator: (value) => validateInt(value: value),
                 ),
               ),
+            ),
+            NumberListTile(
+              value: widget.callCommand.chance.toDouble(),
+              onChanged: (value) {
+                widget.callCommand.chance = value.floor();
+                save();
+              },
+              min: 1,
+              title: 'Call Chance',
             )
           ],
         ),
