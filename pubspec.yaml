@@ -14,11 +14,11 @@ dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.4.0
-  path: ^1.8.1
+  path: ^1.8.0
   shared_preferences: ^2.0.13
   short_uuids: ^2.0.0
   url_launcher: ^6.0.20
-  worldsmith: 
+  worldsmith:
     path: ../worldsmith
   ziggurat: ^0.38.0
   ziggurat_sounds: ^0.18.1
