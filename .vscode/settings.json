@@ -5,6 +5,7 @@
     "dialog",
     "formals",
     "Lf",
+    "libsndfile",
     "Rolloff",
     "synthizer",
     "worldsmith"
