@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dart_sdl/dart_sdl.dart';
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -193,6 +192,8 @@ class _HomePageState extends State<HomePage> {
     required File file,
     World? world,
   }) async {
+    final worldWasNull = world == null;
+    world ??= World();
     var game = _game;
     if (game == null) {
       game = Game(appName);
@@ -200,7 +201,24 @@ class _HomePageState extends State<HomePage> {
     }
     var soundManager = _soundManager;
     if (soundManager == null) {
-      final synthizer = Synthizer()..initialize();
+      final options = world.soundOptions;
+      String? libsndfilePath;
+      if (Platform.isLinux) {
+        libsndfilePath = options.libsndfilePathLinux;
+      } else if (Platform.isWindows) {
+        libsndfilePath = options.libsndfilePathWindows;
+      } else if (Platform.isMacOS) {
+        libsndfilePath = options.libsndfilePathMac;
+      }
+      if (libsndfilePath == null || File(libsndfilePath).existsSync()) {
+        libsndfilePath = null;
+      }
+      final synthizer = Synthizer()
+        ..initialize(
+          libsndfilePath: libsndfilePath,
+          logLevel: options.synthizerLogLevel,
+          loggingBackend: options.synthizerLoggingBackend,
+        );
       final context = synthizer.createContext();
       final bufferCache = BufferCache(
         synthizer: synthizer,
@@ -216,13 +234,17 @@ class _HomePageState extends State<HomePage> {
       _soundManager = soundManager;
       game.sounds.listen(
         (event) {
+          // ignore: avoid_print
           print('Sound: $event');
           soundManager!.handleEvent(event);
         },
+        // ignore: avoid_print
         onDone: () => print('Sound stream finished.'),
         onError: (Object e, StackTrace? s) {
+          // ignore: avoid_print
           print(e);
           if (s != null) {
+            // ignore: avoid_print
             print(s);
           }
         },
@@ -234,9 +256,10 @@ class _HomePageState extends State<HomePage> {
     final projectContext = ProjectContext(
       game: game,
       file: file,
-      world: world ?? World(),
+      world: world,
+      sdl: Sdl(),
     );
-    if (world == null) {
+    if (worldWasNull) {
       projectContext.save();
     }
     final prefs = await SharedPreferences.getInstance();

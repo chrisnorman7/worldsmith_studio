@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:worldsmith/world_context.dart';
@@ -17,11 +18,15 @@ class ProjectContext {
     required this.file,
     required this.world,
     required this.game,
+    required this.sdl,
   });
 
   /// Load a project from the given [file].
-  ProjectContext.fromFile({required this.file, required this.game})
-      : world = World.fromFilename(file.path);
+  ProjectContext.fromFile({
+    required this.file,
+    required this.game,
+    required this.sdl,
+  }) : world = World.fromFilename(file.path);
 
   /// The filename that [world] has been loaded from.
   final File file;
@@ -34,6 +39,9 @@ class ProjectContext {
 
   /// The game to use for creating stuff.
   final Game game;
+
+  /// The sdl instance to use.
+  final Sdl sdl;
 
   /// Save the [world].
   void save() {
@@ -114,5 +122,9 @@ class ProjectContext {
   }
 
   /// Get a world context.
-  WorldContext get worldContext => WorldContext(game: game, world: world);
+  WorldContext get worldContext => WorldContext(
+        game: game,
+        world: world,
+        sdl: sdl,
+      );
 }

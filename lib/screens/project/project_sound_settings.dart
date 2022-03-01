@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ziggurat/sound.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../sound/gain_list_tile.dart';
 import '../sound/sound_list_tile.dart';
+import '../sound/synthizer_settings.dart';
 
 /// A widget for configuring sound-related settings.
 class ProjectSoundSettings extends StatefulWidget {
@@ -32,25 +33,8 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
     final menuActivateSound = soundOptions.menuActivateSound;
     return ListView(
       children: [
-        ListTile(
-          autofocus: true,
-          title: const Text('Default Panning Strategy'),
-          subtitle: Text(
-            soundOptions.defaultPannerStrategy.name,
-          ),
-          onTap: () {
-            final soundOptions = world.soundOptions;
-            var index = soundOptions.defaultPannerStrategy.index + 1;
-            if (index >= DefaultPannerStrategy.values.length) {
-              index = 0;
-            }
-            world.soundOptions.defaultPannerStrategy =
-                DefaultPannerStrategy.values[index];
-            widget.projectContext.save();
-            setState(() {});
-          },
-        ),
         GainListTile(
+          autofocus: true,
           gain: soundOptions.defaultGain,
           onChange: (value) {
             soundOptions.defaultGain = value;
@@ -84,6 +68,19 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           nullable: true,
           title: 'Menu Activate Sound',
           defaultGain: soundOptions.defaultGain,
+        ),
+        ListTile(
+          title: const Text('Synthizer Settings'),
+          subtitle: const Text('(Requires restart)'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => SynthizerSettings(
+                projectContext: widget.projectContext,
+              ),
+            );
+            setState(() {});
+          },
         )
       ],
     );

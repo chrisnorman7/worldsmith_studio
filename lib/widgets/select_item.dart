@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'cancel.dart';
+
 /// A widget for selecting something from a list of [values].
 class SelectItem<T> extends StatelessWidget {
   /// Create an instance.
@@ -29,27 +31,29 @@ class SelectItem<T> extends StatelessWidget {
 
   /// Create the widget.
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final element = values[index];
-          final f = getDescription;
-          final String description;
-          if (f == null) {
-            description = element.toString();
-          } else {
-            description = f(element);
-          }
-          return ListTile(
-            autofocus: (value == null && index == 0) || element == value,
-            selected: element == value,
-            title: Text(description),
-            onTap: () => onDone(element),
-          );
-        },
-        itemCount: values.length,
-      ));
+  Widget build(BuildContext context) => Cancel(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+            ),
+            body: ListView.builder(
+              itemBuilder: (context, index) {
+                final element = values[index];
+                final f = getDescription;
+                final String description;
+                if (f == null) {
+                  description = element.toString();
+                } else {
+                  description = f(element);
+                }
+                return ListTile(
+                  autofocus: (value == null && index == 0) || element == value,
+                  selected: element == value,
+                  title: Text(description),
+                  onTap: () => onDone(element),
+                );
+              },
+              itemCount: values.length,
+            )),
+      );
 }

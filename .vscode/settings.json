@@ -7,6 +7,7 @@
     "Lf",
     "libsndfile",
     "Rolloff",
+    "sdl",
     "synthizer",
     "worldsmith"
   ]

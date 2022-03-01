@@ -13,6 +13,7 @@ class GainListTile extends StatefulWidget {
     required this.gain,
     required this.onChange,
     this.title = 'Gain',
+    this.autofocus = false,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +25,9 @@ class GainListTile extends StatefulWidget {
 
   /// The title of the list tile.
   final String title;
+
+  /// Whether or not the resulting [ListTile] should be autofocused.
+  final bool autofocus;
 
   /// Create state for this widget.
   @override
@@ -50,6 +54,7 @@ class _GainListTileState extends State<GainListTile> {
             )
           },
           child: ListTile(
+            autofocus: widget.autofocus,
             title: Text(widget.title),
             subtitle: Text(widget.gain.toString()),
             onTap: () => pushWidget(
