@@ -236,7 +236,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         ),
         KeyboardShortcut(
           description: 'Import a directory as different assets',
-          keyName: 'i',
+          keyName: 'D',
           control: true,
         ),
         KeyboardShortcut(

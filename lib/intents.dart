@@ -106,7 +106,16 @@ class ImportDirectoryIntent extends Intent {
   const ImportDirectoryIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyI, control: true);
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyD, control: true);
+}
+
+/// An intent to import a single file.
+class ImportFileIntent extends Intent {
+  /// Create an instance.
+  const ImportFileIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyF, control: true);
 }
 
 /// An intent to delete something.
