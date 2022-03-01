@@ -38,8 +38,7 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           gain: soundOptions.defaultGain,
           onChange: (value) {
             soundOptions.defaultGain = value;
-            widget.projectContext.save();
-            setState(() {});
+            save();
           },
           title: 'Default Gain',
         ),
@@ -48,8 +47,7 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           value: menuMoveSound,
           onDone: (value) {
             soundOptions.menuMoveSound = value;
-            widget.projectContext.save();
-            setState(() {});
+            save();
           },
           assetStore: world.interfaceSoundsAssetStore,
           defaultGain: soundOptions.defaultGain,
@@ -61,13 +59,24 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           value: menuActivateSound,
           onDone: (value) {
             soundOptions.menuActivateSound = value;
-            widget.projectContext.save();
-            setState(() {});
+            save();
           },
           assetStore: world.interfaceSoundsAssetStore,
           nullable: true,
           title: 'Menu Activate Sound',
           defaultGain: soundOptions.defaultGain,
+        ),
+        SoundListTile(
+          projectContext: widget.projectContext,
+          value: soundOptions.menuCancelSound,
+          onDone: (value) {
+            soundOptions.menuCancelSound = value;
+            save();
+          },
+          assetStore: world.interfaceSoundsAssetStore,
+          defaultGain: soundOptions.defaultGain,
+          nullable: true,
+          title: 'Menu Cancel Sound',
         ),
         ListTile(
           title: const Text('Synthizer Settings'),
@@ -84,6 +93,11 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         )
       ],
     );
+  }
+
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 
   /// Set default gain.
