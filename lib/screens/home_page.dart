@@ -210,7 +210,8 @@ class _HomePageState extends State<HomePage> {
       } else if (Platform.isMacOS) {
         libsndfilePath = options.libsndfilePathMac;
       }
-      if (libsndfilePath == null || File(libsndfilePath).existsSync()) {
+      if (libsndfilePath == null ||
+          File(libsndfilePath).existsSync() == false) {
         libsndfilePath = null;
       }
       final synthizer = Synthizer()
