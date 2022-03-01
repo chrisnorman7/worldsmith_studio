@@ -74,6 +74,13 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
                 appBar: AppBar(
                   actions: [
                     ElevatedButton(
+                      onPressed: () => deleteCommand(context),
+                      child: const Icon(
+                        Icons.delete_outline,
+                        semanticLabel: 'Delete Command',
+                      ),
+                    ),
+                    ElevatedButton(
                       child: const Icon(Icons.drive_file_rename_outline,
                           semanticLabel: 'Rename Command'),
                       onPressed: Actions.handler<RenameIntent>(
@@ -248,5 +255,70 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
         ),
       ],
     );
+  }
+
+  /// Delete the command.
+  void deleteCommand(BuildContext context) {
+    final id = widget.command.id;
+    final world = widget.projectContext.world;
+    if (world.mainMenuOptions.startGameCommandId == id) {
+      return showSnackBar(
+        context: context,
+        message: 'You cannot delete the start game command.',
+      );
+    }
+    for (final category in world.commandCategories) {
+      for (final command in category.commands) {
+        if (command.callCommand?.commandId == id) {
+          return showSnackBar(
+            context: context,
+            message: 'You cannot delete a command which is called by the '
+                '${command.name} command from the ${category.name} category.',
+          );
+        }
+      }
+    }
+    for (final zone in world.zones) {
+      if (zone.edgeCommand?.commandId == id) {
+        return showSnackBar(
+          context: context,
+          message:
+              'You cannot delete the edge command of the ${zone.name} zone.',
+        );
+      }
+      for (final box in zone.boxes) {
+        if (box.enterCommand?.commandId == id ||
+            box.leaveCommand?.commandId == id ||
+            box.walkCommand?.commandId == id) {
+          return showSnackBar(
+            context: context,
+            message: 'This command is used by the ${box.name} box of the '
+                '${zone.name} zone.',
+          );
+        }
+      }
+      for (final object in zone.objects) {
+        if (object.collideCommand?.commandId == id) {
+          return showSnackBar(
+            context: context,
+            message: 'This command is being used by the ${object.name} '
+                'object of the ${zone.name} zone.',
+          );
+        }
+      }
+    }
+    confirm(
+        context: context,
+        message: 'Are you sure you want to delete the ${widget.command.name} '
+            'command from the ${widget.category.name} category?',
+        title: 'Delete Command',
+        yesCallback: () {
+          widget.category.commands.removeWhere(
+            (element) => element.id == id,
+          );
+          Navigator.pop(context);
+          Navigator.pop(context);
+          widget.projectContext.save();
+        });
   }
 }
