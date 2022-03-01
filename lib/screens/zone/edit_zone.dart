@@ -83,71 +83,55 @@ class _EditZoneState extends State<EditZone> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
-    final world = widget.projectContext.world;
-    return Cancel(
-      child: TabbedScaffold(
-        tabs: [
-          TabbedScaffoldTab(
-            title: 'Zone Settings',
-            icon: const Icon(Icons.settings_display_outlined),
-            builder: getSettingsListView,
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  final id = widget.zone.id;
-                  confirm(
-                    context: context,
-                    message: 'Are you sure you want to delete the '
-                        '${widget.zone.name} zone?',
-                    title: 'Confirm Delete',
-                    yesCallback: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      world.zones.removeWhere((element) => element.id == id);
-                      widget.projectContext.save();
-                    },
-                  );
-                },
-                child: deleteIcon,
-              )
-            ],
-          ),
-          if (widget.zone.boxes.isNotEmpty)
+  Widget build(BuildContext context) => Cancel(
+        child: TabbedScaffold(
+          tabs: [
             TabbedScaffoldTab(
-              title: 'Canvas',
-              icon: const Icon(Icons.brush_outlined),
-              builder: getCanvas,
+              title: 'Zone Settings',
+              icon: const Icon(Icons.settings_display_outlined),
+              builder: getSettingsListView,
               actions: [
                 ElevatedButton(
-                  onPressed: Actions.handler<HelpIntent>(context, _helpIntent),
-                  child: const Icon(
-                    Icons.help_center_outlined,
-                    semanticLabel: 'Keyboard Shortcuts',
-                  ),
+                  onPressed: () => deleteZone(context),
+                  child: deleteIcon,
                 )
               ],
             ),
-          TabbedScaffoldTab(
-            title: 'Objects',
-            icon: const Icon(Icons.local_post_office_outlined),
-            builder: getObjectsListView,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => createZoneObject(context),
-              autofocus: widget.zone.objects.isEmpty,
-              child: createIcon,
-              tooltip: 'Add Object',
+            if (widget.zone.boxes.isNotEmpty)
+              TabbedScaffoldTab(
+                title: 'Canvas',
+                icon: const Icon(Icons.brush_outlined),
+                builder: getCanvas,
+                actions: [
+                  ElevatedButton(
+                    onPressed:
+                        Actions.handler<HelpIntent>(context, _helpIntent),
+                    child: const Icon(
+                      Icons.help_center_outlined,
+                      semanticLabel: 'Keyboard Shortcuts',
+                    ),
+                  )
+                ],
+              ),
+            TabbedScaffoldTab(
+              title: 'Objects',
+              icon: const Icon(Icons.local_post_office_outlined),
+              builder: getObjectsListView,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () => createZoneObject(context),
+                autofocus: widget.zone.objects.isEmpty,
+                child: createIcon,
+                tooltip: 'Add Object',
+              ),
             ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Boxes',
-            icon: const Icon(Icons.map_outlined),
-            builder: getBoxesListView,
-          ),
-        ],
-      ),
-    );
-  }
+            TabbedScaffoldTab(
+              title: 'Boxes',
+              icon: const Icon(Icons.map_outlined),
+              builder: getBoxesListView,
+            ),
+          ],
+        ),
+      );
 
   /// Save the project context, and call[setState].
   void save() {
@@ -645,5 +629,33 @@ class _EditZoneState extends State<EditZone> {
       destination: Point(coordinates.x.toDouble(), coordinates.y.toDouble()),
     );
     setState(() {});
+  }
+
+  /// Delete the current zone.
+  void deleteZone(BuildContext context) {
+    final world = widget.projectContext.world;
+    final id = widget.zone.id;
+    for (final category in world.commandCategories) {
+      for (final command in category.commands) {
+        if (command.zoneTeleport?.zoneId == id) {
+          return showSnackBar(
+            context: context,
+            message: 'You cannot delete the target zone of the ${command.name} '
+                'command from the ${category.name} category.',
+          );
+        }
+      }
+    }
+    confirm(
+      context: context,
+      message: 'Are you sure you want to delete the ${widget.zone.name} zone?',
+      title: 'Confirm Delete',
+      yesCallback: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        world.zones.removeWhere((element) => element.id == id);
+        widget.projectContext.save();
+      },
+    );
   }
 }
