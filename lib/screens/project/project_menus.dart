@@ -28,12 +28,13 @@ class _ProjectMenusState extends State<ProjectMenus> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final options = world.mainMenuOptions;
     return ListView(
       children: [
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             autofocus: true,
-            title: Text(world.mainMenuOptions.title),
+            title: Text(options.title),
             onTap: () async {
               widget.projectContext.playActivateSound();
               await pushWidget(
@@ -48,7 +49,9 @@ class _ProjectMenusState extends State<ProjectMenus> {
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
-            title: Text(world.creditsMenuOptions.title),
+            title: Text(
+              options.creditsMessage.text ?? world.creditsMenuOptions.title,
+            ),
             onTap: () async {
               widget.projectContext.playActivateSound();
               pushWidget(
@@ -63,7 +66,9 @@ class _ProjectMenusState extends State<ProjectMenus> {
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
-            title: Text(world.pauseMenuOptions.title),
+            title: Text(
+              options.soundOptionsMessage.text ?? world.pauseMenuOptions.title,
+            ),
             onTap: () async {
               widget.projectContext.playActivateSound();
               await pushWidget(
@@ -73,6 +78,12 @@ class _ProjectMenusState extends State<ProjectMenus> {
               );
               setState(() {});
             },
+          ),
+        ),
+        widget.projectContext.getMenuMoveSemantics(
+          child: ListTile(
+            title: Text(world.soundMenuOptions.title),
+            onTap: () {},
           ),
         )
       ],
