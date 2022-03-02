@@ -42,13 +42,15 @@ class _GainListTileState extends State<GainListTile> {
         child: Actions(
           actions: {
             IncreaseIntent: CallbackAction<IncreaseIntent>(
-              onInvoke: (intent) => widget.onChange(widget.gain + 0.1),
+              onInvoke: (intent) => widget.onChange(
+                roundDouble(widget.gain + 0.1),
+              ),
             ),
             DecreaseIntent: CallbackAction<DecreaseIntent>(
               onInvoke: (intent) => widget.onChange(
                 max(
-                  0.1,
-                  widget.gain - 0.1,
+                  0.0,
+                  roundDouble(widget.gain - 0.1),
                 ),
               ),
             )
