@@ -16,6 +16,7 @@ import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import '../ambiance/edit_ambiances.dart';
 import '../box/coordinates_list_tile.dart';
 import '../box/edit_box.dart';
 import '../box/select_box.dart';
@@ -178,6 +179,21 @@ class _EditZoneState extends State<EditZone> {
           nullable: true,
           title: 'Zone Music',
           playSound: false,
+        ),
+        ListTile(
+          title: const Text('Ambiances'),
+          subtitle: Text(widget.zone.ambiances.length.toString()),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditAmbiances(
+                projectContext: widget.projectContext,
+                ambiances: widget.zone.ambiances,
+                title: 'Zone Ambiances',
+              ),
+            );
+            resetLevel();
+          },
         ),
         ListTile(
           title: const Text('Default Terrain'),
