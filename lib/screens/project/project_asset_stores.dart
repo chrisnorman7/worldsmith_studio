@@ -81,11 +81,18 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
           assetStore: world.ambianceAssetStore,
           afterOnTap: () => setState(() {}),
           canDelete: (asset) {
+            final id = asset.variableName;
             for (final zone in world.zones) {
               for (final object in zone.objects) {
-                if (object.ambiance?.id == asset.variableName) {
+                if (object.ambiance?.id == id) {
                   return 'You cannot delete the ambiance for the '
                       '${object.name} object in the ${zone.name} zone.';
+                }
+              }
+              for (final ambiance in zone.ambiances) {
+                if (ambiance.id == id) {
+                  return 'You cannot delete an ambiance from the ${zone.name} '
+                      'zone.';
                 }
               }
             }
