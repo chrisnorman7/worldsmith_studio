@@ -54,7 +54,7 @@ class _ProjectMenusState extends State<ProjectMenus> {
             ),
             onTap: () async {
               widget.projectContext.playActivateSound();
-              pushWidget(
+              await pushWidget(
                 context: context,
                 builder: (context) => EditCreditsMenu(
                   projectContext: widget.projectContext,
@@ -66,15 +66,14 @@ class _ProjectMenusState extends State<ProjectMenus> {
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
-            title: Text(
-              options.soundOptionsMessage.text ?? world.pauseMenuOptions.title,
-            ),
+            title: Text(world.pauseMenuOptions.title),
             onTap: () async {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) =>
-                    EditPauseMenu(projectContext: widget.projectContext),
+                builder: (context) => EditPauseMenu(
+                  projectContext: widget.projectContext,
+                ),
               );
               setState(() {});
             },
@@ -82,7 +81,9 @@ class _ProjectMenusState extends State<ProjectMenus> {
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
-            title: Text(world.soundMenuOptions.title),
+            title: Text(
+              options.soundOptionsMessage.text ?? world.soundMenuOptions.title,
+            ),
             onTap: () {},
           ),
         )

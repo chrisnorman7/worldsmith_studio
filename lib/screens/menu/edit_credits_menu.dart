@@ -8,11 +8,11 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/music_widget.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/text_list_tile.dart';
 import '../credits/edit_credit.dart';
 import '../sound/fade_time_list_tile.dart';
-import '../sound/music_player.dart';
 import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the credits menu.
@@ -33,40 +33,19 @@ class EditCreditsMenu extends StatefulWidget {
 
 /// State for [EditCreditsMenu].
 class _EditCreditsMenuState extends State<EditCreditsMenu> {
-  MusicPlayer? _musicPlayer;
-
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
-    var musicPlayer = _musicPlayer;
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
     final options = world.creditsMenuOptions;
-    final music = world.creditsMenuMusic;
-    if (music == null) {
-      _musicPlayer?.stop();
-      _musicPlayer = null;
-    } else {
-      if (musicPlayer == null) {
-        musicPlayer = MusicPlayer(
-          channel: widget.projectContext.game.ambianceSounds,
-          assetReference: music.sound,
-          gain: music.gain,
-          fadeBuilder: () => options.fadeTime,
-        )..play();
-      } else {
-        musicPlayer
-          ..gain = music.gain
-          ..assetReference = music.sound;
-      }
-      _musicPlayer = musicPlayer;
-    }
     return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Credits Menu'),
-        ),
-        body: ListView(
+      child: MusicWidget(
+        getFadeTime: () => options.fadeTime,
+        getMusic: () => world.creditsMenuMusic,
+        soundChannel: widget.projectContext.game.musicSounds,
+        title: options.title,
+        child: ListView(
           children: [
             widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
@@ -124,14 +103,6 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
         ),
       ),
     );
-  }
-
-  /// Stop the sound playing.
-  @override
-  void dispose() {
-    super.dispose();
-    _musicPlayer?.stop();
-    _musicPlayer = null;
   }
 
   /// Save the project context and set state.
