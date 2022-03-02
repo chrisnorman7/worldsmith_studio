@@ -219,3 +219,12 @@ class CreateZoneObjectIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
 }
+
+/// The intent to add a new ambiance.
+class AddAmbianceIntent extends Intent {
+  /// Create an instance.
+  const AddAmbianceIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+}

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/keyboard_shortcuts_list.dart';
 import '../asset_store/select_asset.dart';
 import '../sound/sound_list_tile.dart';
 
@@ -36,41 +38,59 @@ class _EditAmbiancesState extends State<EditAmbiances> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final addAmbianceAction = CallbackAction<AddAmbianceIntent>(
+      onInvoke: (intent) => addAmbiance(context),
+    );
     final world = widget.projectContext.world;
     return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
+      child: WithKeyboardShortcuts(
+        child: Shortcuts(
+          child: Actions(
+            actions: {AddAmbianceIntent: addAmbianceAction},
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+              ),
+              body: ListView.builder(
+                itemBuilder: (context, index) {
+                  final sound = widget.ambiances[index];
+                  return SoundListTile(
+                    projectContext: widget.projectContext,
+                    value: sound,
+                    onDone: (value) {
+                      if (value == null) {
+                        widget.ambiances.remove(sound);
+                        save();
+                      } else {
+                        save();
+                      }
+                    },
+                    assetStore: world.ambianceAssetStore,
+                    defaultGain: world.soundOptions.defaultGain,
+                    autofocus: index == 0,
+                    nullable: true,
+                    looping: true,
+                  );
+                },
+                itemCount: widget.ambiances.length,
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () => addAmbiance(context),
+                autofocus: widget.ambiances.isEmpty,
+                child: const Icon(Icons.add_outlined),
+                tooltip: 'Add Ambiance',
+              ),
+            ),
+          ),
+          shortcuts: const {AddAmbianceIntent.hotkey: AddAmbianceIntent()},
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            final sound = widget.ambiances[index];
-            return SoundListTile(
-              projectContext: widget.projectContext,
-              value: sound,
-              onDone: (value) {
-                if (value == null) {
-                  widget.ambiances.remove(sound);
-                  save();
-                } else {
-                  save();
-                }
-              },
-              assetStore: world.ambianceAssetStore,
-              defaultGain: world.soundOptions.defaultGain,
-              autofocus: index == 0,
-              nullable: true,
-              looping: true,
-            );
-          },
-          itemCount: widget.ambiances.length,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => addAmbiance(context),
-          autofocus: widget.ambiances.isEmpty,
-          child: const Icon(Icons.add_outlined),
-          tooltip: 'Add Ambiance',
-        ),
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Add a new ambiance.',
+            keyName: 'N',
+            control: true,
+          )
+        ],
       ),
     );
   }
