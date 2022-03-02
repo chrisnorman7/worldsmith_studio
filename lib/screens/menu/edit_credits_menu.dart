@@ -47,42 +47,36 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
         title: options.title,
         child: ListView(
           children: [
-            widget.projectContext.getMenuMoveSemantics(
-              child: TextListTile(
-                value: options.title,
-                onChanged: (value) {
-                  options.title = value;
-                  save();
-                },
-                header: 'Title',
-                autofocus: true,
-                title: 'Menu Title',
-                validator: (value) => validateNonEmptyValue(value: value),
-              ),
+            TextListTile(
+              value: options.title,
+              onChanged: (value) {
+                options.title = value;
+                save();
+              },
+              header: 'Title',
+              autofocus: true,
+              title: 'Menu Title',
+              validator: (value) => validateNonEmptyValue(value: value),
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: SoundListTile(
-                projectContext: widget.projectContext,
-                value: options.music,
-                onDone: (value) {
-                  options.music = value;
-                  save();
-                },
-                assetStore: world.musicAssetStore,
-                defaultGain: defaultGain,
-                nullable: true,
-                title: 'Credits Menu Music',
-                playSound: false,
-              ),
+            SoundListTile(
+              projectContext: widget.projectContext,
+              value: options.music,
+              onDone: (value) {
+                options.music = value;
+                save();
+              },
+              assetStore: world.musicAssetStore,
+              defaultGain: defaultGain,
+              nullable: true,
+              title: 'Credits Menu Music',
+              playSound: false,
             ),
-            widget.projectContext.getMenuMoveSemantics(
-              child: FadeTimeListTile(
-                value: options.fadeTime,
-                onChanged: (value) {
-                  options.fadeTime = value;
-                  save();
-                },
-              ),
+            FadeTimeListTile(
+              value: options.fadeTime,
+              onChanged: (value) {
+                options.fadeTime = value;
+                save();
+              },
             ),
             const Divider(),
             for (final credit in world.credits)
