@@ -5,6 +5,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/play_sound_semantics.dart';
+import 'add_asset.dart';
 
 /// A widget for selecting an asset reference.
 class SelectAsset extends StatefulWidget {
@@ -52,13 +53,27 @@ class _SelectAssetState extends State<SelectAsset> {
       assets.add(null);
     }
     assets.addAll(widget.assetStore.assets);
-    final selectedAsset = assets.firstWhere(
-      (element) => element?.variableName == widget.currentId,
-      orElse: () => assets.first,
-    );
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => AddAsset(
+                    projectContext: widget.projectContext,
+                    assetStore: widget.assetStore,
+                  ),
+                );
+                setState(() {});
+              },
+              child: const Icon(
+                Icons.library_add_outlined,
+                semanticLabel: 'Add Asset',
+              ),
+            )
+          ],
           title: Text(widget.title),
         ),
         body: ListView.builder(
@@ -74,9 +89,10 @@ class _SelectAssetState extends State<SelectAsset> {
             }
             return PlaySoundSemantics(
               child: ListTile(
-                autofocus: asset == selectedAsset,
+                autofocus: asset.variableName == widget.currentId ||
+                    (widget.currentId == null && index == 0),
                 title: Text(assetString(asset)),
-                selected: asset == selectedAsset,
+                selected: asset.variableName == widget.currentId,
                 onTap: () => widget.onDone(asset),
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
