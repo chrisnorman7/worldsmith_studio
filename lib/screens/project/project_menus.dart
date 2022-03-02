@@ -5,6 +5,7 @@ import '../../util.dart';
 import '../menu/edit_credits_menu.dart';
 import '../menu/edit_main_menu.dart';
 import '../menu/edit_pause_menu.dart';
+import '../menu/edit_sound_menu.dart';
 
 /// A widget for editing various game menus.
 class ProjectMenus extends StatefulWidget {
@@ -66,6 +67,23 @@ class _ProjectMenusState extends State<ProjectMenus> {
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
+            title: Text(
+              options.soundOptionsMessage.text ?? world.soundMenuOptions.title,
+            ),
+            onTap: () async {
+              widget.projectContext.playActivateSound();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditSoundMenu(
+                  projectContext: widget.projectContext,
+                ),
+              );
+              setState(() {});
+            },
+          ),
+        ),
+        widget.projectContext.getMenuMoveSemantics(
+          child: ListTile(
             title: Text(world.pauseMenuOptions.title),
             onTap: () async {
               widget.projectContext.playActivateSound();
@@ -77,14 +95,6 @@ class _ProjectMenusState extends State<ProjectMenus> {
               );
               setState(() {});
             },
-          ),
-        ),
-        widget.projectContext.getMenuMoveSemantics(
-          child: ListTile(
-            title: Text(
-              options.soundOptionsMessage.text ?? world.soundMenuOptions.title,
-            ),
-            onTap: () {},
           ),
         )
       ],
