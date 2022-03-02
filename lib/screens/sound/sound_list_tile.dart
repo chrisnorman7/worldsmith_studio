@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/play_sound_semantics.dart';
@@ -102,22 +105,56 @@ class SoundListTile extends StatelessWidget {
         }
       },
     );
+    final actions = Actions(
+      actions: {
+        DecreaseIntent: CallbackAction<DecreaseIntent>(
+          onInvoke: (intent) {
+            final sound = value;
+            if (sound == null) {
+              return null;
+            }
+            sound.gain = roundDouble(max(0.0, sound.gain - 0.1));
+            onDone(sound);
+            return null;
+          },
+        ),
+        IncreaseIntent: CallbackAction<IncreaseIntent>(
+          onInvoke: (intent) {
+            final sound = value;
+            if (sound == null) {
+              return null;
+            }
+            sound.gain = roundDouble(sound.gain + 0.1);
+            onDone(sound);
+            return null;
+          },
+        )
+      },
+      child: listTile,
+    );
+    final shortcuts = Shortcuts(
+      shortcuts: const {
+        IncreaseIntent.hotkey: IncreaseIntent(),
+        DecreaseIntent.hotkey: DecreaseIntent(),
+      },
+      child: actions,
+    );
     if (playSound) {
       return PlaySoundSemantics(
-        child: Builder(builder: (context) => listTile),
+        child: Builder(builder: (context) => shortcuts),
         soundChannel: projectContext.game.interfaceSounds,
         assetReference: value == null
             ? null
-            : (getAssetReferenceReference(
+            : getAssetReferenceReference(
                 assets: assetStore.assets,
                 id: value?.id,
               )!
-                .reference),
+                .reference,
         gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
         looping: looping,
       );
     }
-    return listTile;
+    return shortcuts;
   }
 
   /// Push the [EditSound] widget.
