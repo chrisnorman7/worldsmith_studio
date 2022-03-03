@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../intents.dart';
+import 'keyboard_shortcuts_list.dart';
 
 /// A list tile that can be searched for within a [SearchableListView].
 class SearchableListTile {
@@ -61,69 +62,77 @@ class _SearchableListViewState extends State<SearchableListView> {
           )
           .toList();
     }
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          var labelText = 'Search';
-          if (searchString != null) {
-            labelText = '$labelText (${results.length} result';
-            if (results.length == 1) {
-              labelText = '$labelText)';
-            } else {
-              labelText = '${labelText}s)';
+    return WithKeyboardShortcuts(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            var labelText = 'Search';
+            if (searchString != null) {
+              labelText = '$labelText (${results.length} result';
+              if (results.length == 1) {
+                labelText = '$labelText)';
+              } else {
+                labelText = '${labelText}s)';
+              }
             }
+            return ListTile(
+              title: TextField(
+                controller: _controller,
+                focusNode: _textFieldFocusNode,
+                decoration: InputDecoration(
+                  labelText: labelText,
+                ),
+                onChanged: (value) => setState(
+                  () => _searchString = value.isEmpty ? null : value,
+                ),
+              ),
+              subtitle: _controller.text.isEmpty
+                  ? null
+                  : IconButton(
+                      onPressed: () => setState(
+                        () {
+                          setState(() => _controller.text = '');
+                          _searchString = null;
+                          _textFieldFocusNode.requestFocus();
+                        },
+                      ),
+                      icon: const Icon(
+                        Icons.clear_outlined,
+                        semanticLabel: 'Clear',
+                      ),
+                    ),
+            );
           }
-          return ListTile(
-            title: TextField(
-              controller: _controller,
-              focusNode: _textFieldFocusNode,
-              decoration: InputDecoration(
-                labelText: labelText,
-              ),
-              onChanged: (value) => setState(
-                () => _searchString = value.isEmpty ? null : value,
-              ),
+          final child = results[index - 1];
+          return Shortcuts(
+            child: Actions(
+              child: child.child,
+              actions: {
+                SearchIntent: CallbackAction<SearchIntent>(
+                  onInvoke: (intent) {
+                    _textFieldFocusNode.requestFocus();
+                    _controller.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _controller.text.length,
+                    );
+                    return null;
+                  },
+                ),
+              },
             ),
-            subtitle: _controller.text.isEmpty
-                ? null
-                : IconButton(
-                    onPressed: () => setState(
-                      () {
-                        setState(() => _controller.text = '');
-                        _searchString = null;
-                        _textFieldFocusNode.requestFocus();
-                      },
-                    ),
-                    icon: const Icon(
-                      Icons.clear_outlined,
-                      semanticLabel: 'Clear',
-                    ),
-                  ),
-          );
-        }
-        final child = results[index - 1];
-        return Shortcuts(
-          child: Actions(
-            child: child.child,
-            actions: {
-              SearchIntent: CallbackAction<SearchIntent>(
-                onInvoke: (intent) {
-                  _textFieldFocusNode.requestFocus();
-                  _controller.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _controller.text.length,
-                  );
-                  return null;
-                },
-              ),
+            shortcuts: const {
+              SearchIntent.hotkey: SearchIntent(),
             },
-          ),
-          shortcuts: const {
-            SearchIntent.hotkey: SearchIntent(),
-          },
-        );
-      },
-      itemCount: results.length + 1,
+          );
+        },
+        itemCount: results.length + 1,
+      ),
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Search the list.',
+          keyName: '/',
+        )
+      ],
     );
   }
 
