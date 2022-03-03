@@ -101,9 +101,11 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                   value: Point(widget.value.x, widget.value.y),
                   onDone: (value) {
                     Navigator.pop(context);
-                    setState(() => widget.value
-                      ..x = value.x
-                      ..y = value.y);
+                    setState(
+                      () => widget.value
+                        ..x = value.x
+                        ..y = value.y,
+                    );
                   },
                   labelText:
                       clamp == null ? 'Coordinates' : 'Coordinates Offset',
