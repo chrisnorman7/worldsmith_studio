@@ -4,6 +4,7 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/center_text.dart';
+import '../../widgets/searchable_list_view.dart';
 import '../world_command/edit_command_category.dart';
 
 /// A widget for showing the [CommandCategory] list.
@@ -32,16 +33,16 @@ class _ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
     if (categories.isEmpty) {
       return const CenterText(text: 'There are no command categories to show.');
     }
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 5,
-      ),
-      itemBuilder: (context, index) {
-        final category = categories[index];
-        return GridTile(
-          child: TextButton(
-            autofocus: index == 0,
-            onPressed: () async {
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < categories.length; i++) {
+      final category = categories[i];
+      children.add(
+        SearchableListTile(
+          searchString: category.name,
+          child: ListTile(
+            autofocus: i == 0,
+            title: Text(category.name),
+            onTap: () async {
               await pushWidget(
                 context: context,
                 builder: (context) => EditCommandCategory(
@@ -51,12 +52,11 @@ class _ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
               );
               save();
             },
-            child: Text(category.name),
           ),
-        );
-      },
-      itemCount: categories.length,
-    );
+        ),
+      );
+    }
+    return SearchableListView(children: children);
   }
 
   /// Save the project.

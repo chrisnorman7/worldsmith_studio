@@ -9,6 +9,7 @@ import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/searchable_list_view.dart';
 import 'edit_world_command.dart';
 
 const _renameIntent = RenameIntent();
@@ -58,16 +59,16 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
     if (commands.isEmpty) {
       child = const CenterText(text: 'There are no commands in this category.');
     } else {
-      child = GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5,
-        ),
-        itemBuilder: (context, index) {
-          final command = commands[index];
-          return GridTile(
-            child: TextButton(
-              autofocus: index == 0,
-              onPressed: () async {
+      final List<SearchableListTile> children = [];
+      for (var i = 0; i < commands.length; i++) {
+        final command = commands[i];
+        children.add(
+          SearchableListTile(
+            searchString: command.name,
+            child: ListTile(
+              autofocus: i == 0,
+              title: Text(command.name),
+              onTap: () async {
                 await pushWidget(
                   context: context,
                   builder: (context) => EditWorldCommand(
@@ -78,11 +79,12 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
                 );
                 save();
               },
-              child: Text(command.name),
             ),
-          );
-        },
-        itemCount: commands.length,
+          ),
+        );
+      }
+      child = SearchableListView(
+        children: children,
       );
     }
     return Shortcuts(
