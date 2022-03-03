@@ -9,7 +9,7 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   dart_sdl: ^0.8.7
-  dart_synthizer: ^0.7.7
+  dart_synthizer: ^0.7.8
   file_picker: ^4.5.0
   filesize: ^2.0.1
   flutter:
