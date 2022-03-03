@@ -228,3 +228,16 @@ class AddAmbianceIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
 }
+
+/// An intent to open the manual.
+class LaunchManualIntent extends Intent {
+  /// Create an instance.
+  const LaunchManualIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(
+    LogicalKeyboardKey.slash,
+    control: true,
+    shift: true,
+  );
+}

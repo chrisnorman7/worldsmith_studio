@@ -35,3 +35,6 @@ const deleteIcon = Icon(
 
 /// The type of a callback that is used for validating a delete operation.
 typedef CanDelete<T> = String? Function(T value);
+
+/// The URL for the manual.
+const manualUrl = 'https://chrisnorman7.github.io/worldsmith_studio_manual';

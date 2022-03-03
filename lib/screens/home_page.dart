@@ -6,6 +6,7 @@ import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
@@ -103,11 +104,26 @@ class _HomePageState extends State<HomePage> {
             keyName: 'o',
             control: true,
           ),
+          KeyboardShortcut(
+            description: 'Open the manual in your web browser.',
+            keyName: '/',
+            control: true,
+            shift: true,
+          )
         ],
       );
     }
     final scaffold = Scaffold(
       appBar: AppBar(
+        actions: [
+          ElevatedButton(
+            onPressed: () => launch(manualUrl),
+            child: const Icon(
+              Icons.help_outline,
+              semanticLabel: 'Help',
+            ),
+          )
+        ],
         title: const Text(appName),
       ),
       body: child,
@@ -119,7 +135,8 @@ class _HomePageState extends State<HomePage> {
     return Shortcuts(
       shortcuts: const {
         CreateProjectIntent.hotkey: _createProjectIntent,
-        OpenProjectIntent.hotkey: _openProjectIntent
+        OpenProjectIntent.hotkey: _openProjectIntent,
+        LaunchManualIntent.hotkey: LaunchManualIntent(),
       },
       child: Actions(
         actions: {
@@ -134,6 +151,9 @@ class _HomePageState extends State<HomePage> {
               context: context,
               preferences: preferences,
             ),
+          ),
+          LaunchManualIntent: CallbackAction<LaunchManualIntent>(
+            onInvoke: (intent) => launch(manualUrl),
           )
         },
         child: scaffold,
