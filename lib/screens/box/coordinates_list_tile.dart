@@ -120,6 +120,7 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
                 box: widget.box,
                 value: widget.value,
                 title: widget.title,
+                actions: widget.actions,
                 canChangeClamp: widget.canChangeClamp,
               ),
             );
