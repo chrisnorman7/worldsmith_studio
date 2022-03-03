@@ -104,25 +104,28 @@ class _EditCoordinatesState extends State<EditCoordinates> {
             if (clamp == null && widget.canChangeClamp == true) ...[
               ListTile(
                 title: const Text('Clamp Coordinates'),
-                onTap: () => pushWidget(
-                  context: context,
-                  builder: (context) => SelectBox(
-                    zone: widget.zone,
-                    onDone: (box) => pushWidget(
-                      context: context,
-                      builder: (context) => SelectBoxCorner(
-                        onDone: (corner) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          widget.value.clamp = CoordinateClamp(
-                            boxId: box.id,
-                            corner: corner,
-                          );
-                        },
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => SelectBox(
+                      zone: widget.zone,
+                      onDone: (box) => pushWidget(
+                        context: context,
+                        builder: (context) => SelectBoxCorner(
+                          onDone: (corner) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            widget.value.clamp = CoordinateClamp(
+                              boxId: box.id,
+                              corner: corner,
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                  setState(() {});
+                },
               )
             ],
             ListTile(
