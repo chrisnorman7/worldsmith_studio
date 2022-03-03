@@ -41,6 +41,7 @@ class CoordinatesListTile extends StatefulWidget {
     this.box,
     this.actions = const [],
     this.title = 'Coordinates',
+    this.canChangeClamp = false,
     Key? key,
   }) : super(key: key);
 
@@ -65,6 +66,8 @@ class CoordinatesListTile extends StatefulWidget {
   /// The title of the resulting [ListTile].
   final String title;
 
+  /// Whether or not the [value]'s clamp can be changed.
+  final bool canChangeClamp;
   @override
   State<CoordinatesListTile> createState() => _CoordinatesListTileState();
 }
@@ -112,10 +115,12 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
             await pushWidget(
               context: context,
               builder: (context) => EditCoordinates(
+                projectContext: widget.projectContext,
                 zone: widget.zone,
                 box: widget.box,
                 value: widget.value,
                 title: widget.title,
+                canChangeClamp: widget.canChangeClamp,
               ),
             );
             save();

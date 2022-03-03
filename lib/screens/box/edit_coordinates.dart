@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_coordinates.dart';
@@ -13,13 +14,18 @@ import 'select_box_corner.dart';
 class EditCoordinates extends StatefulWidget {
   /// Create an instance.
   const EditCoordinates({
+    required this.projectContext,
     required this.zone,
-    required this.box,
     required this.value,
+    this.box,
     this.actions = const [],
     this.title = 'Edit Coordinates',
+    this.canChangeClamp = false,
     Key? key,
   }) : super(key: key);
+
+  /// The project context to use.
+  final ProjectContext projectContext;
 
   /// The zone which contains the box whose [value] this widget will edit.
   final Zone zone;
@@ -35,6 +41,12 @@ class EditCoordinates extends StatefulWidget {
 
   /// The title of the resulting [Scaffold].
   final String title;
+
+  /// Whether or not the clamp can be changed.
+  ///
+  /// This value was added so that [WorldCommand] instances could have fine
+  /// control over [ZoneTeleport] instances.
+  final bool canChangeClamp;
 
   /// Create state for this widget.
   @override
@@ -87,6 +99,30 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                       setState(() => clamp.corner = value);
                     },
                     value: clamp.corner,
+                  ),
+                ),
+              )
+            ],
+            if (clamp == null && widget.canChangeClamp == true) ...[
+              ListTile(
+                title: const Text('Clamp Coordinates'),
+                onTap: () => pushWidget(
+                  context: context,
+                  builder: (context) => SelectBox(
+                    boxes: widget.zone.boxes,
+                    onDone: (box) => pushWidget(
+                      context: context,
+                      builder: (context) => SelectBoxCorner(
+                        onDone: (corner) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          widget.value.clamp = CoordinateClamp(
+                            boxId: box.id,
+                            corner: corner,
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               )

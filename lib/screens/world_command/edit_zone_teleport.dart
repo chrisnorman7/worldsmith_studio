@@ -8,6 +8,7 @@ import '../../widgets/get_number.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
 import '../box/coordinates_list_tile.dart';
+import '../box/edit_coordinates.dart';
 import '../zone/zone_list_tile.dart';
 
 /// A widget for editing a [zoneTeleport].
@@ -39,6 +40,18 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final clearMaxCoordinatesActions = [
+      ElevatedButton(
+        onPressed: () {
+          widget.zoneTeleport.maxCoordinates = null;
+          save();
+        },
+        child: const Icon(
+          Icons.clear_outlined,
+          semanticLabel: 'Clear Maximum Coordinates',
+        ),
+      )
+    ];
     final zoneId = widget.zoneTeleport.zoneId;
     final zone = widget.projectContext.world.getZone(zoneId);
     final minCoordinates = widget.zoneTeleport.minCoordinates;
@@ -90,13 +103,25 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                 title: maxCoordinates == null
                     ? 'Target Coordinates'
                     : 'Minimum Coordinates',
+                canChangeClamp: true,
               ),
               maxCoordinates == null
                   ? ListTile(
                       title: const Text('Maximum Coordinates'),
                       subtitle: const Text('Not set'),
-                      onTap: () {
-                        widget.zoneTeleport.maxCoordinates = Coordinates(0, 0);
+                      onTap: () async {
+                        final coordinates = Coordinates(0, 0);
+                        widget.zoneTeleport.maxCoordinates = coordinates;
+                        await pushWidget(
+                          context: context,
+                          builder: (context) => EditCoordinates(
+                            projectContext: widget.projectContext,
+                            zone: zone,
+                            value: coordinates,
+                            actions: clearMaxCoordinatesActions,
+                            canChangeClamp: true,
+                          ),
+                        );
                         save();
                       },
                     )
@@ -105,19 +130,9 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                       zone: zone,
                       value: maxCoordinates,
                       onChanged: save,
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            widget.zoneTeleport.maxCoordinates = null;
-                            save();
-                          },
-                          child: const Icon(
-                            Icons.clear_outlined,
-                            semanticLabel: 'Clear Maximum Coordinates',
-                          ),
-                        )
-                      ],
+                      actions: clearMaxCoordinatesActions,
                       title: 'Maximum Coordinates',
+                      canChangeClamp: true,
                     ),
               ListTile(
                 title: const Text('Heading'),
