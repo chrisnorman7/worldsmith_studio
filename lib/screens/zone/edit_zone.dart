@@ -14,6 +14,7 @@ import '../../widgets/center_text.dart';
 import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
+import '../../widgets/searchable_list_view.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import '../ambiance/edit_ambiances.dart';
@@ -600,19 +601,33 @@ class _EditZoneState extends State<EditZone> {
     final createZoneObjectAction = CallbackAction<CreateZoneObjectIntent>(
       onInvoke: (intent) => createZoneObject(context),
     );
+    final objects = widget.zone.objects;
+    final Widget child;
+    if (objects.isEmpty) {
+      child = const CenterText(text: 'There are no objects in this zone.');
+    } else {
+      final children = <SearchableListTile>[];
+      for (var i = 0; i < objects.length; i++) {
+        final object = objects[i];
+        children.add(
+          SearchableListTile(
+            searchString: object.name,
+            child: ZoneObjectListTile(
+              projectContext: widget.projectContext,
+              zone: widget.zone,
+              zoneObject: object,
+              onDone: () => setState(resetLevel),
+              autofocus: i == 0,
+            ),
+          ),
+        );
+      }
+      child = SearchableListView(children: children);
+    }
     return Shortcuts(
       child: Actions(
         actions: {CreateZoneObjectIntent: createZoneObjectAction},
-        child: ListView.builder(
-          itemBuilder: (context, index) => ZoneObjectListTile(
-            projectContext: widget.projectContext,
-            zone: widget.zone,
-            zoneObject: widget.zone.objects[index],
-            onDone: () => setState(resetLevel),
-            autofocus: index == 0,
-          ),
-          itemCount: widget.zone.objects.length,
-        ),
+        child: child,
       ),
       shortcuts: const {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
     );
