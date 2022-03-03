@@ -296,31 +296,35 @@ class _EditZoneState extends State<EditZone> {
           },
         );
     }
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final box = boxes[index];
-        final start = startCoordinates[box.id]!;
-        final end = endCoordinates[box.id]!;
-        return ListTile(
-          autofocus: index == 0,
-          title: Text(box.name),
-          subtitle: Text('${start.x},${start.y} --- ${end.x},${end.y}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditBox(
-                projectContext: widget.projectContext,
-                zone: widget.zone,
-                box: box,
-                onDone: save,
-              ),
-            );
-            save();
-          },
-        );
-      },
-      itemCount: boxes.length,
-    );
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < boxes.length; i++) {
+      final box = boxes[i];
+      final start = startCoordinates[box.id]!;
+      final end = endCoordinates[box.id]!;
+      children.add(
+        SearchableListTile(
+          searchString: box.name,
+          child: ListTile(
+            autofocus: i == 0,
+            title: Text(box.name),
+            subtitle: Text('${start.x},${start.y} --- ${end.x},${end.y}'),
+            onTap: () async {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditBox(
+                  projectContext: widget.projectContext,
+                  zone: widget.zone,
+                  box: box,
+                  onDone: save,
+                ),
+              );
+              save();
+            },
+          ),
+        ),
+      );
+    }
+    return SearchableListView(children: children);
   }
 
   /// Get the WYSIWYG editor.
