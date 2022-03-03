@@ -241,3 +241,12 @@ class LaunchManualIntent extends Intent {
     shift: true,
   );
 }
+
+/// An intent to search for something.
+class SearchIntent extends Intent {
+  /// Create an instance.
+  const SearchIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.slash);
+}
