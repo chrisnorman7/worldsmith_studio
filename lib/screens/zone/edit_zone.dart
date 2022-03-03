@@ -352,7 +352,7 @@ class _EditZoneState extends State<EditZone> {
       onInvoke: (intent) => pushWidget(
         context: context,
         builder: (context) => SelectBox(
-          boxes: widget.zone.boxes,
+          zone: widget.zone,
           onDone: (box) => pushWidget(
             context: context,
             builder: (context) => SelectBoxCorner(

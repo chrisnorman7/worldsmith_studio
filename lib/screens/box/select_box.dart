@@ -3,19 +3,20 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../widgets/cancel.dart';
 
-/// A widget for selecting a box from a list of [boxes].
+/// A widget for selecting a box from a [zone].
 class SelectBox extends StatelessWidget {
   /// Create an instance.
   const SelectBox({
-    required this.boxes,
+    required this.zone,
     required this.onDone,
     this.currentBoxId,
+    this.excludedBoxIds = const [],
     this.title = 'Select Box',
     Key? key,
   }) : super(key: key);
 
-  /// The boxes to choose from.
-  final List<Box> boxes;
+  /// The zone which contains the boxes to choose from.
+  final Zone zone;
 
   /// The function to call with the selected box.
   final ValueChanged<Box> onDone;
@@ -23,17 +24,19 @@ class SelectBox extends StatelessWidget {
   /// The ID of the currently-selected box.
   final String? currentBoxId;
 
+  /// A list of Ids to ignore.
+  final List<String> excludedBoxIds;
+
   /// The title of the resulting [Scaffold].
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    Box? currentBox;
-    if (currentBoxId != null) {
-      currentBox = boxes.firstWhere(
-        (element) => element.id == currentBoxId,
-      );
-    }
+    final boxes = zone.boxes
+        .where(
+          (element) => excludedBoxIds.contains(element.id) == false,
+        )
+        .toList();
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -42,11 +45,17 @@ class SelectBox extends StatelessWidget {
         body: ListView.builder(
           itemBuilder: (context, index) {
             final box = boxes[index];
+            final startCoordinates = zone.getAbsoluteCoordinates(box.start);
+            final endCoordinates = zone.getAbsoluteCoordinates(box.end);
             return ListTile(
-              autofocus:
-                  currentBox == null ? index == 0 : box.id == currentBox.id,
+              autofocus: currentBoxId == box.id || index == 0,
               title: Text(box.name),
+              subtitle: Text(
+                '${startCoordinates.x},${startCoordinates.y} -- '
+                '${endCoordinates.x},${endCoordinates.y}',
+              ),
               onTap: () => onDone(box),
+              selected: box.id == currentBoxId,
             );
           },
           itemCount: boxes.length,

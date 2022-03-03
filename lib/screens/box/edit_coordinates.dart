@@ -59,6 +59,7 @@ class _EditCoordinatesState extends State<EditCoordinates> {
   @override
   Widget build(BuildContext context) {
     final clamp = widget.value.clamp;
+    final boxId = widget.box?.id;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -75,16 +76,13 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                 onTap: () => pushWidget(
                   context: context,
                   builder: (context) => SelectBox(
-                    boxes: widget.zone.boxes
-                        .where(
-                          (element) => element.id != widget.box?.id,
-                        )
-                        .toList(),
+                    zone: widget.zone,
                     onDone: (value) {
                       Navigator.pop(context);
                       setState(() => widget.value.clamp!.boxId = value.id);
                     },
                     currentBoxId: clamp.boxId,
+                    excludedBoxIds: [if (boxId != null) boxId],
                   ),
                 ),
               ),
@@ -109,7 +107,7 @@ class _EditCoordinatesState extends State<EditCoordinates> {
                 onTap: () => pushWidget(
                   context: context,
                   builder: (context) => SelectBox(
-                    boxes: widget.zone.boxes,
+                    zone: widget.zone,
                     onDone: (box) => pushWidget(
                       context: context,
                       builder: (context) => SelectBoxCorner(
