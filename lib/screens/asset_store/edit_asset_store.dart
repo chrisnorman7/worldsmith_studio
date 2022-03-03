@@ -15,6 +15,7 @@ import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/searchable_list_view.dart';
 import 'add_asset.dart';
 import 'edit_asset_reference.dart';
 import 'import_directory.dart';
@@ -83,6 +84,105 @@ class _EditAssetStoreState extends State<EditAssetStore> {
               b.comment.toString().toLowerCase(),
             ),
       );
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < assets.length; i++) {
+      final assetReference = assets[i];
+      final relativeAssetReference = assetReference.reference;
+      final String assetSize;
+      switch (assetReference.reference.type) {
+        case AssetType.file:
+          final file = File(
+            path.join(
+              widget.projectContext.directory.path,
+              assetReference.reference.name,
+            ),
+          );
+          assetSize = filesize(
+            file.statSync().size,
+          );
+          break;
+        case AssetType.collection:
+          final directory = Directory(
+            path.join(
+              widget.projectContext.directory.path,
+              relativeAssetReference.name,
+            ),
+          );
+          final fileSizes = [
+            for (final file in directory.listSync().whereType<File>())
+              file.statSync().size
+          ];
+          assetSize = filesize(
+            fileSizes.reduce(
+              (value, element) => value + element,
+            ),
+          );
+          break;
+      }
+      children.add(
+        SearchableListTile(
+          searchString: assetReference.comment ?? assetReference.reference.name,
+          child: Shortcuts(
+            child: Actions(
+              actions: {
+                DeleteIntent: CallbackAction<DeleteIntent>(
+                  onInvoke: (intent) {
+                    deleteAsset(
+                      assetReferenceReference: assetReference,
+                      context: context,
+                    );
+                    return null;
+                  },
+                ),
+                CopyAssetIntent: CallbackAction<CopyAssetIntent>(
+                  onInvoke: (intent) {
+                    final asset = assetReference.reference;
+                    final stringBuffer = StringBuffer()
+                      ..write('AssetReference(')
+                      ..write(jsonEncode(asset.name))
+                      ..write(', ${asset.type}, ')
+                      ..write('encryptionKey: ')
+                      ..write(jsonEncode(asset.encryptionKey))
+                      ..write(',)');
+                    setClipboardText(stringBuffer.toString());
+                    return null;
+                  },
+                )
+              },
+              child: PlaySoundSemantics(
+                child: Builder(
+                  builder: (context) => ListTile(
+                    autofocus: i == 0,
+                    title: Text(assetString(assetReference)),
+                    subtitle: Text(assetSize),
+                    onTap: () async {
+                      PlaySoundSemantics.of(context)!.stop();
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditAssetReference(
+                          projectContext: widget.projectContext,
+                          assetStore: widget.assetStore,
+                          assetReferenceReference: assetReference,
+                          canDelete: widget.canDelete,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                  ),
+                ),
+                soundChannel: widget.projectContext.game.interfaceSounds,
+                assetReference: relativeAssetReference,
+                looping: true,
+              ),
+            ),
+            shortcuts: const {
+              DeleteIntent.hotkey: DeleteIntent(),
+              CopyAssetIntent.hotkey: CopyAssetIntent()
+            },
+          ),
+        ),
+      );
+    }
     return WithKeyboardShortcuts(
       child: Cancel(
         child: Shortcuts(
@@ -108,108 +208,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                 body: assets.isEmpty
                     ? const CenterText(
                         text: 'There are no assets in this store.')
-                    : ListView.builder(
-                        itemBuilder: (context, index) {
-                          final assetReference = assets[index];
-                          final relativeAssetReference =
-                              assetReference.reference;
-                          final String assetSize;
-                          switch (assetReference.reference.type) {
-                            case AssetType.file:
-                              final file = File(
-                                path.join(
-                                  widget.projectContext.directory.path,
-                                  assetReference.reference.name,
-                                ),
-                              );
-                              assetSize = filesize(
-                                file.statSync().size,
-                              );
-                              break;
-                            case AssetType.collection:
-                              final directory = Directory(
-                                path.join(
-                                  widget.projectContext.directory.path,
-                                  relativeAssetReference.name,
-                                ),
-                              );
-                              final fileSizes = [
-                                for (final file
-                                    in directory.listSync().whereType<File>())
-                                  file.statSync().size
-                              ];
-                              assetSize = filesize(
-                                fileSizes.reduce(
-                                  (value, element) => value + element,
-                                ),
-                              );
-                              break;
-                          }
-                          return Shortcuts(
-                            child: Actions(
-                              actions: {
-                                DeleteIntent: CallbackAction<DeleteIntent>(
-                                  onInvoke: (intent) {
-                                    deleteAsset(
-                                      assetReferenceReference: assetReference,
-                                      context: context,
-                                    );
-                                    return null;
-                                  },
-                                ),
-                                CopyAssetIntent:
-                                    CallbackAction<CopyAssetIntent>(
-                                  onInvoke: (intent) {
-                                    final asset = assetReference.reference;
-                                    final stringBuffer = StringBuffer()
-                                      ..write('AssetReference(')
-                                      ..write(jsonEncode(asset.name))
-                                      ..write(', ${asset.type}, ')
-                                      ..write('encryptionKey: ')
-                                      ..write(jsonEncode(asset.encryptionKey))
-                                      ..write(',)');
-                                    setClipboardText(stringBuffer.toString());
-                                    return null;
-                                  },
-                                )
-                              },
-                              child: PlaySoundSemantics(
-                                child: Builder(
-                                  builder: (context) => ListTile(
-                                    autofocus: index == 0,
-                                    title: Text(assetString(assetReference)),
-                                    subtitle: Text(assetSize),
-                                    onTap: () async {
-                                      PlaySoundSemantics.of(context)!.stop();
-                                      await pushWidget(
-                                        context: context,
-                                        builder: (context) =>
-                                            EditAssetReference(
-                                          projectContext: widget.projectContext,
-                                          assetStore: widget.assetStore,
-                                          assetReferenceReference:
-                                              assetReference,
-                                          canDelete: widget.canDelete,
-                                        ),
-                                      );
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                                soundChannel:
-                                    widget.projectContext.game.interfaceSounds,
-                                assetReference: relativeAssetReference,
-                                looping: true,
-                              ),
-                            ),
-                            shortcuts: const {
-                              DeleteIntent.hotkey: DeleteIntent(),
-                              CopyAssetIntent.hotkey: CopyAssetIntent()
-                            },
-                          );
-                        },
-                        itemCount: assets.length,
-                      ),
+                    : SearchableListView(children: children),
                 floatingActionButton: FloatingActionButton(
                   autofocus: assets.isEmpty,
                   child: const Icon(Icons.add_outlined),

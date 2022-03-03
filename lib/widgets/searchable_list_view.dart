@@ -9,30 +9,14 @@ class SearchableListTile {
   /// Create an instance.
   const SearchableListTile({
     required this.searchString,
-    this.autofocus = false,
-    this.subtitle,
-    this.title,
-    this.onTap,
-    this.selected = false,
+    required this.child,
   });
 
   /// The search string that will find this instance.
   final String searchString;
 
-  /// Whether or not the resulting [ListTile] should be autofocused.
-  final bool autofocus;
-
-  /// The title for the [ListTile].
-  final Widget? title;
-
-  /// The [ListTile] subtitle.
-  final Widget? subtitle;
-
-  /// The on tap function.
-  final VoidCallback? onTap;
-
-  /// Whether the [ListTile] should be selected.
-  final bool selected;
+  /// The child to use.
+  final Widget child;
 }
 
 /// A [ListView] that can be searched.
@@ -122,13 +106,10 @@ class _SearchableListViewState extends State<SearchableListView> {
         final child = widget.children[index - 1];
         return Shortcuts(
           child: Actions(
-            child: ListTile(
-              autofocus: child.autofocus,
+            child: Focus(
+              child: child.child,
               focusNode: focusNodes[index - 1],
-              onTap: child.onTap,
-              selected: child.selected,
-              subtitle: child.subtitle,
-              title: child.title,
+              debugLabel: child.searchString,
             ),
             actions: {
               SearchIntent: CallbackAction<SearchIntent>(
@@ -140,10 +121,12 @@ class _SearchableListViewState extends State<SearchableListView> {
                   );
                   return null;
                 },
-              )
+              ),
             },
           ),
-          shortcuts: const {SearchIntent.hotkey: SearchIntent()},
+          shortcuts: const {
+            SearchIntent.hotkey: SearchIntent(),
+          },
         );
       },
       itemCount: widget.children.length + 1,
