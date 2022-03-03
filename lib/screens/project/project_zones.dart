@@ -31,12 +31,13 @@ class _ProjectZonesState extends State<ProjectZones> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    if (world.zones.isEmpty) {
+    final zones = world.zones;
+    if (zones.isEmpty) {
       return const CenterText(text: 'There are no zones yet.');
     }
     final children = <SearchableListTile>[];
-    for (var i = 0; i < world.zones.length; i++) {
-      final zone = world.zones[i];
+    for (var i = 0; i < zones.length; i++) {
+      final zone = zones[i];
       final music = zone.music;
       children.add(
         SearchableListTile(
