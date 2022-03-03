@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../intents.dart';
@@ -37,8 +35,7 @@ class SearchableListView extends StatefulWidget {
 class _SearchableListViewState extends State<SearchableListView> {
   late final TextEditingController _controller;
   late final FocusNode _textFieldFocusNode;
-  Timer? _searchTimer;
-  late final List<FocusNode> focusNodes;
+  String? _searchString;
 
   /// Initialise state.
   @override
@@ -46,71 +43,68 @@ class _SearchableListViewState extends State<SearchableListView> {
     super.initState();
     _controller = TextEditingController();
     _textFieldFocusNode = FocusNode();
-    focusNodes = [];
   }
 
   /// Build the widget.
   @override
   Widget build(BuildContext context) {
-    while (focusNodes.length < widget.children.length) {
-      focusNodes.add(FocusNode());
+    final searchString = _searchString;
+    final List<SearchableListTile> results;
+    if (searchString == null) {
+      results = widget.children;
+    } else {
+      results = widget.children
+          .where(
+            (element) => element.searchString.toLowerCase().startsWith(
+                  searchString.toLowerCase(),
+                ),
+          )
+          .toList();
     }
     return ListView.builder(
       itemBuilder: (context, index) {
         if (index == 0) {
+          var labelText = 'Search';
+          if (searchString != null) {
+            labelText = '$labelText (${results.length} result';
+            if (results.length == 1) {
+              labelText = '$labelText)';
+            } else {
+              labelText = '${labelText}s)';
+            }
+          }
           return ListTile(
             title: TextField(
               controller: _controller,
-              decoration: const InputDecoration(labelText: 'Search'),
               focusNode: _textFieldFocusNode,
-              onChanged: (value) {
-                _searchTimer?.cancel();
-                if (value.isEmpty) {
-                  _searchTimer = null;
-                } else {
-                  _searchTimer = Timer(
-                    const Duration(milliseconds: 500),
-                    () {
-                      _searchTimer = null;
-                      value = value.toLowerCase();
-                      for (var i = 0; i < widget.children.length; i++) {
-                        final child = widget.children[i];
-                        if (child.searchString
-                            .toLowerCase()
-                            .startsWith(value)) {
-                          focusNodes[i].requestFocus();
-                          return;
-                        }
-                      }
-                      _controller.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: _controller.text.length,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-            subtitle: IconButton(
-              onPressed: () => setState(() {
-                _controller.text = '';
-                _textFieldFocusNode.requestFocus();
-              }),
-              icon: const Icon(
-                Icons.clear_outlined,
-                semanticLabel: 'Clear',
+              decoration: InputDecoration(
+                labelText: labelText,
+              ),
+              onChanged: (value) => setState(
+                () => _searchString = value.isEmpty ? null : value,
               ),
             ),
+            subtitle: _controller.text.isEmpty
+                ? null
+                : IconButton(
+                    onPressed: () => setState(
+                      () {
+                        setState(() => _controller.text = '');
+                        _searchString = null;
+                        _textFieldFocusNode.requestFocus();
+                      },
+                    ),
+                    icon: const Icon(
+                      Icons.clear_outlined,
+                      semanticLabel: 'Clear',
+                    ),
+                  ),
           );
         }
-        final child = widget.children[index - 1];
+        final child = results[index - 1];
         return Shortcuts(
           child: Actions(
-            child: Focus(
-              child: child.child,
-              focusNode: focusNodes[index - 1],
-              debugLabel: child.searchString,
-            ),
+            child: child.child,
             actions: {
               SearchIntent: CallbackAction<SearchIntent>(
                 onInvoke: (intent) {
@@ -129,7 +123,7 @@ class _SearchableListViewState extends State<SearchableListView> {
           },
         );
       },
-      itemCount: widget.children.length + 1,
+      itemCount: results.length + 1,
     );
   }
 
@@ -139,9 +133,5 @@ class _SearchableListViewState extends State<SearchableListView> {
     super.dispose();
     _textFieldFocusNode.dispose();
     _controller.dispose();
-    _searchTimer?.cancel();
-    while (focusNodes.isNotEmpty) {
-      focusNodes.removeLast().dispose();
-    }
   }
 }
