@@ -61,7 +61,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
       ),
       keyboardShortcuts: const [
         KeyboardShortcut(
-          description: 'CLose the project and return to the main menu.',
+          description: 'Close the project and return to the main menu.',
           keyName: 'w',
           control: true,
         )
