@@ -59,7 +59,7 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
     if (commands.isEmpty) {
       child = const CenterText(text: 'There are no commands in this category.');
     } else {
-      final List<SearchableListTile> children = [];
+      final children = <SearchableListTile>[];
       for (var i = 0; i < commands.length; i++) {
         final command = commands[i];
         children.add(
