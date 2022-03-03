@@ -86,10 +86,24 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
                 projectContext: widget.projectContext,
                 onDone: (zone) {
                   widget.zoneTeleport.zoneId = zone.id;
+                  final minClamp = minCoordinates.clamp;
+                  final maxClamp = maxCoordinates?.clamp;
                   minCoordinates.clamp = null;
                   if (maxCoordinates != null) {
                     maxCoordinates.clamp = null;
                   }
+                  showSnackBar(
+                    context: context,
+                    message: 'Clamps cleared.',
+                    actionLabel: 'Undo',
+                    actionCallback: () {
+                      minCoordinates.clamp = minClamp;
+                      if (maxCoordinates != null) {
+                        maxCoordinates.clamp = maxClamp;
+                      }
+                      setState(() {});
+                    },
+                  );
                   save();
                 },
                 title: 'Destination Zone',
