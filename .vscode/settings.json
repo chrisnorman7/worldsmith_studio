@@ -6,6 +6,7 @@
     "formals",
     "Lf",
     "libsndfile",
+    "pubspec",
     "Rolloff",
     "sdl",
     "synthizer",
