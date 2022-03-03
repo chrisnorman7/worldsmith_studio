@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../widgets/searchable_list_view.dart';
 import '../terrain/edit_terrain.dart';
 
 /// A widget for displaying and editing terrain types.
@@ -26,25 +27,29 @@ class _ProjectTerrainsState extends State<ProjectTerrains> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final terrain = world.terrains[index];
-        return ListTile(
-          autofocus: index == 0,
-          title: Text(terrain.name),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditTerrain(
-                projectContext: widget.projectContext,
-                terrain: terrain,
-              ),
-            );
-            setState(() {});
-          },
-        );
-      },
-      itemCount: world.terrains.length,
-    );
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < world.terrains.length; i++) {
+      final terrain = world.terrains[i];
+      children.add(
+        SearchableListTile(
+          searchString: terrain.name,
+          child: ListTile(
+            autofocus: i == 0,
+            title: Text(terrain.name),
+            onTap: () async {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditTerrain(
+                  projectContext: widget.projectContext,
+                  terrain: terrain,
+                ),
+              );
+              setState(() {});
+            },
+          ),
+        ),
+      );
+    }
+    return SearchableListView(children: children);
   }
 }
