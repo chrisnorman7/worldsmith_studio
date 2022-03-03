@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../constants.dart';
 import '../intents.dart';
 import '../util.dart';
 import 'cancel.dart';
@@ -66,6 +68,15 @@ class KeyboardShortcuts extends StatelessWidget {
   Widget build(BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
+            actions: [
+              ElevatedButton(
+                onPressed: () => launch(manualUrl),
+                child: const Icon(
+                  Icons.help_outline,
+                  semanticLabel: 'Open Manual',
+                ),
+              )
+            ],
             title: Text(title),
           ),
           body: ListView.builder(
