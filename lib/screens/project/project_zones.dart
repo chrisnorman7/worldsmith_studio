@@ -6,6 +6,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/searchable_list_view.dart';
 import '../zone/edit_zone.dart';
 
 /// A widget for displaying and editing [Zone] instances.
@@ -33,42 +34,46 @@ class _ProjectZonesState extends State<ProjectZones> {
     if (world.zones.isEmpty) {
       return const CenterText(text: 'There are no zones yet.');
     }
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final zone = world.zones[index];
-        final music = zone.music;
-        return PlaySoundSemantics(
-          child: Builder(
-            builder: (context) => ListTile(
-              autofocus: index == 0,
-              title: Text(zone.name),
-              subtitle: Text('Boxes: ${zone.boxes.length}'),
-              onTap: () async {
-                PlaySoundSemantics.of(context)?.stop();
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditZone(
-                    projectContext: widget.projectContext,
-                    zone: zone,
-                  ),
-                );
-                setState(() {});
-              },
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < world.zones.length; i++) {
+      final zone = world.zones[i];
+      final music = zone.music;
+      children.add(
+        SearchableListTile(
+          searchString: zone.name,
+          child: PlaySoundSemantics(
+            child: Builder(
+              builder: (context) => ListTile(
+                autofocus: i == 0,
+                title: Text(zone.name),
+                subtitle: Text('Boxes: ${zone.boxes.length}'),
+                onTap: () async {
+                  PlaySoundSemantics.of(context)?.stop();
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => EditZone(
+                      projectContext: widget.projectContext,
+                      zone: zone,
+                    ),
+                  );
+                  setState(() {});
+                },
+              ),
             ),
+            soundChannel: widget.projectContext.game.interfaceSounds,
+            assetReference: music == null
+                ? null
+                : getAssetReferenceReference(
+                    assets: world.musicAssets,
+                    id: music.id,
+                  )!
+                    .reference,
+            gain: music?.gain ?? world.soundOptions.defaultGain,
+            looping: true,
           ),
-          soundChannel: widget.projectContext.game.interfaceSounds,
-          assetReference: music == null
-              ? null
-              : getAssetReferenceReference(
-                  assets: world.musicAssets,
-                  id: music.id,
-                )!
-                  .reference,
-          gain: music?.gain ?? world.soundOptions.defaultGain,
-          looping: true,
-        );
-      },
-      itemCount: world.zones.length,
-    );
+        ),
+      );
+    }
+    return SearchableListView(children: children);
   }
 }
