@@ -43,6 +43,7 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
     final clearMaxCoordinatesActions = [
       ElevatedButton(
         onPressed: () {
+          Navigator.pop(context);
           widget.zoneTeleport.maxCoordinates = null;
           save();
         },
