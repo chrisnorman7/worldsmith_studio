@@ -257,36 +257,44 @@ class _EditZoneState extends State<EditZone> {
     }
     final startCoordinates = <String, Point<int>>{};
     final endCoordinates = <String, Point<int>>{};
-    final boxes = List<Box>.from(widget.zone.boxes, growable: false)
-      ..sort(
-        (a, b) {
-          final aStart = startCoordinates[a.id] ??
-              widget.zone.getAbsoluteCoordinates(a.start);
-          startCoordinates[a.id] = aStart;
-          final aEnd =
-              endCoordinates[a.id] ?? widget.zone.getAbsoluteCoordinates(a.end);
-          endCoordinates[a.id] = aEnd;
-          final bStart = startCoordinates[b.id] ??
-              widget.zone.getAbsoluteCoordinates(b.start);
-          startCoordinates[b.id] = bStart;
-          final bEnd =
-              endCoordinates[b.id] ?? widget.zone.getAbsoluteCoordinates(b.end);
-          endCoordinates[b.id] = bEnd;
-          if (aStart.x == bStart.x) {
-            if (aStart.y == bStart.y) {
-              if (aEnd.x == bEnd.x) {
-                if (aEnd.y == bEnd.y) {
-                  return 0;
+    final List<Box> boxes;
+    if (widget.zone.boxes.length == 1) {
+      final box = widget.zone.boxes.first;
+      boxes = [box];
+      startCoordinates[box.id] = widget.zone.getAbsoluteCoordinates(box.start);
+      endCoordinates[box.id] = widget.zone.getAbsoluteCoordinates(box.end);
+    } else {
+      boxes = List<Box>.from(widget.zone.boxes, growable: false)
+        ..sort(
+          (a, b) {
+            final aStart = startCoordinates[a.id] ??
+                widget.zone.getAbsoluteCoordinates(a.start);
+            startCoordinates[a.id] = aStart;
+            final aEnd = endCoordinates[a.id] ??
+                widget.zone.getAbsoluteCoordinates(a.end);
+            endCoordinates[a.id] = aEnd;
+            final bStart = startCoordinates[b.id] ??
+                widget.zone.getAbsoluteCoordinates(b.start);
+            startCoordinates[b.id] = bStart;
+            final bEnd = endCoordinates[b.id] ??
+                widget.zone.getAbsoluteCoordinates(b.end);
+            endCoordinates[b.id] = bEnd;
+            if (aStart.x == bStart.x) {
+              if (aStart.y == bStart.y) {
+                if (aEnd.x == bEnd.x) {
+                  if (aEnd.y == bEnd.y) {
+                    return 0;
+                  }
+                  return aEnd.y.compareTo(bEnd.y);
                 }
-                return aEnd.y.compareTo(bEnd.y);
+                return aEnd.x.compareTo(bEnd.x);
               }
-              return aEnd.x.compareTo(bEnd.x);
+              return aStart.y.compareTo(bStart.y);
             }
-            return aStart.y.compareTo(bStart.y);
-          }
-          return aStart.x.compareTo(bStart.x);
-        },
-      );
+            return aStart.x.compareTo(bStart.x);
+          },
+        );
+    }
     return ListView.builder(
       itemBuilder: (context, index) {
         final box = boxes[index];

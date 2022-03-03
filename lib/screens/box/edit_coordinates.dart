@@ -72,7 +72,9 @@ class _EditCoordinatesState extends State<EditCoordinates> {
               ListTile(
                 autofocus: true,
                 title: const Text('Clamped To'),
-                subtitle: Text(widget.zone.getBox(clamp.boxId).name),
+                subtitle: Text(
+                  widget.zone.getBox(clamp.boxId).name,
+                ),
                 onTap: () => pushWidget(
                   context: context,
                   builder: (context) => SelectBox(
