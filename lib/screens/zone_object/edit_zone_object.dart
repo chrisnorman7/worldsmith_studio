@@ -90,6 +90,7 @@ class _EditZoneObjectState extends State<EditZoneObject> {
               value: coordinates,
               onChanged: save,
               title: 'Initial Coordinates',
+              canChangeClamp: true,
             ),
             SoundListTile(
               projectContext: widget.projectContext,
