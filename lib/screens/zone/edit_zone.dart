@@ -15,6 +15,7 @@ import '../../widgets/center_text.dart';
 import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
+import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/searchable_list_view.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
@@ -30,6 +31,7 @@ import '../terrain/terrain_list_tile.dart';
 import '../world_command/call_command_list_tile.dart';
 import '../zone_object/edit_zone_object.dart';
 import '../zone_object/zone_object_list_tile.dart';
+import 'edit_location_marker.dart';
 
 const _helpIntent = HelpIntent();
 const _createBoxIntent = CreateBoxIntent();
@@ -132,6 +134,22 @@ class _EditZoneState extends State<EditZone> {
               icon: const Icon(Icons.map_outlined),
               builder: getBoxesListView,
             ),
+            TabbedScaffoldTab(
+              title: 'Location Markers',
+              icon: const Icon(Icons.location_pin),
+              builder: (context) => CallbackShortcuts(
+                bindings: {
+                  CreateProjectIntent.hotkey: () => addLocationMarker(context)
+                },
+                child: getLocationMarkersList(context),
+              ),
+              floatingActionButton: FloatingActionButton(
+                autofocus: widget.zone.locationMarkers.isEmpty,
+                child: createIcon,
+                onPressed: () => addLocationMarker(context),
+                tooltip: 'Add Location Marker',
+              ),
+            )
           ],
         ),
       );
@@ -713,5 +731,71 @@ class _EditZoneState extends State<EditZone> {
         widget.projectContext.save();
       },
     );
+  }
+
+  /// Create a new location marker.
+  Future<void> addLocationMarker(BuildContext context) async {
+    final marker = LocationMarker(
+      id: newId(),
+      message: CustomMessage(text: 'Untitled Marker'),
+      coordinates: Coordinates(0, 0),
+    );
+    widget.zone.locationMarkers.add(marker);
+    widget.projectContext.save();
+    await pushWidget(
+      context: context,
+      builder: (context) => EditLocationMarker(
+        projectContext: widget.projectContext,
+        zone: widget.zone,
+        locationMarker: marker,
+      ),
+    );
+    save();
+  }
+
+  /// Get the list of location markers for the current zone.
+  Widget getLocationMarkersList(BuildContext context) {
+    final markers = widget.zone.locationMarkers;
+    if (markers.isEmpty) {
+      return const CenterText(text: 'There are no location markers.');
+    }
+    final children = <SearchableListTile>[];
+    for (var i = 0; i < markers.length; i++) {
+      final marker = markers[i];
+      final message = marker.message;
+      final sound = message.sound;
+      final assetReference = sound == null
+          ? null
+          : widget.projectContext.worldContext.getCustomSound(sound);
+      final coordinates = widget.zone.getAbsoluteCoordinates(
+        marker.coordinates,
+      );
+      children.add(
+        SearchableListTile(
+          searchString: marker.message.text ?? '',
+          child: PlaySoundSemantics(
+            child: ListTile(
+              autofocus: i == 0,
+              title: Text(message.text ?? 'Untitled Marker'),
+              subtitle: Text('${coordinates.x},${coordinates.y}'),
+              onTap: () async {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditLocationMarker(
+                    projectContext: widget.projectContext,
+                    zone: widget.zone,
+                    locationMarker: marker,
+                  ),
+                );
+                save();
+              },
+            ),
+            soundChannel: widget.projectContext.game.interfaceSounds,
+            assetReference: assetReference,
+          ),
+        ),
+      );
+    }
+    return SearchableListView(children: children);
   }
 }
