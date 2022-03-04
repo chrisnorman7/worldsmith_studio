@@ -87,12 +87,13 @@ class ProjectContext {
   }
 
   /// Play the menu activate sound.
-  void playActivateSound() {
+  void playActivateSound({double? gain}) {
     final activateSound = world.menuActivateSound;
     if (activateSound != null) {
       game.interfaceSounds.playSound(
         activateSound,
-        gain: world.soundOptions.menuActivateSound?.gain ??
+        gain: gain ??
+            world.soundOptions.menuActivateSound?.gain ??
             world.soundOptions.defaultGain,
       );
     }
