@@ -25,6 +25,7 @@ import '../box/edit_box.dart';
 import '../box/select_box.dart';
 import '../box/select_box_corner.dart';
 import '../reverb/reverb_list_tile.dart';
+import '../sound/fade_time_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
@@ -199,6 +200,13 @@ class _EditZoneState extends State<EditZone> {
           nullable: true,
           title: 'Zone Music',
           playSound: false,
+        ),
+        FadeTimeListTile(
+          value: widget.zone.musicFadeTime,
+          onChanged: (value) {
+            widget.zone.musicFadeTime = value;
+            save();
+          },
         ),
         ListTile(
           title: const Text('Ambiances'),
