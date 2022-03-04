@@ -207,6 +207,7 @@ class _EditZoneState extends State<EditZone> {
             widget.zone.musicFadeTime = value;
             save();
           },
+          title: 'Music Fade Time',
         ),
         ListTile(
           title: const Text('Ambiances'),
@@ -222,6 +223,14 @@ class _EditZoneState extends State<EditZone> {
             );
             resetLevel();
           },
+        ),
+        FadeTimeListTile(
+          value: widget.zone.ambianceFadeTime,
+          onChanged: (value) {
+            widget.zone.ambianceFadeTime = value;
+            save();
+          },
+          title: 'Ambiance Fade Time',
         ),
         ListTile(
           title: const Text('Default Terrain'),
