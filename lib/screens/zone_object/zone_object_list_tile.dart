@@ -59,7 +59,7 @@ class _ZoneObjectListTileState extends State<ZoneObjectListTile> {
         builder: (context) => ListTile(
           autofocus: widget.autofocus,
           title: Text(widget.zoneObject.name),
-          subtitle: Text('${coordinates.x}x ${coordinates.y}'),
+          subtitle: Text('${coordinates.x}, ${coordinates.y}'),
           onTap: () async {
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
