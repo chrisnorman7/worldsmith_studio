@@ -175,9 +175,9 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                 looping: true,
               ),
             ),
-            shortcuts: const {
-              DeleteIntent.hotkey: DeleteIntent(),
-              CopyAssetIntent.hotkey: CopyAssetIntent()
+            shortcuts: {
+              DeleteIntent.hotkey: const DeleteIntent(),
+              CopyAssetIntent.hotkey: const CopyAssetIntent()
             },
           ),
         ),
@@ -221,7 +221,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
               ),
             ),
           ),
-          shortcuts: const {
+          shortcuts: {
             OpenProjectIntent.hotkey: _openProjectIntent,
             ImportDirectoryIntent.hotkey: _importDirectoryIntent
           },

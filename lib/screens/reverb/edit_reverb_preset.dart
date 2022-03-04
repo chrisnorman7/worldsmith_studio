@@ -308,8 +308,8 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
               ),
             ),
           ),
-          shortcuts: const {
-            PlayPauseIntent.hotkey: PlayPauseIntent(),
+          shortcuts: {
+            PlayPauseIntent.hotkey: const PlayPauseIntent(),
           },
         ),
       ),

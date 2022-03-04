@@ -1,5 +1,7 @@
 /// Provides the various intent classes used throughout the program, along with
 /// their assorted hotkeys.
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,7 +35,11 @@ class CreateProjectIntent extends Intent {
   const CreateProjectIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// The intent to open a project.
@@ -42,7 +48,11 @@ class OpenProjectIntent extends Intent {
   const OpenProjectIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyO, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyO,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// Close the current project and return to the main menu.
@@ -51,7 +61,11 @@ class CloseProjectIntent extends Intent {
   const CloseProjectIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyW, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyW,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// Play or pause something.
@@ -60,7 +74,11 @@ class PlayPauseIntent extends Intent {
   const PlayPauseIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyP, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyP,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// Increase something.
@@ -96,8 +114,11 @@ class HelpIntent extends Intent {
   const HelpIntent();
 
   /// The hotkey to use.
-  static const hotkey =
-      SingleActivator(LogicalKeyboardKey.slash, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.slash,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// The intent to import a directory.
@@ -106,7 +127,11 @@ class ImportDirectoryIntent extends Intent {
   const ImportDirectoryIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyD, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyD,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to import a single file.
@@ -115,7 +140,11 @@ class ImportFileIntent extends Intent {
   const ImportFileIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyF, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyF,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to delete something.
@@ -133,7 +162,11 @@ class CopyAssetIntent extends Intent {
   const CopyAssetIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyC, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyC,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to create a new box.
@@ -142,7 +175,11 @@ class CreateBoxIntent extends Intent {
   const CreateBoxIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to go to the next box.
@@ -151,9 +188,10 @@ class NextBoxIntent extends Intent {
   const NextBoxIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(
+  static final hotkey = SingleActivator(
     LogicalKeyboardKey.period,
-    control: true,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
   );
 }
 
@@ -163,9 +201,10 @@ class PreviousBoxIntent extends Intent {
   const PreviousBoxIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(
+  static final hotkey = SingleActivator(
     LogicalKeyboardKey.comma,
-    control: true,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
   );
 }
 
@@ -175,7 +214,11 @@ class CreateEquipmentPositionIntent extends Intent {
   const CreateEquipmentPositionIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to move something up.
@@ -184,9 +227,10 @@ class MoveUpIntent extends Intent {
   const MoveUpIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(
+  static final hotkey = SingleActivator(
     LogicalKeyboardKey.arrowUp,
-    alt: true,
+    alt: Platform.isWindows,
+    meta: Platform.isMacOS,
   );
 }
 
@@ -196,9 +240,10 @@ class MoveDownIntent extends Intent {
   const MoveDownIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(
+  static final hotkey = SingleActivator(
     LogicalKeyboardKey.arrowDown,
-    alt: true,
+    alt: Platform.isWindows,
+    meta: Platform.isMacOS,
   );
 }
 
@@ -208,7 +253,11 @@ class RenameIntent extends Intent {
   const RenameIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyR, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyR,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// The intent to create a zone object.
@@ -217,7 +266,11 @@ class CreateZoneObjectIntent extends Intent {
   const CreateZoneObjectIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// The intent to add a new ambiance.
@@ -226,7 +279,11 @@ class AddAmbianceIntent extends Intent {
   const AddAmbianceIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(LogicalKeyboardKey.keyN, control: true);
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
 }
 
 /// An intent to open the manual.
@@ -235,9 +292,10 @@ class LaunchManualIntent extends Intent {
   const LaunchManualIntent();
 
   /// The hotkey to use.
-  static const hotkey = SingleActivator(
+  static final hotkey = SingleActivator(
     LogicalKeyboardKey.slash,
-    control: true,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
     shift: true,
   );
 }

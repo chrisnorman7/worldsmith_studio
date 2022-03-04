@@ -55,8 +55,8 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           },
           child: Builder(builder: (context) => getTabbedScaffold(world)),
         ),
-        shortcuts: const {
-          CloseProjectIntent.hotkey: CloseProjectIntent(),
+        shortcuts: {
+          CloseProjectIntent.hotkey: const CloseProjectIntent(),
         },
       ),
       keyboardShortcuts: const [

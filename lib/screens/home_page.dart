@@ -133,10 +133,10 @@ class _HomePageState extends State<HomePage> {
     }
     final preferences = AppPreferences.load(prefs);
     return Shortcuts(
-      shortcuts: const {
+      shortcuts: {
         CreateProjectIntent.hotkey: _createProjectIntent,
         OpenProjectIntent.hotkey: _openProjectIntent,
-        LaunchManualIntent.hotkey: LaunchManualIntent(),
+        LaunchManualIntent.hotkey: const LaunchManualIntent(),
       },
       child: Actions(
         actions: {

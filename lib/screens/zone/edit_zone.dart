@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -451,26 +452,38 @@ class _EditZoneState extends State<EditZone> {
             ],
           ),
         ),
-        shortcuts: const {
-          SingleActivator(LogicalKeyboardKey.arrowUp, control: true):
-              MoveIntent(
+        shortcuts: {
+          SingleActivator(
+            LogicalKeyboardKey.arrowUp,
+            control: Platform.isWindows,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
             MoveDirections.north,
           ),
-          SingleActivator(LogicalKeyboardKey.arrowRight, control: true):
-              MoveIntent(
+          SingleActivator(
+            LogicalKeyboardKey.arrowRight,
+            control: Platform.isWindows,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
             MoveDirections.east,
           ),
-          SingleActivator(LogicalKeyboardKey.arrowDown, control: true):
-              MoveIntent(
+          SingleActivator(
+            LogicalKeyboardKey.arrowDown,
+            control: Platform.isWindows,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
             MoveDirections.south,
           ),
-          SingleActivator(LogicalKeyboardKey.arrowLeft, control: true):
-              MoveIntent(
+          SingleActivator(
+            LogicalKeyboardKey.arrowLeft,
+            control: Platform.isWindows,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
             MoveDirections.west,
           ),
           CreateBoxIntent.hotkey: _createBoxIntent,
-          PreviousBoxIntent.hotkey: PreviousBoxIntent(),
-          NextBoxIntent.hotkey: NextBoxIntent(),
+          PreviousBoxIntent.hotkey: const PreviousBoxIntent(),
+          NextBoxIntent.hotkey: const NextBoxIntent(),
         },
       ),
       keyboardShortcuts: const [
@@ -633,7 +646,7 @@ class _EditZoneState extends State<EditZone> {
         actions: {CreateZoneObjectIntent: createZoneObjectAction},
         child: child,
       ),
-      shortcuts: const {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
+      shortcuts: {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
     );
   }
 

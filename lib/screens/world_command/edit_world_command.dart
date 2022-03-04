@@ -96,7 +96,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
             ),
           ),
         ),
-        shortcuts: const {RenameIntent.hotkey: _renameIntent},
+        shortcuts: {RenameIntent.hotkey: _renameIntent},
       ),
       keyboardShortcuts: const [
         KeyboardShortcut(

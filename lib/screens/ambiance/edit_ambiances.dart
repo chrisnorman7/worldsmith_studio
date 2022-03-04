@@ -82,7 +82,7 @@ class _EditAmbiancesState extends State<EditAmbiances> {
               ),
             ),
           ),
-          shortcuts: const {AddAmbianceIntent.hotkey: AddAmbianceIntent()},
+          shortcuts: {AddAmbianceIntent.hotkey: const AddAmbianceIntent()},
         ),
         keyboardShortcuts: const [
           KeyboardShortcut(

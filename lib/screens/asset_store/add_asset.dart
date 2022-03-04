@@ -121,9 +121,9 @@ class _AddAssetState extends State<AddAsset> {
             ),
           ),
         ),
-        shortcuts: const {
-          ImportFileIntent.hotkey: ImportFileIntent(),
-          ImportDirectoryIntent.hotkey: ImportDirectoryIntent()
+        shortcuts: {
+          ImportFileIntent.hotkey: const ImportFileIntent(),
+          ImportDirectoryIntent.hotkey: const ImportDirectoryIntent()
         },
       ),
       keyboardShortcuts: const [

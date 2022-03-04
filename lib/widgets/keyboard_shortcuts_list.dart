@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,7 +38,7 @@ class KeyboardShortcut {
   String get keyDescription {
     final List<String> keys = [];
     if (control) {
-      keys.add('Control');
+      keys.add(Platform.isMacOS ? 'CMD' : 'Control');
     }
     if (alt) {
       keys.add('Alt');
@@ -64,6 +66,7 @@ class KeyboardShortcuts extends StatelessWidget {
   /// The title of the resulting [Scaffold].
   final String title;
 
+  /// Build the widget.
   @override
   Widget build(BuildContext context) => Cancel(
         child: Scaffold(
@@ -113,6 +116,8 @@ class WithKeyboardShortcuts extends StatelessWidget {
 
   /// The keyboard shortcuts to show.
   final List<KeyboardShortcut> keyboardShortcuts;
+
+  /// Build the widget.
   @override
   Widget build(BuildContext context) {
     final helpAction = CallbackAction<HelpIntent>(
@@ -123,7 +128,7 @@ class WithKeyboardShortcuts extends StatelessWidget {
       ),
     );
     return Shortcuts(
-      shortcuts: const {HelpIntent.hotkey: HelpIntent()},
+      shortcuts: {HelpIntent.hotkey: const HelpIntent()},
       child: Actions(
         actions: {HelpIntent: helpAction},
         child: child,

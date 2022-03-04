@@ -144,7 +144,7 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
           ),
         ),
       ),
-      shortcuts: const {RenameIntent.hotkey: _renameIntent},
+      shortcuts: {RenameIntent.hotkey: _renameIntent},
     );
   }
 

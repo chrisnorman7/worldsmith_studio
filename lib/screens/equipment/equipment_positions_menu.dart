@@ -148,7 +148,7 @@ class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
             ),
           ),
         ),
-        shortcuts: const {
+        shortcuts: {
           CreateEquipmentPositionIntent.hotkey: _createEquipmentPositionIntent
         },
       ),
