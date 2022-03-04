@@ -8,6 +8,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/tabbed_scaffold.dart';
+import '../conversation/edit_conversation_categories.dart';
 import '../reverb/edit_reverb_preset.dart';
 import '../terrain/edit_terrain.dart';
 import '../world_command/edit_command_category.dart';
@@ -82,8 +83,16 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           TabbedScaffoldTab(
             title: 'Commands',
             icon: const Icon(Icons.category_outlined),
-            builder: (context) => ProjectCommandCategories(
-              projectContext: widget.projectContext,
+            builder: (context) => CallbackShortcuts(
+              bindings: {
+                EditConversationCategoriesIntent.hotkey: () =>
+                    editConversationCategories(
+                      context,
+                    )
+              },
+              child: ProjectCommandCategories(
+                projectContext: widget.projectContext,
+              ),
             ),
             floatingActionButton: FloatingActionButton(
               autofocus: world.commandCategories.isEmpty,
@@ -107,6 +116,15 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               child: createIcon,
               tooltip: 'Add Command Category',
             ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => editConversationCategories(context),
+                child: const Icon(
+                  Icons.chat_bubble_outline,
+                  semanticLabel: 'Conversations',
+                ),
+              )
+            ],
           ),
           TabbedScaffoldTab(
             title: 'Zones',
@@ -246,4 +264,18 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           )
         ],
       );
+
+  /// Edit conversation categories.
+  void editConversationCategories(BuildContext context) => pushWidget(
+        context: context,
+        builder: (context) => EditConversationCategories(
+          projectContext: widget.projectContext,
+        ),
+      );
+
+  /// Save the project.
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
+  }
 }

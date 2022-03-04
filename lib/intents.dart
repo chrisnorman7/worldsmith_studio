@@ -308,3 +308,17 @@ class SearchIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.slash);
 }
+
+/// An intent to edit conversation categories.
+class EditConversationCategoriesIntent extends Intent {
+  /// Create an instance.
+  const EditConversationCategoriesIntent();
+
+  /// The hotkey to use.
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyC,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+    shift: true,
+  );
+}
