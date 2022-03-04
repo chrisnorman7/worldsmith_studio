@@ -13,6 +13,7 @@ class FadeTimeListTile extends StatelessWidget {
   const FadeTimeListTile({
     required this.value,
     required this.onChanged,
+    this.title = 'Fade Time',
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +23,10 @@ class FadeTimeListTile extends StatelessWidget {
   /// The function to be called when the fade time changes.
   final ValueChanged<double?> onChanged;
 
+  /// The title of the resulting [ListTile].
+  final String title;
+
+  /// Build the widget.
   @override
   Widget build(BuildContext context) {
     final increaseAction = CallbackAction<IncreaseIntent>(
@@ -45,7 +50,7 @@ class FadeTimeListTile extends StatelessWidget {
           DecreaseIntent: decreaseAction
         },
         child: ListTile(
-          title: const Text('Fade Time'),
+          title: Text(title),
           subtitle: Text('${value ?? "Not set"}'),
           onTap: () => pushWidget(
             context: context,
