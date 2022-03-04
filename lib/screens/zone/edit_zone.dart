@@ -26,6 +26,7 @@ import '../box/select_box.dart';
 import '../box/select_box_corner.dart';
 import '../reverb/reverb_list_tile.dart';
 import '../sound/fade_time_list_tile.dart';
+import '../sound/gain_list_tile.dart';
 import '../sound/sound_list_tile.dart';
 import '../terrain/select_terrain.dart';
 import '../terrain/terrain_list_tile.dart';
@@ -209,6 +210,15 @@ class _EditZoneState extends State<EditZone> {
           },
           title: 'Music Fade Time',
         ),
+        GainListTile(
+          gain: widget.zone.musicFadeGain,
+          onChange: (value) {
+            widget.projectContext.playActivateSound(gain: value);
+            widget.zone.musicFadeGain = value;
+            save();
+          },
+          title: 'Minimum Music Gain',
+        ),
         ListTile(
           title: const Text('Ambiances'),
           subtitle: Text(widget.zone.ambiances.length.toString()),
@@ -231,6 +241,15 @@ class _EditZoneState extends State<EditZone> {
             save();
           },
           title: 'Ambiance Fade Time',
+        ),
+        GainListTile(
+          gain: widget.zone.ambianceFadeGain,
+          onChange: (value) {
+            widget.projectContext.playActivateSound(gain: value);
+            widget.zone.ambianceFadeGain = value;
+            save();
+          },
+          title: 'Minimum Ambiance Gain',
         ),
         ListTile(
           title: const Text('Default Terrain'),
