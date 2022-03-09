@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -9,7 +10,9 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/get_text.dart';
+import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/searchable_list_view.dart';
+import 'edit_conversation.dart';
 
 /// A widget for editing the given [conversationCategory].
 class EditConversationCategory extends StatefulWidget {
@@ -38,6 +41,7 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
   @override
   Widget build(BuildContext context) {
     final Widget child;
+    final world = widget.projectContext.world;
     final conversations = widget.conversationCategory.conversations;
     if (conversations.isEmpty) {
       child = const CenterText(text: 'There are no conversations to show.');
@@ -45,32 +49,61 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
       final children = <SearchableListTile>[];
       for (var i = 0; i < conversations.length; i++) {
         final conversation = conversations[i];
+        final music = conversation.music;
+        final asset = music == null
+            ? null
+            : getAssetReferenceReference(
+                assets: world.musicAssets,
+                id: music.id,
+              )?.reference;
+        final gain = music?.gain ?? world.soundOptions.defaultGain;
         children.add(
           SearchableListTile(
             searchString: conversation.name,
             child: CallbackShortcuts(
-                bindings: {
-                  RenameIntent.hotkey: () => pushWidget(
-                        context: context,
-                        builder: (context) => GetText(
-                          onDone: (value) {
-                            conversation.name = value;
-                            Navigator.pop(context);
-                            save();
-                          },
-                          labelText: 'Name',
-                          text: conversation.name,
-                          title: 'Rename Conversation',
-                          validator: (value) =>
-                              validateNonEmptyValue(value: value),
+              bindings: {
+                RenameIntent.hotkey: () => pushWidget(
+                      context: context,
+                      builder: (context) => GetText(
+                        onDone: (value) {
+                          conversation.name = value;
+                          Navigator.pop(context);
+                          save();
+                        },
+                        labelText: 'Name',
+                        text: conversation.name,
+                        title: 'Rename Conversation',
+                        validator: (value) => validateNonEmptyValue(
+                          value: value,
                         ),
-                      )
-                },
-                child: ListTile(
-                  autofocus: i == 0,
-                  title: Text(conversation.name),
-                  onTap: () {},
-                )),
+                      ),
+                    )
+              },
+              child: PlaySoundSemantics(
+                child: Builder(
+                  builder: (context) => ListTile(
+                    autofocus: i == 0,
+                    title: Text(conversation.name),
+                    onTap: () async {
+                      PlaySoundSemantics.of(context)?.stop();
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditConversation(
+                          projectContext: widget.projectContext,
+                          category: widget.conversationCategory,
+                          conversation: conversation,
+                        ),
+                      );
+                      save();
+                    },
+                  ),
+                ),
+                soundChannel: widget.projectContext.game.musicSounds,
+                assetReference: asset,
+                gain: gain,
+                looping: true,
+              ),
+            ),
           ),
         );
       }
@@ -110,7 +143,7 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
           onPressed: () async {
             final branch = ConversationBranch(
               id: newId(),
-              message: CustomMessage(text: 'I need changing.'),
+              text: 'I need changing.',
               responseIds: [],
             );
             final conversation = Conversation(
@@ -122,6 +155,14 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
             );
             conversations.add(conversation);
             widget.projectContext.save();
+            await pushWidget(
+              context: context,
+              builder: (context) => EditConversation(
+                projectContext: widget.projectContext,
+                category: widget.conversationCategory,
+                conversation: conversation,
+              ),
+            );
             setState(() {});
           },
           tooltip: 'Add Conversation',

@@ -75,13 +75,13 @@ class SoundListTile extends StatelessWidget {
               )} (${value?.gain})',
       ),
       onTap: () async {
-        PlaySoundSemantics.of(context)?.stop();
         if (assetStore.assets.isEmpty) {
           return showSnackBar(
             context: context,
             message: 'There are no valid assets.',
           );
         }
+        PlaySoundSemantics.of(context)?.stop();
         final v = value;
         if (v == null) {
           pushWidget(
@@ -130,7 +130,7 @@ class SoundListTile extends StatelessWidget {
           },
         )
       },
-      child: listTile,
+      child: Builder(builder: (context) => listTile),
     );
     final shortcuts = Shortcuts(
       shortcuts: const {
@@ -141,7 +141,7 @@ class SoundListTile extends StatelessWidget {
     );
     if (playSound) {
       return PlaySoundSemantics(
-        child: Builder(builder: (context) => shortcuts),
+        child: shortcuts,
         soundChannel: projectContext.game.interfaceSounds,
         assetReference: value == null
             ? null
