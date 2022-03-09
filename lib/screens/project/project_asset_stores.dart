@@ -100,6 +100,26 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
           },
         ),
         AssetStoreListTile(
+          projectContext: widget.projectContext,
+          assetStore: world.conversationAssetStore,
+          afterOnTap: () => setState(() {}),
+          canDelete: (asset) {
+            for (final category in world.conversationCategories) {
+              for (final conversation in category.conversations) {
+                for (final branch in conversation.branches) {
+                  if (branch.sound?.id == asset.variableName) {
+                    final text = branch.text ?? 'untitled';
+                    return 'That asset is used by the $text branch of the '
+                        '${conversation.name} conversation of the '
+                        '${category.name} category.';
+                  }
+                }
+              }
+            }
+            return null;
+          },
+        ),
+        AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.interfaceSoundsAssetStore,
           canDelete: (reference) {
