@@ -269,13 +269,14 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
         message: 'You cannot delete the start game command.',
       );
     }
-    for (final category in world.commandCategories) {
-      for (final command in category.commands) {
+    for (final commandCategory in world.commandCategories) {
+      for (final command in commandCategory.commands) {
         if (command.callCommand?.commandId == id) {
           return showSnackBar(
             context: context,
             message: 'You cannot delete a command which is called by the '
-                '${command.name} command from the ${category.name} category.',
+                '${command.name} command from the ${commandCategory.name} '
+                'category.',
           );
         }
       }
@@ -306,6 +307,19 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
             message: 'This command is being used by the ${object.name} '
                 'object of the ${zone.name} zone.',
           );
+        }
+      }
+    }
+    for (final conversationCategory in world.conversationCategories) {
+      for (final conversation in conversationCategory.conversations) {
+        for (final response in conversation.responses) {
+          if (response.command?.commandId == id) {
+            return showSnackBar(
+              context: context,
+              message: 'The command is being used by the ${conversation.name} '
+                  'conversation of the ${conversationCategory.name} category.',
+            );
+          }
         }
       }
     }
