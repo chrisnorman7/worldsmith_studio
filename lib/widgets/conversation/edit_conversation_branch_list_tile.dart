@@ -3,14 +3,16 @@ import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/conversation/edit_conversation_branch.dart';
+import '../../util.dart';
 import '../play_sound_semantics.dart';
 
-/// A widget for displaying and editing a [conversationBranch].
+/// A widget for displaying and editing a [branch].
 class EditConversationBranchListTile extends StatefulWidget {
   /// Create an instance.
   const EditConversationBranchListTile({
     required this.projectContext,
-    required this.conversationBranch,
+    required this.branch,
     this.autofocus = false,
     Key? key,
   }) : super(key: key);
@@ -19,7 +21,7 @@ class EditConversationBranchListTile extends StatefulWidget {
   final ProjectContext projectContext;
 
   /// The conversation branch to show.
-  final ConversationBranch conversationBranch;
+  final ConversationBranch branch;
 
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
@@ -37,7 +39,7 @@ class _EditConversationBranchListTileState
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    final sound = widget.conversationBranch.sound;
+    final sound = widget.branch.sound;
     final asset = sound == null
         ? null
         : getAssetReferenceReference(
@@ -47,15 +49,24 @@ class _EditConversationBranchListTileState
             .reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
-      child: ListTile(
-        autofocus: widget.autofocus,
-        title: Text(
-          widget.conversationBranch.text ??
-              'Conversation branch without any text',
+      child: Builder(
+        builder: (context) => ListTile(
+          autofocus: widget.autofocus,
+          title: Text(
+            widget.branch.text ?? 'Conversation branch without any text',
+          ),
+          onTap: () async {
+            PlaySoundSemantics.of(context)?.stop();
+            await pushWidget(
+              context: context,
+              builder: (context) => EditConversationBranch(
+                projectContext: widget.projectContext,
+                branch: widget.branch,
+              ),
+            );
+            setState(() {});
+          },
         ),
-        onTap: () {
-          PlaySoundSemantics.of(context)?.stop();
-        },
       ),
       soundChannel: widget.projectContext.game.musicSounds,
       assetReference: asset,

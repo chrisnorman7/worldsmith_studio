@@ -3,14 +3,17 @@ import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/conversation/edit_conversation_response.dart';
+import '../../util.dart';
 import '../play_sound_semantics.dart';
 
-/// A widget for showing and editing the given [conversationResponse].
+/// A widget for showing and editing the given conversation [response].
 class ConversationResponseListTile extends StatefulWidget {
   /// Create an instance.
   const ConversationResponseListTile({
     required this.projectContext,
-    required this.conversationResponse,
+    required this.conversation,
+    required this.response,
     this.autofocus = false,
     Key? key,
   }) : super(key: key);
@@ -18,8 +21,11 @@ class ConversationResponseListTile extends StatefulWidget {
   /// The project context to use.
   final ProjectContext projectContext;
 
+  /// The conversation to work with.
+  final Conversation conversation;
+
   /// The conversation response to use.
-  final ConversationResponse conversationResponse;
+  final ConversationResponse response;
 
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
@@ -37,7 +43,7 @@ class _ConversationResponseListTileState
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    final sound = widget.conversationResponse.sound;
+    final sound = widget.response.sound;
     final asset = sound == null
         ? null
         : getAssetReferenceReference(
@@ -45,11 +51,25 @@ class _ConversationResponseListTileState
             .reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
-      child: ListTile(
-        autofocus: widget.autofocus,
-        title:
-            Text(widget.conversationResponse.text ?? 'Response with no text'),
-        onTap: () {},
+      child: Builder(
+        builder: (context) => ListTile(
+          autofocus: widget.autofocus,
+          title: Text(
+            widget.response.text ?? 'Response with no text',
+          ),
+          onTap: () async {
+            PlaySoundSemantics.of(context)?.stop();
+            await pushWidget(
+              context: context,
+              builder: (context) => EditConversationResponse(
+                projectContext: widget.projectContext,
+                conversation: widget.conversation,
+                response: widget.response,
+              ),
+            );
+            setState(() {});
+          },
+        ),
       ),
       soundChannel: widget.projectContext.game.interfaceSounds,
       assetReference: asset,

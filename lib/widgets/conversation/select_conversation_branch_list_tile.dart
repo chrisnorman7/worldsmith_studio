@@ -16,6 +16,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
     required this.branch,
     required this.onChanged,
     this.title = 'Branch',
+    this.autofocus = false,
     Key? key,
   }) : super(key: key);
 
@@ -34,6 +35,9 @@ class SelectConversationBranchListTile extends StatelessWidget {
   /// The title for the resulting [ListTile].
   final String title;
 
+  /// Whether or not the resulting [ListTile] should be autofocused.
+  final bool autofocus;
+
   /// Build the list tile.
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
             .reference;
     return PlaySoundSemantics(
       child: ListTile(
+        autofocus: autofocus,
         title: Text(title),
         subtitle: Text(branch.text ?? 'Branch with no text'),
         onTap: () => pushWidget(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../constants.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
@@ -13,6 +14,7 @@ import '../../widgets/searchable_list_view.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import 'edit_conversation_response.dart';
 
 /// A widget for editing a [conversation] in the given [category].
 class EditConversation extends StatefulWidget {
@@ -117,7 +119,7 @@ class _EditConversationState extends State<EditConversation> {
             ],
           ),
           TabbedScaffoldTab(
-            title: 'Conversation Branches',
+            title: 'Branches',
             icon: const Icon(Icons.question_answer_outlined),
             builder: (context) {
               final branches = widget.conversation.branches;
@@ -132,7 +134,7 @@ class _EditConversationState extends State<EditConversation> {
                     searchString: branch.text ?? 'Untitled Branch',
                     child: EditConversationBranchListTile(
                       autofocus: i == 0,
-                      conversationBranch: branch,
+                      branch: branch,
                       projectContext: widget.projectContext,
                     ),
                   ),
@@ -158,14 +160,38 @@ class _EditConversationState extends State<EditConversation> {
                     searchString:
                         response.text ?? 'Untitled Conversation Response',
                     child: ConversationResponseListTile(
+                      autofocus: i == 0,
                       projectContext: widget.projectContext,
-                      conversationResponse: response,
+                      conversation: widget.conversation,
+                      response: response,
                     ),
                   ),
                 );
               }
               return SearchableListView(children: children);
             },
+            floatingActionButton: FloatingActionButton(
+              autofocus: widget.conversation.responses.isEmpty,
+              onPressed: () async {
+                final response = ConversationResponse(
+                  id: newId(),
+                  text: 'Change me',
+                );
+                widget.conversation.responses.add(response);
+                widget.projectContext.save();
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditConversationResponse(
+                    projectContext: widget.projectContext,
+                    conversation: widget.conversation,
+                    response: response,
+                  ),
+                );
+                setState(() {});
+              },
+              child: createIcon,
+              tooltip: 'Add Response',
+            ),
           ),
         ],
       ),

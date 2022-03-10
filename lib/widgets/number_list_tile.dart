@@ -47,7 +47,10 @@ class NumberListTile extends StatelessWidget {
           context: context,
           builder: (context) => GetNumber(
             value: value,
-            onDone: onChanged,
+            onDone: (value) {
+              Navigator.pop(context);
+              onChanged(value);
+            },
             max: max,
             min: min,
             title: title,
