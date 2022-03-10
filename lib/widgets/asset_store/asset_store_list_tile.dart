@@ -5,18 +5,38 @@ import '../../constants.dart';
 import '../../project_context.dart';
 import '../../screens/asset_store/edit_asset_store.dart';
 import '../../util.dart';
+import '../searchable_list_view.dart';
 
 /// A list tile that shows an asset store.
-class AssetStoreListTile extends StatelessWidget {
+class AssetStoreListTile extends SearchableListTile {
   /// Create an instance.
-  const AssetStoreListTile({
+  AssetStoreListTile({
     required this.projectContext,
     required this.assetStore,
     required this.afterOnTap,
     required this.canDelete,
     this.autofocus = false,
-    Key? key,
-  }) : super(key: key);
+  }) : super(
+          child: Builder(
+            builder: (context) => ListTile(
+              autofocus: autofocus,
+              title: Text('${assetStore.comment}'),
+              subtitle: Text('Assets: ${assetStore.assets.length}'),
+              onTap: () async {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditAssetStore(
+                    projectContext: projectContext,
+                    assetStore: assetStore,
+                    canDelete: canDelete,
+                  ),
+                );
+                afterOnTap();
+              },
+            ),
+          ),
+          searchString: assetStore.comment!,
+        );
 
   /// The project context to use.
   final ProjectContext projectContext;
@@ -32,22 +52,4 @@ class AssetStoreListTile extends StatelessWidget {
 
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
-
-  @override
-  Widget build(BuildContext context) => ListTile(
-        autofocus: autofocus,
-        title: Text('${assetStore.comment}'),
-        subtitle: Text('Assets: ${assetStore.assets.length}'),
-        onTap: () async {
-          await pushWidget(
-            context: context,
-            builder: (context) => EditAssetStore(
-              projectContext: projectContext,
-              assetStore: assetStore,
-              canDelete: canDelete,
-            ),
-          );
-          afterOnTap();
-        },
-      );
 }

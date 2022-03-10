@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../widgets/asset_store/asset_store_list_tile.dart';
+import '../../widgets/searchable_list_view.dart';
 
 /// A widget for showing asset stores.
 class ProjectAssetStores extends StatefulWidget {
@@ -25,7 +26,7 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    return ListView(
+    return SearchableListView(
       children: [
         AssetStoreListTile(
           autofocus: true,
