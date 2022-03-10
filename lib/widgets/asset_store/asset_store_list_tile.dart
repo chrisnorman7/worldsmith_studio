@@ -3,8 +3,8 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../constants.dart';
 import '../../project_context.dart';
+import '../../screens/asset_store/edit_asset_store.dart';
 import '../../util.dart';
-import 'edit_asset_store.dart';
 
 /// A list tile that shows an asset store.
 class AssetStoreListTile extends StatelessWidget {

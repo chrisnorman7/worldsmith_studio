@@ -7,8 +7,8 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/sound/gain_list_tile.dart';
 import '../asset_store/select_asset.dart';
-import 'gain_list_tile.dart';
 
 /// A widget for editing a [sound].
 class EditSound extends StatefulWidget {

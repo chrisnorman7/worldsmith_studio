@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../intents.dart';
 import '../../util.dart';
-import '../../widgets/get_number.dart';
+import '../get_number.dart';
 
 /// A widget for editing a gain value.
 class GainListTile extends StatefulWidget {

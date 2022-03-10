@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
-import '../sound/gain_list_tile.dart';
-import '../sound/sound_list_tile.dart';
+import '../../widgets/sound/gain_list_tile.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../sound/synthizer_settings.dart';
 
 /// A widget for configuring sound-related settings.

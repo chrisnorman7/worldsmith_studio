@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/reverb/select_reverb.dart';
 import '../../util.dart';
-import 'select_reverb.dart';
 
 /// A list tile for changing a reverb preset.
 class ReverbListTile extends StatelessWidget {

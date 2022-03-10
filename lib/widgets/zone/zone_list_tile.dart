@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/zone/select_zone.dart';
 import '../../util.dart';
-import 'select_zone.dart';
 
 /// A widget for viewing and editing a zone.
 class ZoneListTile extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
-import '../asset_store/asset_store_list_tile.dart';
+import '../../widgets/asset_store/asset_store_list_tile.dart';
 
 /// A widget for showing asset stores.
 class ProjectAssetStores extends StatefulWidget {

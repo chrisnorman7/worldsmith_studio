@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/world_command/edit_call_command.dart';
+import '../../screens/world_command/select_command_category.dart';
+import '../../screens/world_command/select_world_command.dart';
 import '../../util.dart';
 import '../../world_command_location.dart';
-import 'edit_call_command.dart';
-import 'select_command_category.dart';
-import 'select_world_command.dart';
 
 /// A widget for viewing and editing its [callCommand].
 class CallCommandListTile extends StatefulWidget {

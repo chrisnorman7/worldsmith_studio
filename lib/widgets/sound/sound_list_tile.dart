@@ -7,10 +7,10 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../intents.dart';
 import '../../project_context.dart';
+import '../../screens/asset_store/select_asset.dart';
+import '../../screens/sound/edit_sound.dart';
 import '../../util.dart';
-import '../../widgets/play_sound_semantics.dart';
-import '../asset_store/select_asset.dart';
-import 'edit_sound.dart';
+import '../play_sound_semantics.dart';
 
 /// A list tile to display and edit a [Sound] instance.
 class SoundListTile extends StatelessWidget {

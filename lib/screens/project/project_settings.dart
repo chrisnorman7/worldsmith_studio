@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
+import '../../widgets/command/world_command_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
-import '../world_command/world_command_list_tile.dart';
 
 /// A widget for customising the main settings for the given [projectContext].
 class ProjectSettings extends StatefulWidget {

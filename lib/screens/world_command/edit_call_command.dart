@@ -5,10 +5,10 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/command/world_command_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../world_command_location.dart';
-import 'world_command_list_tile.dart';
 
 /// A widget for editing its [callCommand].
 class EditCallCommand extends StatefulWidget {

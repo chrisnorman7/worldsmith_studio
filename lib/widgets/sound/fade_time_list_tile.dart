@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../intents.dart';
 import '../../util.dart';
-import '../../widgets/get_number.dart';
+import '../get_number.dart';
 
 const _increaseIntent = IncreaseIntent();
 const _decreaseIntent = DecreaseIntent();

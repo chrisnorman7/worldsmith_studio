@@ -6,8 +6,8 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
-import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the given [walkingOptions].
 class EditWalkingOptions extends StatefulWidget {

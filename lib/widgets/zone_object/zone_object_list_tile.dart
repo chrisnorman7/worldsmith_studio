@@ -3,9 +3,9 @@ import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/zone_object/edit_zone_object.dart';
 import '../../util.dart';
-import '../../widgets/play_sound_semantics.dart';
-import 'edit_zone_object.dart';
+import '../play_sound_semantics.dart';
 
 /// A widget which shows a [zoneObject].
 class ZoneObjectListTile extends StatefulWidget {

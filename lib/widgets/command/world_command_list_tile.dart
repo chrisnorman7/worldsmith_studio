@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/world_command/select_command_category.dart';
+import '../../screens/world_command/select_world_command.dart';
 import '../../util.dart';
 import '../../world_command_location.dart';
-import 'select_command_category.dart';
-import 'select_world_command.dart';
 
 /// A list tile that allows the viewing and editing of a [currentId].
 class WorldCommandListTile extends StatelessWidget {

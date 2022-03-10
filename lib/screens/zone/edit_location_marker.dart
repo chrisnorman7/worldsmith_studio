@@ -4,9 +4,9 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
+import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
-import '../box/coordinates_list_tile.dart';
 
 /// A widget for editing a location marker.
 class EditLocationMarker extends StatefulWidget {

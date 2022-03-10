@@ -7,8 +7,8 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
-import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the given [credit].
 class EditCredit extends StatefulWidget {

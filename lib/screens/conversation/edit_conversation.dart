@@ -8,11 +8,11 @@ import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/conversation/conversation_response_list_tile.dart';
 import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
+import '../../widgets/conversation/select_conversation_branch_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
-import '../sound/sound_list_tile.dart';
-import 'select_conversation_branch_list_tile.dart';
 
 /// A widget for editing a [conversation] in the given [category].
 class EditConversation extends StatefulWidget {

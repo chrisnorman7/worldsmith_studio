@@ -4,8 +4,8 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
-import '../../widgets/play_sound_semantics.dart';
-import '../../widgets/select_item.dart';
+import '../play_sound_semantics.dart';
+import '../select_item.dart';
 
 /// A widget for showing and changing the given [branch].
 class SelectConversationBranchListTile extends StatelessWidget {

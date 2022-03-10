@@ -3,13 +3,13 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
-import '../box/coordinates_list_tile.dart';
+import '../../widgets/zone/zone_list_tile.dart';
 import '../box/edit_coordinates.dart';
-import '../zone/zone_list_tile.dart';
 
 /// A widget for editing a [zoneTeleport].
 class EditZoneTeleport extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../screens/box/edit_coordinates.dart';
 import '../../util.dart';
-import 'edit_coordinates.dart';
 
 /// What should happen to a coordinate.
 enum CoordinateModification {

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/command/call_command_list_tile.dart';
+import '../../widgets/reverb/reverb_list_tile.dart';
+import '../../widgets/terrain/terrain_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
-import '../reverb/reverb_list_tile.dart';
-import '../terrain/terrain_list_tile.dart';
-import '../world_command/call_command_list_tile.dart';
-import 'coordinates_list_tile.dart';
 
 /// A widget for editing the given [box].
 class EditBox extends StatefulWidget {

@@ -6,8 +6,8 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../asset_store/select_asset.dart';
-import '../sound/sound_list_tile.dart';
 
 /// Show a list of [ambiances].
 class EditAmbiances extends StatefulWidget {

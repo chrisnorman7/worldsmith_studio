@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
-import '../../screens/sound/gain_list_tile.dart';
 import '../cancel.dart';
 import '../custom_sound/custom_sound_list_tile.dart';
+import '../sound/gain_list_tile.dart';
 import '../text_list_tile.dart';
 
 /// A widget for editing a [customMessage].

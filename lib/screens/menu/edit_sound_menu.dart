@@ -5,9 +5,9 @@ import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/music_widget.dart';
 import '../../widgets/number_list_tile.dart';
+import '../../widgets/sound/fade_time_list_tile.dart';
+import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
-import '../sound/fade_time_list_tile.dart';
-import '../sound/sound_list_tile.dart';
 
 /// A widget for editing the sound options menu.
 class EditSoundMenu extends StatefulWidget {

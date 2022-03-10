@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../screens/terrain/select_terrain.dart';
 import '../../util.dart';
-import 'select_terrain.dart';
 
 /// A widget for selecting a new terrain.
 class TerrainListTile extends StatelessWidget {
