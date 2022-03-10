@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
-import '../../widgets/cancel.dart';
 import '../../widgets/play_sound_semantics.dart';
-import 'add_asset.dart';
+import '../../widgets/select_item.dart';
 
 /// A widget for selecting an asset reference.
-class SelectAsset extends StatefulWidget {
+class SelectAsset extends StatelessWidget {
   /// Create an instance.
   const SelectAsset({
     required this.projectContext,
@@ -38,71 +36,35 @@ class SelectAsset extends StatefulWidget {
   /// The title of the resulting scaffold.
   final String title;
 
-  /// Create state for this widget.
-  @override
-  _SelectAssetState createState() => _SelectAssetState();
-}
-
-/// State for [SelectAsset].
-class _SelectAssetState extends State<SelectAsset> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final assets = <AssetReferenceReference?>[];
-    if (widget.nullable == true) {
+    if (nullable == true) {
       assets.add(null);
     }
-    assets.addAll(widget.assetStore.assets);
-    return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            ElevatedButton(
-              onPressed: () async {
-                await pushWidget(
-                  context: context,
-                  builder: (context) => AddAsset(
-                    projectContext: widget.projectContext,
-                    assetStore: widget.assetStore,
-                  ),
-                );
-                setState(() {});
-              },
-              child: const Icon(
-                Icons.library_add_outlined,
-                semanticLabel: 'Add Asset',
-              ),
-            )
-          ],
-          title: Text(widget.title),
-        ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            final asset = assets[index];
-            if (asset == null) {
-              return ListTile(
-                autofocus: widget.currentId == null,
-                selected: widget.currentId == null,
-                title: const Text('Clear'),
-                onTap: () => widget.onDone(null),
-              );
-            }
-            return PlaySoundSemantics(
-              child: ListTile(
-                autofocus: asset.variableName == widget.currentId ||
-                    (widget.currentId == null && index == 0),
-                title: Text(assetString(asset)),
-                selected: asset.variableName == widget.currentId,
-                onTap: () => widget.onDone(asset),
-              ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: asset.reference,
-              gain: widget.projectContext.world.soundOptions.defaultGain,
-            );
-          },
-          itemCount: assets.length,
-        ),
-      ),
+    assets.addAll(assetStore.assets);
+    final id = currentId;
+    return SelectItem<AssetReferenceReference?>(
+      onDone: onDone,
+      values: assets,
+      getItemWidget: (value) {
+        if (value == null) {
+          return const Text('Clear');
+        }
+        return PlaySoundSemantics(
+          child: Text(value.comment ?? 'Untitled Asset'),
+          soundChannel: projectContext.game.interfaceSounds,
+          assetReference: value.reference,
+          gain: projectContext.world.soundOptions.defaultGain,
+        );
+      },
+      title: title,
+      value: id == null
+          ? null
+          : assetStore.assets.firstWhere(
+              (element) => element.variableName == id,
+            ),
     );
   }
 }
