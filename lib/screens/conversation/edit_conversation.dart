@@ -6,8 +6,8 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
-import '../../widgets/conversation/conversation_branch_list_tile.dart';
 import '../../widgets/conversation/conversation_response_list_tile.dart';
+import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
@@ -130,7 +130,7 @@ class _EditConversationState extends State<EditConversation> {
                 children.add(
                   SearchableListTile(
                     searchString: branch.text ?? 'Untitled Branch',
-                    child: ConversationBranchListTile(
+                    child: EditConversationBranchListTile(
                       autofocus: i == 0,
                       conversationBranch: branch,
                       projectContext: widget.projectContext,

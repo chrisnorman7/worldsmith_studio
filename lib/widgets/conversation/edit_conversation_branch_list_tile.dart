@@ -6,9 +6,9 @@ import '../../project_context.dart';
 import '../play_sound_semantics.dart';
 
 /// A widget for displaying and editing a [conversationBranch].
-class ConversationBranchListTile extends StatefulWidget {
+class EditConversationBranchListTile extends StatefulWidget {
   /// Create an instance.
-  const ConversationBranchListTile({
+  const EditConversationBranchListTile({
     required this.projectContext,
     required this.conversationBranch,
     this.autofocus = false,
@@ -26,13 +26,13 @@ class ConversationBranchListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ConversationBranchListTileState createState() =>
-      _ConversationBranchListTileState();
+  _EditConversationBranchListTileState createState() =>
+      _EditConversationBranchListTileState();
 }
 
-/// State for [ConversationBranchListTile].
-class _ConversationBranchListTileState
-    extends State<ConversationBranchListTile> {
+/// State for [EditConversationBranchListTile].
+class _EditConversationBranchListTileState
+    extends State<EditConversationBranchListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
