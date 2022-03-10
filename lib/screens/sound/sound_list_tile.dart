@@ -61,50 +61,14 @@ class SoundListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final listTile = ListTile(
-      autofocus: autofocus,
-      title: Text(title),
-      subtitle: Text(
-        value == null
-            ? 'Not set'
-            : '${assetString(
-                getAssetReferenceReference(
-                  assets: assetStore.assets,
-                  id: value?.id,
-                )!,
-              )} (${value?.gain})',
-      ),
-      onTap: () async {
-        if (assetStore.assets.isEmpty) {
-          return showSnackBar(
-            context: context,
-            message: 'There are no valid assets.',
-          );
-        }
-        PlaySoundSemantics.of(context)?.stop();
-        final v = value;
-        if (v == null) {
-          pushWidget(
-            context: context,
-            builder: (context) => SelectAsset(
-              projectContext: projectContext,
-              assetStore: assetStore,
-              onDone: (value) {
-                Navigator.pop(context);
-                final sound = Sound(
-                  id: value!.variableName,
-                  gain: projectContext.world.soundOptions.defaultGain,
-                );
-                onDone(sound);
-                pushEditSoundWidget(context: context, sound: sound);
-              },
-            ),
-          );
-        } else {
-          pushEditSoundWidget(context: context, sound: v);
-        }
-      },
-    );
+    final subtitle = value == null
+        ? 'Not set'
+        : '${assetString(
+            getAssetReferenceReference(
+              assets: assetStore.assets,
+              id: value?.id,
+            )!,
+          )} (${value?.gain})';
     return Shortcuts(
       shortcuts: const {
         IncreaseIntent.hotkey: IncreaseIntent(),
@@ -137,7 +101,12 @@ class SoundListTile extends StatelessWidget {
         },
         child: playSound == true
             ? PlaySoundSemantics(
-                child: listTile,
+                child: Builder(
+                  builder: (context) => getListTile(
+                    context: context,
+                    subtitle: subtitle,
+                  ),
+                ),
                 soundChannel: projectContext.game.interfaceSounds,
                 assetReference: value == null
                     ? null
@@ -150,10 +119,22 @@ class SoundListTile extends StatelessWidget {
                     projectContext.world.soundOptions.defaultGain,
                 looping: looping,
               )
-            : listTile,
+            : getListTile(subtitle: subtitle, context: context),
       ),
     );
   }
+
+  /// Get the resulting list tile.
+  ListTile getListTile({
+    required BuildContext context,
+    required String subtitle,
+  }) =>
+      ListTile(
+        autofocus: autofocus,
+        title: Text(title),
+        subtitle: Text(subtitle),
+        onTap: () => listTileOnTap(context),
+      );
 
   /// Push the [EditSound] widget.
   Future<void> pushEditSoundWidget({
@@ -171,4 +152,36 @@ class SoundListTile extends StatelessWidget {
           title: title,
         ),
       );
+
+  /// What happens when the [ListTile] is tapped.
+  void listTileOnTap(BuildContext context) async {
+    if (assetStore.assets.isEmpty) {
+      return showSnackBar(
+        context: context,
+        message: 'There are no valid assets.',
+      );
+    }
+    PlaySoundSemantics.of(context)?.stop();
+    final v = value;
+    if (v == null) {
+      pushWidget(
+        context: context,
+        builder: (context) => SelectAsset(
+          projectContext: projectContext,
+          assetStore: assetStore,
+          onDone: (value) {
+            Navigator.pop(context);
+            final sound = Sound(
+              id: value!.variableName,
+              gain: projectContext.world.soundOptions.defaultGain,
+            );
+            onDone(sound);
+            pushEditSoundWidget(context: context, sound: sound);
+          },
+        ),
+      );
+    } else {
+      pushEditSoundWidget(context: context, sound: v);
+    }
+  }
 }
