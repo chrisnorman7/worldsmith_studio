@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/sound.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../intents.dart';
@@ -10,10 +11,9 @@ import '../../project_context.dart';
 import '../../screens/asset_store/select_asset.dart';
 import '../../screens/sound/edit_sound.dart';
 import '../../util.dart';
-import '../play_sound_semantics.dart';
 
 /// A list tile to display and edit a [Sound] instance.
-class SoundListTile extends StatelessWidget {
+class SoundListTile extends StatefulWidget {
   /// Create an instance.
   const SoundListTile({
     required this.projectContext,
@@ -60,81 +60,112 @@ class SoundListTile extends StatelessWidget {
   final bool playSound;
 
   @override
+  State<SoundListTile> createState() => _SoundListTileState();
+}
+
+class _SoundListTileState extends State<SoundListTile> {
+  PlaySound? _playSound;
+
+  /// Get the asset reference reference for the [widget]'s sound.
+  AssetReferenceReference? get assetReferenceReference =>
+      getAssetReferenceReference(
+        assets: widget.assetStore.assets,
+        id: widget.value?.id,
+      );
+
+  /// Build the widget.
+  @override
   Widget build(BuildContext context) {
-    final subtitle = value == null
-        ? 'Not set'
-        : '${assetString(
-            getAssetReferenceReference(
-              assets: assetStore.assets,
-              id: value?.id,
-            )!,
-          )} (${value?.gain})';
-    return Shortcuts(
-      shortcuts: const {
-        IncreaseIntent.hotkey: IncreaseIntent(),
-        DecreaseIntent.hotkey: DecreaseIntent(),
-      },
-      child: Actions(
-        actions: {
-          DecreaseIntent: CallbackAction<DecreaseIntent>(
-            onInvoke: (intent) {
-              final sound = value;
-              if (sound == null) {
+    final sound = widget.value;
+    final String subtitle;
+    if (sound == null) {
+      subtitle = 'Not set';
+    } else {
+      final playSound = _playSound;
+      if (playSound != null) {
+        playSound.gain = sound.gain;
+      }
+      subtitle = '${assetString(
+        assetReferenceReference!,
+      )} (${sound.gain})';
+    }
+    return Semantics(
+      child: Shortcuts(
+        shortcuts: const {
+          IncreaseIntent.hotkey: IncreaseIntent(),
+          DecreaseIntent.hotkey: DecreaseIntent(),
+        },
+        child: Actions(
+          actions: {
+            DecreaseIntent: CallbackAction<DecreaseIntent>(
+              onInvoke: (intent) {
+                final sound = widget.value;
+                if (sound == null) {
+                  return null;
+                }
+                sound.gain = roundDouble(max(0.0, sound.gain - 0.1));
+                setState(() {
+                  widget.onDone(sound);
+                });
                 return null;
+              },
+            ),
+            IncreaseIntent: CallbackAction<IncreaseIntent>(
+              onInvoke: (intent) {
+                final sound = widget.value;
+                if (sound == null) {
+                  return null;
+                }
+                sound.gain = roundDouble(sound.gain + 0.1);
+                setState(() {
+                  widget.onDone(sound);
+                });
+                return null;
+              },
+            )
+          },
+          child: ListTile(
+            autofocus: widget.autofocus,
+            title: Text(widget.title),
+            subtitle: Text(subtitle),
+            onTap: () async {
+              if (widget.assetStore.assets.isEmpty) {
+                return showSnackBar(
+                  context: context,
+                  message: 'There are no valid assets.',
+                );
               }
-              sound.gain = roundDouble(max(0.0, sound.gain - 0.1));
-              onDone(sound);
-              return null;
+              stop();
+              final v = widget.value;
+              if (v == null) {
+                pushWidget(
+                  context: context,
+                  builder: (context) => SelectAsset(
+                    projectContext: widget.projectContext,
+                    assetStore: widget.assetStore,
+                    onDone: (value) {
+                      Navigator.pop(context);
+                      final sound = Sound(
+                        id: value!.variableName,
+                        gain: widget
+                            .projectContext.world.soundOptions.defaultGain,
+                      );
+                      widget.onDone(sound);
+                      pushEditSoundWidget(context: context, sound: sound);
+                    },
+                  ),
+                );
+              } else {
+                pushEditSoundWidget(context: context, sound: v);
+              }
             },
           ),
-          IncreaseIntent: CallbackAction<IncreaseIntent>(
-            onInvoke: (intent) {
-              final sound = value;
-              if (sound == null) {
-                return null;
-              }
-              sound.gain = roundDouble(sound.gain + 0.1);
-              onDone(sound);
-              return null;
-            },
-          )
-        },
-        child: playSound == true
-            ? PlaySoundSemantics(
-                child: Builder(
-                  builder: (context) => getListTile(
-                    context: context,
-                    subtitle: subtitle,
-                  ),
-                ),
-                soundChannel: projectContext.game.interfaceSounds,
-                assetReference: value == null
-                    ? null
-                    : getAssetReferenceReference(
-                        assets: assetStore.assets,
-                        id: value?.id,
-                      )!
-                        .reference,
-                gain: value?.gain ??
-                    projectContext.world.soundOptions.defaultGain,
-                looping: looping,
-              )
-            : getListTile(subtitle: subtitle, context: context),
+        ),
       ),
+      onDidGainAccessibilityFocus: play,
+      onDidLoseAccessibilityFocus: stop,
     );
   }
-
-  /// Get the resulting list tile.
-  ListTile getListTile({
-    required BuildContext context,
-    required String subtitle,
-  }) =>
-      ListTile(
-        autofocus: autofocus,
-        title: Text(title),
-        subtitle: Text(subtitle),
-        onTap: () => listTileOnTap(context),
-      );
 
   /// Push the [EditSound] widget.
   Future<void> pushEditSoundWidget({
@@ -144,44 +175,36 @@ class SoundListTile extends StatelessWidget {
       pushWidget(
         context: context,
         builder: (context) => EditSound(
-          projectContext: projectContext,
-          assetStore: assetStore,
+          projectContext: widget.projectContext,
+          assetStore: widget.assetStore,
           sound: sound,
-          onChanged: onDone,
-          nullable: nullable,
-          title: title,
+          onChanged: widget.onDone,
+          nullable: widget.nullable,
+          title: widget.title,
         ),
       );
 
-  /// What happens when the [ListTile] is tapped.
-  void listTileOnTap(BuildContext context) async {
-    if (assetStore.assets.isEmpty) {
-      return showSnackBar(
-        context: context,
-        message: 'There are no valid assets.',
-      );
-    }
-    PlaySoundSemantics.of(context)?.stop();
-    final v = value;
-    if (v == null) {
-      pushWidget(
-        context: context,
-        builder: (context) => SelectAsset(
-          projectContext: projectContext,
-          assetStore: assetStore,
-          onDone: (value) {
-            Navigator.pop(context);
-            final sound = Sound(
-              id: value!.variableName,
-              gain: projectContext.world.soundOptions.defaultGain,
-            );
-            onDone(sound);
-            pushEditSoundWidget(context: context, sound: sound);
-          },
-        ),
-      );
-    } else {
-      pushEditSoundWidget(context: context, sound: v);
-    }
+  /// Dispose of the playing sound.
+  @override
+  void dispose() {
+    super.dispose();
+    stop();
+  }
+
+  /// Start the playing sound.
+  void play() {
+    stop();
+    _playSound = widget.projectContext.game.interfaceSounds.playSound(
+      assetReferenceReference!.reference,
+      gain: widget.value!.gain,
+      keepAlive: true,
+      looping: widget.looping,
+    );
+  }
+
+  /// Stop the playing sound.
+  void stop() {
+    _playSound?.destroy();
+    _playSound = null;
   }
 }
