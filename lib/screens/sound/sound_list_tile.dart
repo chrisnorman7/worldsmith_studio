@@ -105,56 +105,54 @@ class SoundListTile extends StatelessWidget {
         }
       },
     );
-    final actions = Actions(
-      actions: {
-        DecreaseIntent: CallbackAction<DecreaseIntent>(
-          onInvoke: (intent) {
-            final sound = value;
-            if (sound == null) {
-              return null;
-            }
-            sound.gain = roundDouble(max(0.0, sound.gain - 0.1));
-            onDone(sound);
-            return null;
-          },
-        ),
-        IncreaseIntent: CallbackAction<IncreaseIntent>(
-          onInvoke: (intent) {
-            final sound = value;
-            if (sound == null) {
-              return null;
-            }
-            sound.gain = roundDouble(sound.gain + 0.1);
-            onDone(sound);
-            return null;
-          },
-        )
-      },
-      child: Builder(builder: (context) => listTile),
-    );
-    final shortcuts = Shortcuts(
+    return Shortcuts(
       shortcuts: const {
         IncreaseIntent.hotkey: IncreaseIntent(),
         DecreaseIntent.hotkey: DecreaseIntent(),
       },
-      child: actions,
+      child: Actions(
+        actions: {
+          DecreaseIntent: CallbackAction<DecreaseIntent>(
+            onInvoke: (intent) {
+              final sound = value;
+              if (sound == null) {
+                return null;
+              }
+              sound.gain = roundDouble(max(0.0, sound.gain - 0.1));
+              onDone(sound);
+              return null;
+            },
+          ),
+          IncreaseIntent: CallbackAction<IncreaseIntent>(
+            onInvoke: (intent) {
+              final sound = value;
+              if (sound == null) {
+                return null;
+              }
+              sound.gain = roundDouble(sound.gain + 0.1);
+              onDone(sound);
+              return null;
+            },
+          )
+        },
+        child: playSound == true
+            ? PlaySoundSemantics(
+                child: listTile,
+                soundChannel: projectContext.game.interfaceSounds,
+                assetReference: value == null
+                    ? null
+                    : getAssetReferenceReference(
+                        assets: assetStore.assets,
+                        id: value?.id,
+                      )!
+                        .reference,
+                gain: value?.gain ??
+                    projectContext.world.soundOptions.defaultGain,
+                looping: looping,
+              )
+            : listTile,
+      ),
     );
-    if (playSound) {
-      return PlaySoundSemantics(
-        child: shortcuts,
-        soundChannel: projectContext.game.interfaceSounds,
-        assetReference: value == null
-            ? null
-            : getAssetReferenceReference(
-                assets: assetStore.assets,
-                id: value?.id,
-              )!
-                .reference,
-        gain: value?.gain ?? projectContext.world.soundOptions.defaultGain,
-        looping: looping,
-      );
-    }
-    return shortcuts;
   }
 
   /// Push the [EditSound] widget.
