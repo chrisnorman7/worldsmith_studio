@@ -322,3 +322,29 @@ class EditConversationCategoriesIntent extends Intent {
     shift: true,
   );
 }
+
+/// An intent to create a new conversation branch.
+class CreateConversationBranchIntent extends Intent {
+  /// Create an instance.
+  const CreateConversationBranchIntent();
+
+  /// The hotkey to use.
+  static SingleActivator hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
+}
+
+/// An intent to create a new conversation response.
+class CreateConversationResponse extends Intent {
+  /// Create an instance.
+  const CreateConversationResponse();
+
+  /// The hotkey to use.
+  static SingleActivator hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
+}

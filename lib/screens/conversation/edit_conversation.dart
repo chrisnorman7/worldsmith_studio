@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
@@ -14,6 +15,7 @@ import '../../widgets/searchable_list_view.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
+import 'edit_conversation_branch.dart';
 import 'edit_conversation_response.dart';
 
 /// A widget for editing a [conversation] in the given [category].
@@ -123,9 +125,6 @@ class _EditConversationState extends State<EditConversation> {
             icon: const Icon(Icons.question_answer_outlined),
             builder: (context) {
               final branches = widget.conversation.branches;
-              if (branches.isEmpty) {
-                return const CenterText(text: 'There are no branches to show.');
-              }
               final children = <SearchableListTile>[];
               for (var i = 0; i < branches.length; i++) {
                 final branch = branches[i];
@@ -141,8 +140,19 @@ class _EditConversationState extends State<EditConversation> {
                   ),
                 );
               }
-              return SearchableListView(children: children);
+              return CallbackShortcuts(
+                child: SearchableListView(children: children),
+                bindings: {
+                  CreateConversationBranchIntent.hotkey: () =>
+                      addConversationBranch(context)
+                },
+              );
             },
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => addConversationBranch(context),
+              child: createIcon,
+              tooltip: 'Add Branch',
+            ),
           ),
           TabbedScaffoldTab(
             title: 'Responses',
@@ -169,27 +179,17 @@ class _EditConversationState extends State<EditConversation> {
                   ),
                 );
               }
-              return SearchableListView(children: children);
+              return CallbackShortcuts(
+                child: SearchableListView(children: children),
+                bindings: {
+                  CreateConversationResponse.hotkey: () =>
+                      addConversationResponse(context),
+                },
+              );
             },
             floatingActionButton: FloatingActionButton(
               autofocus: widget.conversation.responses.isEmpty,
-              onPressed: () async {
-                final response = ConversationResponse(
-                  id: newId(),
-                  text: 'Change me',
-                );
-                widget.conversation.responses.add(response);
-                widget.projectContext.save();
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditConversationResponse(
-                    projectContext: widget.projectContext,
-                    conversation: widget.conversation,
-                    response: response,
-                  ),
-                );
-                setState(() {});
-              },
+              onPressed: () => addConversationResponse(context),
               child: createIcon,
               tooltip: 'Add Response',
             ),
@@ -202,6 +202,41 @@ class _EditConversationState extends State<EditConversation> {
   /// Save the project.
   void save() {
     widget.projectContext.save();
+    setState(() {});
+  }
+
+  /// Add a conversation response.
+  Future<void> addConversationResponse(BuildContext context) async {
+    final response = ConversationResponse(
+      id: newId(),
+      text: 'Change me',
+    );
+    widget.conversation.responses.add(response);
+    widget.projectContext.save();
+    await pushWidget(
+      context: context,
+      builder: (context) => EditConversationResponse(
+        projectContext: widget.projectContext,
+        conversation: widget.conversation,
+        response: response,
+      ),
+    );
+    setState(() {});
+  }
+
+  /// Add a new conversation branch.
+  Future<void> addConversationBranch(BuildContext context) async {
+    final branch = ConversationBranch(id: newId(), responseIds: []);
+    widget.conversation.branches.add(branch);
+    widget.projectContext.save();
+    await pushWidget(
+      context: context,
+      builder: (context) => EditConversationBranch(
+        projectContext: widget.projectContext,
+        conversation: widget.conversation,
+        branch: branch,
+      ),
+    );
     setState(() {});
   }
 }
