@@ -53,7 +53,9 @@ class _ConversationBranchListTileState
           widget.conversationBranch.text ??
               'Conversation branch without any text',
         ),
-        onTap: () {},
+        onTap: () {
+          PlaySoundSemantics.of(context)?.stop();
+        },
       ),
       soundChannel: widget.projectContext.game.musicSounds,
       assetReference: asset,
