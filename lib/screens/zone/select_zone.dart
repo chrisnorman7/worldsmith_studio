@@ -30,7 +30,7 @@ class SelectZone extends StatelessWidget {
         child: SelectItem<Zone>(
           onDone: onDone,
           values: projectContext.world.zones,
-          getDescription: (zone) => zone.name,
+          getItemWidget: (zone) => Text(zone.name),
           title: 'Select Zone',
           value: zone,
         ),

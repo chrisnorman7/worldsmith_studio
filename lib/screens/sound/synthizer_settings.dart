@@ -50,8 +50,9 @@ class _SynthizerSettingsState extends State<SynthizerSettings> {
                     save();
                   },
                   values: const [null, ...LogLevel.values],
-                  getDescription: (value) =>
-                      value == null ? 'Clear' : value.name,
+                  getItemWidget: (value) => Text(
+                    value == null ? 'Clear' : value.name,
+                  ),
                   value: options.synthizerLogLevel,
                   title: 'Synthizer Log Level',
                 ),
@@ -70,8 +71,9 @@ class _SynthizerSettingsState extends State<SynthizerSettings> {
                     save();
                   },
                   values: const [null, ...LoggingBackend.values],
-                  getDescription: (value) =>
-                      value == null ? 'Clear' : value.name,
+                  getItemWidget: (value) => Text(
+                    value == null ? 'Clear' : value.name,
+                  ),
                   title: 'Synthizer Logging Backend',
                   value: options.synthizerLoggingBackend,
                 ),

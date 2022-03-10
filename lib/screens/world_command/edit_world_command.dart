@@ -232,7 +232,9 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           onTap: () => pushWidget(
             context: context,
             builder: (context) => SelectItem<WalkingMode?>(
-              getDescription: (value) => value == null ? 'Clear' : value.name,
+              getItemWidget: (value) => Text(
+                value == null ? 'Clear' : value.name,
+              ),
               onDone: (value) {
                 Navigator.pop(context);
                 widget.command.walkingMode = value;

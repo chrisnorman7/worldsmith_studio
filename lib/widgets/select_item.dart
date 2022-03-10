@@ -10,7 +10,7 @@ class SelectItem<T> extends StatelessWidget {
     required this.values,
     this.title = 'Select Item',
     this.value,
-    this.getDescription,
+    this.getItemWidget,
     Key? key,
   }) : super(key: key);
 
@@ -20,8 +20,8 @@ class SelectItem<T> extends StatelessWidget {
   /// The possible values to choose from.
   final List<T> values;
 
-  /// The function to be used to return a textual representation of values.
-  final String Function(T value)? getDescription;
+  /// The function to be used to get a suitable widget for displaying an item.
+  final Widget Function(T value)? getItemWidget;
 
   /// The title of the resulting [Scaffold].
   final String title;
@@ -33,27 +33,23 @@ class SelectItem<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Cancel(
         child: Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-            ),
-            body: ListView.builder(
-              itemBuilder: (context, index) {
-                final element = values[index];
-                final f = getDescription;
-                final String description;
-                if (f == null) {
-                  description = element.toString();
-                } else {
-                  description = f(element);
-                }
-                return ListTile(
-                  autofocus: (value == null && index == 0) || element == value,
-                  selected: element == value,
-                  title: Text(description),
-                  onTap: () => onDone(element),
-                );
-              },
-              itemCount: values.length,
-            )),
+          appBar: AppBar(
+            title: Text(title),
+          ),
+          body: ListView.builder(
+            itemBuilder: (context, index) {
+              final item = values[index];
+              final getWidget = getItemWidget;
+              return ListTile(
+                autofocus: (value == null && index == 0) || item == value,
+                selected: item == value,
+                title:
+                    getWidget == null ? Text(item.toString()) : getWidget(item),
+                onTap: () => onDone(item),
+              );
+            },
+            itemCount: values.length,
+          ),
+        ),
       );
 }

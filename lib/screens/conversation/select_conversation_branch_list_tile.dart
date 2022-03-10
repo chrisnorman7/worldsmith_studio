@@ -55,7 +55,9 @@ class SelectConversationBranchListTile extends StatelessWidget {
           builder: (context) => SelectItem<ConversationBranch>(
             onDone: onChanged,
             values: conversation.branches,
-            getDescription: (item) => item.text ?? 'Untitled',
+            getItemWidget: (item) => Text(
+              item.text ?? 'Untitled',
+            ),
           ),
         ),
       ),
