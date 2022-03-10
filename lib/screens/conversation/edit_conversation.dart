@@ -75,6 +75,7 @@ class _EditConversationState extends State<EditConversation> {
                   defaultGain: world.soundOptions.defaultGain,
                   looping: true,
                   nullable: true,
+                  title: 'Music',
                 ),
                 ListTile(
                   title: const Text('Initial Branch'),
