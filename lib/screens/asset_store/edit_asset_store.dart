@@ -273,7 +273,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         },
       );
     } else {
-      showSnackBar(context: context, message: result);
+      showError(context: context, message: result);
     }
   }
 }

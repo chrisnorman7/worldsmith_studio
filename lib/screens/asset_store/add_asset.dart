@@ -190,7 +190,7 @@ class _AddAssetState extends State<AddAsset> {
     final filename = result.paths.single;
     final file = File(filename!);
     if (file.existsSync() == false) {
-      return showSnackBar(
+      return showError(
         context: context,
         message: 'The file $filename does not exist.',
       );
@@ -210,7 +210,7 @@ class _AddAssetState extends State<AddAsset> {
       return;
     }
     if (Directory(directoryName).existsSync() == false) {
-      return showSnackBar(
+      return showError(
         context: context,
         message: 'The directory $directoryName does not exist.',
       );

@@ -264,7 +264,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     final id = widget.command.id;
     final world = widget.projectContext.world;
     if (world.mainMenuOptions.startGameCommandId == id) {
-      return showSnackBar(
+      return showError(
         context: context,
         message: 'You cannot delete the start game command.',
       );
@@ -272,7 +272,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     for (final commandCategory in world.commandCategories) {
       for (final command in commandCategory.commands) {
         if (command.callCommand?.commandId == id) {
-          return showSnackBar(
+          return showError(
             context: context,
             message: 'You cannot delete a command which is called by the '
                 '${command.name} command from the ${commandCategory.name} '
@@ -283,7 +283,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     }
     for (final zone in world.zones) {
       if (zone.edgeCommand?.commandId == id) {
-        return showSnackBar(
+        return showError(
           context: context,
           message:
               'You cannot delete the edge command of the ${zone.name} zone.',
@@ -293,7 +293,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
         if (box.enterCommand?.commandId == id ||
             box.leaveCommand?.commandId == id ||
             box.walkCommand?.commandId == id) {
-          return showSnackBar(
+          return showError(
             context: context,
             message: 'This command is used by the ${box.name} box of the '
                 '${zone.name} zone.',
@@ -302,7 +302,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
       }
       for (final object in zone.objects) {
         if (object.collideCommand?.commandId == id) {
-          return showSnackBar(
+          return showError(
             context: context,
             message: 'This command is being used by the ${object.name} '
                 'object of the ${zone.name} zone.',
@@ -314,7 +314,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
       for (final conversation in conversationCategory.conversations) {
         for (final response in conversation.responses) {
           if (response.command?.commandId == id) {
-            return showSnackBar(
+            return showError(
               context: context,
               message: 'The command is being used by the ${conversation.name} '
                   'conversation of the ${conversationCategory.name} category.',

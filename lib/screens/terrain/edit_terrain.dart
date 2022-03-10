@@ -63,7 +63,7 @@ class _EditTerrainState extends State<EditTerrain> {
                   }
                 }
                 if (message != null) {
-                  return showSnackBar(context: context, message: message);
+                  return showError(context: context, message: message);
                 }
                 confirm(
                   context: context,

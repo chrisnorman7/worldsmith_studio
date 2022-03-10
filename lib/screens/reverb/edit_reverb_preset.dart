@@ -255,7 +255,7 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
                         for (final zone in widget.projectContext.world.zones) {
                           for (final box in zone.boxes) {
                             if (box.reverbId == id) {
-                              return showSnackBar(
+                              return showError(
                                 context: context,
                                 message: 'You cannot delete the reverb for the '
                                     '${box.name} of the ${zone.name} zone.',

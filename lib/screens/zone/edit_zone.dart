@@ -748,7 +748,7 @@ class _EditZoneState extends State<EditZone> {
     for (final category in world.commandCategories) {
       for (final command in category.commands) {
         if (command.zoneTeleport?.zoneId == id) {
-          return showSnackBar(
+          return showError(
             context: context,
             message: 'You cannot delete the target zone of the ${command.name} '
                 'command from the ${category.name} category.',

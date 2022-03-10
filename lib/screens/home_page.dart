@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage> {
       }
       filename = result.files.single.path;
       if (filename == null) {
-        return showSnackBar(
+        return showError(
           context: context,
           message:
               'There was an internal error, and the file could not be opened.',
@@ -327,7 +327,7 @@ class _HomePageState extends State<HomePage> {
     }
     final file = File(filename);
     if (file.existsSync() == false) {
-      return showSnackBar(
+      return showError(
         context: context,
         message: 'The file $filename no longer exists.',
       );

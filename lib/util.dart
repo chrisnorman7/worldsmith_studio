@@ -69,24 +69,25 @@ Future<void> confirm({
     );
 
 /// Show a snackbar, with an optional action.
-void showSnackBar({
+void showError({
   required BuildContext context,
   required String message,
-  String? actionLabel,
-  VoidCallback? actionCallback,
-}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      action: actionLabel != null && actionCallback != null
-          ? SnackBarAction(
-              label: actionLabel,
-              onPressed: actionCallback,
-            )
-          : null,
-    ),
-  );
-}
+  String title = 'Error',
+}) =>
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+            autofocus: true,
+          )
+        ],
+        title: Text(title),
+        content: Text(message),
+      ),
+    );
 
 /// Make a printable string from the given [assetReferenceReference].
 String assetString(AssetReferenceReference assetReferenceReference) =>

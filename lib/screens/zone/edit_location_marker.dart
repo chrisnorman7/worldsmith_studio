@@ -78,7 +78,7 @@ class _EditLocationMarkerState extends State<EditLocationMarker> {
       for (final command in category.commands) {
         if (command.localTeleport?.locationMarkerId ==
             widget.locationMarker.id) {
-          return showSnackBar(
+          return showError(
             context: context,
             message: 'You cannot delete the location marker used by the '
                 '${command.name} command of the ${category.name} category.',

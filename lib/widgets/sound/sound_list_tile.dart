@@ -130,7 +130,7 @@ class _SoundListTileState extends State<SoundListTile> {
             subtitle: Text(subtitle),
             onTap: () async {
               if (widget.assetStore.assets.isEmpty) {
-                return showSnackBar(
+                return showError(
                   context: context,
                   message: 'There are no valid assets.',
                 );

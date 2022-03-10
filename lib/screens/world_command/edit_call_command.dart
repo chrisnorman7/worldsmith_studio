@@ -92,7 +92,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
                   onDone: (value) {
                     final n = int.parse(value);
                     if (n < 0) {
-                      showSnackBar(
+                      showError(
                         context: context,
                         message: 'This value must be a positive number.',
                       );

@@ -81,7 +81,7 @@ class _EditConversationCategoriesState
                       },
                     );
                   } else {
-                    showSnackBar(
+                    showError(
                       context: context,
                       message: 'You can only delete empty categories.',
                     );

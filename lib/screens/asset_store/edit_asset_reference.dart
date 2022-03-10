@@ -69,7 +69,7 @@ class _EditAssetReferenceState extends State<EditAssetReference> {
                         Navigator.pop(context);
                       });
                 } else {
-                  showSnackBar(context: context, message: result);
+                  showError(context: context, message: result);
                 }
               },
               child: deleteIcon,

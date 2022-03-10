@@ -73,7 +73,7 @@ class _DirectionsListState extends State<DirectionsList> {
                 return;
               }
             }
-            showSnackBar(
+            showError(
               context: context,
               message: 'You already have 360 directions.',
             );
