@@ -182,7 +182,7 @@ class _EditConversationState extends State<EditConversation> {
               return CallbackShortcuts(
                 child: SearchableListView(children: children),
                 bindings: {
-                  CreateConversationResponse.hotkey: () =>
+                  CreateConversationResponseIntent.hotkey: () =>
                       addConversationResponse(context),
                 },
               );

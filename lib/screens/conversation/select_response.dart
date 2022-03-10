@@ -13,6 +13,8 @@ class SelectResponse extends StatelessWidget {
     required this.projectContext,
     required this.conversation,
     required this.onDone,
+    this.title = 'Select Response',
+    this.value,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +26,12 @@ class SelectResponse extends StatelessWidget {
 
   /// The function to call with the new response.
   final ValueChanged<ConversationResponse> onDone;
+
+  /// The title of the [Scaffold].
+  final String title;
+
+  /// The current value (if any).
+  final ConversationResponse? value;
 
   /// Build the widget.
   @override
@@ -41,6 +49,8 @@ class SelectResponse extends StatelessWidget {
         )?.reference,
         gain: world.soundOptions.defaultGain,
       ),
+      title: title,
+      value: value,
     );
   }
 }

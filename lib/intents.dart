@@ -329,7 +329,7 @@ class CreateConversationBranchIntent extends Intent {
   const CreateConversationBranchIntent();
 
   /// The hotkey to use.
-  static SingleActivator hotkey = SingleActivator(
+  static final SingleActivator hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
     control: Platform.isWindows,
     meta: Platform.isMacOS,
@@ -337,13 +337,26 @@ class CreateConversationBranchIntent extends Intent {
 }
 
 /// An intent to create a new conversation response.
-class CreateConversationResponse extends Intent {
+class CreateConversationResponseIntent extends Intent {
   /// Create an instance.
-  const CreateConversationResponse();
+  const CreateConversationResponseIntent();
 
   /// The hotkey to use.
-  static SingleActivator hotkey = SingleActivator(
+  static final SingleActivator hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
+}
+
+/// An intent to add something.
+class AddIntent extends Intent {
+  /// Create an instance.
+  const AddIntent();
+
+  /// The hotkey to use.
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyA,
     control: Platform.isWindows,
     meta: Platform.isMacOS,
   );
