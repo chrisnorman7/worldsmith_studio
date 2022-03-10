@@ -86,7 +86,6 @@ class _EditSoundState extends State<EditSound> {
                     asset == null ? 'Not set' : assetString(asset),
                   ),
                   onTap: () {
-                    PlaySoundSemantics.of(context)!.stop();
                     pushWidget(
                       context: context,
                       builder: (context) => SelectAsset(
@@ -99,6 +98,7 @@ class _EditSoundState extends State<EditSound> {
                           setState(() {});
                         },
                         currentId: widget.sound.id,
+                        title: widget.title,
                       ),
                     );
                   },
