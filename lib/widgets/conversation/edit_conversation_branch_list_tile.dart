@@ -12,6 +12,7 @@ class EditConversationBranchListTile extends StatefulWidget {
   /// Create an instance.
   const EditConversationBranchListTile({
     required this.projectContext,
+    required this.conversation,
     required this.branch,
     this.autofocus = false,
     Key? key,
@@ -19,6 +20,9 @@ class EditConversationBranchListTile extends StatefulWidget {
 
   /// The project context to use.
   final ProjectContext projectContext;
+
+  /// The conversation to work with.
+  final Conversation conversation;
 
   /// The conversation branch to show.
   final ConversationBranch branch;
@@ -62,6 +66,7 @@ class _EditConversationBranchListTileState
               builder: (context) => EditConversationBranch(
                 projectContext: widget.projectContext,
                 branch: widget.branch,
+                conversation: widget.conversation,
               ),
             );
             setState(() {});

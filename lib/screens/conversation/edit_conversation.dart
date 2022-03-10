@@ -134,6 +134,7 @@ class _EditConversationState extends State<EditConversation> {
                     searchString: branch.text ?? 'Untitled Branch',
                     child: EditConversationBranchListTile(
                       autofocus: i == 0,
+                      conversation: widget.conversation,
                       branch: branch,
                       projectContext: widget.projectContext,
                     ),
