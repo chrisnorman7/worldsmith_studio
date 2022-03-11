@@ -361,3 +361,16 @@ class AddIntent extends Intent {
     meta: Platform.isMacOS,
   );
 }
+
+/// An intent to edit something.
+class EditIntent extends Intent {
+  /// Create an instance.
+  const EditIntent();
+
+  /// The hotkey to use.
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyE,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
+}

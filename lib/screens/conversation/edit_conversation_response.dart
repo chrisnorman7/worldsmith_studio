@@ -73,6 +73,7 @@ class _EditConversationResponseState extends State<EditConversationResponse> {
             ConversationNextBranchListTile(
               projectContext: widget.projectContext,
               conversation: widget.conversation,
+              response: widget.response,
               nextBranch: widget.response.nextBranch,
               onChanged: (value) {
                 widget.response.nextBranch = value;

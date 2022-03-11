@@ -13,6 +13,7 @@ import '../../widgets/command/call_command_list_tile.dart';
 import '../../widgets/conversation/conversation_branch_list_tile.dart';
 import '../../widgets/conversation/conversation_response_list_tile.dart';
 import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
+import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/searchable_list_view.dart';
 import '../../widgets/select_item.dart';
@@ -20,6 +21,7 @@ import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import 'edit_conversation_branch.dart';
+import 'edit_conversation_next_branch.dart';
 import 'edit_conversation_response.dart';
 
 /// A widget for editing a [conversation] in the given [category].
@@ -127,37 +129,96 @@ class _EditConversationState extends State<EditConversation> {
           },
         )
       ];
-      child = ListView.builder(
-        itemBuilder: (context, index) {
-          if (index < children.length) {
-            return children[index];
-          }
-          final id = branch.responseIds[index - children.length];
-          final response = widget.conversation.getResponse(id);
-          final sound = response.sound;
-          return PlaySoundSemantics(
-            child: ListTile(
-              title: Text('Response ${index - children.length + 1}'),
-              subtitle: Text('${response.text}'),
-              onTap: () => setState(
-                () {
-                  _index = index;
-                  _response = response;
-                  _branch = null;
-                },
+      child = WithKeyboardShortcuts(
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            if (index < children.length) {
+              return children[index];
+            }
+            final position = index - children.length;
+            final id = branch.responseIds[position];
+            final response = widget.conversation.getResponse(id);
+            final sound = response.sound;
+            return CallbackShortcuts(
+              child: PlaySoundSemantics(
+                child: ListTile(
+                  autofocus: _index == index,
+                  title: Text('Response ${index - children.length + 1}'),
+                  subtitle: Text('${response.text}'),
+                  onTap: () => setState(
+                    () {
+                      _index = index;
+                      _response = response;
+                      _branch = null;
+                    },
+                  ),
+                ),
+                soundChannel: widget.projectContext.game.interfaceSounds,
+                assetReference: sound == null
+                    ? null
+                    : getAssetReferenceReference(
+                        assets: world.conversationAssets,
+                        id: sound.id,
+                      ).reference,
+                gain: sound?.gain ?? world.soundOptions.defaultGain,
               ),
-            ),
-            soundChannel: widget.projectContext.game.interfaceSounds,
-            assetReference: sound == null
-                ? null
-                : getAssetReferenceReference(
-                    assets: world.conversationAssets,
-                    id: sound.id,
-                  ).reference,
-            gain: sound?.gain ?? world.soundOptions.defaultGain,
-          );
-        },
-        itemCount: branch.responseIds.length + children.length,
+              bindings: {
+                EditIntent.hotkey: () => pushWidget(
+                      context: context,
+                      builder: (context) => EditConversationResponse(
+                        projectContext: widget.projectContext,
+                        conversation: widget.conversation,
+                        response: response,
+                      ),
+                    ),
+                DeleteIntent.hotkey: () {
+                  branch.responseIds.removeAt(position);
+                  save();
+                },
+                MoveUpIntent.hotkey: () {
+                  if (position > 0) {
+                    branch.responseIds.removeAt(position);
+                    branch.responseIds.insert(position - 1, id);
+                    _index = index - 1;
+                    save();
+                  }
+                },
+                MoveDownIntent.hotkey: () {
+                  branch.responseIds.removeAt(position);
+                  if (position == branch.responseIds.length) {
+                    branch.responseIds.add(id);
+                  } else {
+                    branch.responseIds.insert(position + 1, id);
+                  }
+                  _index = index + 1;
+                  save();
+                },
+              },
+            );
+          },
+          itemCount: branch.responseIds.length + children.length,
+        ),
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Edit the selected response.',
+            keyName: 'E',
+            control: true,
+          ),
+          KeyboardShortcut(
+            description: 'Remove the current response from this branch.',
+            keyName: 'Delete',
+          ),
+          KeyboardShortcut(
+            description: 'Move the selected response up in the list.',
+            keyName: 'Up Arrow',
+            alt: true,
+          ),
+          KeyboardShortcut(
+            description: 'Move the selected response down in the list.',
+            keyName: 'Down Arrow',
+            alt: true,
+          )
+        ],
       );
     } else if (response != null) {
       title = 'Edit Response';
@@ -165,80 +226,106 @@ class _EditConversationState extends State<EditConversation> {
       final nextBranch = response.nextBranch;
       final id = nextBranch?.branchId;
       final branch = id == null ? null : widget.conversation.getBranch(id);
-      child = ListView(
-        children: [
-          TextListTile(
-            value: response.text ?? '',
-            onChanged: (value) {
-              response.text = value.isEmpty ? null : value;
-              save();
-            },
-            header: 'Text',
-            autofocus: true,
+      child = WithKeyboardShortcuts(
+        child: CallbackShortcuts(
+          child: ListView(
+            children: [
+              TextListTile(
+                value: response.text ?? '',
+                onChanged: (value) {
+                  response.text = value.isEmpty ? null : value;
+                  save();
+                },
+                header: 'Text',
+                autofocus: true,
+              ),
+              SoundListTile(
+                projectContext: widget.projectContext,
+                value: sound,
+                onDone: (value) {
+                  response.sound = value;
+                  save();
+                },
+                assetStore: world.conversationAssetStore,
+                defaultGain: world.soundOptions.defaultGain,
+                nullable: true,
+              ),
+              ConversationBranchListTile(
+                projectContext: widget.projectContext,
+                branch: branch,
+                onTap: () {
+                  if (branch == null) {
+                    pushWidget(
+                      context: context,
+                      builder: (context) => SelectItem<ConversationBranch>(
+                        onDone: (value) {
+                          Navigator.pop(context);
+                          response.nextBranch =
+                              ConversationNextBranch(branchId: value.id);
+                          save();
+                        },
+                        values: widget.conversation.branches,
+                        getItemWidget: (item) {
+                          final sound = item.sound;
+                          return PlaySoundSemantics(
+                            child: Text('${item.text}'),
+                            soundChannel:
+                                widget.projectContext.game.interfaceSounds,
+                            assetReference: sound == null
+                                ? null
+                                : getAssetReferenceReference(
+                                    assets: world.conversationAssets,
+                                    id: sound.id,
+                                  ).reference,
+                            gain: sound?.gain ?? world.soundOptions.defaultGain,
+                          );
+                        },
+                        title: 'Select Branch',
+                      ),
+                    );
+                  } else {
+                    setState(
+                      () {
+                        _index = null;
+                        _branch = branch;
+                        _response = null;
+                      },
+                    );
+                  }
+                },
+                title: 'Next Branch',
+              ),
+              CallCommandListTile(
+                projectContext: widget.projectContext,
+                callCommand: response.command,
+                onChanged: (value) {
+                  response.command = value;
+                  save();
+                },
+              )
+            ],
           ),
-          SoundListTile(
-            projectContext: widget.projectContext,
-            value: sound,
-            onDone: (value) {
-              response.sound = value;
-              save();
-            },
-            assetStore: world.conversationAssetStore,
-            defaultGain: world.soundOptions.defaultGain,
-            nullable: true,
-          ),
-          ConversationBranchListTile(
-            projectContext: widget.projectContext,
-            branch: branch,
-            onTap: () {
-              if (branch == null) {
+          bindings: {
+            EditIntent.hotkey: () {
+              if (nextBranch != null) {
                 pushWidget(
                   context: context,
-                  builder: (context) => SelectItem<ConversationBranch>(
-                    onDone: (value) {
-                      Navigator.pop(context);
-                      response.nextBranch =
-                          ConversationNextBranch(branchId: value.id);
-                      save();
-                    },
-                    values: widget.conversation.branches,
-                    getItemWidget: (item) {
-                      final sound = item.sound;
-                      return PlaySoundSemantics(
-                        child: Text('${item.text}'),
-                        soundChannel:
-                            widget.projectContext.game.interfaceSounds,
-                        assetReference: sound == null
-                            ? null
-                            : getAssetReferenceReference(
-                                assets: world.conversationAssets,
-                                id: sound.id,
-                              ).reference,
-                        gain: sound?.gain ?? world.soundOptions.defaultGain,
-                      );
-                    },
-                    title: 'Select Branch',
+                  builder: (context) => EditConversationNextBranch(
+                    projectContext: widget.projectContext,
+                    conversation: widget.conversation,
+                    response: response,
+                    nextBranch: nextBranch,
                   ),
                 );
-              } else {
-                setState(
-                  () {
-                    _index = null;
-                    _branch = branch;
-                    _response = null;
-                  },
-                );
               }
-            },
-            title: 'Next Branch',
-          ),
-          CallCommandListTile(
-            projectContext: widget.projectContext,
-            callCommand: response.command,
-            onChanged: (value) {
-              response.command = value;
-              save();
-            },
+            }
+          },
+        ),
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Edit the next branch.',
+            keyName: 'E',
+            control: true,
           )
         ],
       );

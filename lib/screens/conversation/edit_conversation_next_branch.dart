@@ -12,8 +12,8 @@ class EditConversationNextBranch extends StatefulWidget {
   const EditConversationNextBranch({
     required this.projectContext,
     required this.conversation,
+    required this.response,
     required this.nextBranch,
-    required this.onChanged,
     Key? key,
   }) : super(key: key);
 
@@ -23,11 +23,11 @@ class EditConversationNextBranch extends StatefulWidget {
   /// The conversation to work with.
   final Conversation conversation;
 
+  /// The response that [nextBranch] belongs to.
+  final ConversationResponse response;
+
   /// The next branch instance to edit.
   final ConversationNextBranch nextBranch;
-
-  /// The function to call when [nextBranch] changes.
-  final ValueChanged<ConversationNextBranch?> onChanged;
 
   /// Create state for this widget.
   @override
@@ -47,7 +47,8 @@ class _EditConversationNextBranchState
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  widget.onChanged(null);
+                  widget.response.nextBranch = null;
+                  widget.projectContext.save();
                 },
                 child: const Icon(
                   Icons.clear_outlined,

@@ -14,6 +14,7 @@ class ConversationNextBranchListTile extends StatefulWidget {
   const ConversationNextBranchListTile({
     required this.projectContext,
     required this.conversation,
+    required this.response,
     required this.nextBranch,
     required this.onChanged,
     Key? key,
@@ -25,11 +26,14 @@ class ConversationNextBranchListTile extends StatefulWidget {
   /// The conversation that [nextBranch] belongs to.
   final Conversation conversation;
 
+  /// The response that [nextBranch] belongs to.
+  final ConversationResponse response;
+
   /// The next branch instance to work with.
   final ConversationNextBranch? nextBranch;
 
-  /// The function to be called when [nextBranch] changes.
-  final ValueChanged<ConversationNextBranch?> onChanged;
+  /// The function to be called when a new [nextBranch] is created.
+  final ValueChanged<ConversationNextBranch> onChanged;
 
   /// Create state for this widget.
   @override
@@ -101,8 +105,8 @@ class _ConversationNextBranchListTileState
                 builder: (context) => EditConversationNextBranch(
                   projectContext: widget.projectContext,
                   conversation: widget.conversation,
+                  response: widget.response,
                   nextBranch: nextBranch,
-                  onChanged: widget.onChanged,
                 ),
               );
               setState(() {});
