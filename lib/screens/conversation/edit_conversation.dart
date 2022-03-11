@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -8,10 +9,13 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
+import '../../widgets/command/call_command_list_tile.dart';
+import '../../widgets/conversation/conversation_branch_list_tile.dart';
 import '../../widgets/conversation/conversation_response_list_tile.dart';
 import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
-import '../../widgets/conversation/select_conversation_branch_list_tile.dart';
+import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/searchable_list_view.dart';
+import '../../widgets/select_item.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
@@ -44,57 +48,258 @@ class EditConversation extends StatefulWidget {
 
 /// State for [EditConversation].
 class _EditConversationState extends State<EditConversation> {
+  int? _index;
+  ConversationBranch? _branch;
+  ConversationResponse? _response;
+
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    final initialBranch =
-        widget.conversation.getBranch(widget.conversation.initialBranchId);
-    return Cancel(
-      child: TabbedScaffold(
+    final branch = _branch;
+    final response = _response;
+    final Widget child;
+    final String title;
+    if (branch != null) {
+      title = 'Edit Branch';
+      final children = [
+        TextListTile(
+          value: branch.text ?? '',
+          onChanged: (value) {
+            branch.text = value.isEmpty ? null : value;
+            save();
+          },
+          header: 'Text',
+          autofocus: _index == null,
+        ),
+        SoundListTile(
+          projectContext: widget.projectContext,
+          value: branch.sound,
+          onDone: (value) {
+            branch.sound = value;
+            save();
+          },
+          assetStore: world.conversationAssetStore,
+          defaultGain: world.soundOptions.defaultGain,
+          nullable: true,
+        ),
+        const Divider(),
+        ListTile(
+          title: const Text('Add Response'),
+          onTap: () => pushWidget(
+            context: context,
+            builder: (context) => SelectItem<ConversationResponse>(
+              onDone: (value) {
+                Navigator.pop(context);
+                branch.responseIds.add(value.id);
+                save();
+              },
+              values: widget.conversation.responses
+                  .where(
+                    (element) =>
+                        branch.responseIds.contains(element.id) == false,
+                  )
+                  .toList(),
+              getItemWidget: (item) {
+                final sound = item.sound;
+                return PlaySoundSemantics(
+                  child: Text('${item.text}'),
+                  soundChannel: widget.projectContext.game.interfaceSounds,
+                  assetReference: sound == null
+                      ? null
+                      : getAssetReferenceReference(
+                          assets: world.conversationAssets,
+                          id: sound.id,
+                        )!
+                          .reference,
+                  gain: sound?.gain ?? world.soundOptions.defaultGain,
+                );
+              },
+              title: 'Select Response',
+            ),
+          ),
+        )
+      ];
+      child = ListView.builder(
+        itemBuilder: (context, index) {
+          if (index < children.length) {
+            return children[index];
+          }
+          final id = branch.responseIds[index - children.length];
+          final response = widget.conversation.getResponse(id);
+          final sound = response.sound;
+          return PlaySoundSemantics(
+            child: ListTile(
+              title: Text('Response ${index - children.length + 1}'),
+              subtitle: Text('${response.text}'),
+              onTap: () => setState(
+                () {
+                  _index = index;
+                  _response = response;
+                  _branch = null;
+                },
+              ),
+            ),
+            soundChannel: widget.projectContext.game.interfaceSounds,
+            assetReference: sound == null
+                ? null
+                : getAssetReferenceReference(
+                    assets: world.conversationAssets,
+                    id: sound.id,
+                  )!
+                    .reference,
+            gain: sound?.gain ?? world.soundOptions.defaultGain,
+          );
+        },
+        itemCount: branch.responseIds.length + children.length,
+      );
+    } else if (response != null) {
+      title = 'Edit Response';
+      final sound = response.sound;
+      final nextBranch = response.nextBranch;
+      final id = nextBranch?.branchId;
+      final branch = id == null ? null : widget.conversation.getBranch(id);
+      child = ListView(
+        children: [
+          TextListTile(
+            value: response.text ?? '',
+            onChanged: (value) {
+              response.text = value.isEmpty ? null : value;
+              save();
+            },
+            header: 'Text',
+            autofocus: true,
+          ),
+          SoundListTile(
+            projectContext: widget.projectContext,
+            value: sound,
+            onDone: (value) {
+              response.sound = value;
+              save();
+            },
+            assetStore: world.conversationAssetStore,
+            defaultGain: world.soundOptions.defaultGain,
+            nullable: true,
+          ),
+          ConversationBranchListTile(
+            projectContext: widget.projectContext,
+            branch: branch,
+            onTap: () {
+              if (branch == null) {
+                pushWidget(
+                  context: context,
+                  builder: (context) => SelectItem<ConversationBranch>(
+                    onDone: (value) {
+                      Navigator.pop(context);
+                      response.nextBranch =
+                          ConversationNextBranch(branchId: value.id);
+                      save();
+                    },
+                    values: widget.conversation.branches,
+                    getItemWidget: (item) {
+                      final sound = item.sound;
+                      return PlaySoundSemantics(
+                        child: Text('${item.text}'),
+                        soundChannel:
+                            widget.projectContext.game.interfaceSounds,
+                        assetReference: sound == null
+                            ? null
+                            : getAssetReferenceReference(
+                                assets: world.conversationAssets,
+                                id: sound.id,
+                              )!
+                                .reference,
+                        gain: sound?.gain ?? world.soundOptions.defaultGain,
+                      );
+                    },
+                    title: 'Select Branch',
+                  ),
+                );
+              } else {
+                setState(
+                  () {
+                    _index = null;
+                    _branch = branch;
+                    _response = null;
+                  },
+                );
+              }
+            },
+            title: 'Next Branch',
+          ),
+          CallCommandListTile(
+            projectContext: widget.projectContext,
+            callCommand: response.command,
+            onChanged: (value) {
+              response.command = value;
+              save();
+            },
+          )
+        ],
+      );
+    } else {
+      title = 'If you are seeing this there is a bug!!';
+      child = TabbedScaffold(
         tabs: [
           TabbedScaffoldTab(
             title: 'Conversation Settings',
             icon: const Icon(Icons.settings_outlined),
-            builder: (context) => ListView(
-              children: [
-                TextListTile(
-                  value: widget.conversation.name,
-                  onChanged: (value) {
-                    widget.conversation.name = value;
-                    save();
-                  },
-                  header: 'Conversation Name',
-                  autofocus: true,
-                  labelText: 'Name',
-                  validator: (value) => validateNonEmptyValue(value: value),
-                ),
-                SoundListTile(
-                  projectContext: widget.projectContext,
-                  value: widget.conversation.music,
-                  onDone: (value) {
-                    widget.conversation.music = value;
-                    save();
-                  },
-                  assetStore: world.musicAssetStore,
-                  defaultGain: world.soundOptions.defaultGain,
-                  looping: true,
-                  nullable: true,
-                  title: 'Music',
-                ),
-                SelectConversationBranchListTile(
-                  projectContext: widget.projectContext,
-                  branch: initialBranch,
-                  conversation: widget.conversation,
-                  title: 'Initial Branch',
-                  onChanged: (branch) {
-                    Navigator.pop(context);
-                    widget.conversation.initialBranchId = branch.id;
-                    save();
-                  },
-                ),
-              ],
-            ),
+            builder: (context) {
+              final initialBranch = widget.conversation.getBranch(
+                widget.conversation.initialBranchId,
+              );
+              final sound = initialBranch.sound;
+              return ListView(
+                children: [
+                  TextListTile(
+                    value: widget.conversation.name,
+                    onChanged: (value) {
+                      widget.conversation.name = value;
+                      save();
+                    },
+                    header: 'Conversation Name',
+                    autofocus: true,
+                    labelText: 'Name',
+                    validator: (value) => validateNonEmptyValue(value: value),
+                  ),
+                  SoundListTile(
+                    projectContext: widget.projectContext,
+                    value: widget.conversation.music,
+                    onDone: (value) {
+                      widget.conversation.music = value;
+                      save();
+                    },
+                    assetStore: world.musicAssetStore,
+                    defaultGain: world.soundOptions.defaultGain,
+                    looping: true,
+                    nullable: true,
+                    title: 'Music',
+                  ),
+                  PlaySoundSemantics(
+                    child: ListTile(
+                      title: const Text('Initial Branch'),
+                      subtitle: Text('${initialBranch.text}'),
+                      onTap: () => setState(
+                        () {
+                          _branch = initialBranch;
+                          _response = null;
+                          _index = null;
+                        },
+                      ),
+                    ),
+                    soundChannel: widget.projectContext.game.interfaceSounds,
+                    assetReference: sound == null
+                        ? null
+                        : getAssetReferenceReference(
+                            assets: world.conversationAssets,
+                            id: sound.id,
+                          )!
+                            .reference,
+                    gain: sound?.gain ?? world.soundOptions.defaultGain,
+                  )
+                ],
+              );
+            },
             actions: [
               ElevatedButton(
                 onPressed: () {
@@ -195,6 +400,17 @@ class _EditConversationState extends State<EditConversation> {
             ),
           ),
         ],
+      );
+    }
+    if (child is TabbedScaffold) {
+      return Cancel(child: child);
+    }
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: child,
       ),
     );
   }
