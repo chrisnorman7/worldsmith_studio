@@ -15,6 +15,7 @@ import '../../widgets/conversation/conversation_response_list_tile.dart';
 import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/reverb/reverb_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/sound/sound_list_tile.dart';
@@ -423,6 +424,16 @@ class _EditConversationState extends State<EditConversation> {
                       ),
                       title: 'Initial Branch',
                     ),
+                    ReverbListTile(
+                      projectContext: widget.projectContext,
+                      onDone: (reverb) {
+                        widget.conversation.reverbId = reverb?.id;
+                        save();
+                      },
+                      reverbPresets: world.reverbs,
+                      currentReverbId: widget.conversation.reverbId,
+                      nullable: true,
+                    )
                   ],
                 ),
                 keyboardShortcuts: const [_backKeyboardShortcut],
