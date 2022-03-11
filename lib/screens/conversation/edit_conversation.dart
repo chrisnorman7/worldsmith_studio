@@ -86,37 +86,45 @@ class _EditConversationState extends State<EditConversation> {
         const Divider(),
         ListTile(
           title: const Text('Add Response'),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (context) => SelectItem<ConversationResponse>(
-              onDone: (value) {
-                Navigator.pop(context);
-                branch.responseIds.add(value.id);
-                save();
-              },
-              values: widget.conversation.responses
-                  .where(
-                    (element) =>
-                        branch.responseIds.contains(element.id) == false,
-                  )
-                  .toList(),
-              getItemWidget: (item) {
-                final sound = item.sound;
-                return PlaySoundSemantics(
-                  child: Text('${item.text}'),
-                  soundChannel: widget.projectContext.game.interfaceSounds,
-                  assetReference: sound == null
-                      ? null
-                      : getAssetReferenceReference(
-                          assets: world.conversationAssets,
-                          id: sound.id,
-                        ).reference,
-                  gain: sound?.gain ?? world.soundOptions.defaultGain,
-                );
-              },
-              title: 'Select Response',
-            ),
-          ),
+          onTap: () {
+            final possibleResponses = widget.conversation.responses
+                .where(
+                  (element) => branch.responseIds.contains(element.id) == false,
+                )
+                .toList();
+            if (possibleResponses.isEmpty) {
+              return showError(
+                context: context,
+                message: 'There are no more responses.',
+              );
+            }
+            pushWidget(
+              context: context,
+              builder: (context) => SelectItem<ConversationResponse>(
+                onDone: (value) {
+                  Navigator.pop(context);
+                  branch.responseIds.add(value.id);
+                  save();
+                },
+                values: possibleResponses,
+                getItemWidget: (item) {
+                  final sound = item.sound;
+                  return PlaySoundSemantics(
+                    child: Text('${item.text}'),
+                    soundChannel: widget.projectContext.game.interfaceSounds,
+                    assetReference: sound == null
+                        ? null
+                        : getAssetReferenceReference(
+                            assets: world.conversationAssets,
+                            id: sound.id,
+                          ).reference,
+                    gain: sound?.gain ?? world.soundOptions.defaultGain,
+                  );
+                },
+                title: 'Select Response',
+              ),
+            );
+          },
         )
       ];
       child = ListView.builder(
@@ -245,7 +253,6 @@ class _EditConversationState extends State<EditConversation> {
               final initialBranch = widget.conversation.getBranch(
                 widget.conversation.initialBranchId,
               );
-              final sound = initialBranch.sound;
               return ListView(
                 children: [
                   TextListTile(
@@ -272,27 +279,18 @@ class _EditConversationState extends State<EditConversation> {
                     nullable: true,
                     title: 'Music',
                   ),
-                  PlaySoundSemantics(
-                    child: ListTile(
-                      title: const Text('Initial Branch'),
-                      subtitle: Text('${initialBranch.text}'),
-                      onTap: () => setState(
-                        () {
-                          _branch = initialBranch;
-                          _response = null;
-                          _index = null;
-                        },
-                      ),
+                  ConversationBranchListTile(
+                    projectContext: widget.projectContext,
+                    branch: initialBranch,
+                    onTap: () => setState(
+                      () {
+                        _branch = initialBranch;
+                        _response = null;
+                        _index = null;
+                      },
                     ),
-                    soundChannel: widget.projectContext.game.interfaceSounds,
-                    assetReference: sound == null
-                        ? null
-                        : getAssetReferenceReference(
-                            assets: world.conversationAssets,
-                            id: sound.id,
-                          ).reference,
-                    gain: sound?.gain ?? world.soundOptions.defaultGain,
-                  )
+                    title: 'Initial Branch',
+                  ),
                 ],
               );
             },
