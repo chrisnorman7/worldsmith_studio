@@ -26,6 +26,7 @@ class SoundListTile extends StatefulWidget {
     this.title = 'Sound',
     this.autofocus = false,
     this.playSound = true,
+    this.soundChannel,
     Key? key,
   }) : super(key: key);
 
@@ -59,6 +60,8 @@ class SoundListTile extends StatefulWidget {
   /// Whether or not the sound should play when the [ListTile] is focused.
   final bool playSound;
 
+  /// The sound channel to play sounds through.
+  final SoundChannel? soundChannel;
   @override
   State<SoundListTile> createState() => _SoundListTileState();
 }
@@ -200,7 +203,9 @@ class _SoundListTileState extends State<SoundListTile> {
     stop();
     final assetReference = assetReferenceReference?.reference;
     if (assetReference != null) {
-      _playSound = widget.projectContext.game.interfaceSounds.playSound(
+      final channel =
+          widget.soundChannel ?? widget.projectContext.game.interfaceSounds;
+      _playSound = channel.playSound(
         assetReference,
         gain: widget.value!.gain,
         keepAlive: true,

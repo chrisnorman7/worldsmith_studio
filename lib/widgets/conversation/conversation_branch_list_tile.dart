@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/sound.dart';
 
 import '../../project_context.dart';
 import '../play_sound_semantics.dart';
@@ -14,6 +15,7 @@ class ConversationBranchListTile extends StatelessWidget {
     required this.onTap,
     this.title,
     this.autofocus = false,
+    this.soundChannel,
     Key? key,
   }) : super(key: key);
 
@@ -35,6 +37,9 @@ class ConversationBranchListTile extends StatelessWidget {
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
 
+  /// The sound channel to play sounds through.
+  final SoundChannel? soundChannel;
+
   /// Return the widget.
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class ConversationBranchListTile extends StatelessWidget {
         subtitle: titleText == null ? null : text,
         onTap: onTap,
       ),
-      soundChannel: projectContext.game.interfaceSounds,
+      soundChannel: soundChannel ?? projectContext.game.interfaceSounds,
       assetReference: sound == null
           ? null
           : getAssetReferenceReference(

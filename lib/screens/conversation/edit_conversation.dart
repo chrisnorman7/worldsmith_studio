@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/sound.dart';
 
 import '../../constants.dart';
 import '../../intents.dart';
@@ -79,6 +80,8 @@ class _EditConversationState extends State<EditConversation> {
   ConversationBranch? _branch;
   ConversationResponse? _response;
   late List<PreviousState> _previousStates;
+  SoundChannel? _channel;
+  CreateReverb? _reverb;
 
   /// Initialise lists.
   @override
@@ -91,6 +94,18 @@ class _EditConversationState extends State<EditConversation> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final reverbId = widget.conversation.reverbId;
+    var channel = _channel;
+    var reverb = _reverb;
+    if (reverb == null && reverbId != null) {
+      final preset = world.getReverb(reverbId);
+      reverb = widget.projectContext.game.createReverb(preset);
+      _reverb = reverb;
+    }
+    if (channel == null) {
+      channel = widget.projectContext.game.createSoundChannel(reverb: reverb);
+      _channel = channel;
+    }
     final branch = _branch;
     final response = _response;
     final Widget child;
@@ -117,6 +132,7 @@ class _EditConversationState extends State<EditConversation> {
           assetStore: world.conversationAssetStore,
           defaultGain: world.soundOptions.defaultGain,
           nullable: true,
+          soundChannel: channel,
         ),
         const Divider(),
         ListTile(
@@ -192,7 +208,8 @@ class _EditConversationState extends State<EditConversation> {
                     },
                   ),
                 ),
-                soundChannel: widget.projectContext.game.interfaceSounds,
+                soundChannel:
+                    channel ?? widget.projectContext.game.interfaceSounds,
                 assetReference: sound == null
                     ? null
                     : getAssetReferenceReference(
@@ -289,6 +306,7 @@ class _EditConversationState extends State<EditConversation> {
                 assetStore: world.conversationAssetStore,
                 defaultGain: world.soundOptions.defaultGain,
                 nullable: true,
+                soundChannel: channel,
               ),
               ConversationBranchListTile(
                 projectContext: widget.projectContext,
@@ -336,6 +354,7 @@ class _EditConversationState extends State<EditConversation> {
                     );
                   }
                 },
+                soundChannel: channel,
                 title: 'Next Branch',
               ),
               CallCommandListTile(
@@ -422,11 +441,16 @@ class _EditConversationState extends State<EditConversation> {
                           _index = null;
                         },
                       ),
+                      soundChannel: channel,
                       title: 'Initial Branch',
                     ),
                     ReverbListTile(
                       projectContext: widget.projectContext,
                       onDone: (reverb) {
+                        _reverb?.destroy();
+                        _reverb = null;
+                        _channel?.destroy();
+                        _channel = null;
                         widget.conversation.reverbId = reverb?.id;
                         save();
                       },
@@ -625,5 +649,13 @@ class _EditConversationState extends State<EditConversation> {
       ),
     );
     setState(() {});
+  }
+
+  /// Dispose of the sound channel.
+  @override
+  void dispose() {
+    super.dispose();
+    _channel?.destroy();
+    _reverb?.destroy();
   }
 }
