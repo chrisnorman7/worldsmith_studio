@@ -24,6 +24,30 @@ import 'edit_conversation_branch.dart';
 import 'edit_conversation_next_branch.dart';
 import 'edit_conversation_response.dart';
 
+const _backKeyboardShortcut = KeyboardShortcut(
+  description: 'Go back to the previous branch or response.',
+  keyName: 'Backspace',
+);
+
+/// A class to represent a previous position.
+class PreviousState {
+  /// Create an index.
+  const PreviousState({
+    this.index,
+    this.branchId,
+    this.responseId,
+  });
+
+  /// The index.
+  final int? index;
+
+  /// The ID of a branch.
+  final String? branchId;
+
+  /// The id of a response.
+  final String? responseId;
+}
+
 /// A widget for editing a [conversation] in the given [category].
 class EditConversation extends StatefulWidget {
   /// Create an instance.
@@ -53,6 +77,14 @@ class _EditConversationState extends State<EditConversation> {
   int? _index;
   ConversationBranch? _branch;
   ConversationResponse? _response;
+  late List<PreviousState> _previousStates;
+
+  /// Initialise lists.
+  @override
+  void initState() {
+    super.initState();
+    _previousStates = [];
+  }
 
   /// Build a widget.
   @override
@@ -147,6 +179,12 @@ class _EditConversationState extends State<EditConversation> {
                   subtitle: Text('${response.text}'),
                   onTap: () => setState(
                     () {
+                      _previousStates.add(
+                        PreviousState(
+                          branchId: branch.id,
+                          index: index,
+                        ),
+                      );
                       _index = index;
                       _response = response;
                       _branch = null;
@@ -217,7 +255,8 @@ class _EditConversationState extends State<EditConversation> {
             description: 'Move the selected response down in the list.',
             keyName: 'Down Arrow',
             alt: true,
-          )
+          ),
+          _backKeyboardShortcut
         ],
       );
     } else if (response != null) {
@@ -286,6 +325,9 @@ class _EditConversationState extends State<EditConversation> {
                   } else {
                     setState(
                       () {
+                        _previousStates.add(
+                          PreviousState(responseId: response.id),
+                        );
                         _index = null;
                         _branch = branch;
                         _response = null;
@@ -323,10 +365,11 @@ class _EditConversationState extends State<EditConversation> {
         ),
         keyboardShortcuts: const [
           KeyboardShortcut(
-            description: 'Edit the next branch.',
+            description: 'Edit next branch parameters.',
             keyName: 'E',
             control: true,
-          )
+          ),
+          _backKeyboardShortcut
         ],
       );
     } else {
@@ -340,45 +383,49 @@ class _EditConversationState extends State<EditConversation> {
               final initialBranch = widget.conversation.getBranch(
                 widget.conversation.initialBranchId,
               );
-              return ListView(
-                children: [
-                  TextListTile(
-                    value: widget.conversation.name,
-                    onChanged: (value) {
-                      widget.conversation.name = value;
-                      save();
-                    },
-                    header: 'Conversation Name',
-                    autofocus: true,
-                    labelText: 'Name',
-                    validator: (value) => validateNonEmptyValue(value: value),
-                  ),
-                  SoundListTile(
-                    projectContext: widget.projectContext,
-                    value: widget.conversation.music,
-                    onDone: (value) {
-                      widget.conversation.music = value;
-                      save();
-                    },
-                    assetStore: world.musicAssetStore,
-                    defaultGain: world.soundOptions.defaultGain,
-                    looping: true,
-                    nullable: true,
-                    title: 'Music',
-                  ),
-                  ConversationBranchListTile(
-                    projectContext: widget.projectContext,
-                    branch: initialBranch,
-                    onTap: () => setState(
-                      () {
-                        _branch = initialBranch;
-                        _response = null;
-                        _index = null;
+              return WithKeyboardShortcuts(
+                child: ListView(
+                  children: [
+                    TextListTile(
+                      value: widget.conversation.name,
+                      onChanged: (value) {
+                        widget.conversation.name = value;
+                        save();
                       },
+                      header: 'Conversation Name',
+                      autofocus: true,
+                      labelText: 'Name',
+                      validator: (value) => validateNonEmptyValue(value: value),
                     ),
-                    title: 'Initial Branch',
-                  ),
-                ],
+                    SoundListTile(
+                      projectContext: widget.projectContext,
+                      value: widget.conversation.music,
+                      onDone: (value) {
+                        widget.conversation.music = value;
+                        save();
+                      },
+                      assetStore: world.musicAssetStore,
+                      defaultGain: world.soundOptions.defaultGain,
+                      looping: true,
+                      nullable: true,
+                      title: 'Music',
+                    ),
+                    ConversationBranchListTile(
+                      projectContext: widget.projectContext,
+                      branch: initialBranch,
+                      onTap: () => setState(
+                        () {
+                          _previousStates.clear();
+                          _branch = initialBranch;
+                          _response = null;
+                          _index = null;
+                        },
+                      ),
+                      title: 'Initial Branch',
+                    ),
+                  ],
+                ),
+                keyboardShortcuts: const [_backKeyboardShortcut],
               );
             },
             actions: [
@@ -489,11 +536,41 @@ class _EditConversationState extends State<EditConversation> {
       return Cancel(child: child);
     }
     return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(title),
+      child: CallbackShortcuts(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+          ),
+          body: child,
         ),
-        body: child,
+        bindings: {
+          GoUpIntent.hotkey: () {
+            if (_previousStates.isNotEmpty) {
+              final previousState = _previousStates.removeLast();
+              final branchId = previousState.branchId;
+              final responseId = previousState.responseId;
+              if (branchId != null) {
+                setState(() {
+                  _branch = widget.conversation.getBranch(branchId);
+                  _index = previousState.index;
+                  _response = null;
+                });
+              } else if (responseId != null) {
+                setState(() {
+                  _response = widget.conversation.getResponse(responseId);
+                  _index = null;
+                  _branch = null;
+                });
+              }
+            } else {
+              setState(() {
+                _branch = null;
+                _index = null;
+                _response = null;
+              });
+            }
+          }
+        },
       ),
     );
   }

@@ -374,3 +374,12 @@ class EditIntent extends Intent {
     meta: Platform.isMacOS,
   );
 }
+
+/// And intent to go up in a tree structure.
+class GoUpIntent extends Intent {
+  /// Create an instance.
+  const GoUpIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.backspace);
+}

@@ -198,12 +198,15 @@ class _SoundListTileState extends State<SoundListTile> {
   /// Start the playing sound.
   void play() {
     stop();
-    _playSound = widget.projectContext.game.interfaceSounds.playSound(
-      assetReferenceReference!.reference,
-      gain: widget.value!.gain,
-      keepAlive: true,
-      looping: widget.looping,
-    );
+    final assetReference = assetReferenceReference?.reference;
+    if (assetReference != null) {
+      _playSound = widget.projectContext.game.interfaceSounds.playSound(
+        assetReference,
+        gain: widget.value!.gain,
+        keepAlive: true,
+        looping: widget.looping,
+      );
+    }
   }
 
   /// Stop the playing sound.
