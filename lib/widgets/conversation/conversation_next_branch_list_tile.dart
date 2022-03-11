@@ -48,11 +48,12 @@ class _ConversationNextBranchListTileState
     final branch = nextBranch == null
         ? null
         : widget.conversation.getBranch(nextBranch.branchId);
-    final asset = branch == null
+    final sound = branch?.sound;
+    final asset = sound == null
         ? null
         : getAssetReferenceReference(
             assets: world.conversationAssets,
-            id: branch.sound?.id,
+            id: sound.id,
           );
     return PlaySoundSemantics(
       child: Builder(
@@ -78,15 +79,20 @@ class _ConversationNextBranchListTileState
                     );
                   },
                   values: widget.conversation.branches,
-                  getItemWidget: (item) => PlaySoundSemantics(
-                    child: Text(item.text ?? '<No Text>'),
-                    soundChannel: widget.projectContext.game.interfaceSounds,
-                    assetReference: getAssetReferenceReference(
-                      assets: world.conversationAssets,
-                      id: item.sound?.id,
-                    )?.reference,
-                    gain: world.soundOptions.defaultGain,
-                  ),
+                  getItemWidget: (item) {
+                    final sound = item.sound;
+                    return PlaySoundSemantics(
+                      child: Text(item.text ?? '<No Text>'),
+                      soundChannel: widget.projectContext.game.interfaceSounds,
+                      assetReference: sound == null
+                          ? null
+                          : getAssetReferenceReference(
+                              assets: world.conversationAssets,
+                              id: sound.id,
+                            ).reference,
+                      gain: world.soundOptions.defaultGain,
+                    );
+                  },
                 ),
               );
             } else {

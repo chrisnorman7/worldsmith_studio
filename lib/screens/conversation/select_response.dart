@@ -40,15 +40,20 @@ class SelectResponse extends StatelessWidget {
     return SelectItem<ConversationResponse>(
       onDone: onDone,
       values: conversation.responses,
-      getItemWidget: (item) => PlaySoundSemantics(
-        child: Text('${item.text}'),
-        soundChannel: projectContext.game.interfaceSounds,
-        assetReference: getAssetReferenceReference(
-          assets: world.conversationAssets,
-          id: item.sound?.id,
-        )?.reference,
-        gain: world.soundOptions.defaultGain,
-      ),
+      getItemWidget: (item) {
+        final sound = item.sound;
+        return PlaySoundSemantics(
+          child: Text('${item.text}'),
+          soundChannel: projectContext.game.interfaceSounds,
+          assetReference: sound == null
+              ? null
+              : getAssetReferenceReference(
+                  assets: world.conversationAssets,
+                  id: sound.id,
+                ).reference,
+          gain: world.soundOptions.defaultGain,
+        );
+      },
       title: title,
       value: value,
     );

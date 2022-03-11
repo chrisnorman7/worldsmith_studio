@@ -115,7 +115,7 @@ class _EditTerrainState extends State<EditTerrain> {
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: getAssetReferenceReference(
-                      assets: terrainAssets, id: slowWalkSound.id)!
+                      assets: terrainAssets, id: slowWalkSound.id)
                   .reference,
               gain: slowWalkSound.gain,
             ),
@@ -138,8 +138,7 @@ class _EditTerrainState extends State<EditTerrain> {
               assetReference: getAssetReferenceReference(
                 assets: terrainAssets,
                 id: fastWalkSound.id,
-              )!
-                  .reference,
+              ).reference,
               gain: fastWalkSound.gain,
             ),
           ],

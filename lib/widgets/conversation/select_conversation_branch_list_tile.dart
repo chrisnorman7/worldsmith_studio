@@ -48,8 +48,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
         : getAssetReferenceReference(
             assets: world.conversationAssets,
             id: sound.id,
-          )!
-            .reference;
+          ).reference;
     return PlaySoundSemantics(
       child: ListTile(
         autofocus: autofocus,

@@ -116,7 +116,7 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     final AssetReference? assetReference;
     if (sound != null) {
       assetReference =
-          getAssetReferenceReference(assets: world.creditsAssets, id: sound.id)!
+          getAssetReferenceReference(assets: world.creditsAssets, id: sound.id)
               .reference;
     } else {
       assetReference = world.menuMoveSound;

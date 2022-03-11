@@ -49,8 +49,7 @@ class _EditConversationBranchListTileState
         : getAssetReferenceReference(
             assets: world.conversationAssets,
             id: sound.id,
-          )!
-            .reference;
+          ).reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
       child: Builder(

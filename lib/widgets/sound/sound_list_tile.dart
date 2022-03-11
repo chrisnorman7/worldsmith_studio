@@ -67,11 +67,15 @@ class _SoundListTileState extends State<SoundListTile> {
   PlaySound? _playSound;
 
   /// Get the asset reference reference for the [widget]'s sound.
-  AssetReferenceReference? get assetReferenceReference =>
-      getAssetReferenceReference(
-        assets: widget.assetStore.assets,
-        id: widget.value?.id,
-      );
+  AssetReferenceReference? get assetReferenceReference {
+    final sound = widget.value;
+    return sound == null
+        ? null
+        : getAssetReferenceReference(
+            assets: widget.assetStore.assets,
+            id: sound.id,
+          );
+  }
 
   /// Build the widget.
   @override

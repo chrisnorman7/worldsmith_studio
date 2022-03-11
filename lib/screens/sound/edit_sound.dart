@@ -83,7 +83,7 @@ class _EditSoundState extends State<EditSound> {
                   autofocus: true,
                   title: const Text('Asset'),
                   subtitle: Text(
-                    asset == null ? 'Not set' : assetString(asset),
+                    assetString(asset),
                   ),
                   onTap: () {
                     pushWidget(
@@ -105,7 +105,7 @@ class _EditSoundState extends State<EditSound> {
                 ),
               ),
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: asset?.reference,
+              assetReference: asset.reference,
               gain: gain,
             ),
             GainListTile(

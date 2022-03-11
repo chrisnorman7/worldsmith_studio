@@ -67,8 +67,7 @@ class _ProjectZonesState extends State<ProjectZones> {
                 : getAssetReferenceReference(
                     assets: world.musicAssets,
                     id: music.id,
-                  )!
-                    .reference,
+                  ).reference,
             gain: music?.gain ?? world.soundOptions.defaultGain,
             looping: true,
           ),

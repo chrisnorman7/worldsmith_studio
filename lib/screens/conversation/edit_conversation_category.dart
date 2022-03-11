@@ -55,7 +55,7 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
             : getAssetReferenceReference(
                 assets: world.musicAssets,
                 id: music.id,
-              )?.reference;
+              ).reference;
         final gain = music?.gain ?? world.soundOptions.defaultGain;
         children.add(
           SearchableListTile(

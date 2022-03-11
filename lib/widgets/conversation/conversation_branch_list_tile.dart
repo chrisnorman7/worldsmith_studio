@@ -56,8 +56,7 @@ class ConversationBranchListTile extends StatelessWidget {
           : getAssetReferenceReference(
               assets: world.conversationAssets,
               id: sound.id,
-            )!
-              .reference,
+            ).reference,
       gain: sound?.gain ?? world.soundOptions.defaultGain,
     );
   }

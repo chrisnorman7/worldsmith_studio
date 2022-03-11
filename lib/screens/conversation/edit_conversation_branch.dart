@@ -89,6 +89,7 @@ class _EditConversationBranchState extends State<EditConversationBranch> {
                   itemBuilder: (context, index) {
                     final id = widget.branch.responseIds[index];
                     final response = widget.conversation.getResponse(id);
+                    final sound = response.sound;
                     return CallbackShortcuts(
                       child: PlaySoundSemantics(
                         child: Builder(
@@ -111,10 +112,12 @@ class _EditConversationBranchState extends State<EditConversationBranch> {
                         ),
                         soundChannel:
                             widget.projectContext.game.interfaceSounds,
-                        assetReference: getAssetReferenceReference(
-                          assets: world.conversationAssets,
-                          id: response.sound?.id,
-                        )?.reference,
+                        assetReference: sound == null
+                            ? null
+                            : getAssetReferenceReference(
+                                assets: world.conversationAssets,
+                                id: sound.id,
+                              ).reference,
                         gain: world.soundOptions.defaultGain,
                       ),
                       bindings: {

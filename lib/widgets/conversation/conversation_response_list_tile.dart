@@ -47,7 +47,7 @@ class _ConversationResponseListTileState
     final asset = sound == null
         ? null
         : getAssetReferenceReference(
-                assets: world.conversationAssets, id: sound.id)!
+                assets: world.conversationAssets, id: sound.id)
             .reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
