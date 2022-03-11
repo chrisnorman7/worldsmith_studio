@@ -324,6 +324,8 @@ class _EditConversationState extends State<EditConversation> {
             icon: const Icon(Icons.question_answer_outlined),
             builder: (context) {
               final branches = widget.conversation.branches;
+              // No need to check if there are no branches, since there must
+              // always be one for `Conversation.initialBranchId`.
               final children = <SearchableListTile>[];
               for (var i = 0; i < branches.length; i++) {
                 final branch = branches[i];
