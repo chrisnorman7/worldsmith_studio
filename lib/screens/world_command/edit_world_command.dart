@@ -7,7 +7,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/command/call_command_list_tile.dart';
-import '../../widgets/conversation/conversation_list_tile.dart';
+import '../../widgets/conversation/start_conversation_list_tile.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
@@ -257,11 +257,11 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           header: 'Custom Event Name',
           labelText: 'Event Name',
         ),
-        ConversationListTile(
+        StartConversationListTile(
           projectContext: widget.projectContext,
-          value: widget.command.conversationId,
+          startConversation: widget.command.startConversation,
           onChanged: (value) {
-            widget.command.conversationId = value?.id;
+            widget.command.startConversation = value;
             save();
           },
         )
