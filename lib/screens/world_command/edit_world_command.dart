@@ -147,6 +147,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
                         pushWidget(
                           context: context,
                           builder: (context) => SelectWorldCommand(
+                            projectContext: widget.projectContext,
                             category: category,
                             onDone: (command) {
                               Navigator.pop(context);

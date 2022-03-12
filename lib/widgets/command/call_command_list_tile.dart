@@ -74,6 +74,7 @@ class _CallCommandListTileState extends State<CallCommandListTile> {
                   onDone: (category) => pushWidget(
                     context: context,
                     builder: (context) => SelectWorldCommand(
+                      projectContext: widget.projectContext,
                       category: category!,
                       onDone: (command) {
                         Navigator.pop(context);

@@ -70,6 +70,7 @@ class WorldCommandListTile extends StatelessWidget {
             pushWidget(
               context: context,
               builder: (context) => SelectWorldCommand(
+                projectContext: projectContext,
                 category: commandCategory!,
                 onDone: (worldCommand) {
                   Navigator.pop(context);
