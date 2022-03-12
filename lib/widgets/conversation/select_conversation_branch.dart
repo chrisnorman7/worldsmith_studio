@@ -84,6 +84,7 @@ class _SelectConversationBranchState extends State<SelectConversationBranch> {
     );
   }
 
+  /// Add a new conversation branch.
   void addBranch() => setState(
         () {
           widget.conversation.branches.add(

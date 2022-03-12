@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
+import '../keyboard_shortcuts_list.dart';
 import '../play_sound_semantics.dart';
 import '../select_item.dart';
 
@@ -46,44 +48,60 @@ class _SelectConversationResponseState
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
-    return SelectItem<ConversationResponse>(
-      onDone: widget.onDone,
-      values: widget.conversation.responses
-          .where(
-            (element) => widget.ignoredResponses.contains(element.id) == false,
-          )
-          .toList(),
-      getItemWidget: (item) {
-        final sound = item.sound;
-        return PlaySoundSemantics(
-          child: Text('${item.text}'),
-          soundChannel: widget.projectContext.game.interfaceSounds,
-          assetReference: sound == null
-              ? null
-              : getAssetReferenceReference(
-                  assets: world.conversationAssets,
-                  id: sound.id,
-                ).reference,
-          gain: sound?.gain ?? world.soundOptions.defaultGain,
-        );
-      },
-      actions: [
-        ElevatedButton(
-          onPressed: () async {
-            setState(() {
-              widget.conversation.responses.add(
-                ConversationResponse(id: newId()),
-              );
-              widget.projectContext.save();
-            });
+    return WithKeyboardShortcuts(
+      child: CallbackShortcuts(
+        child: SelectItem<ConversationResponse>(
+          onDone: widget.onDone,
+          values: widget.conversation.responses
+              .where(
+                (element) =>
+                    widget.ignoredResponses.contains(element.id) == false,
+              )
+              .toList(),
+          getItemWidget: (item) {
+            final sound = item.sound;
+            return PlaySoundSemantics(
+              child: Text('${item.text}'),
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: sound == null
+                  ? null
+                  : getAssetReferenceReference(
+                      assets: world.conversationAssets,
+                      id: sound.id,
+                    ).reference,
+              gain: sound?.gain ?? world.soundOptions.defaultGain,
+            );
           },
-          child: const Icon(
-            Icons.add,
-            semanticLabel: 'Add Response',
-          ),
+          actions: [
+            ElevatedButton(
+              onPressed: addResponse,
+              child: const Icon(
+                Icons.add,
+                semanticLabel: 'Add Response',
+              ),
+            )
+          ],
+          title: 'Select Response',
+        ),
+        bindings: {AddIntent.hotkey: addResponse},
+      ),
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new response',
+          keyName: 'A',
+          control: true,
         )
       ],
-      title: 'Select Response',
     );
+  }
+
+  /// Add a new conversation response.
+  void addResponse() {
+    setState(() {
+      widget.conversation.responses.add(
+        ConversationResponse(id: newId()),
+      );
+      widget.projectContext.save();
+    });
   }
 }
