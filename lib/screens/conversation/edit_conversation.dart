@@ -14,11 +14,12 @@ import '../../widgets/command/call_command_list_tile.dart';
 import '../../widgets/conversation/conversation_branch_list_tile.dart';
 import '../../widgets/conversation/conversation_response_list_tile.dart';
 import '../../widgets/conversation/edit_conversation_branch_list_tile.dart';
+import '../../widgets/conversation/select_conversation_response.dart';
+import '../../widgets/conversation/select_select_conversation_branch.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/reverb/reverb_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
-import '../../widgets/select_item.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
@@ -138,41 +139,17 @@ class _EditConversationState extends State<EditConversation> {
         ListTile(
           title: const Text('Add Response'),
           onTap: () {
-            final possibleResponses = widget.conversation.responses
-                .where(
-                  (element) => branch.responseIds.contains(element.id) == false,
-                )
-                .toList();
-            if (possibleResponses.isEmpty) {
-              return showError(
-                context: context,
-                message: 'There are no more responses.',
-              );
-            }
             pushWidget(
               context: context,
-              builder: (context) => SelectItem<ConversationResponse>(
+              builder: (context) => SelectConversationResponse(
+                projectContext: widget.projectContext,
+                conversation: widget.conversation,
                 onDone: (value) {
                   Navigator.pop(context);
                   branch.responseIds.add(value.id);
                   save();
                 },
-                values: possibleResponses,
-                getItemWidget: (item) {
-                  final sound = item.sound;
-                  return PlaySoundSemantics(
-                    child: Text('${item.text}'),
-                    soundChannel: widget.projectContext.game.interfaceSounds,
-                    assetReference: sound == null
-                        ? null
-                        : getAssetReferenceReference(
-                            assets: world.conversationAssets,
-                            id: sound.id,
-                          ).reference,
-                    gain: sound?.gain ?? world.soundOptions.defaultGain,
-                  );
-                },
-                title: 'Select Response',
+                ignoredResponses: branch.responseIds,
               ),
             );
           },
@@ -315,30 +292,16 @@ class _EditConversationState extends State<EditConversation> {
                   if (branch == null) {
                     pushWidget(
                       context: context,
-                      builder: (context) => SelectItem<ConversationBranch>(
+                      builder: (context) => SelectConversationBranch(
+                        projectContext: widget.projectContext,
+                        conversation: widget.conversation,
                         onDone: (value) {
                           Navigator.pop(context);
-                          response.nextBranch =
-                              ConversationNextBranch(branchId: value.id);
+                          response.nextBranch = ConversationNextBranch(
+                            branchId: value.id,
+                          );
                           save();
                         },
-                        values: widget.conversation.branches,
-                        getItemWidget: (item) {
-                          final sound = item.sound;
-                          return PlaySoundSemantics(
-                            child: Text('${item.text}'),
-                            soundChannel:
-                                widget.projectContext.game.interfaceSounds,
-                            assetReference: sound == null
-                                ? null
-                                : getAssetReferenceReference(
-                                    assets: world.conversationAssets,
-                                    id: sound.id,
-                                  ).reference,
-                            gain: sound?.gain ?? world.soundOptions.defaultGain,
-                          );
-                        },
-                        title: 'Select Branch',
                       ),
                     );
                   } else {
