@@ -3,11 +3,10 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
-import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/get_number.dart';
+import '../../widgets/number_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
-import '../../widgets/text_list_tile.dart';
 
 /// A widget for editing the given [walkingOptions].
 class EditWalkingOptions extends StatefulWidget {
@@ -60,45 +59,36 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
         ),
         body: ListView(
           children: [
-            ListTile(
-              autofocus: true,
-              title: const Text('Step Length'),
-              subtitle: Text('${widget.walkingOptions.distance}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetNumber(
-                  value: widget.walkingOptions.distance,
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    widget.walkingOptions.distance = value;
-                    widget.projectContext.save();
-                    setState(() {});
-                  },
-                  labelText: 'Distance',
-                  min: 0.001,
-                  title: 'Step Length',
-                ),
-              ),
-            ),
-            TextListTile(
-              value: widget.walkingOptions.interval.toString(),
+            NumberListTile(
+              value: widget.walkingOptions.distance,
               onChanged: (value) {
-                widget.walkingOptions.interval = int.parse(value);
-                widget.projectContext.save();
-                setState(() {});
+                widget.walkingOptions.distance = value;
+                save();
               },
-              header: 'Milliseconds Between Steps',
-              validator: (value) => validateInt(value: value),
+              autofocus: true,
+              title: 'Step Length',
+            ),
+            NumberListTile(
+              value: widget.walkingOptions.interval.toDouble(),
+              onChanged: (value) {
+                widget.walkingOptions.interval = value.floor();
+                save();
+              },
+              min: 0.0,
+              title: 'Milliseconds Between Steps',
+              subtitle: '${widget.walkingOptions.interval}',
             ),
             SoundListTile(
               projectContext: widget.projectContext,
               value: sound,
               onDone: (value) {
+                widget.walkingOptions.sound = value;
                 widget.projectContext.save();
                 setState(() {});
               },
               assetStore: world.terrainAssetStore,
               defaultGain: world.soundOptions.defaultGain,
+              nullable: true,
               title: 'Terrain Sound',
             ),
             ListTile(
@@ -125,5 +115,11 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
         ),
       ),
     );
+  }
+
+  /// Save the project.
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 }

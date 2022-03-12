@@ -47,9 +47,9 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
               }
             }
             for (final terrain in world.terrains) {
-              if (terrain.fastWalk.sound.id == id) {
+              if (terrain.fastWalk.sound?.id == id) {
                 return 'This asset is used by the ${terrain.name} fast walk.';
-              } else if (terrain.slowWalk.sound.id == id) {
+              } else if (terrain.slowWalk.sound?.id == id) {
                 return 'This asset is used by the ${terrain.name} slow walk.';
               }
             }

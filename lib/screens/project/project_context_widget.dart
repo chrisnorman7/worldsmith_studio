@@ -85,16 +85,17 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   TabbedScaffold getTabbedScaffold(World world) => TabbedScaffold(
         tabs: [
           TabbedScaffoldTab(
-              title: 'World Options',
-              icon: const Icon(Icons.settings_outlined),
-              builder: (context) => ProjectSettings(
-                    projectContext: widget.projectContext,
-                  ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: run,
-                child: const Icon(Icons.run_circle_outlined),
-                tooltip: 'Run Project',
-              )),
+            title: 'World Options',
+            icon: const Icon(Icons.settings_outlined),
+            builder: (context) => ProjectSettings(
+              projectContext: widget.projectContext,
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: run,
+              child: const Icon(Icons.run_circle_outlined),
+              tooltip: 'Run Project',
+            ),
+          ),
           TabbedScaffoldTab(
             title: 'Commands',
             icon: const Icon(Icons.category_outlined),
@@ -179,47 +180,35 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
             builder: (context) => ProjectTerrains(
               projectContext: widget.projectContext,
             ),
-            floatingActionButton: world.terrainAssets.isEmpty
-                ? null
-                : FloatingActionButton(
-                    onPressed: () async {
-                      final sound = world.terrainAssets.first;
-                      final terrain = Terrain(
-                        id: newId(),
-                        name: sound.comment ?? sound.reference.name,
-                        slowWalk: WalkingOptions(
-                          interval: 1000,
-                          distance: 0.1,
-                          sound: Sound(
-                            id: sound.variableName,
-                            gain: world.soundOptions.defaultGain,
-                          ),
-                          joystickValue: 0.1,
-                        ),
-                        fastWalk: WalkingOptions(
-                          interval: 500,
-                          distance: 0.1,
-                          sound: Sound(
-                              id: sound.variableName,
-                              gain: world.soundOptions.defaultGain),
-                          joystickValue: 0.5,
-                        ),
-                      );
-                      world.terrains.add(terrain);
-                      widget.projectContext.save();
-                      await pushWidget(
-                        context: context,
-                        builder: (context) => EditTerrain(
-                          projectContext: widget.projectContext,
-                          terrain: terrain,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    autofocus: world.terrains.isEmpty,
-                    child: createIcon,
-                    tooltip: 'Add Terrain',
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                final terrain = Terrain(
+                  id: newId(),
+                  name: 'Untitled Terrain',
+                  slowWalk: WalkingOptions(
+                    interval: 1000,
+                    joystickValue: 0.1,
                   ),
+                  fastWalk: WalkingOptions(
+                    interval: 500,
+                    joystickValue: 0.5,
+                  ),
+                );
+                world.terrains.add(terrain);
+                widget.projectContext.save();
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditTerrain(
+                    projectContext: widget.projectContext,
+                    terrain: terrain,
+                  ),
+                );
+                setState(() {});
+              },
+              autofocus: world.terrains.isEmpty,
+              child: createIcon,
+              tooltip: 'Add Terrain',
+            ),
           ),
           TabbedScaffoldTab(
             title: 'Asset Stores',
