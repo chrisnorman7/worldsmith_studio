@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/select_item.dart';
+import 'add_asset.dart';
 
 /// A widget for selecting an asset reference.
-class SelectAsset extends StatelessWidget {
+class SelectAsset extends StatefulWidget {
   /// Create an instance.
   const SelectAsset({
     required this.projectContext,
@@ -36,17 +38,22 @@ class SelectAsset extends StatelessWidget {
   /// The title of the resulting scaffold.
   final String title;
 
+  @override
+  State<SelectAsset> createState() => _SelectAssetState();
+}
+
+class _SelectAssetState extends State<SelectAsset> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final assets = <AssetReferenceReference?>[];
-    if (nullable == true) {
+    if (widget.nullable == true) {
       assets.add(null);
     }
-    assets.addAll(assetStore.assets);
-    final id = currentId;
+    assets.addAll(widget.assetStore.assets);
+    final id = widget.currentId;
     return SelectItem<AssetReferenceReference?>(
-      onDone: onDone,
+      onDone: widget.onDone,
       values: assets,
       getItemWidget: (value) {
         if (value == null) {
@@ -54,17 +61,35 @@ class SelectAsset extends StatelessWidget {
         }
         return PlaySoundSemantics(
           child: Text(value.comment ?? 'Untitled Asset'),
-          soundChannel: projectContext.game.interfaceSounds,
+          soundChannel: widget.projectContext.game.interfaceSounds,
           assetReference: value.reference,
-          gain: projectContext.world.soundOptions.defaultGain,
+          gain: widget.projectContext.world.soundOptions.defaultGain,
         );
       },
-      title: title,
+      title: widget.title,
       value: id == null
           ? null
-          : assetStore.assets.firstWhere(
+          : widget.assetStore.assets.firstWhere(
               (element) => element.variableName == id,
             ),
+      actions: [
+        ElevatedButton(
+          onPressed: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => AddAsset(
+                projectContext: widget.projectContext,
+                assetStore: widget.assetStore,
+              ),
+            );
+            setState(() {});
+          },
+          child: const Icon(
+            Icons.add,
+            semanticLabel: 'Add Asset',
+          ),
+        )
+      ],
     );
   }
 }
