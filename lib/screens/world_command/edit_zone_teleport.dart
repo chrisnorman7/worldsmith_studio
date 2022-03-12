@@ -156,7 +156,6 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
               NumberListTile(
                 value: fadeTime?.toDouble() ?? 0.0,
                 onChanged: (value) {
-                  Navigator.pop(context);
                   widget.zoneTeleport.fadeTime = value == 0 ? null : value;
                   save();
                 },
