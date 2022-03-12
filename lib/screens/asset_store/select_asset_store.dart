@@ -35,6 +35,8 @@ class _SelectAssetStoreState extends State<SelectAssetStore> {
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     final assetStores = {
+      CustomSoundAssetStore.ambiances: world.ambianceAssetStore,
+      CustomSoundAssetStore.conversations: world.conversationAssetStore,
       CustomSoundAssetStore.credits: world.creditsAssetStore,
       CustomSoundAssetStore.equipment: world.equipmentAssetStore,
       CustomSoundAssetStore.interface: world.interfaceSoundsAssetStore,
