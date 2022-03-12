@@ -5,7 +5,7 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
-import '../select_item.dart';
+import 'select_select_conversation_branch.dart';
 
 /// A widget for showing and changing the given [branch].
 class SelectConversationBranchListTile extends StatelessWidget {
@@ -56,12 +56,10 @@ class SelectConversationBranchListTile extends StatelessWidget {
         subtitle: Text(branch.text ?? 'Branch with no text'),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectItem<ConversationBranch>(
+          builder: (context) => SelectConversationBranch(
+            projectContext: projectContext,
+            conversation: conversation,
             onDone: onChanged,
-            values: conversation.branches,
-            getItemWidget: (item) => Text(
-              item.text ?? 'Untitled',
-            ),
           ),
         ),
       ),
