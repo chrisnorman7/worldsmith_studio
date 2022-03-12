@@ -8,6 +8,7 @@ class SelectItem<T> extends StatelessWidget {
   const SelectItem({
     required this.onDone,
     required this.values,
+    this.actions = const [],
     this.title = 'Select Item',
     this.value,
     this.getItemWidget,
@@ -23,6 +24,9 @@ class SelectItem<T> extends StatelessWidget {
   /// The function to be used to get a suitable widget for displaying an item.
   final Widget Function(T value)? getItemWidget;
 
+  /// The actions for the resulting [AppBar].
+  final List<Widget> actions;
+
   /// The title of the resulting [Scaffold].
   final String title;
 
@@ -34,6 +38,7 @@ class SelectItem<T> extends StatelessWidget {
   Widget build(BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
+            actions: actions,
             title: Text(title),
           ),
           body: ListView.builder(
