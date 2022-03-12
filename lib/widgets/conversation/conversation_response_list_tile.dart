@@ -42,6 +42,9 @@ class _ConversationResponseListTileState
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final attached = widget.conversation.branches.any(
+      (element) => element.responseIds.contains(widget.response.id),
+    );
     final world = widget.projectContext.world;
     final sound = widget.response.sound;
     final asset = sound == null
@@ -57,6 +60,7 @@ class _ConversationResponseListTileState
           title: Text(
             widget.response.text ?? 'Response with no text',
           ),
+          subtitle: attached ? null : const Text('(Unattached)'),
           onTap: () async {
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(

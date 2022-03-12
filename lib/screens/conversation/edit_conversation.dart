@@ -464,17 +464,25 @@ class _EditConversationState extends State<EditConversation> {
                 children.add(
                   SearchableListTile(
                     searchString: branch.text ?? 'Untitled Branch',
-                    child: CallbackShortcuts(
-                      child: EditConversationBranchListTile(
-                        autofocus: i == 0,
-                        conversation: widget.conversation,
-                        branch: branch,
-                        projectContext: widget.projectContext,
+                    child: WithKeyboardShortcuts(
+                      child: CallbackShortcuts(
+                        child: EditConversationBranchListTile(
+                          autofocus: i == 0,
+                          conversation: widget.conversation,
+                          branch: branch,
+                          projectContext: widget.projectContext,
+                        ),
+                        bindings: {
+                          DeleteIntent.hotkey: () =>
+                              deleteBranch(context: context, branch: branch)
+                        },
                       ),
-                      bindings: {
-                        DeleteIntent.hotkey: () =>
-                            deleteBranch(context: context, branch: branch)
-                      },
+                      keyboardShortcuts: const [
+                        KeyboardShortcut(
+                          description: 'Delete the current branch.',
+                          keyName: 'Delete',
+                        )
+                      ],
                     ),
                   ),
                 );
@@ -509,11 +517,25 @@ class _EditConversationState extends State<EditConversation> {
                   SearchableListTile(
                     searchString:
                         response.text ?? 'Untitled Conversation Response',
-                    child: ConversationResponseListTile(
-                      autofocus: i == 0,
-                      projectContext: widget.projectContext,
-                      conversation: widget.conversation,
-                      response: response,
+                    child: WithKeyboardShortcuts(
+                      child: CallbackShortcuts(
+                        child: ConversationResponseListTile(
+                          autofocus: i == 0,
+                          projectContext: widget.projectContext,
+                          conversation: widget.conversation,
+                          response: response,
+                        ),
+                        bindings: {
+                          DeleteIntent.hotkey: () => deleteResponse(
+                              context: context, response: response)
+                        },
+                      ),
+                      keyboardShortcuts: const [
+                        KeyboardShortcut(
+                          description: 'Delete the current response.',
+                          keyName: 'Delete',
+                        )
+                      ],
                     ),
                   ),
                 );
@@ -579,6 +601,7 @@ class _EditConversationState extends State<EditConversation> {
     );
   }
 
+  /// Delete the given [branch].
   void deleteBranch({
     required BuildContext context,
     required ConversationBranch branch,
@@ -590,7 +613,8 @@ class _EditConversationState extends State<EditConversation> {
     if (attached) {
       showError(
         context: context,
-        message: 'You cannot delete this branch because it is attached.',
+        message: 'You cannot delete this branch because it is attached to a '
+            'response.',
       );
     } else {
       confirm(
@@ -654,5 +678,34 @@ class _EditConversationState extends State<EditConversation> {
     super.dispose();
     _channel?.destroy();
     _reverb?.destroy();
+  }
+
+  /// Delete the given [response].
+  void deleteResponse({
+    required BuildContext context,
+    required ConversationResponse response,
+  }) {
+    final attached = widget.conversation.branches.any(
+      (element) => element.responseIds.contains(response.id),
+    );
+    if (attached) {
+      showError(
+        context: context,
+        message: 'You cannot delete this response because it is attached to a '
+            'branch.',
+      );
+    } else {
+      confirm(
+          context: context,
+          message: 'Are you sure you want to delete this response?',
+          title: 'Delete Response',
+          yesCallback: () {
+            Navigator.pop(context);
+            widget.conversation.responses.removeWhere(
+              (element) => element.id == response.id,
+            );
+            save();
+          });
+    }
   }
 }
