@@ -7,13 +7,13 @@ import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/conversation/select_conversation_response.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../widgets/text_list_tile.dart';
 import 'edit_conversation_response.dart';
-import 'select_response.dart';
 
 /// A widget for editing a conversation [branch].
 class EditConversationBranch extends StatefulWidget {
@@ -226,7 +226,7 @@ class _EditConversationBranchState extends State<EditConversationBranch> {
   /// Add an existing conversation response.
   Future<void> addConversationResponse(BuildContext context) => pushWidget(
         context: context,
-        builder: (context) => SelectResponse(
+        builder: (context) => SelectConversationResponse(
           projectContext: widget.projectContext,
           conversation: widget.conversation,
           onDone: (value) {
