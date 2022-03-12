@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/get_number.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 
@@ -91,25 +89,14 @@ class _EditWalkingOptionsState extends State<EditWalkingOptions> {
               nullable: true,
               title: 'Terrain Sound',
             ),
-            ListTile(
-              title: const Text('Minimum Joystick Value'),
-              subtitle: Text('${widget.walkingOptions.joystickValue}'),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetNumber(
-                  value: widget.walkingOptions.joystickValue,
-                  onDone: (value) {
-                    Navigator.pop(context);
-                    widget.walkingOptions.joystickValue = value;
-                    widget.projectContext.save();
-                    setState(() {});
-                  },
-                  labelText: 'Joystick Value',
-                  min: 0.001,
-                  max: 0.99,
-                  title: 'Minimum Joystick Value',
-                ),
-              ),
+            NumberListTile(
+              value: widget.walkingOptions.joystickValue,
+              onChanged: (value) {
+                widget.walkingOptions.joystickValue = value;
+                save();
+              },
+              max: 1.0,
+              title: 'Minimum Joystick Value',
             )
           ],
         ),
