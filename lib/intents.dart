@@ -383,3 +383,16 @@ class GoUpIntent extends Intent {
   /// The hotkey to use.
   static const hotkey = SingleActivator(LogicalKeyboardKey.backspace);
 }
+
+/// An intent to run something.
+class RunIntent extends Intent {
+  /// Create an instance.
+  const RunIntent();
+
+  /// The hotkey to use.
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyR,
+    control: Platform.isWindows,
+    meta: Platform.isMacOS,
+  );
+}

@@ -279,6 +279,7 @@ class _HomePageState extends State<HomePage> {
       file: file,
       world: world,
       sdl: Sdl(),
+      audioContext: soundManager.context,
     );
     if (worldWasNull) {
       projectContext.save();

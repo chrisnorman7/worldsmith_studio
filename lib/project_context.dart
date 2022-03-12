@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_sdl/dart_sdl.dart';
+import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:worldsmith/world_context.dart';
@@ -14,11 +15,12 @@ import 'widgets/play_sound_semantics.dart';
 /// A class to hold information about the current project.
 class ProjectContext {
   /// Create an instance.
-  ProjectContext({
+  const ProjectContext({
     required this.file,
     required this.world,
     required this.game,
     required this.sdl,
+    required this.audioContext,
   });
 
   /// Load a project from the given [file].
@@ -26,6 +28,7 @@ class ProjectContext {
     required this.file,
     required this.game,
     required this.sdl,
+    required this.audioContext,
   }) : world = World.fromFilename(file.path);
 
   /// The filename that [world] has been loaded from.
@@ -35,13 +38,16 @@ class ProjectContext {
   Directory get directory => file.parent;
 
   /// The world that has been loaded.
-  World world;
+  final World world;
 
   /// The game to use for creating stuff.
   final Game game;
 
   /// The sdl instance to use.
   final Sdl sdl;
+
+  /// The synthizer context to use.
+  final Context audioContext;
 
   /// Save the [world].
   void save() {

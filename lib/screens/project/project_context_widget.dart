@@ -7,6 +7,7 @@ import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/run_game.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../conversation/edit_conversation_categories.dart';
 import '../reverb/edit_reverb_preset.dart';
@@ -48,22 +49,32 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
     final closeProjectAction = CallbackAction<CloseProjectIntent>(
       onInvoke: (intent) => Navigator.pop(context),
     );
+    final runProjectAction = CallbackAction<RunIntent>(
+      onInvoke: (intent) => run(),
+    );
     return WithKeyboardShortcuts(
       child: Shortcuts(
         child: Actions(
           actions: {
             CloseProjectIntent: closeProjectAction,
+            RunIntent: runProjectAction,
           },
           child: Builder(builder: (context) => getTabbedScaffold(world)),
         ),
         shortcuts: {
           CloseProjectIntent.hotkey: const CloseProjectIntent(),
+          RunIntent.hotkey: const RunIntent()
         },
       ),
       keyboardShortcuts: const [
         KeyboardShortcut(
           description: 'Close the project and return to the main menu.',
           keyName: 'w',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Run the game.',
+          keyName: 'R',
           control: true,
         )
       ],
@@ -74,12 +85,16 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   TabbedScaffold getTabbedScaffold(World world) => TabbedScaffold(
         tabs: [
           TabbedScaffoldTab(
-            title: 'World Options',
-            icon: const Icon(Icons.settings_outlined),
-            builder: (context) => ProjectSettings(
-              projectContext: widget.projectContext,
-            ),
-          ),
+              title: 'World Options',
+              icon: const Icon(Icons.settings_outlined),
+              builder: (context) => ProjectSettings(
+                    projectContext: widget.projectContext,
+                  ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: run,
+                child: const Icon(Icons.run_circle_outlined),
+                tooltip: 'Run Project',
+              )),
           TabbedScaffoldTab(
             title: 'Commands',
             icon: const Icon(Icons.category_outlined),
@@ -277,5 +292,15 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   void save() {
     widget.projectContext.save();
     setState(() {});
+  }
+
+  /// Run the project.
+  Future<void> run() async {
+    await pushWidget(
+      context: context,
+      builder: (context) => RunGame(
+        projectContext: widget.projectContext,
+      ),
+    );
   }
 }
