@@ -464,11 +464,17 @@ class _EditConversationState extends State<EditConversation> {
                 children.add(
                   SearchableListTile(
                     searchString: branch.text ?? 'Untitled Branch',
-                    child: EditConversationBranchListTile(
-                      autofocus: i == 0,
-                      conversation: widget.conversation,
-                      branch: branch,
-                      projectContext: widget.projectContext,
+                    child: CallbackShortcuts(
+                      child: EditConversationBranchListTile(
+                        autofocus: i == 0,
+                        conversation: widget.conversation,
+                        branch: branch,
+                        projectContext: widget.projectContext,
+                      ),
+                      bindings: {
+                        DeleteIntent.hotkey: () =>
+                            deleteBranch(context: context, branch: branch)
+                      },
                     ),
                   ),
                 );
@@ -571,6 +577,34 @@ class _EditConversationState extends State<EditConversation> {
         },
       ),
     );
+  }
+
+  void deleteBranch({
+    required BuildContext context,
+    required ConversationBranch branch,
+  }) {
+    final bool attached = widget.conversation.initialBranchId == branch.id ||
+        widget.conversation.responses
+            .where((element) => element.nextBranch?.branchId == branch.id)
+            .isNotEmpty;
+    if (attached) {
+      showError(
+        context: context,
+        message: 'You cannot delete this branch because it is attached.',
+      );
+    } else {
+      confirm(
+          context: context,
+          message: 'Are you sure you want to delete this branch?',
+          title: 'Delete Branch',
+          yesCallback: () {
+            Navigator.pop(context);
+            widget.conversation.branches.removeWhere(
+              (element) => element.id == branch.id,
+            );
+            save();
+          });
+    }
   }
 
   /// Save the project.

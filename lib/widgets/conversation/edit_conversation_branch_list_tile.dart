@@ -43,6 +43,12 @@ class _EditConversationBranchListTileState
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final bool attached = widget.conversation.initialBranchId ==
+            widget.branch.id ||
+        widget.conversation.responses
+            .where(
+                (element) => element.nextBranch?.branchId == widget.branch.id)
+            .isNotEmpty;
     final sound = widget.branch.sound;
     final asset = sound == null
         ? null
@@ -58,6 +64,7 @@ class _EditConversationBranchListTileState
           title: Text(
             widget.branch.text ?? 'Conversation branch without any text',
           ),
+          subtitle: attached ? null : const Text('(Unattached)'),
           onTap: () async {
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
