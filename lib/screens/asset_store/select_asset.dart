@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
+import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/select_item.dart';
 import 'add_asset.dart';
@@ -52,44 +54,59 @@ class _SelectAssetState extends State<SelectAsset> {
     }
     assets.addAll(widget.assetStore.assets);
     final id = widget.currentId;
-    return SelectItem<AssetReferenceReference?>(
-      onDone: widget.onDone,
-      values: assets,
-      getItemWidget: (value) {
-        if (value == null) {
-          return const Text('Clear');
-        }
-        return PlaySoundSemantics(
-          child: Text(value.comment ?? 'Untitled Asset'),
-          soundChannel: widget.projectContext.game.interfaceSounds,
-          assetReference: value.reference,
-          gain: widget.projectContext.world.soundOptions.defaultGain,
-        );
-      },
-      title: widget.title,
-      value: id == null
-          ? null
-          : widget.assetStore.assets.firstWhere(
-              (element) => element.variableName == id,
-            ),
-      actions: [
-        ElevatedButton(
-          onPressed: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => AddAsset(
-                projectContext: widget.projectContext,
-                assetStore: widget.assetStore,
-              ),
+    return WithKeyboardShortcuts(
+      child: CallbackShortcuts(
+        child: SelectItem<AssetReferenceReference?>(
+          onDone: widget.onDone,
+          values: assets,
+          getItemWidget: (value) {
+            if (value == null) {
+              return const Text('Clear');
+            }
+            return PlaySoundSemantics(
+              child: Text(value.comment ?? 'Untitled Asset'),
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: value.reference,
+              gain: widget.projectContext.world.soundOptions.defaultGain,
             );
-            setState(() {});
           },
-          child: const Icon(
-            Icons.add,
-            semanticLabel: 'Add Asset',
-          ),
+          title: widget.title,
+          value: id == null
+              ? null
+              : widget.assetStore.assets.firstWhere(
+                  (element) => element.variableName == id,
+                ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => addAsset(context),
+              child: const Icon(
+                Icons.add,
+                semanticLabel: 'Add Asset',
+              ),
+            )
+          ],
+        ),
+        bindings: {AddIntent.hotkey: () => addAsset(context)},
+      ),
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new asset.',
+          keyName: 'A',
+          control: true,
         )
       ],
     );
+  }
+
+  /// Add a new asset.
+  Future<void> addAsset(BuildContext context) async {
+    await pushWidget(
+      context: context,
+      builder: (context) => AddAsset(
+        projectContext: widget.projectContext,
+        assetStore: widget.assetStore,
+      ),
+    );
+    setState(() {});
   }
 }
