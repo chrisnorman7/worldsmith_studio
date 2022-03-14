@@ -10,6 +10,7 @@ import '../../widgets/run_game.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../conversation/edit_conversation_category.dart';
 import '../conversation/project_conversation_categories.dart';
+import '../quest/edit_quest.dart';
 import '../terrain/edit_terrain.dart';
 import '../world_command/edit_command_category.dart';
 import '../zone/edit_zone.dart';
@@ -17,6 +18,7 @@ import 'project_asset_stores.dart';
 import 'project_command_categories.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
+import 'project_quests.dart';
 import 'project_settings.dart';
 import 'project_sound_settings.dart';
 import 'project_terrains.dart';
@@ -190,6 +192,35 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
             autofocus: world.zones.isEmpty,
             child: createIcon,
             tooltip: 'Add Zone',
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Quests',
+          icon: const Icon(Icons.elderly_outlined),
+          builder: (context) => ProjectQuests(
+            projectContext: projectContext,
+          ),
+          floatingActionButton: FloatingActionButton(
+            autofocus: world.quests.isEmpty,
+            child: createIcon,
+            onPressed: () async {
+              final quest = Quest(
+                id: newId(),
+                name: 'Untitled Quest',
+                stages: [],
+              );
+              world.quests.add(quest);
+              projectContext.save();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuest(
+                  projectContext: projectContext,
+                  quest: quest,
+                ),
+              );
+              setState(() {});
+            },
+            tooltip: 'Add Quest',
           ),
         ),
         TabbedScaffoldTab(
