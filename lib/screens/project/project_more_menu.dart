@@ -4,6 +4,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../directions/directions_list.dart';
 import '../equipment/equipment_positions_menu.dart';
+import 'project_reverbs.dart';
 
 /// The "more" menu.
 class ProjectMoreMenu extends StatefulWidget {
@@ -38,6 +39,19 @@ class _ProjectMoreMenuState extends State<ProjectMoreMenu> {
               context: context,
               builder: (context) =>
                   EquipmentPositionsMenu(projectContext: widget.projectContext),
+            );
+            setState(() {});
+          },
+        ),
+        ListTile(
+          title: const Text('Reverb Presets'),
+          subtitle: Text('${world.reverbs.length}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => ProjectReverbs(
+                projectContext: widget.projectContext,
+              ),
             );
             setState(() {});
           },

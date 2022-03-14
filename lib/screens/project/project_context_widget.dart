@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
-import 'package:ziggurat/sound.dart';
 
 import '../../constants.dart';
 import '../../intents.dart';
@@ -9,8 +8,8 @@ import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/run_game.dart';
 import '../../widgets/tabbed_scaffold.dart';
-import '../conversation/edit_conversation_categories.dart';
-import '../reverb/edit_reverb_preset.dart';
+import '../conversation/edit_conversation_category.dart';
+import '../conversation/project_conversation_categories.dart';
 import '../terrain/edit_terrain.dart';
 import '../world_command/edit_command_category.dart';
 import '../zone/edit_zone.dart';
@@ -18,7 +17,6 @@ import 'project_asset_stores.dart';
 import 'project_command_categories.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
-import 'project_reverbs.dart';
 import 'project_settings.dart';
 import 'project_sound_settings.dart';
 import 'project_terrains.dart';
@@ -82,200 +80,185 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
   }
 
   /// Get the tabbed scaffold.
-  TabbedScaffold getTabbedScaffold(World world) => TabbedScaffold(
-        tabs: [
-          TabbedScaffoldTab(
-            title: 'World Options',
-            icon: const Icon(Icons.settings_outlined),
-            builder: (context) => ProjectSettings(
-              projectContext: widget.projectContext,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: run,
-              child: const Icon(Icons.run_circle_outlined),
-              tooltip: 'Run Project',
-            ),
+  TabbedScaffold getTabbedScaffold(World world) {
+    final projectContext = widget.projectContext;
+    return TabbedScaffold(
+      tabs: [
+        TabbedScaffoldTab(
+          title: 'World Options',
+          icon: const Icon(Icons.settings_outlined),
+          builder: (context) => ProjectSettings(
+            projectContext: projectContext,
           ),
-          TabbedScaffoldTab(
-            title: 'Commands',
-            icon: const Icon(Icons.category_outlined),
-            builder: (context) => CallbackShortcuts(
-              bindings: {
-                EditConversationCategoriesIntent.hotkey: () =>
-                    editConversationCategories(
-                      context,
-                    )
-              },
-              child: ProjectCommandCategories(
-                projectContext: widget.projectContext,
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              autofocus: world.commandCategories.isEmpty,
-              onPressed: () async {
-                final category = CommandCategory(
-                  id: newId(),
-                  name: 'Untitled Command Category',
-                  commands: [],
-                );
-                world.commandCategories.add(category);
-                widget.projectContext.save();
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditCommandCategory(
-                    projectContext: widget.projectContext,
-                    category: category,
-                  ),
-                );
-                setState(() {});
-              },
-              child: createIcon,
-              tooltip: 'Add Command Category',
-            ),
-            actions: [
-              ElevatedButton(
-                onPressed: () => editConversationCategories(context),
-                child: const Icon(
-                  Icons.chat_bubble_outline,
-                  semanticLabel: 'Conversations',
-                ),
-              )
-            ],
+          floatingActionButton: FloatingActionButton(
+            onPressed: run,
+            child: const Icon(Icons.run_circle_outlined),
+            tooltip: 'Run Project',
           ),
-          TabbedScaffoldTab(
-            title: 'Zones',
-            icon: const Icon(Icons.map_outlined),
-            builder: (context) => ProjectZones(
-              projectContext: widget.projectContext,
-            ),
-            floatingActionButton: world.terrains.isEmpty
-                ? null
-                : FloatingActionButton(
-                    onPressed: () async {
-                      final zone = Zone(
-                        id: newId(),
-                        name: 'Untitled Zone',
-                        boxes: [],
-                        defaultTerrainId: world.terrains.first.id,
-                      );
-                      world.zones.add(zone);
-                      widget.projectContext.save();
-                      await pushWidget(
-                        context: context,
-                        builder: (context) => EditZone(
-                          projectContext: widget.projectContext,
-                          zone: zone,
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    autofocus: world.zones.isEmpty,
-                    child: createIcon,
-                    tooltip: 'Add Zone',
-                  ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Terrain Types',
-            icon: const Icon(Icons.add_location_outlined),
-            builder: (context) => ProjectTerrains(
-              projectContext: widget.projectContext,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                final terrain = Terrain(
-                  id: newId(),
-                  name: 'Untitled Terrain',
-                  slowWalk: WalkingOptions(
-                    interval: 1000,
-                    joystickValue: 0.1,
-                  ),
-                  fastWalk: WalkingOptions(
-                    interval: 500,
-                    joystickValue: 0.5,
-                  ),
-                );
-                world.terrains.add(terrain);
-                widget.projectContext.save();
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditTerrain(
-                    projectContext: widget.projectContext,
-                    terrain: terrain,
-                  ),
-                );
-                setState(() {});
-              },
-              autofocus: world.terrains.isEmpty,
-              child: createIcon,
-              tooltip: 'Add Terrain',
-            ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Asset Stores',
-            icon: const Icon(Icons.store_mall_directory_outlined),
-            builder: (context) => ProjectAssetStores(
-              projectContext: widget.projectContext,
-            ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Reverb Presets',
-            icon: const Icon(Icons.crop_outlined),
-            builder: (context) => ProjectReverbs(
-              projectContext: widget.projectContext,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
-                final reverbPresetReference = ReverbPresetReference(
-                  id: newId(),
-                  reverbPreset: reverbPreset,
-                );
-                world.reverbs.add(reverbPresetReference);
-                widget.projectContext.save();
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditReverbPreset(
-                    projectContext: widget.projectContext,
-                    reverbPresetReference: reverbPresetReference,
-                  ),
-                );
-                setState(() {});
-              },
-              autofocus: world.reverbs.isEmpty,
-              child: createIcon,
-              tooltip: 'Add Reverb',
-            ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Sound Settings',
-            icon: const Icon(Icons.speaker_outlined),
-            builder: (context) => ProjectSoundSettings(
-              projectContext: widget.projectContext,
-            ),
-          ),
-          TabbedScaffoldTab(
-            title: 'Menus',
-            icon: const Icon(Icons.menu_book_outlined),
-            builder: (context) =>
-                ProjectMenus(projectContext: widget.projectContext),
-          ),
-          TabbedScaffoldTab(
-            title: 'More',
-            icon: const Icon(Icons.more_outlined),
-            builder: (context) => ProjectMoreMenu(
-              projectContext: widget.projectContext,
-            ),
-          )
-        ],
-      );
-
-  /// Edit conversation categories.
-  void editConversationCategories(BuildContext context) => pushWidget(
-        context: context,
-        builder: (context) => EditConversationCategories(
-          projectContext: widget.projectContext,
         ),
-      );
+        TabbedScaffoldTab(
+          title: 'Commands',
+          icon: const Icon(Icons.category_outlined),
+          builder: (context) => ProjectCommandCategories(
+            projectContext: projectContext,
+          ),
+          floatingActionButton: FloatingActionButton(
+            autofocus: world.commandCategories.isEmpty,
+            onPressed: () async {
+              final category = CommandCategory(
+                id: newId(),
+                name: 'Untitled Command Category',
+                commands: [],
+              );
+              world.commandCategories.add(category);
+              projectContext.save();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditCommandCategory(
+                  projectContext: projectContext,
+                  category: category,
+                ),
+              );
+              setState(() {});
+            },
+            child: createIcon,
+            tooltip: 'Add Command Category',
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Conversations',
+          icon: const Icon(Icons.message_outlined),
+          builder: (context) => ProjectConversationCategories(
+            projectContext: projectContext,
+          ),
+          floatingActionButton: FloatingActionButton(
+            autofocus: world.conversationCategories.isEmpty,
+            child: createIcon,
+            onPressed: () async {
+              final category = ConversationCategory(
+                id: newId(),
+                name: 'Untitled Category',
+                conversations: [],
+              );
+              world.conversationCategories.add(category);
+              projectContext.save();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditConversationCategory(
+                  projectContext: projectContext,
+                  conversationCategory: category,
+                ),
+              );
+              setState(() {});
+            },
+            tooltip: 'Add Conversation Category',
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Zones',
+          icon: const Icon(Icons.map_outlined),
+          builder: (context) => ProjectZones(
+            projectContext: projectContext,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              if (world.terrains.isEmpty) {
+                return showError(
+                  context: context,
+                  message:
+                      'You must add at least 1 terrain before you can add a'
+                      ' zone.',
+                );
+              }
+              final zone = Zone(
+                id: newId(),
+                name: 'Untitled Zone',
+                boxes: [],
+                defaultTerrainId: world.terrains.first.id,
+              );
+              world.zones.add(zone);
+              projectContext.save();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditZone(
+                  projectContext: projectContext,
+                  zone: zone,
+                ),
+              );
+              setState(() {});
+            },
+            autofocus: world.zones.isEmpty,
+            child: createIcon,
+            tooltip: 'Add Zone',
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Terrain Types',
+          icon: const Icon(Icons.add_location_outlined),
+          builder: (context) => ProjectTerrains(
+            projectContext: projectContext,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              final terrain = Terrain(
+                id: newId(),
+                name: 'Untitled Terrain',
+                slowWalk: WalkingOptions(
+                  interval: 1000,
+                  joystickValue: 0.1,
+                ),
+                fastWalk: WalkingOptions(
+                  interval: 500,
+                  joystickValue: 0.5,
+                ),
+              );
+              world.terrains.add(terrain);
+              projectContext.save();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditTerrain(
+                  projectContext: projectContext,
+                  terrain: terrain,
+                ),
+              );
+              setState(() {});
+            },
+            autofocus: world.terrains.isEmpty,
+            child: createIcon,
+            tooltip: 'Add Terrain',
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Asset Stores',
+          icon: const Icon(Icons.store_mall_directory_outlined),
+          builder: (context) => ProjectAssetStores(
+            projectContext: projectContext,
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Sound Settings',
+          icon: const Icon(Icons.speaker_outlined),
+          builder: (context) => ProjectSoundSettings(
+            projectContext: projectContext,
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'Menus',
+          icon: const Icon(Icons.menu_book_outlined),
+          builder: (context) => ProjectMenus(
+            projectContext: projectContext,
+          ),
+        ),
+        TabbedScaffoldTab(
+          title: 'More',
+          icon: const Icon(Icons.more_outlined),
+          builder: (context) => ProjectMoreMenu(
+            projectContext: projectContext,
+          ),
+        )
+      ],
+    );
+  }
 
   /// Save the project.
   void save() {
