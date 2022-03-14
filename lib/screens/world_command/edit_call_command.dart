@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
-import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/command/world_command_list_tile.dart';
-import '../../widgets/get_text.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../world_command_location.dart';
 
@@ -51,7 +48,6 @@ class _EditCallCommandState extends State<EditCallCommand> {
         callAfterString += 's';
       }
     }
-    final chance = widget.callCommand.chance;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -81,44 +77,19 @@ class _EditCallCommandState extends State<EditCallCommand> {
               title: 'Command',
               autofocus: true,
             ),
-            ListTile(
-              title: const Text('Call After'),
-              subtitle: Text(
-                callAfter == null ? 'Straight away' : callAfterString,
-              ),
-              onTap: () => pushWidget(
-                context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
-                    final n = int.parse(value);
-                    if (n < 0) {
-                      showError(
-                        context: context,
-                        message: 'This value must be a positive number.',
-                      );
-                    } else {
-                      Navigator.pop(context);
-                      widget.callCommand.callAfter = n == 0 ? null : n;
-                      save();
-                    }
-                  },
-                  labelText: 'Value',
-                  text: callAfter == null ? '0' : callAfter.toString(),
-                  title: 'Call After',
-                  validator: (value) => validateInt(value: value),
-                ),
-              ),
-            ),
             NumberListTile(
-              value: widget.callCommand.chance.toDouble(),
+              value: widget.callCommand.callAfter?.toDouble() ?? 0.0,
               onChanged: (value) {
-                Navigator.pop(context);
-                widget.callCommand.chance = value.floor();
+                if (value <= 0) {
+                  widget.callCommand.callAfter = null;
+                } else {
+                  widget.callCommand.callAfter = value.floor();
+                }
                 save();
               },
-              min: 1,
-              title: 'Call Chance',
-              subtitle: chance == 1 ? 'Every time' : '1 in $chance',
+              min: 0,
+              title: 'Call After',
+              subtitle: callAfterString,
             )
           ],
         ),

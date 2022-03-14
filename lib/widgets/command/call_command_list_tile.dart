@@ -57,10 +57,8 @@ class _CallCommandListTileState extends State<CallCommandListTile> {
     if (location == null) {
       subtitle = 'Unset';
     } else {
-      final chance = widget.callCommand?.chance;
       subtitle = '${location.description} (Call after: $callAfter millisecond'
-          '${callAfter == 1 ? "" : "s"} '
-          '${chance == 1 ? "every time" : "1 time in $chance"})';
+          '${callAfter == 1 ? "" : "s"})';
     }
     return ListTile(
       title: Text(widget.title),
