@@ -58,6 +58,21 @@ class _ProjectAssetStoresState extends State<ProjectAssetStores> {
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
+          projectContext: widget.projectContext,
+          assetStore: world.questsAssetStore,
+          afterOnTap: () => setState(() {}),
+          canDelete: (reference) {
+            for (final quest in world.quests) {
+              for (final stage in quest.stages) {
+                if (stage.sound?.id == reference.variableName) {
+                  return 'This asset is being used by the ${quest.name} quest.';
+                }
+              }
+            }
+            return null;
+          },
+        ),
+        AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.musicAssetStore,
           canDelete: (reference) {
