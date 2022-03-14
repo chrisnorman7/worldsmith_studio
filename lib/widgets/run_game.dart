@@ -33,6 +33,7 @@ class RunGame extends StatefulWidget {
 class _RunGameState extends State<RunGame> {
   late final List<SoundEvent> soundEvents;
   bool? done;
+  Game? _game;
 
   /// Initialise the game.
   @override
@@ -82,6 +83,7 @@ class _RunGameState extends State<RunGame> {
   void dispose() {
     super.dispose();
     widget.projectContext.game.stop();
+    _game?.stop();
   }
 
   /// Start the game running.
@@ -95,6 +97,7 @@ class _RunGameState extends State<RunGame> {
         // ignore: prefer_const_constructors
         triggerMap: TriggerMap([]),
       );
+      _game = game;
       final context = widget.projectContext.audioContext;
       bufferCache = BufferCache(
         synthizer: context.synthizer,
@@ -126,8 +129,12 @@ class _RunGameState extends State<RunGame> {
       rethrow;
     } finally {
       bufferCache?.destroy();
-      // sdl?.quit();
-      setState(() => done = true);
+      _game = null;
+      if (mounted) {
+        setState(() => done = true);
+      } else {
+        done = true;
+      }
     }
   }
 }
