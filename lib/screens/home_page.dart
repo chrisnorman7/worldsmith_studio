@@ -38,6 +38,16 @@ class _HomePageState extends State<HomePage> {
   SharedPreferences? _preferences;
   Game? _game;
   ProjectSoundManager? _soundManager;
+  late final Synthizer synthizer;
+  late final Sdl sdl;
+
+  /// Initialise synthizer.
+  @override
+  void initState() {
+    super.initState();
+    synthizer = Synthizer();
+    sdl = Sdl();
+  }
 
   /// Build the widget.
   @override
@@ -233,12 +243,11 @@ class _HomePageState extends State<HomePage> {
           File(libsndfilePath).existsSync() == false) {
         libsndfilePath = null;
       }
-      final synthizer = Synthizer()
-        ..initialize(
-          libsndfilePath: libsndfilePath,
-          logLevel: options.synthizerLogLevel,
-          loggingBackend: options.synthizerLoggingBackend,
-        );
+      synthizer.initialize(
+        libsndfilePath: libsndfilePath,
+        logLevel: options.synthizerLogLevel,
+        loggingBackend: options.synthizerLoggingBackend,
+      );
       final context = synthizer.createContext();
       final bufferCache = BufferCache(
         synthizer: synthizer,
@@ -277,7 +286,7 @@ class _HomePageState extends State<HomePage> {
       game: game,
       file: file,
       world: world,
-      sdl: Sdl(),
+      sdl: sdl,
       audioContext: soundManager.context,
     );
     if (worldWasNull) {
@@ -349,8 +358,9 @@ class _HomePageState extends State<HomePage> {
     if (soundManager != null) {
       soundManager
         ..bufferCache?.destroy()
-        ..context.destroy()
-        ..context.synthizer.shutdown();
+        ..context.destroy();
+      synthizer.shutdown();
+      sdl.quit();
     }
   }
 }
