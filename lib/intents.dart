@@ -37,7 +37,7 @@ class CreateProjectIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -50,7 +50,7 @@ class OpenProjectIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyO,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -63,7 +63,7 @@ class CloseProjectIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyW,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -76,7 +76,7 @@ class PlayPauseIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyP,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -116,7 +116,7 @@ class HelpIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.slash,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -129,7 +129,7 @@ class ImportDirectoryIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyD,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -142,7 +142,7 @@ class ImportFileIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyF,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -164,7 +164,7 @@ class CopyAssetIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyC,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -177,7 +177,7 @@ class CreateBoxIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -190,7 +190,7 @@ class NextBoxIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.period,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -203,7 +203,7 @@ class PreviousBoxIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.comma,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -216,7 +216,7 @@ class CreateEquipmentPositionIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -255,7 +255,7 @@ class RenameIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyR,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -268,7 +268,7 @@ class CreateZoneObjectIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -281,7 +281,7 @@ class AddAmbianceIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -294,7 +294,7 @@ class LaunchManualIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.slash,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
     shift: true,
   );
@@ -317,7 +317,7 @@ class CreateConversationBranchIntent extends Intent {
   /// The hotkey to use.
   static final SingleActivator hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -330,7 +330,7 @@ class CreateConversationResponseIntent extends Intent {
   /// The hotkey to use.
   static final SingleActivator hotkey = SingleActivator(
     LogicalKeyboardKey.keyN,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -343,7 +343,7 @@ class AddIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyA,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -356,7 +356,7 @@ class EditIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyE,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }
@@ -378,7 +378,7 @@ class RunIntent extends Intent {
   /// The hotkey to use.
   static final hotkey = SingleActivator(
     LogicalKeyboardKey.keyR,
-    control: Platform.isWindows,
+    control: !Platform.isMacOS,
     meta: Platform.isMacOS,
   );
 }

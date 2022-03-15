@@ -509,28 +509,28 @@ class _EditZoneState extends State<EditZone> {
         shortcuts: {
           SingleActivator(
             LogicalKeyboardKey.arrowUp,
-            control: Platform.isWindows,
+            control: !Platform.isMacOS,
             meta: Platform.isMacOS,
           ): const MoveIntent(
             MoveDirections.north,
           ),
           SingleActivator(
             LogicalKeyboardKey.arrowRight,
-            control: Platform.isWindows,
+            control: !Platform.isMacOS,
             meta: Platform.isMacOS,
           ): const MoveIntent(
             MoveDirections.east,
           ),
           SingleActivator(
             LogicalKeyboardKey.arrowDown,
-            control: Platform.isWindows,
+            control: !Platform.isMacOS,
             meta: Platform.isMacOS,
           ): const MoveIntent(
             MoveDirections.south,
           ),
           SingleActivator(
             LogicalKeyboardKey.arrowLeft,
-            control: Platform.isWindows,
+            control: !Platform.isMacOS,
             meta: Platform.isMacOS,
           ): const MoveIntent(
             MoveDirections.west,
