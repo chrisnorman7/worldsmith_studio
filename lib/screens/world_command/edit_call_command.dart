@@ -168,21 +168,25 @@ class _EditCallCommandState extends State<EditCallCommand> {
     return TableRow(
       children: [
         TableCell(
-          child: QuestListTile(
-            projectContext: widget.projectContext,
-            quest: quest,
-            stage: questStage,
-            onDone: (value) {
-              if (value == null) {
-                conditional.questCondition = null;
-              } else {
-                conditional.questCondition = QuestCondition(
-                  questId: value.quest.id,
-                  stageId: value.stage?.id,
-                );
-              }
-              save();
-            },
+          child: Semantics(
+            child: QuestListTile(
+              projectContext: widget.projectContext,
+              quest: quest,
+              stage: questStage,
+              onDone: (value) {
+                if (value == null) {
+                  conditional.questCondition = null;
+                } else {
+                  conditional.questCondition = QuestCondition(
+                    questId: value.quest.id,
+                    stageId: value.stage?.id,
+                  );
+                }
+                save();
+              },
+              title: null,
+            ),
+            label: 'Quest',
           ),
         ),
         TableCell(
@@ -204,7 +208,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
               ),
               child: Semantics(
                 child: Text(chanceDescription),
-                label: 'Random Chance: $chanceDescription',
+                label: 'Chance',
               ),
             ),
             bindings: {
@@ -238,7 +242,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
             ),
             child: Semantics(
               child: Text(conditionalFunctionNameDescription),
-              label: 'Function Name: $conditionalFunctionNameDescription',
+              label: 'Function Name',
             ),
           ),
         ),
