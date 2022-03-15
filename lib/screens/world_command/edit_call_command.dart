@@ -11,6 +11,7 @@ import '../../widgets/command/world_command_list_tile.dart';
 import '../../widgets/get_number.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/number_list_tile.dart';
+import '../../widgets/quest/quest_list_tile.dart';
 import '../../widgets/tabbed_scaffold.dart';
 import '../../world_command_location.dart';
 
@@ -105,37 +106,38 @@ class _EditCallCommandState extends State<EditCallCommand> {
             ],
           ),
           TabbedScaffoldTab(
-              title: 'Conditions',
-              icon: const Icon(Icons.question_answer),
-              builder: (context) {
-                final conditions = widget.callCommand.conditions;
-                if (conditions.isEmpty) {
-                  return const CenterText(text: 'There are no conditions.');
-                }
-                final rows = <TableRow>[
-                  const TableRow(
-                    children: [
-                      TableCell(child: Text('Quest')),
-                      TableCell(child: Text('Random Chance')),
-                      TableCell(child: Text('Condition Function')),
-                      TableCell(child: Text('Delete'))
-                    ],
-                  ),
-                ];
-                for (final condition in conditions) {
-                  rows.add(getTableRow(context, condition));
-                }
-                return Table(children: rows);
+            title: 'Conditions',
+            icon: const Icon(Icons.question_answer),
+            builder: (context) {
+              final conditions = widget.callCommand.conditions;
+              if (conditions.isEmpty) {
+                return const CenterText(text: 'There are no conditions.');
+              }
+              final rows = <TableRow>[
+                const TableRow(
+                  children: [
+                    TableCell(child: Text('Quest')),
+                    TableCell(child: Text('Random Chance')),
+                    TableCell(child: Text('Condition Function')),
+                    TableCell(child: Text('Delete'))
+                  ],
+                ),
+              ];
+              for (final condition in conditions) {
+                rows.add(getTableRow(context, condition));
+              }
+              return Table(children: rows);
+            },
+            floatingActionButton: FloatingActionButton(
+              autofocus: widget.callCommand.conditions.isEmpty,
+              child: createIcon,
+              onPressed: () {
+                final conditional = Conditional();
+                widget.callCommand.conditions.add(conditional);
+                save();
               },
-              floatingActionButton: FloatingActionButton(
-                autofocus: widget.callCommand.conditions.isEmpty,
-                child: createIcon,
-                onPressed: () {
-                  final conditional = Conditional();
-                  widget.callCommand.conditions.add(conditional);
-                  save();
-                },
-              ))
+            ),
+          )
         ],
       ),
     );
@@ -157,12 +159,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
     final questStage = quest == null || questStageId == null
         ? null
         : quest.getStage(questStageId);
-    var questDescription = quest == null ? 'Not Set' : '${quest.name}: ';
-    if (quest != null) {
-      questDescription += questStage == null
-          ? 'Not started'
-          : questStage.description ?? 'Not described';
-    }
+    if (quest != null) {}
     final chance = conditional.chance;
     final conditionalFunctionName = conditional.conditionFunctionName;
     final chanceDescription = chance == 1 ? 'Every time' : '1 in $chance';
@@ -171,12 +168,21 @@ class _EditCallCommandState extends State<EditCallCommand> {
     return TableRow(
       children: [
         TableCell(
-          child: TextButton(
-            child: Semantics(
-              child: Text(questDescription),
-              label: 'Quest: $questDescription',
-            ),
-            onPressed: () {},
+          child: QuestListTile(
+            projectContext: widget.projectContext,
+            quest: quest,
+            stage: questStage,
+            onDone: (value) {
+              if (value == null) {
+                conditional.questCondition = null;
+              } else {
+                conditional.questCondition = QuestCondition(
+                  questId: value.quest.id,
+                  stageId: value.stage?.id,
+                );
+              }
+              save();
+            },
           ),
         ),
         TableCell(
@@ -243,14 +249,15 @@ class _EditCallCommandState extends State<EditCallCommand> {
               semanticLabel: 'Delete Condition',
             ),
             onPressed: () => confirm(
-                context: context,
-                message: 'Are you sure you want to delete this condition?',
-                title: 'Delete Condition',
-                yesCallback: () {
-                  Navigator.pop(context);
-                  widget.callCommand.conditions.remove(conditional);
-                  save();
-                }),
+              context: context,
+              message: 'Are you sure you want to delete this condition?',
+              title: 'Delete Condition',
+              yesCallback: () {
+                Navigator.pop(context);
+                widget.callCommand.conditions.remove(conditional);
+                save();
+              },
+            ),
           ),
         )
       ],
