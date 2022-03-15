@@ -20,7 +20,7 @@ class QuestListTile extends StatefulWidget {
     this.autofocus = false,
     Key? key,
   })  : assert(
-          stage != null || quest == null,
+          quest != null || stage == null,
           'If `quest` is not `null`, then `stage` must not be either.',
         ),
         super(key: key);
@@ -38,7 +38,7 @@ class QuestListTile extends StatefulWidget {
   final ValueChanged<QuestLocation?> onDone;
 
   /// The title for the resulting [ListTile].
-  final String title;
+  final String? title;
 
   /// Whether the resulting [ListTile] should be autofocused.
   final bool autofocus;
@@ -57,13 +57,20 @@ class _QuestListTileState extends State<QuestListTile> {
     final quest = widget.quest;
     final stage = widget.stage;
     var questDescription = quest?.name ?? 'Not set';
-    if (stage != null) {
-      questDescription = '$questDescription: ${stage.description}';
+    if (quest != null) {
+      final String stageDescription;
+      if (stage == null) {
+        stageDescription = 'Not Started';
+      } else {
+        stageDescription = stage.description ?? 'Not Described';
+      }
+      questDescription = '$questDescription: $stageDescription';
     }
+    final title = widget.title;
     return ListTile(
       autofocus: widget.autofocus,
-      title: Text(widget.title),
-      subtitle: Text(questDescription),
+      title: Text(title ?? questDescription),
+      subtitle: title == null ? null : Text(questDescription),
       onTap: () => pushWidget(
         context: context,
         builder: (context) => SelectItem<Quest?>(
