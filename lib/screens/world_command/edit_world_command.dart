@@ -11,6 +11,7 @@ import '../../widgets/conversation/start_conversation_list_tile.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
+import '../../widgets/quest/quest_list_tile.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
 import '../zone/select_zone.dart';
@@ -117,6 +118,13 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
 
   /// Get the list view for the [Scaffold] to use.
   ListView getCommandListView({required BuildContext context}) {
+    final setQuestStage = widget.command.setQuestStage;
+    final questId = setQuestStage?.questId;
+    final quest =
+        questId == null ? null : widget.projectContext.world.getQuest(questId);
+    final stageId = setQuestStage?.stageId;
+    final stage =
+        quest == null || stageId == null ? null : quest.getStage(stageId);
     final walkingMode = widget.command.walkingMode;
     final customCommandName = widget.command.customCommandName;
     final callCommand = widget.command.callCommand;
@@ -247,6 +255,23 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
               value: walkingMode,
             ),
           ),
+        ),
+        QuestListTile(
+          projectContext: widget.projectContext,
+          quest: quest,
+          stage: stage,
+          onDone: (value) {
+            if (value == null) {
+              widget.command.setQuestStage = null;
+            } else {
+              widget.command.setQuestStage = SetQuestStage(
+                questId: value.quest.id,
+                stageId: value.stage?.id,
+              );
+            }
+            save();
+          },
+          title: 'Set Quest Stage',
         ),
         TextListTile(
           value: customCommandName ?? '',
