@@ -185,7 +185,6 @@ class _HomePageState extends State<HomePage> {
       confirm(
         context: context,
         message: 'Are you sure you want to overwrite $filename?',
-        noCallback: () => Navigator.pop(context),
         title: 'Overwrite File',
         yesCallback: () {
           Navigator.pop(context);
