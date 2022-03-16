@@ -13,6 +13,7 @@ import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/quest/quest_list_tile.dart';
+import '../../widgets/scene/show_scene_list_tile.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
 import '../zone/select_zone.dart';
@@ -292,6 +293,14 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
             save();
           },
         ),
+        ShowSceneListTile(
+          projectContext: widget.projectContext,
+          showScene: widget.command.showScene,
+          onChanged: (value) {
+            widget.command.showScene = value;
+            save();
+          },
+        ),
         ReturnToMainMenuListTile(
           projectContext: widget.projectContext,
           returnToMainMenu: returnToMainMenu,
@@ -317,7 +326,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     for (final commandCategory in world.commandCategories) {
       for (final command in commandCategory.commands) {
         if (command.callCommand?.commandId == id ||
-            command.showScene?.commandId == id) {
+            command.showScene?.callCommand?.commandId == id) {
           return showError(
             context: context,
             message: 'You cannot delete a command which is called by the '
