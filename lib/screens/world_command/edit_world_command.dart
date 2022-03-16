@@ -306,7 +306,8 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     }
     for (final commandCategory in world.commandCategories) {
       for (final command in commandCategory.commands) {
-        if (command.callCommand?.commandId == id) {
+        if (command.callCommand?.commandId == id ||
+            command.showScene?.commandId == id) {
           return showError(
             context: context,
             message: 'You cannot delete a command which is called by the '
