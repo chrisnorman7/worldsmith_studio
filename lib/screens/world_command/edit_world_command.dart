@@ -7,6 +7,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/command/call_command_list_tile.dart';
+import '../../widgets/command/return_to_main_menu_list_tile.dart';
 import '../../widgets/conversation/start_conversation_list_tile.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
@@ -129,6 +130,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     final customCommandName = widget.command.customCommandName;
     final callCommand = widget.command.callCommand;
     final zoneTeleport = widget.command.zoneTeleport;
+    final returnToMainMenu = widget.command.returnToMainMenu;
     return ListView(
       children: [
         ListTile(
@@ -287,6 +289,14 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           startConversation: widget.command.startConversation,
           onChanged: (value) {
             widget.command.startConversation = value;
+            save();
+          },
+        ),
+        ReturnToMainMenuListTile(
+          projectContext: widget.projectContext,
+          returnToMainMenu: returnToMainMenu,
+          onChanged: (value) {
+            widget.command.returnToMainMenu = value;
             save();
           },
         )
