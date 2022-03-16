@@ -5,6 +5,7 @@ import '../../util.dart';
 import '../menu/edit_credits_menu.dart';
 import '../menu/edit_main_menu.dart';
 import '../menu/edit_pause_menu.dart';
+import '../menu/edit_quest_menu.dart';
 import '../menu/edit_sound_menu.dart';
 
 /// A widget for editing various game menus.
@@ -90,6 +91,20 @@ class _ProjectMenusState extends State<ProjectMenus> {
               await pushWidget(
                 context: context,
                 builder: (context) => EditPauseMenu(
+                  projectContext: widget.projectContext,
+                ),
+              );
+              setState(() {});
+            },
+          ),
+        ),
+        widget.projectContext.getMenuMoveSemantics(
+          child: ListTile(
+            title: Text(world.questMenuOptions.title),
+            onTap: () async {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuestMenu(
                   projectContext: widget.projectContext,
                 ),
               );

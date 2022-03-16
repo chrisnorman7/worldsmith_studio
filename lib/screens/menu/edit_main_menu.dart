@@ -109,6 +109,7 @@ class _EditMainMenuState extends State<EditMainMenu> {
     );
   }
 
+  /// Save the project.
   void save() {
     widget.projectContext.save();
     setState(() {});

@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+import 'package:worldsmith/worldsmith.dart';
+
+import '../../constants.dart';
+import '../../project_context.dart';
+import '../../util.dart';
+import '../../widgets/cancel.dart';
+import '../../widgets/center_text.dart';
+import '../../widgets/searchable_list_view.dart';
+import '../scene/edit_scene.dart';
+
+/// A widget for editing scenes.
+class ProjectScenes extends StatefulWidget {
+  /// Create an instance.
+  const ProjectScenes({
+    required this.projectContext,
+    Key? key,
+  }) : super(key: key);
+
+  /// The project context to use.
+  final ProjectContext projectContext;
+
+  /// Create state for this widget.
+  @override
+  _ProjectScenesState createState() => _ProjectScenesState();
+}
+
+/// State for [ProjectScenes].
+class _ProjectScenesState extends State<ProjectScenes> {
+  /// Build a widget.
+  @override
+  Widget build(BuildContext context) {
+    final world = widget.projectContext.world;
+    final scenes = world.scenes;
+    final Widget child;
+    if (scenes.isEmpty) {
+      child = const CenterText(text: 'There are no scenes to show.');
+    } else {
+      final children = <SearchableListTile>[];
+      for (var i = 0; i < scenes.length; i++) {
+        final scene = scenes[i];
+        final n = scene.sections.length;
+        children.add(
+          SearchableListTile(
+            searchString: scene.name,
+            child: ListTile(
+              autofocus: i == 0,
+              title: Text(scene.name),
+              subtitle: Text('$n ${n == 1 ? "section" : "sections"}'),
+              onTap: () async {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditScene(
+                    projectContext: widget.projectContext,
+                    scene: scene,
+                  ),
+                );
+                setState(() {});
+              },
+            ),
+          ),
+        );
+      }
+      child = SearchableListView(children: children);
+    }
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Scenes'),
+        ),
+        body: child,
+        floatingActionButton: FloatingActionButton(
+          autofocus: scenes.isEmpty,
+          child: createIcon,
+          onPressed: () async {
+            final scene = Scene(
+              id: newId(),
+              name: 'Untitled Scene',
+              sections: [],
+            );
+            world.scenes.add(scene);
+            widget.projectContext.save();
+            setState(() {});
+          },
+          tooltip: 'Add Scene',
+        ),
+      ),
+    );
+  }
+}
