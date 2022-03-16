@@ -285,7 +285,11 @@ class _EditZoneState extends State<EditZone> {
           title: 'Turn Amount',
         ),
         CheckboxListTile(
-          title: const Text('Top-down Map Visible'),
+          title: Text(
+            widget.zone.topDownMap
+                ? 'Disable Top-Down Map'
+                : 'Enable Top-Down Map',
+          ),
           value: widget.zone.topDownMap,
           onChanged: (value) {
             widget.zone.topDownMap = !widget.zone.topDownMap;
