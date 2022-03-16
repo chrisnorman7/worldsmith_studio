@@ -29,8 +29,6 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     final soundOptions = world.soundOptions;
-    final menuMoveSound = soundOptions.menuMoveSound;
-    final menuActivateSound = soundOptions.menuActivateSound;
     return ListView(
       children: [
         GainListTile(
@@ -44,7 +42,7 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         ),
         SoundListTile(
           projectContext: widget.projectContext,
-          value: menuMoveSound,
+          value: soundOptions.menuMoveSound,
           onDone: (value) {
             soundOptions.menuMoveSound = value;
             save();
@@ -56,7 +54,7 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         ),
         SoundListTile(
           projectContext: widget.projectContext,
-          value: menuActivateSound,
+          value: soundOptions.menuActivateSound,
           onDone: (value) {
             soundOptions.menuActivateSound = value;
             save();
@@ -65,6 +63,18 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           nullable: true,
           title: 'Menu Activate Sound',
           defaultGain: soundOptions.defaultGain,
+        ),
+        SoundListTile(
+          projectContext: widget.projectContext,
+          value: soundOptions.menuSwitchSound,
+          onDone: (value) {
+            soundOptions.menuSwitchSound = value;
+            save();
+          },
+          assetStore: world.interfaceSoundsAssetStore,
+          defaultGain: soundOptions.defaultGain,
+          nullable: true,
+          title: 'Switch Menu Sound',
         ),
         SoundListTile(
           projectContext: widget.projectContext,
