@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
@@ -9,6 +10,7 @@ import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
 import 'constants.dart';
+import 'src/json/git_tag.dart';
 
 /// Round the given [value] to the given number of decimal [places].
 ///
@@ -141,4 +143,19 @@ void launchReportIssue() {
     scheme: 'https',
   );
   launch(uri.toString());
+}
+
+/// Get the latest tag from GitHub.
+Future<GitTag> getLatestTag() async {
+  const url =
+      'https://api.github.com/repos/chrisnorman7/worldsmith_studio/tags';
+  final dio = Dio();
+  final response = await dio.get<List<dynamic>>(url);
+  final data = response.data;
+  if (data == null || data.isEmpty) {
+    throw StateError('No tags found.');
+  }
+  final datum = data.last as Map<String, dynamic>;
+  final tag = GitTag.fromJson(datum);
+  return tag;
 }

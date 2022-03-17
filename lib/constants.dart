@@ -41,7 +41,3 @@ typedef CanDelete<T> = String? Function(T value);
 
 /// The URL for the manual.
 const manualUrl = 'https://chrisnorman7.github.io/worldsmith_studio_manual';
-
-/// The URL for reporting issues.
-const newIssueUrl =
-    'https://github.com/chrisnorman7/worldsmith_studio/issues/new';

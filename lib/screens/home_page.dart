@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   ProjectSoundManager? _soundManager;
   late final Synthizer synthizer;
   late final Sdl sdl;
+  bool? _checkedForUpdate;
 
   /// Initialise synthizer.
   @override
@@ -123,11 +124,19 @@ class _HomePageState extends State<HomePage> {
         ],
       );
     }
+    final checkedForUpdate = _checkedForUpdate;
+    if (checkedForUpdate == null) {
+      checkForUpdates(context);
+    }
     final scaffold = Scaffold(
       appBar: AppBar(
         actions: [
           PopupMenuButton<VoidCallback>(
             itemBuilder: (context) => [
+              PopupMenuItem(
+                child: const Text('Check For Updates'),
+                value: () => setState(() => _checkedForUpdate = null),
+              ),
               const PopupMenuItem(
                 child: Text('Open Manual'),
                 value: launchManual,
@@ -135,6 +144,11 @@ class _HomePageState extends State<HomePage> {
               const PopupMenuItem(
                 child: Text('Report Issue'),
                 value: launchReportIssue,
+              ),
+              PopupMenuItem(
+                child: const Text('Visit GitHub'),
+                value: () =>
+                    launch('https://github.com/chrisnorman7/worldsmith_studio'),
               ),
               PopupMenuItem(
                 child: const Text('About'),
@@ -386,5 +400,47 @@ class _HomePageState extends State<HomePage> {
       synthizer.shutdown();
       sdl.quit();
     }
+  }
+
+  /// Check for updates.
+  Future<void> checkForUpdates(BuildContext context) async {
+    _checkedForUpdate = false;
+    try {
+      final tag = await getLatestTag();
+      final name = tag.name;
+      if (name != appVersion) {
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => launch(
+                  'https://github.com/chrisnorman7/worldsmith_studio/releases/latest',
+                ),
+                child: const Text('Download'),
+              )
+            ],
+            content: Focus(
+              autofocus: true,
+              child: Text(
+                'There is a new version available. You are running version '
+                '$appVersion, but ${tag.name} is available.',
+              ),
+            ),
+          ),
+        );
+      }
+    } catch (e, s) {
+      showError(
+        context: context,
+        message: '$e\n$s',
+        title: 'Error Checking For Update',
+      );
+    }
+    _checkedForUpdate = true;
   }
 }
