@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -120,3 +122,23 @@ void deleteEquipmentPosition({
         onDone();
       },
     );
+
+/// Launch the manual.
+void launchManual() => launch(manualUrl);
+
+/// Report an issue.
+void launchReportIssue() {
+  final uri = Uri(
+    host: 'github.com',
+    pathSegments: ['chrisnorman7', 'worldsmith_studio', 'issues', 'new'],
+    queryParameters: <String, String>{
+      'body': '\n\n\nDart Version: ${Platform.version}\n'
+          'Application Version: $appName $appVersion\n'
+          'Operating System: ${Platform.operatingSystemVersion}.\n'
+          'Locale Name: ${Platform.localeName}\n'
+          'Working Directory: ${Directory.current.path}'
+    },
+    scheme: 'https',
+  );
+  launch(uri.toString());
+}

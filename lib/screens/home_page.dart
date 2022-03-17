@@ -126,19 +126,36 @@ class _HomePageState extends State<HomePage> {
     final scaffold = Scaffold(
       appBar: AppBar(
         actions: [
-          ElevatedButton(
-            onPressed: () => launch(manualUrl),
-            child: const Icon(
-              Icons.help_outline,
-              semanticLabel: 'Help',
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => launch(newIssueUrl),
-            child: const Icon(
-              Icons.report_problem_outlined,
-              semanticLabel: 'Report An Issue',
-            ),
+          PopupMenuButton<VoidCallback>(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                child: Text('Open Manual'),
+                value: launchManual,
+              ),
+              const PopupMenuItem(
+                child: Text('Report Issue'),
+                value: launchReportIssue,
+              ),
+              PopupMenuItem(
+                child: const Text('About'),
+                value: () async {
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => const AboutDialog(
+                      applicationLegalese:
+                          'This is free and unencumbered software released '
+                          'into the public domain.',
+                      applicationName: appName,
+                      applicationVersion: appVersion,
+                    ),
+                  );
+                },
+              )
+            ],
+            icon: const Icon(Icons.help_outline),
+            initialValue: launchManual,
+            onSelected: (f) => f(),
+            tooltip: 'Help',
           )
         ],
         title: const Text(appName),
