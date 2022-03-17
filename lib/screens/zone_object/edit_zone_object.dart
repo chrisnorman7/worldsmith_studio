@@ -102,6 +102,8 @@ class _EditZoneObjectState extends State<EditZoneObject> {
               assetStore: world.ambianceAssetStore,
               defaultGain: world.soundOptions.defaultGain,
               looping: true,
+              nullable: true,
+              title: 'Ambiance',
             ),
             CallCommandListTile(
               projectContext: widget.projectContext,
