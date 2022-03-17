@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => launch(newIssueUrl),
             child: const Icon(
               Icons.report_problem_outlined,
-              semanticLabel: 'Report A Problem',
+              semanticLabel: 'Report An Issue',
             ),
           )
         ],
