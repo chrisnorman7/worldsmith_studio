@@ -65,20 +65,23 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
         children.add(
           SearchableListTile(
             searchString: command.name,
-            child: ListTile(
-              autofocus: i == 0,
-              title: Text(command.name),
-              onTap: () async {
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditWorldCommand(
-                    projectContext: widget.projectContext,
-                    category: widget.category,
-                    command: command,
-                  ),
-                );
-                save();
-              },
+            child: CallbackShortcuts(
+              child: ListTile(
+                autofocus: i == 0,
+                title: Text(command.name),
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => EditWorldCommand(
+                      projectContext: widget.projectContext,
+                      category: widget.category,
+                      command: command,
+                    ),
+                  );
+                  save();
+                },
+              ),
+              bindings: {CopyIntent.hotkey: () => setClipboardText(command.id)},
             ),
           ),
         );

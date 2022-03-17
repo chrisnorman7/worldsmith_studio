@@ -134,7 +134,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                     return null;
                   },
                 ),
-                CopyAssetIntent: CallbackAction<CopyAssetIntent>(
+                CopyIntent: CallbackAction<CopyIntent>(
                   onInvoke: (intent) {
                     final asset = assetReference.reference;
                     final stringBuffer = StringBuffer()
@@ -177,7 +177,7 @@ class _EditAssetStoreState extends State<EditAssetStore> {
             ),
             shortcuts: {
               DeleteIntent.hotkey: const DeleteIntent(),
-              CopyAssetIntent.hotkey: const CopyAssetIntent()
+              CopyIntent.hotkey: const CopyIntent()
             },
           ),
         ),

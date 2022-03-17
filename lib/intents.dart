@@ -156,10 +156,10 @@ class DeleteIntent extends Intent {
   static const hotkey = SingleActivator(LogicalKeyboardKey.delete);
 }
 
-/// An intent to copy the given assetReference to the clipboard.
-class CopyAssetIntent extends Intent {
+/// An intent to copy something to the clipboard.
+class CopyIntent extends Intent {
   /// Create an instance.
-  const CopyAssetIntent();
+  const CopyIntent();
 
   /// The hotkey to use.
   static final hotkey = SingleActivator(
