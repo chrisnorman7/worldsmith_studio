@@ -126,6 +126,7 @@ class _HomePageState extends State<HomePage> {
     }
     final checkedForUpdate = _checkedForUpdate;
     if (checkedForUpdate == null) {
+      _checkedForUpdate = false;
       checkForUpdates(context);
     }
     final scaffold = Scaffold(
@@ -135,7 +136,10 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: const Text('Check For Updates'),
-                value: () => setState(() => _checkedForUpdate = null),
+                value: () => setState(() {
+                  _checkedForUpdate = true;
+                  checkForUpdates(context);
+                }),
               ),
               const PopupMenuItem(
                 child: Text('Open Manual'),
@@ -404,7 +408,6 @@ class _HomePageState extends State<HomePage> {
 
   /// Check for updates.
   Future<void> checkForUpdates(BuildContext context) async {
-    _checkedForUpdate = false;
     try {
       final tag = await getLatestTag();
       final name = tag.name;
@@ -432,6 +435,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+        );
+      } else if (_checkedForUpdate == true) {
+        showError(
+          context: context,
+          message: 'You are up to date.',
+          title: 'No Updates Available',
         );
       }
     } catch (e, s) {

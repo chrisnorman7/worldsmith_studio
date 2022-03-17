@@ -155,7 +155,7 @@ Future<GitTag> getLatestTag() async {
   if (data == null || data.isEmpty) {
     throw StateError('No tags found.');
   }
-  final datum = data.last as Map<String, dynamic>;
+  final datum = data.first as Map<String, dynamic>;
   final tag = GitTag.fromJson(datum);
   return tag;
 }
