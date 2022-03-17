@@ -84,6 +84,20 @@ class _EditPauseMenuState extends State<EditPauseMenu> {
               customMessage: options.returnToGameMessage,
               title: 'Return To Game',
               assetReference: world.menuMoveSound,
+            ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: options.returnToMainMenuMessage,
+              title: 'Return To Main Menu',
+              assetReference: world.menuMoveSound,
+            ),
+            FadeTimeListTile(
+              value: options.returnToMainMenuFadeTime,
+              onChanged: (value) {
+                options.returnToMainMenuFadeTime = value;
+                save();
+              },
+              title: 'Return To Main Menu Fade Time',
             )
           ],
         ),
