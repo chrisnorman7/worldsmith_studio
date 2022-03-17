@@ -132,6 +132,13 @@ class _HomePageState extends State<HomePage> {
               Icons.help_outline,
               semanticLabel: 'Help',
             ),
+          ),
+          ElevatedButton(
+            onPressed: () => launch(newIssueUrl),
+            child: const Icon(
+              Icons.report_problem_outlined,
+              semanticLabel: 'Report A Problem',
+            ),
           )
         ],
         title: const Text(appName),
