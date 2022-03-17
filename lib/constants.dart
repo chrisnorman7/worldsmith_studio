@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:short_uuids/short_uuids.dart';
 
 /// The application version.
-const appVersion = '0.0.3';
+const appVersion = '0.0.4';
 
 /// The app name.
 const appName = 'Worldsmith Studio';
