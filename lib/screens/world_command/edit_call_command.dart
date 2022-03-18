@@ -136,6 +136,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
                 widget.callCommand.conditions.add(conditional);
                 save();
               },
+              tooltip: 'Add Condition',
             ),
           )
         ],
