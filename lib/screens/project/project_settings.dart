@@ -30,6 +30,7 @@ class _ProjectSettingsState extends State<ProjectSettings> {
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
+    final options = world.globalOptions;
     return ListView(
       children: [
         TextListTile(
@@ -43,9 +44,9 @@ class _ProjectSettingsState extends State<ProjectSettings> {
           validator: (value) => validateNonEmptyValue(value: value),
         ),
         TextListTile(
-          value: world.globalOptions.version,
+          value: options.version,
           onChanged: (value) {
-            world.globalOptions.version = value;
+            options.version = value;
             save();
           },
           header: 'Version',
@@ -77,7 +78,7 @@ class _ProjectSettingsState extends State<ProjectSettings> {
               )
             },
             child: TextListTile(
-              value: world.globalOptions.framesPerSecond.toString(),
+              value: '${options.framesPerSecond}',
               onChanged: (value) {
                 framesPerSecond = int.parse(value);
               },
@@ -89,6 +90,26 @@ class _ProjectSettingsState extends State<ProjectSettings> {
             IncreaseIntent.hotkey: IncreaseIntent(),
             DecreaseIntent.hotkey: DecreaseIntent()
           },
+        ),
+        TextListTile(
+          value: options.orgName,
+          onChanged: (value) {
+            options.orgName = value;
+            save();
+          },
+          header: 'Organisation Name',
+          labelText: 'Name',
+          validator: (value) => validateNonEmptyValue(value: value),
+        ),
+        TextListTile(
+          value: options.appName,
+          onChanged: (value) {
+            options.appName = value;
+            save();
+          },
+          header: 'Application Name',
+          labelText: 'Name',
+          validator: (value) => validateNonEmptyValue(value: value),
         )
       ],
     );
