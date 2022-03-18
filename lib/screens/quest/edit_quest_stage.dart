@@ -55,17 +55,19 @@ class _EditQuestStageState extends State<EditQuestStage> {
                             'of the ${category.name} category.',
                       );
                     }
-                    final conditions = command.callCommand?.conditions ?? [];
-                    for (final condition in conditions) {
-                      final questCondition = condition.questCondition;
-                      if (questCondition?.questId == widget.quest.id &&
-                          questCondition?.stageId == widget.stage.id) {
-                        return showError(
-                          context: context,
-                          message: 'This stage is relied upon by the '
-                              '${command.name} command of the '
-                              '${category.name} category.',
-                        );
+                    for (final callCommand in command.callCommands) {
+                      final conditions = callCommand.conditions;
+                      for (final condition in conditions) {
+                        final questCondition = condition.questCondition;
+                        if (questCondition?.questId == widget.quest.id &&
+                            questCondition?.stageId == widget.stage.id) {
+                          return showError(
+                            context: context,
+                            message: 'This stage is relied upon by the '
+                                '${command.name} command of the '
+                                '${category.name} category.',
+                          );
+                        }
                       }
                     }
                   }

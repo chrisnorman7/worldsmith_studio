@@ -6,7 +6,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/command/call_command_list_tile.dart';
+import '../../widgets/command/call_commands_list_tile.dart';
 import '../../widgets/command/return_to_main_menu_list_tile.dart';
 import '../../widgets/conversation/start_conversation_list_tile.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
@@ -18,8 +18,6 @@ import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
 import '../zone/select_zone.dart';
 import 'edit_zone_teleport.dart';
-import 'select_command_category.dart';
-import 'select_world_command.dart';
 
 const _renameIntent = RenameIntent();
 
@@ -129,7 +127,6 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
         quest == null || stageId == null ? null : quest.getStage(stageId);
     final walkingMode = widget.command.walkingMode;
     final customCommandName = widget.command.customCommandName;
-    final callCommand = widget.command.callCommand;
     final zoneTeleport = widget.command.zoneTeleport;
     final returnToMainMenu = widget.command.returnToMainMenu;
     return ListView(
@@ -145,48 +142,6 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           customMessage: widget.command.message,
           title: 'Message',
         ),
-        callCommand == null
-            ? ListTile(
-                title: const Text('Call Another Command'),
-                onTap: () => pushWidget(
-                  context: context,
-                  builder: (context) => SelectCommandCategory(
-                    projectContext: widget.projectContext,
-                    onDone: (category) {
-                      if (category == null) {
-                        Navigator.pop(context);
-                      } else {
-                        pushWidget(
-                          context: context,
-                          builder: (context) => SelectWorldCommand(
-                            projectContext: widget.projectContext,
-                            category: category,
-                            onDone: (command) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              if (command != null) {
-                                final callCommand = CallCommand(
-                                  commandId: command.id,
-                                );
-                                widget.command.callCommand = callCommand;
-                                save();
-                              }
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-              )
-            : CallCommandListTile(
-                projectContext: widget.projectContext,
-                callCommand: callCommand,
-                onChanged: (value) {
-                  widget.command.callCommand = value;
-                  save();
-                },
-              ),
         ListTile(
           title: const Text('Set Current Zone'),
           subtitle: Text(zoneTeleport == null
@@ -276,6 +231,10 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           },
           title: 'Set Quest Stage',
         ),
+        CallCommandsListTile(
+          projectContext: widget.projectContext,
+          callCommands: widget.command.callCommands,
+        ),
         TextListTile(
           value: customCommandName ?? '',
           onChanged: (value) {
@@ -325,14 +284,16 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
     }
     for (final commandCategory in world.commandCategories) {
       for (final command in commandCategory.commands) {
-        if (command.callCommand?.commandId == id ||
-            command.showScene?.callCommand?.commandId == id) {
-          return showError(
-            context: context,
-            message: 'You cannot delete a command which is called by the '
-                '${command.name} command from the ${commandCategory.name} '
-                'category.',
-          );
+        for (final callCommand in command.callCommands) {
+          if (callCommand.commandId == id ||
+              command.showScene?.callCommand?.commandId == id) {
+            return showError(
+              context: context,
+              message: 'You cannot delete a command which is called by the '
+                  '${command.name} command from the ${commandCategory.name} '
+                  'category.',
+            );
+          }
         }
       }
     }

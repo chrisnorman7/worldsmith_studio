@@ -66,14 +66,17 @@ class _EditQuestState extends State<EditQuest> {
                             'command of the ${category.name} category.',
                       );
                     }
-                    final conditionals = command.callCommand?.conditions ?? [];
-                    for (final conditional in conditionals) {
-                      if (conditional.questCondition?.questId == id) {
-                        return showError(
-                          context: context,
-                          message: 'This quest is check by the ${command.name} '
-                              'command of the ${category.name} category.',
-                        );
+                    for (final callCommand in command.callCommands) {
+                      final conditionals = callCommand.conditions;
+                      for (final conditional in conditionals) {
+                        if (conditional.questCondition?.questId == id) {
+                          return showError(
+                            context: context,
+                            message:
+                                'This quest is check by the ${command.name} '
+                                'command of the ${category.name} category.',
+                          );
+                        }
                       }
                     }
                   }
