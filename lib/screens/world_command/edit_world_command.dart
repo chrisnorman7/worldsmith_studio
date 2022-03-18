@@ -16,6 +16,7 @@ import '../../widgets/quest/quest_list_tile.dart';
 import '../../widgets/scene/show_scene_list_tile.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
+import '../zone/edit_zone.dart';
 import '../zone/select_zone.dart';
 import 'edit_zone_teleport.dart';
 
@@ -118,16 +119,18 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
 
   /// Get the list view for the [Scaffold] to use.
   ListView getCommandListView({required BuildContext context}) {
+    final world = widget.projectContext.world;
     final setQuestStage = widget.command.setQuestStage;
     final questId = setQuestStage?.questId;
-    final quest =
-        questId == null ? null : widget.projectContext.world.getQuest(questId);
+    final quest = questId == null ? null : world.getQuest(questId);
     final stageId = setQuestStage?.stageId;
     final stage =
         quest == null || stageId == null ? null : quest.getStage(stageId);
     final walkingMode = widget.command.walkingMode;
     final customCommandName = widget.command.customCommandName;
     final zoneTeleport = widget.command.zoneTeleport;
+    final zone =
+        zoneTeleport == null ? null : world.getZone(zoneTeleport.zoneId);
     final returnToMainMenu = widget.command.returnToMainMenu;
     return ListView(
       children: [
@@ -142,55 +145,66 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           customMessage: widget.command.message,
           title: 'Message',
         ),
-        ListTile(
-          title: const Text('Set Current Zone'),
-          subtitle: Text(zoneTeleport == null
-              ? 'Not set'
-              : widget.projectContext.world
-                  .getZone(
-                    zoneTeleport.zoneId,
-                  )
-                  .name),
-          onTap: () async {
-            if (zoneTeleport == null) {
-              await pushWidget(
-                context: context,
-                builder: (context) => SelectZone(
-                  projectContext: widget.projectContext,
-                  onDone: (zone) async {
-                    Navigator.pop(context);
-                    final teleport = ZoneTeleport(
-                      zoneId: zone.id,
-                      minCoordinates: Coordinates(0, 0),
-                    );
-                    widget.command.zoneTeleport = teleport;
-                    save();
-                    await pushWidget(
-                      context: context,
-                      builder: (context) => EditZoneTeleport(
-                        projectContext: widget.projectContext,
-                        zoneTeleport: teleport,
-                        onChanged: (value) {
-                          widget.command.zoneTeleport = value;
-                          save();
-                        },
-                      ),
-                    );
-                  },
-                ),
-              );
-            } else {
-              await pushWidget(
-                context: context,
-                builder: (context) => EditZoneTeleport(
-                  projectContext: widget.projectContext,
-                  zoneTeleport: zoneTeleport,
-                  onChanged: (value) {
-                    widget.command.zoneTeleport = value;
-                    save();
-                  },
-                ),
-              );
+        CallbackShortcuts(
+          child: ListTile(
+            title: const Text('Set Current Zone'),
+            subtitle: Text(zone == null ? 'Not set' : zone.name),
+            onTap: () async {
+              if (zoneTeleport == null) {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => SelectZone(
+                    projectContext: widget.projectContext,
+                    onDone: (zone) async {
+                      Navigator.pop(context);
+                      final teleport = ZoneTeleport(
+                        zoneId: zone.id,
+                        minCoordinates: Coordinates(0, 0),
+                      );
+                      widget.command.zoneTeleport = teleport;
+                      await pushWidget(
+                        context: context,
+                        builder: (context) => EditZoneTeleport(
+                          projectContext: widget.projectContext,
+                          zoneTeleport: teleport,
+                          onChanged: (value) {
+                            widget.command.zoneTeleport = value;
+                            save();
+                          },
+                        ),
+                      );
+                      save();
+                    },
+                  ),
+                );
+              } else {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditZoneTeleport(
+                    projectContext: widget.projectContext,
+                    zoneTeleport: zoneTeleport,
+                    onChanged: (value) {
+                      widget.command.zoneTeleport = value;
+                      save();
+                    },
+                  ),
+                );
+                setState(() {});
+              }
+            },
+          ),
+          bindings: {
+            EditIntent.hotkey: () async {
+              if (zone != null) {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditZone(
+                    projectContext: widget.projectContext,
+                    zone: zone,
+                  ),
+                );
+                setState(() {});
+              }
             }
           },
         ),

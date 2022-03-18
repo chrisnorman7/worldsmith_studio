@@ -75,6 +75,7 @@ class _EditBoxState extends State<EditBox> {
                 title: 'End Coordinates',
               ),
               TerrainListTile(
+                projectContext: widget.projectContext,
                 onDone: (value) {
                   Navigator.pop(context);
                   widget.box.terrainId = value.id;

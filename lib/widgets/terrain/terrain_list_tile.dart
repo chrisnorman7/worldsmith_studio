@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
+import '../../project_context.dart';
+import '../../screens/terrain/edit_terrain.dart';
 import '../../screens/terrain/select_terrain.dart';
 import '../../util.dart';
 
 /// A widget for selecting a new terrain.
-class TerrainListTile extends StatelessWidget {
+class TerrainListTile extends StatefulWidget {
   /// Create an instance.
   const TerrainListTile({
+    required this.projectContext,
     required this.onDone,
     required this.terrains,
     this.currentTerrainId,
     this.title = 'Terrain',
     Key? key,
   }) : super(key: key);
+
+  /// The project context to use.
+  final ProjectContext projectContext;
 
   /// The function to be called with the new value.
   final ValueChanged<Terrain> onDone;
@@ -28,21 +35,40 @@ class TerrainListTile extends StatelessWidget {
   final String title;
 
   @override
+  State<TerrainListTile> createState() => _TerrainListTileState();
+}
+
+class _TerrainListTileState extends State<TerrainListTile> {
+  @override
   Widget build(BuildContext context) {
-    final currentTerrain = terrains.firstWhere(
-      (element) => element.id == currentTerrainId,
+    final currentTerrain = widget.terrains.firstWhere(
+      (element) => element.id == widget.currentTerrainId,
     );
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(currentTerrain.name),
-      onTap: () => pushWidget(
-        context: context,
-        builder: (context) => SelectTerrain(
-          onDone: onDone,
-          terrains: terrains,
-          currentTerrainId: currentTerrainId,
+    return CallbackShortcuts(
+      child: ListTile(
+        title: Text(widget.title),
+        subtitle: Text(currentTerrain.name),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectTerrain(
+            onDone: widget.onDone,
+            terrains: widget.terrains,
+            currentTerrainId: widget.currentTerrainId,
+          ),
         ),
       ),
+      bindings: {
+        EditIntent.hotkey: () async {
+          await pushWidget(
+            context: context,
+            builder: (context) => EditTerrain(
+              projectContext: widget.projectContext,
+              terrain: currentTerrain,
+            ),
+          );
+          setState(() {});
+        }
+      },
     );
   }
 }

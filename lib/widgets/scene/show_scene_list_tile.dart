@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
+import '../../screens/scene/edit_scene.dart';
 import '../../screens/scene/edit_show_scene.dart';
 import '../../util.dart';
 import '../../world_command_location.dart';
@@ -53,29 +55,45 @@ class _ShowSceneListTileState extends State<ShowSceneListTile> {
             categories: world.commandCategories,
             commandId: callCommand.commandId,
           );
-    return ListTile(
-      autofocus: widget.autofocus,
-      title: Text(widget.title),
-      subtitle: Text(
-        scene == null ? 'Not set' : '${scene.name} (${location?.description}',
-      ),
-      onTap: () async {
-        if (world.scenes.isEmpty) {
-          return showError(
+    return CallbackShortcuts(
+      child: ListTile(
+        autofocus: widget.autofocus,
+        title: Text(widget.title),
+        subtitle: Text(
+          scene == null ? 'Not set' : '${scene.name} (${location?.description}',
+        ),
+        onTap: () async {
+          if (world.scenes.isEmpty) {
+            return showError(
+              context: context,
+              message: 'There are no scenes to show.',
+            );
+          }
+          final value = showScene ?? ShowScene(sceneId: world.scenes.first.id);
+          if (widget.showScene == null) {}
+          widget.onChanged(value);
+          await pushWidget(
             context: context,
-            message: 'There are no scenes to show.',
+            builder: (context) => EditShowScene(
+                projectContext: widget.projectContext,
+                showScene: value,
+                onChanged: widget.onChanged),
           );
+        },
+      ),
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (scene != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditScene(
+                projectContext: widget.projectContext,
+                scene: scene,
+              ),
+            );
+            setState(() {});
+          }
         }
-        final value = showScene ?? ShowScene(sceneId: world.scenes.first.id);
-        if (widget.showScene == null) {}
-        widget.onChanged(value);
-        await pushWidget(
-          context: context,
-          builder: (context) => EditShowScene(
-              projectContext: widget.projectContext,
-              showScene: value,
-              onChanged: widget.onChanged),
-        );
       },
     );
   }

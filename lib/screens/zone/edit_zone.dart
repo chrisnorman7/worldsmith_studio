@@ -623,6 +623,7 @@ class _EditZoneState extends State<EditZone> {
         title: 'End Coordinates',
       ),
       TerrainListTile(
+        projectContext: widget.projectContext,
         onDone: (value) {
           Navigator.pop(context);
           box.terrainId = value.id;

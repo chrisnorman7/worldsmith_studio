@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
-import '../../intents.dart';
 import '../../project_context.dart';
-import '../../screens/scene/edit_scene.dart';
 import '../../util.dart';
 import '../select_item.dart';
 
@@ -46,35 +44,21 @@ class _SceneListTileState extends State<SceneListTile> {
   Widget build(BuildContext context) {
     final scene = widget.scene;
     final world = widget.projectContext.world;
-    return CallbackShortcuts(
-      bindings: {
-        EditIntent.hotkey: () async {
-          await pushWidget(
-            context: context,
-            builder: (context) => EditScene(
-              projectContext: widget.projectContext,
-              scene: widget.scene,
-            ),
-          );
-          setState(() {});
-        }
-      },
-      child: ListTile(
-        autofocus: widget.autofocus,
-        title: Text(widget.title),
-        subtitle: Text(scene.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (context) => SelectItem<Scene>(
-            onDone: (value) {
-              Navigator.pop(context);
-              widget.onChanged(value);
-            },
-            values: world.scenes,
-            getItemWidget: (item) => Text(item.name),
-            title: 'Select Scene',
-            value: widget.scene,
-          ),
+    return ListTile(
+      autofocus: widget.autofocus,
+      title: Text(widget.title),
+      subtitle: Text(scene.name),
+      onTap: () => pushWidget(
+        context: context,
+        builder: (context) => SelectItem<Scene>(
+          onDone: (value) {
+            Navigator.pop(context);
+            widget.onChanged(value);
+          },
+          values: world.scenes,
+          getItemWidget: (item) => Text(item.name),
+          title: 'Select Scene',
+          value: widget.scene,
         ),
       ),
     );

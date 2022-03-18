@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../quest_location.dart';
+import '../../screens/quest/edit_quest.dart';
+import '../../screens/quest/edit_quest_stage.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
 import '../select_item.dart';
@@ -67,70 +70,97 @@ class _QuestListTileState extends State<QuestListTile> {
       questDescription = '$questDescription: $stageDescription';
     }
     final title = widget.title;
-    return ListTile(
-      autofocus: widget.autofocus,
-      title: Text(title ?? questDescription),
-      subtitle: title == null ? null : Text(questDescription),
-      onTap: () => pushWidget(
-        context: context,
-        builder: (context) => SelectItem<Quest?>(
-          onDone: (newQuest) {
-            if (newQuest == null) {
-              Navigator.pop(context);
-              widget.onDone(null);
-            } else {
-              pushWidget(
-                context: context,
-                builder: (context) => SelectItem<QuestStage?>(
-                  onDone: (newStage) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    widget.onDone(
-                      QuestLocation(
-                        quest: newQuest,
-                        stage: newStage,
-                      ),
-                    );
-                  },
-                  values: [null, ...newQuest.stages],
-                  getItemWidget: (item) {
-                    if (item == null) {
-                      return const Text('Not Started');
-                    } else {
-                      final sound = item.sound;
-                      final assetReference = sound == null
-                          ? null
-                          : getAssetReferenceReference(
-                              assets: world.questAssets,
-                              id: sound.id,
-                            ).reference;
-                      return PlaySoundSemantics(
-                        child: Text('${item.description}'),
-                        soundChannel:
-                            widget.projectContext.game.interfaceSounds,
-                        assetReference: assetReference,
-                        gain: sound?.gain ?? world.soundOptions.defaultGain,
+    return CallbackShortcuts(
+      child: ListTile(
+        autofocus: widget.autofocus,
+        title: Text(title ?? questDescription),
+        subtitle: title == null ? null : Text(questDescription),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectItem<Quest?>(
+            onDone: (newQuest) {
+              if (newQuest == null) {
+                Navigator.pop(context);
+                widget.onDone(null);
+              } else {
+                pushWidget(
+                  context: context,
+                  builder: (context) => SelectItem<QuestStage?>(
+                    onDone: (newStage) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      widget.onDone(
+                        QuestLocation(
+                          quest: newQuest,
+                          stage: newStage,
+                        ),
                       );
-                    }
-                  },
-                  title: 'Select Stage',
-                  value: stage,
+                    },
+                    values: [null, ...newQuest.stages],
+                    getItemWidget: (item) {
+                      if (item == null) {
+                        return const Text('Not Started');
+                      } else {
+                        final sound = item.sound;
+                        final assetReference = sound == null
+                            ? null
+                            : getAssetReferenceReference(
+                                assets: world.questAssets,
+                                id: sound.id,
+                              ).reference;
+                        return PlaySoundSemantics(
+                          child: Text('${item.description}'),
+                          soundChannel:
+                              widget.projectContext.game.interfaceSounds,
+                          assetReference: assetReference,
+                          gain: sound?.gain ?? world.soundOptions.defaultGain,
+                        );
+                      }
+                    },
+                    title: 'Select Stage',
+                    value: stage,
+                  ),
+                );
+              }
+            },
+            values: [null, ...world.quests],
+            getItemWidget: (item) {
+              if (item == null) {
+                return const Text('Clear');
+              } else {
+                return Text(item.name);
+              }
+            },
+            title: 'Select Quest',
+            value: quest,
+          ),
+        ),
+      ),
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (quest != null) {
+            if (stage == null) {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuest(
+                  projectContext: widget.projectContext,
+                  quest: quest,
+                ),
+              );
+            } else {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuestStage(
+                  projectContext: widget.projectContext,
+                  quest: quest,
+                  stage: stage,
                 ),
               );
             }
-          },
-          values: [null, ...world.quests],
-          getItemWidget: (item) {
-            if (item == null) {
-              return const Text('Clear');
-            } else {
-              return Text(item.name);
-            }
-          },
-          title: 'Select Quest',
-          value: quest,
-        ),
-      ),
+            setState(() {});
+          }
+        }
+      },
     );
   }
 }

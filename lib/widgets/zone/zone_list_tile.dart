@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
+import '../../screens/zone/edit_zone.dart';
 import '../../screens/zone/select_zone.dart';
 import '../../util.dart';
 
 /// A widget for viewing and editing a zone.
-class ZoneListTile extends StatelessWidget {
+class ZoneListTile extends StatefulWidget {
   /// Create an instance.
   const ZoneListTile({
     required this.projectContext,
@@ -32,24 +34,45 @@ class ZoneListTile extends StatelessWidget {
   /// Whether or not the resulting [ListTile] should be autofocused.
   final bool autofocus;
 
+  @override
+  State<ZoneListTile> createState() => _ZoneListTileState();
+}
+
+class _ZoneListTileState extends State<ZoneListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
-    final id = zoneId;
-    final world = projectContext.world;
+    final id = widget.zoneId;
+    final world = widget.projectContext.world;
     final currentZone = id == null ? null : world.getZone(id);
-    return ListTile(
-      autofocus: autofocus,
-      title: Text(title),
-      subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
-      onTap: () => pushWidget(
-        context: context,
-        builder: (context) => SelectZone(
-          projectContext: projectContext,
-          onDone: onDone,
-          zone: currentZone,
+    return CallbackShortcuts(
+      child: ListTile(
+        autofocus: widget.autofocus,
+        title: Text(widget.title),
+        subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectZone(
+            projectContext: widget.projectContext,
+            onDone: widget.onDone,
+            zone: currentZone,
+          ),
         ),
       ),
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (currentZone != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditZone(
+                projectContext: widget.projectContext,
+                zone: currentZone,
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
+import '../../screens/conversation/edit_conversation.dart';
 import '../../screens/conversation/edit_start_conversation.dart';
 import '../../screens/conversation/select_conversation.dart';
 import '../../util.dart';
@@ -58,49 +60,73 @@ class _StartConversationListTileState extends State<StartConversationListTile> {
                 assets: widget.projectContext.world.conversationAssets,
                 id: sound.id)
             .reference;
-    return PlaySoundSemantics(
-      child: ListTile(
-        autofocus: widget.autofocus,
-        title: Text(widget.title),
-        subtitle: Text(
-          conversation == null
-              ? 'Not set'
-              : '${conversation.name} (${widget.startConversation?.fadeTime})',
+    return CallbackShortcuts(
+      child: PlaySoundSemantics(
+        child: ListTile(
+          autofocus: widget.autofocus,
+          title: Text(widget.title),
+          subtitle: Text(
+            conversation == null
+                ? 'Not set'
+                : '${conversation.name} '
+                    '(${widget.startConversation?.fadeTime})',
+          ),
+          onTap: () async {
+            final startConversation = widget.startConversation;
+            if (startConversation == null) {
+              await pushWidget(
+                context: context,
+                builder: (context) => SelectConversation(
+                  projectContext: widget.projectContext,
+                  onDone: (value) {
+                    if (value == null) {
+                      widget.onChanged(null);
+                    } else {
+                      widget.onChanged(
+                        StartConversation(
+                            conversationId: value.conversation.id),
+                      );
+                    }
+                  },
+                ),
+              );
+            } else {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditStartConversation(
+                  projectContext: widget.projectContext,
+                  startConversation: startConversation,
+                  onChanged: widget.onChanged,
+                ),
+              );
+            }
+            setState(() {});
+          },
         ),
-        onTap: () async {
-          final startConversation = widget.startConversation;
-          if (startConversation == null) {
-            await pushWidget(
-              context: context,
-              builder: (context) => SelectConversation(
-                projectContext: widget.projectContext,
-                onDone: (value) {
-                  if (value == null) {
-                    widget.onChanged(null);
-                  } else {
-                    widget.onChanged(
-                      StartConversation(conversationId: value.conversation.id),
-                    );
-                  }
-                },
-              ),
-            );
-          } else {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditStartConversation(
-                projectContext: widget.projectContext,
-                startConversation: startConversation,
-                onChanged: widget.onChanged,
-              ),
-            );
-          }
-          setState(() {});
-        },
+        soundChannel: widget.projectContext.game.interfaceSounds,
+        assetReference: assetReference,
+        gain: sound?.gain ?? 0.0,
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: assetReference,
-      gain: sound?.gain ?? 0.0,
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (conversation != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditConversation(
+                projectContext: widget.projectContext,
+                category: widget.projectContext.world.conversationCategories
+                    .firstWhere(
+                  (element) => element.conversations
+                      .where((element) => element.id == conversation.id)
+                      .isNotEmpty,
+                ),
+                conversation: conversation,
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
     );
   }
 }
