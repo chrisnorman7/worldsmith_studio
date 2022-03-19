@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:short_uuids/short_uuids.dart';
 
 /// The application version.
@@ -41,3 +42,6 @@ typedef CanDelete<T> = String? Function(T value);
 
 /// The URL for the manual.
 const manualUrl = 'https://chrisnorman7.github.io/worldsmith_studio_manual';
+
+/// The date formatter to use.
+final dateFormat = DateFormat.yMMMMEEEEd().add_Hms();
