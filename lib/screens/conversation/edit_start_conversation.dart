@@ -35,6 +35,7 @@ class _EditStartConversationState extends State<EditStartConversation> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
+    final pushAfter = widget.startConversation.pushInitialBranchAfter;
     final fadeTime = widget.startConversation.fadeTime;
     return Cancel(
       child: Scaffold(
@@ -69,6 +70,16 @@ class _EditStartConversationState extends State<EditStartConversation> {
                 save();
               },
               autofocus: true,
+            ),
+            NumberListTile(
+              value: pushAfter.toDouble(),
+              onChanged: (value) {
+                widget.startConversation.pushInitialBranchAfter = value.floor();
+                save();
+              },
+              min: 1.0,
+              title: 'First Branch Delay',
+              subtitle: '$pushAfter millisecond${pushAfter == 1 ? "" : "s"}',
             ),
             NumberListTile(
               value: fadeTime?.toDouble() ?? 0.0,
