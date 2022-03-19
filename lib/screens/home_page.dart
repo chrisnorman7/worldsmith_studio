@@ -5,6 +5,7 @@ import 'package:dart_sdl/dart_sdl.dart';
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -223,6 +224,11 @@ class _HomePageState extends State<HomePage> {
     );
     if (filename == null) {
       return;
+    } else if (Platform.resolvedExecutable.startsWith(path.dirname(filename))) {
+      return showError(
+        context: context,
+        message: 'You cannot create projects along side the program files.',
+      );
     }
     final file = File(filename);
     if (file.existsSync()) {
