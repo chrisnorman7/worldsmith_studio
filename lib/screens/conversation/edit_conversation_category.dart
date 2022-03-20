@@ -31,12 +31,12 @@ class EditConversationCategory extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditConversationCategoryState createState() =>
-      _EditConversationCategoryState();
+  EditConversationCategoryState createState() =>
+      EditConversationCategoryState();
 }
 
 /// State for [EditConversationCategory].
-class _EditConversationCategoryState extends State<EditConversationCategory> {
+class EditConversationCategoryState extends State<EditConversationCategory> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -80,6 +80,10 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
                     )
               },
               child: PlaySoundSemantics(
+                soundChannel: widget.projectContext.game.musicSounds,
+                assetReference: asset,
+                gain: gain,
+                looping: true,
                 child: Builder(
                   builder: (context) => ListTile(
                     autofocus: i == 0,
@@ -98,10 +102,6 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
                     },
                   ),
                 ),
-                soundChannel: widget.projectContext.game.musicSounds,
-                assetReference: asset,
-                gain: gain,
-                looping: true,
               ),
             ),
           ),
@@ -139,7 +139,6 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
         body: child,
         floatingActionButton: FloatingActionButton(
           autofocus: conversations.isEmpty,
-          child: createIcon,
           onPressed: () async {
             final branch = ConversationBranch(
               id: newId(),
@@ -166,6 +165,7 @@ class _EditConversationCategoryState extends State<EditConversationCategory> {
             setState(() {});
           },
           tooltip: 'Add Conversation',
+          child: createIcon,
         ),
       ),
     );

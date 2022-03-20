@@ -81,11 +81,11 @@ class TabbedScaffold extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _TabbedScaffoldState createState() => _TabbedScaffoldState();
+  TabbedScaffoldState createState() => TabbedScaffoldState();
 }
 
 /// State for [TabbedScaffold].
-class _TabbedScaffoldState extends State<TabbedScaffold> {
+class TabbedScaffoldState extends State<TabbedScaffold> {
   late int _index;
 
   /// Set the initial index.
@@ -133,6 +133,19 @@ class _TabbedScaffoldState extends State<TabbedScaffold> {
     );
     final tab = widget.tabs[_index];
     return Shortcuts(
+      shortcuts: {
+        for (var i = 0; i < _pageNumbers.length; i++)
+          SingleActivator(_pageNumbers[i], control: true): GotoPageIntent(i),
+        const SingleActivator(
+          LogicalKeyboardKey.tab,
+          control: true,
+        ): const SwitchPageIntent(SwitchPageDirections.forwards),
+        const SingleActivator(
+          LogicalKeyboardKey.tab,
+          control: true,
+          shift: true,
+        ): const SwitchPageIntent(SwitchPageDirections.backwards)
+      },
       child: Actions(
         actions: {
           GotoPageIntent: gotoPageAction,
@@ -159,19 +172,6 @@ class _TabbedScaffoldState extends State<TabbedScaffold> {
           ),
         ),
       ),
-      shortcuts: {
-        for (var i = 0; i < _pageNumbers.length; i++)
-          SingleActivator(_pageNumbers[i], control: true): GotoPageIntent(i),
-        const SingleActivator(
-          LogicalKeyboardKey.tab,
-          control: true,
-        ): const SwitchPageIntent(SwitchPageDirections.forwards),
-        const SingleActivator(
-          LogicalKeyboardKey.tab,
-          control: true,
-          shift: true,
-        ): const SwitchPageIntent(SwitchPageDirections.backwards)
-      },
     );
   }
 }

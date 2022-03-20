@@ -28,11 +28,11 @@ class EditCallCommands extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCallCommandsState createState() => _EditCallCommandsState();
+  EditCallCommandsState createState() => EditCallCommandsState();
 }
 
 /// State for [EditCallCommands].
-class _EditCallCommandsState extends State<EditCallCommands> {
+class EditCallCommandsState extends State<EditCallCommands> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -121,8 +121,8 @@ class _EditCallCommandsState extends State<EditCallCommands> {
               },
             ),
           ),
-          child: createIcon,
           tooltip: 'Add Command',
+          child: createIcon,
         ),
       ),
     );

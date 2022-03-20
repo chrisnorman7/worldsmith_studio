@@ -37,11 +37,11 @@ class ShowSceneListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ShowSceneListTileState createState() => _ShowSceneListTileState();
+  ShowSceneListTileState createState() => ShowSceneListTileState();
 }
 
 /// State for [ShowSceneListTile].
-class _ShowSceneListTileState extends State<ShowSceneListTile> {
+class ShowSceneListTileState extends State<ShowSceneListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -56,6 +56,20 @@ class _ShowSceneListTileState extends State<ShowSceneListTile> {
             commandId: callCommand.commandId,
           );
     return CallbackShortcuts(
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (scene != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditScene(
+                projectContext: widget.projectContext,
+                scene: scene,
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
       child: ListTile(
         autofocus: widget.autofocus,
         title: Text(widget.title),
@@ -81,20 +95,6 @@ class _ShowSceneListTileState extends State<ShowSceneListTile> {
           );
         },
       ),
-      bindings: {
-        EditIntent.hotkey: () async {
-          if (scene != null) {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditScene(
-                projectContext: widget.projectContext,
-                scene: scene,
-              ),
-            );
-            setState(() {});
-          }
-        }
-      },
     );
   }
 }

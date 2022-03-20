@@ -27,11 +27,11 @@ class EditCredit extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCreditState createState() => _EditCreditState();
+  EditCreditState createState() => EditCreditState();
 }
 
 /// State for [EditCredit].
-class _EditCreditState extends State<EditCredit> {
+class EditCreditState extends State<EditCredit> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

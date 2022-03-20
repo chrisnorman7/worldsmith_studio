@@ -17,11 +17,11 @@ class ProjectAssetStores extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectAssetStoresState createState() => _ProjectAssetStoresState();
+  ProjectAssetStoresState createState() => ProjectAssetStoresState();
 }
 
 /// State for [ProjectAssetStores].
-class _ProjectAssetStoresState extends State<ProjectAssetStores> {
+class ProjectAssetStoresState extends State<ProjectAssetStores> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

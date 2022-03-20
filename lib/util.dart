@@ -84,8 +84,8 @@ void showError({
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
             autofocus: true,
+            child: const Text('OK'),
           )
         ],
         title: Text(title),

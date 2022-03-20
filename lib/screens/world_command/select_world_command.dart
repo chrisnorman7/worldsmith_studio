@@ -66,7 +66,15 @@ class _SelectWorldCommandState extends State<SelectWorldCommand> {
     }
     return Cancel(
       child: WithKeyboardShortcuts(
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Add a new command.',
+            keyName: 'A',
+            control: true,
+          )
+        ],
         child: CallbackShortcuts(
+          bindings: {AddIntent.hotkey: addCommand},
           child: Scaffold(
             appBar: AppBar(
               actions: [
@@ -87,15 +95,7 @@ class _SelectWorldCommandState extends State<SelectWorldCommand> {
                     itemCount: listTiles.length,
                   ),
           ),
-          bindings: {AddIntent.hotkey: addCommand},
         ),
-        keyboardShortcuts: const [
-          KeyboardShortcut(
-            description: 'Add a new command.',
-            keyName: 'A',
-            control: true,
-          )
-        ],
       ),
     );
   }

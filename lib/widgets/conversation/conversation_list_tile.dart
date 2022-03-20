@@ -54,6 +54,9 @@ class ConversationListTile extends StatelessWidget {
         : ConversationLocation.find(
             world: world, conversationId: conversation.id);
     return PlaySoundSemantics(
+      soundChannel: projectContext.game.interfaceSounds,
+      assetReference: assetReference,
+      gain: sound?.gain ?? world.soundOptions.defaultGain,
       child: ListTile(
         autofocus: autofocus,
         title: Text(title),
@@ -69,9 +72,6 @@ class ConversationListTile extends StatelessWidget {
           ),
         ),
       ),
-      soundChannel: projectContext.game.interfaceSounds,
-      assetReference: assetReference,
-      gain: sound?.gain ?? world.soundOptions.defaultGain,
     );
   }
 }

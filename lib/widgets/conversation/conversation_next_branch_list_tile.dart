@@ -37,12 +37,12 @@ class ConversationNextBranchListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ConversationNextBranchListTileState createState() =>
-      _ConversationNextBranchListTileState();
+  ConversationNextBranchListTileState createState() =>
+      ConversationNextBranchListTileState();
 }
 
 /// State for [ConversationNextBranchListTile].
-class _ConversationNextBranchListTileState
+class ConversationNextBranchListTileState
     extends State<ConversationNextBranchListTile> {
   /// Build a widget.
   @override
@@ -60,6 +60,9 @@ class _ConversationNextBranchListTileState
             id: sound.id,
           );
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: asset?.reference,
+      gain: world.soundOptions.defaultGain,
       child: Builder(
         builder: (context) => ListTile(
           title: const Text('Next Branch'),
@@ -86,7 +89,6 @@ class _ConversationNextBranchListTileState
                   getItemWidget: (item) {
                     final sound = item.sound;
                     return PlaySoundSemantics(
-                      child: Text(item.text ?? '<No Text>'),
                       soundChannel: widget.projectContext.game.interfaceSounds,
                       assetReference: sound == null
                           ? null
@@ -95,6 +97,7 @@ class _ConversationNextBranchListTileState
                               id: sound.id,
                             ).reference,
                       gain: world.soundOptions.defaultGain,
+                      child: Text(item.text ?? '<No Text>'),
                     );
                   },
                 ),
@@ -115,9 +118,6 @@ class _ConversationNextBranchListTileState
           },
         ),
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: asset?.reference,
-      gain: world.soundOptions.defaultGain,
     );
   }
 }

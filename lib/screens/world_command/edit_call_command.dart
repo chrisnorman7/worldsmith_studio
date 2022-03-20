@@ -36,11 +36,11 @@ class EditCallCommand extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCallCommandState createState() => _EditCallCommandState();
+  EditCallCommandState createState() => EditCallCommandState();
 }
 
 /// State for [EditCallCommand].
-class _EditCallCommandState extends State<EditCallCommand> {
+class EditCallCommandState extends State<EditCallCommand> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -130,13 +130,13 @@ class _EditCallCommandState extends State<EditCallCommand> {
             },
             floatingActionButton: FloatingActionButton(
               autofocus: widget.callCommand.conditions.isEmpty,
-              child: createIcon,
               onPressed: () {
                 final conditional = Conditional();
                 widget.callCommand.conditions.add(conditional);
                 save();
               },
               tooltip: 'Add Condition',
+              child: createIcon,
             ),
           )
         ],
@@ -170,6 +170,7 @@ class _EditCallCommandState extends State<EditCallCommand> {
       children: [
         TableCell(
           child: Semantics(
+            label: 'Quest',
             child: QuestListTile(
               projectContext: widget.projectContext,
               quest: quest,
@@ -187,11 +188,22 @@ class _EditCallCommandState extends State<EditCallCommand> {
               },
               title: null,
             ),
-            label: 'Quest',
           ),
         ),
         TableCell(
           child: CallbackShortcuts(
+            bindings: {
+              DecreaseIntent.hotkey: () {
+                if (chance > 1) {
+                  conditional.chance = chance - 1;
+                  save();
+                }
+              },
+              IncreaseIntent.hotkey: () {
+                conditional.chance++;
+                save();
+              }
+            },
             child: TextButton(
               onPressed: () => pushWidget(
                 context: context,
@@ -208,22 +220,10 @@ class _EditCallCommandState extends State<EditCallCommand> {
                 ),
               ),
               child: Semantics(
-                child: Text(chanceDescription),
                 label: 'Chance',
+                child: Text(chanceDescription),
               ),
             ),
-            bindings: {
-              DecreaseIntent.hotkey: () {
-                if (chance > 1) {
-                  conditional.chance = chance - 1;
-                  save();
-                }
-              },
-              IncreaseIntent.hotkey: () {
-                conditional.chance++;
-                save();
-              }
-            },
           ),
         ),
         TableCell(
@@ -242,8 +242,8 @@ class _EditCallCommandState extends State<EditCallCommand> {
               ),
             ),
             child: Semantics(
-              child: Text(conditionalFunctionNameDescription),
               label: 'Function Name',
+              child: Text(conditionalFunctionNameDescription),
             ),
           ),
         ),

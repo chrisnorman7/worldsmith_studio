@@ -28,11 +28,11 @@ class SelectConversation extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SelectConversationState createState() => _SelectConversationState();
+  SelectConversationState createState() => SelectConversationState();
 }
 
 /// State for [SelectConversation].
-class _SelectConversationState extends State<SelectConversation> {
+class SelectConversationState extends State<SelectConversation> {
   ConversationCategory? _category;
 
   /// Build a widget.
@@ -82,10 +82,10 @@ class _SelectConversationState extends State<SelectConversation> {
                   id: sound.id,
                 ).reference;
           return PlaySoundSemantics(
-            child: Text(item.name),
             soundChannel: widget.projectContext.game.interfaceSounds,
             assetReference: assetReference,
             gain: sound?.gain ?? world.soundOptions.defaultGain,
+            child: Text(item.name),
           );
         },
       );

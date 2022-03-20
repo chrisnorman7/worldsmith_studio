@@ -59,7 +59,32 @@ class _WorldCommandListTileState extends State<WorldCommandListTile> {
     final currentCategory = location?.category;
     final currentValue = location?.command;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Edit the command.',
+          keyName: 'E',
+          control: true,
+        )
+      ],
       child: CallbackShortcuts(
+        bindings: {
+          EditIntent.hotkey: () async {
+            final category = currentCategory;
+            final command = currentValue;
+            if (category != null && command != null) {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditWorldCommand(
+                  projectContext: widget.projectContext,
+                  category: category,
+                  command: command,
+                ),
+              );
+              widget.projectContext.save();
+              setState(() {});
+            }
+          }
+        },
         child: ListTile(
           autofocus: widget.autofocus,
           title: Text(widget.title),
@@ -97,32 +122,7 @@ class _WorldCommandListTileState extends State<WorldCommandListTile> {
             ),
           ),
         ),
-        bindings: {
-          EditIntent.hotkey: () async {
-            final category = currentCategory;
-            final command = currentValue;
-            if (category != null && command != null) {
-              await pushWidget(
-                context: context,
-                builder: (context) => EditWorldCommand(
-                  projectContext: widget.projectContext,
-                  category: category,
-                  command: command,
-                ),
-              );
-              widget.projectContext.save();
-              setState(() {});
-            }
-          }
-        },
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Edit the command.',
-          keyName: 'E',
-          control: true,
-        )
-      ],
     );
   }
 }

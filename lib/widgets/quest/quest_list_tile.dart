@@ -48,11 +48,11 @@ class QuestListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _QuestListTileState createState() => _QuestListTileState();
+  QuestListTileState createState() => QuestListTileState();
 }
 
 /// State for [QuestListTile].
-class _QuestListTileState extends State<QuestListTile> {
+class QuestListTileState extends State<QuestListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -71,6 +71,31 @@ class _QuestListTileState extends State<QuestListTile> {
     }
     final title = widget.title;
     return CallbackShortcuts(
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (quest != null) {
+            if (stage == null) {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuest(
+                  projectContext: widget.projectContext,
+                  quest: quest,
+                ),
+              );
+            } else {
+              await pushWidget(
+                context: context,
+                builder: (context) => EditQuestStage(
+                  projectContext: widget.projectContext,
+                  quest: quest,
+                  stage: stage,
+                ),
+              );
+            }
+            setState(() {});
+          }
+        }
+      },
       child: ListTile(
         autofocus: widget.autofocus,
         title: Text(title ?? questDescription),
@@ -109,11 +134,11 @@ class _QuestListTileState extends State<QuestListTile> {
                                 id: sound.id,
                               ).reference;
                         return PlaySoundSemantics(
-                          child: Text('${item.description}'),
                           soundChannel:
                               widget.projectContext.game.interfaceSounds,
                           assetReference: assetReference,
                           gain: sound?.gain ?? world.soundOptions.defaultGain,
+                          child: Text('${item.description}'),
                         );
                       }
                     },
@@ -136,31 +161,6 @@ class _QuestListTileState extends State<QuestListTile> {
           ),
         ),
       ),
-      bindings: {
-        EditIntent.hotkey: () async {
-          if (quest != null) {
-            if (stage == null) {
-              await pushWidget(
-                context: context,
-                builder: (context) => EditQuest(
-                  projectContext: widget.projectContext,
-                  quest: quest,
-                ),
-              );
-            } else {
-              await pushWidget(
-                context: context,
-                builder: (context) => EditQuestStage(
-                  projectContext: widget.projectContext,
-                  quest: quest,
-                  stage: stage,
-                ),
-              );
-            }
-            setState(() {});
-          }
-        }
-      },
     );
   }
 }

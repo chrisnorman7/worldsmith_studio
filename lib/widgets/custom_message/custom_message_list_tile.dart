@@ -40,17 +40,21 @@ class CustomMessageListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _CustomMessageListTileState createState() => _CustomMessageListTileState();
+  CustomMessageListTileState createState() => CustomMessageListTileState();
 }
 
 /// State for [CustomMessageListTile].
-class _CustomMessageListTileState extends State<CustomMessageListTile> {
+class CustomMessageListTileState extends State<CustomMessageListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final text = widget.customMessage.text;
     final sound = widget.customMessage.sound;
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: sound == null
+          ? widget.assetReference
+          : widget.projectContext.worldContext.getCustomSound(sound),
       child: Builder(
         builder: (context) => ListTile(
           autofocus: widget.autofocus,
@@ -70,10 +74,6 @@ class _CustomMessageListTileState extends State<CustomMessageListTile> {
           },
         ),
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: sound == null
-          ? widget.assetReference
-          : widget.projectContext.worldContext.getCustomSound(sound),
     );
   }
 }

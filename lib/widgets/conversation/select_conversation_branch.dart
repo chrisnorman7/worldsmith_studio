@@ -30,27 +30,32 @@ class SelectConversationBranch extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SelectConversationBranchState createState() =>
-      _SelectConversationBranchState();
+  SelectConversationBranchState createState() =>
+      SelectConversationBranchState();
 }
 
 /// State for [SelectConversationBranch].
-class _SelectConversationBranchState extends State<SelectConversationBranch> {
+class SelectConversationBranchState extends State<SelectConversationBranch> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new branch.',
+          keyName: 'A',
+          control: true,
+        )
+      ],
       child: CallbackShortcuts(
+        bindings: {AddIntent.hotkey: addBranch},
         child: SelectItem<ConversationBranch>(
           onDone: widget.onDone,
           values: widget.conversation.branches,
           getItemWidget: (item) {
             final sound = item.sound;
             return PlaySoundSemantics(
-              child: Text(
-                item.text ?? 'Untitled',
-              ),
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: sound == null
                   ? null
@@ -59,6 +64,9 @@ class _SelectConversationBranchState extends State<SelectConversationBranch> {
                       id: sound.id,
                     ).reference,
               gain: sound?.gain ?? world.soundOptions.defaultGain,
+              child: Text(
+                item.text ?? 'Untitled',
+              ),
             );
           },
           actions: [
@@ -72,15 +80,7 @@ class _SelectConversationBranchState extends State<SelectConversationBranch> {
           ],
           title: 'Select Branch',
         ),
-        bindings: {AddIntent.hotkey: addBranch},
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Add a new branch.',
-          keyName: 'A',
-          control: true,
-        )
-      ],
     );
   }
 

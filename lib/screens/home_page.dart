@@ -102,6 +102,24 @@ class _HomePageState extends State<HomePage> {
           LaunchManualIntent.hotkey: () => launch(manualUrl)
         },
         child: WithKeyboardShortcuts(
+          keyboardShortcuts: const [
+            KeyboardShortcut(
+              description: 'Create a new project.',
+              keyName: 'n',
+              control: true,
+            ),
+            KeyboardShortcut(
+              description: 'Open an existing project',
+              keyName: 'o',
+              control: true,
+            ),
+            KeyboardShortcut(
+              description: 'Open the manual in your web browser.',
+              keyName: '/',
+              control: true,
+              shift: true,
+            )
+          ],
           child: ListView.builder(
             itemBuilder: (context, index) {
               if (index < children.length) {
@@ -123,24 +141,6 @@ class _HomePageState extends State<HomePage> {
             },
             itemCount: children.length + recentProjectPaths.length,
           ),
-          keyboardShortcuts: const [
-            KeyboardShortcut(
-              description: 'Create a new project.',
-              keyName: 'n',
-              control: true,
-            ),
-            KeyboardShortcut(
-              description: 'Open an existing project',
-              keyName: 'o',
-              control: true,
-            ),
-            KeyboardShortcut(
-              description: 'Open the manual in your web browser.',
-              keyName: '/',
-              control: true,
-              shift: true,
-            )
-          ],
         ),
       );
     }
@@ -162,12 +162,12 @@ class _HomePageState extends State<HomePage> {
                 }),
               ),
               const PopupMenuItem(
-                child: Text('Open Manual'),
                 value: launchManual,
+                child: Text('Open Manual'),
               ),
               const PopupMenuItem(
-                child: Text('Report Issue'),
                 value: launchReportIssue,
+                child: Text('Report Issue'),
               ),
               PopupMenuItem(
                 child: const Text('Visit GitHub'),

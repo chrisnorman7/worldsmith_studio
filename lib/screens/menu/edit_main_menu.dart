@@ -22,11 +22,11 @@ class EditMainMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditMainMenuState createState() => _EditMainMenuState();
+  EditMainMenuState createState() => EditMainMenuState();
 }
 
 /// State for [EditMainMenu].
-class _EditMainMenuState extends State<EditMainMenu> {
+class EditMainMenuState extends State<EditMainMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

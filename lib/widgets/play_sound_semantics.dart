@@ -47,9 +47,9 @@ class PlaySoundSemanticsState extends State<PlaySoundSemantics> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) => Semantics(
-        child: widget.child,
         onDidGainAccessibilityFocus: play,
         onDidLoseAccessibilityFocus: stop,
+        child: widget.child,
       );
 
   /// Dispose of the play sound instance.

@@ -63,6 +63,12 @@ class _SearchableListViewState extends State<SearchableListView> {
           .toList();
     }
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Search the list.',
+          keyName: '/',
+        )
+      ],
       child: ListView.builder(
         itemBuilder: (context, index) {
           if (index == 0) {
@@ -105,8 +111,10 @@ class _SearchableListViewState extends State<SearchableListView> {
           }
           final child = results[index - 1];
           return Shortcuts(
+            shortcuts: const {
+              SearchIntent.hotkey: SearchIntent(),
+            },
             child: Actions(
-              child: child.child,
               actions: {
                 SearchIntent: CallbackAction<SearchIntent>(
                   onInvoke: (intent) {
@@ -119,20 +127,12 @@ class _SearchableListViewState extends State<SearchableListView> {
                   },
                 ),
               },
+              child: child.child,
             ),
-            shortcuts: const {
-              SearchIntent.hotkey: SearchIntent(),
-            },
           );
         },
         itemCount: results.length + 1,
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Search the list.',
-          keyName: '/',
-        )
-      ],
     );
   }
 

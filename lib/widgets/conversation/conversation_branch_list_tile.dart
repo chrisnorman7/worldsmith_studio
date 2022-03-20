@@ -49,12 +49,6 @@ class ConversationBranchListTile extends StatelessWidget {
     final text = Text(b == null ? 'Not set' : '${b.text}');
     final titleText = title;
     return PlaySoundSemantics(
-      child: ListTile(
-        autofocus: autofocus,
-        title: titleText == null ? text : Text(titleText),
-        subtitle: titleText == null ? null : text,
-        onTap: onTap,
-      ),
       soundChannel: soundChannel ?? projectContext.game.interfaceSounds,
       assetReference: sound == null
           ? null
@@ -63,6 +57,12 @@ class ConversationBranchListTile extends StatelessWidget {
               id: sound.id,
             ).reference,
       gain: sound?.gain ?? world.soundOptions.defaultGain,
+      child: ListTile(
+        autofocus: autofocus,
+        title: titleText == null ? text : Text(titleText),
+        subtitle: titleText == null ? null : text,
+        onTap: onTap,
+      ),
     );
   }
 }

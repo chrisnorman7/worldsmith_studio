@@ -30,11 +30,11 @@ class EditScene extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditSceneState createState() => _EditSceneState();
+  EditSceneState createState() => EditSceneState();
 }
 
 /// State for [EditScene].
-class _EditSceneState extends State<EditScene> {
+class EditSceneState extends State<EditScene> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

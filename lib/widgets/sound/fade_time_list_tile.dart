@@ -44,6 +44,10 @@ class FadeTimeListTile extends StatelessWidget {
       },
     );
     return Shortcuts(
+      shortcuts: const {
+        IncreaseIntent.hotkey: _increaseIntent,
+        DecreaseIntent.hotkey: _decreaseIntent
+      },
       child: Actions(
         actions: {
           IncreaseIntent: increaseAction,
@@ -80,10 +84,6 @@ class FadeTimeListTile extends StatelessWidget {
           ),
         ),
       ),
-      shortcuts: const {
-        IncreaseIntent.hotkey: _increaseIntent,
-        DecreaseIntent.hotkey: _decreaseIntent
-      },
     );
   }
 }

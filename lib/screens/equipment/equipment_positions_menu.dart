@@ -26,11 +26,11 @@ class EquipmentPositionsMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EquipmentPositionsMenuState createState() => _EquipmentPositionsMenuState();
+  EquipmentPositionsMenuState createState() => EquipmentPositionsMenuState();
 }
 
 /// State for [EquipmentPositionsMenu].
-class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
+class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,26 @@ class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
       },
     );
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Create a new equipment position.',
+          keyName: 'N',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Move equipment positions up or down.',
+          keyName: 'Arrow Keys',
+          alt: true,
+        ),
+        KeyboardShortcut(
+          description: 'Delete the selected equipment position',
+          keyName: 'Delete',
+        )
+      ],
       child: Shortcuts(
+        shortcuts: {
+          CreateEquipmentPositionIntent.hotkey: _createEquipmentPositionIntent
+        },
         child: Actions(
           actions: {
             CreateEquipmentPositionIntent: createEquipmentPositionAction
@@ -113,6 +132,7 @@ class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                       shortcuts[MoveUpIntent.hotkey] = _moveUpIntent;
                     }
                     return Shortcuts(
+                      shortcuts: shortcuts,
                       child: Actions(
                         actions: actions,
                         child: ListTile(
@@ -130,7 +150,6 @@ class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                           },
                         ),
                       ),
-                      shortcuts: shortcuts,
                     );
                   },
                   itemCount: world.equipmentPositions.length,
@@ -141,33 +160,14 @@ class _EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                     context,
                     _createEquipmentPositionIntent,
                   ),
-                  child: createIcon,
                   tooltip: 'Add Equipment Position',
+                  child: createIcon,
                 ),
               ),
             ),
           ),
         ),
-        shortcuts: {
-          CreateEquipmentPositionIntent.hotkey: _createEquipmentPositionIntent
-        },
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Create a new equipment position.',
-          keyName: 'N',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Move equipment positions up or down.',
-          keyName: 'Arrow Keys',
-          alt: true,
-        ),
-        KeyboardShortcut(
-          description: 'Delete the selected equipment position',
-          keyName: 'Delete',
-        )
-      ],
     );
   }
 

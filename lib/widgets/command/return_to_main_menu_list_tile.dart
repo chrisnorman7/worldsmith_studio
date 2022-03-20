@@ -34,12 +34,12 @@ class ReturnToMainMenuListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ReturnToMainMenuListTileState createState() =>
-      _ReturnToMainMenuListTileState();
+  ReturnToMainMenuListTileState createState() =>
+      ReturnToMainMenuListTileState();
 }
 
 /// State for [ReturnToMainMenuListTile].
-class _ReturnToMainMenuListTileState extends State<ReturnToMainMenuListTile> {
+class ReturnToMainMenuListTileState extends State<ReturnToMainMenuListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

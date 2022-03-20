@@ -74,12 +74,6 @@ class _SelectReverbState extends State<SelectReverb> {
       final sound = reverbPreset.sound;
       children.add(
         Semantics(
-          child: ListTile(
-            autofocus: widget.currentReverbId == null ? i == 0 : select,
-            title: Text(reverbPreset.reverbPreset.name),
-            selected: select,
-            onTap: () => widget.onDone(reverbPreset),
-          ),
           onDidGainAccessibilityFocus: sound == null
               ? null
               : () {
@@ -111,6 +105,12 @@ class _SelectReverbState extends State<SelectReverb> {
                   );
                 },
           onDidLoseAccessibilityFocus: stopSound,
+          child: ListTile(
+            autofocus: widget.currentReverbId == null ? i == 0 : select,
+            title: Text(reverbPreset.reverbPreset.name),
+            selected: select,
+            onTap: () => widget.onDone(reverbPreset),
+          ),
         ),
       );
     }

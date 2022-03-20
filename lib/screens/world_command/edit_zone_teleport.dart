@@ -32,11 +32,11 @@ class EditZoneTeleport extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditZoneTeleportState createState() => _EditZoneTeleportState();
+  EditZoneTeleportState createState() => EditZoneTeleportState();
 }
 
 /// State for [EditZoneTeleport].
-class _EditZoneTeleportState extends State<EditZoneTeleport> {
+class EditZoneTeleportState extends State<EditZoneTeleport> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -63,6 +63,13 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
     );
     final fadeTime = widget.zoneTeleport.fadeTime;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Adjust coordinates.',
+          keyName: 'Arrow keys',
+          alt: true,
+        )
+      ],
       child: Cancel(
         child: Scaffold(
           appBar: AppBar(
@@ -166,13 +173,6 @@ class _EditZoneTeleportState extends State<EditZoneTeleport> {
           ),
         ),
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Adjust coordinates.',
-          keyName: 'Arrow keys',
-          alt: true,
-        )
-      ],
     );
   }
 

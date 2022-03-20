@@ -19,11 +19,11 @@ class DirectionsList extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _DirectionsListState createState() => _DirectionsListState();
+  DirectionsListState createState() => DirectionsListState();
 }
 
 /// State for [DirectionsList].
-class _DirectionsListState extends State<DirectionsList> {
+class DirectionsListState extends State<DirectionsList> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -79,8 +79,8 @@ class _DirectionsListState extends State<DirectionsList> {
             );
           },
           autofocus: world.directions.isEmpty,
-          child: createIcon,
           tooltip: 'Add Direction',
+          child: createIcon,
         ),
       ),
     );

@@ -31,12 +31,12 @@ class EditConversationNextBranch extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditConversationNextBranchState createState() =>
-      _EditConversationNextBranchState();
+  EditConversationNextBranchState createState() =>
+      EditConversationNextBranchState();
 }
 
 /// State for [EditConversationNextBranch].
-class _EditConversationNextBranchState
+class EditConversationNextBranchState
     extends State<EditConversationNextBranch> {
   /// Build a widget.
   @override

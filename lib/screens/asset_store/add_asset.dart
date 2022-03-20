@@ -30,11 +30,11 @@ class AddAsset extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _AddAssetState createState() => _AddAssetState();
+  AddAssetState createState() => AddAssetState();
 }
 
 /// State for [AddAsset].
-class _AddAssetState extends State<AddAsset> {
+class AddAssetState extends State<AddAsset> {
   late final TextEditingController _pathController;
   late final TextEditingController _commentController;
   late final GlobalKey<FormState> _formKey;
@@ -58,7 +58,23 @@ class _AddAssetState extends State<AddAsset> {
       onInvoke: (intent) => importDirectory(context),
     );
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Import a single file.',
+          keyName: 'F',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Import a directory.',
+          keyName: 'D',
+          control: true,
+        )
+      ],
       child: Shortcuts(
+        shortcuts: {
+          ImportFileIntent.hotkey: const ImportFileIntent(),
+          ImportDirectoryIntent.hotkey: const ImportDirectoryIntent()
+        },
         child: Actions(
           actions: {
             ImportFileIntent: importFileAction,
@@ -86,6 +102,7 @@ class _AddAssetState extends State<AddAsset> {
                 title: const Text('Add Asset'),
               ),
               body: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
@@ -112,7 +129,6 @@ class _AddAssetState extends State<AddAsset> {
                     )
                   ],
                 ),
-                key: _formKey,
               ),
               floatingActionButton: FloatingActionButton(
                 child: saveIcon,
@@ -121,23 +137,7 @@ class _AddAssetState extends State<AddAsset> {
             ),
           ),
         ),
-        shortcuts: {
-          ImportFileIntent.hotkey: const ImportFileIntent(),
-          ImportDirectoryIntent.hotkey: const ImportDirectoryIntent()
-        },
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Import a single file.',
-          keyName: 'F',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Import a directory.',
-          keyName: 'D',
-          control: true,
-        )
-      ],
     );
   }
 

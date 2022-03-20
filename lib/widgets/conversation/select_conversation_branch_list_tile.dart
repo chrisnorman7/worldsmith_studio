@@ -50,6 +50,9 @@ class SelectConversationBranchListTile extends StatelessWidget {
             id: sound.id,
           ).reference;
     return PlaySoundSemantics(
+      soundChannel: projectContext.game.interfaceSounds,
+      assetReference: asset,
+      gain: sound?.gain ?? world.soundOptions.defaultGain,
       child: ListTile(
         autofocus: autofocus,
         title: Text(title),
@@ -63,9 +66,6 @@ class SelectConversationBranchListTile extends StatelessWidget {
           ),
         ),
       ),
-      soundChannel: projectContext.game.interfaceSounds,
-      assetReference: asset,
-      gain: sound?.gain ?? world.soundOptions.defaultGain,
     );
   }
 }

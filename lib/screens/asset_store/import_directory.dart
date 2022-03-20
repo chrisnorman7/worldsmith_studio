@@ -29,11 +29,11 @@ class ImportDirectory extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ImportDirectoryState createState() => _ImportDirectoryState();
+  ImportDirectoryState createState() => ImportDirectoryState();
 }
 
 /// State for [ImportDirectory].
-class _ImportDirectoryState extends State<ImportDirectory> {
+class ImportDirectoryState extends State<ImportDirectory> {
   Directory? _directory;
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController _controller;
@@ -60,6 +60,7 @@ class _ImportDirectoryState extends State<ImportDirectory> {
     if (directory == null) {
       title = 'Select Directory';
       child = Form(
+        key: _formKey,
         child: Column(
           children: [
             TextFormField(
@@ -85,12 +86,11 @@ class _ImportDirectoryState extends State<ImportDirectory> {
             )
           ],
         ),
-        key: _formKey,
       );
       floatingActionButton = FloatingActionButton(
         onPressed: submitForm,
-        child: const Icon(Icons.navigate_next_outlined),
         tooltip: 'Next',
+        child: const Icon(Icons.navigate_next_outlined),
       );
     } else {
       title = 'Confirm Assets';
@@ -99,8 +99,8 @@ class _ImportDirectoryState extends State<ImportDirectory> {
         floatingActionButton = FloatingActionButton(
           autofocus: true,
           onPressed: () => Navigator.pop(context),
-          child: const Icon(Icons.close_outlined),
           tooltip: 'Close',
+          child: const Icon(Icons.close_outlined),
         );
       } else {
         child = ListView.builder(
@@ -120,6 +120,12 @@ class _ImportDirectoryState extends State<ImportDirectory> {
               subtitle = '!! UNKNOWN !!';
             }
             return PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: AssetReference(
+                entity.path,
+                entity is File ? AssetType.file : AssetType.collection,
+              ),
+              gain: widget.projectContext.world.soundOptions.defaultGain,
               child: ListTile(
                 autofocus: index == 0,
                 title: Text(title),
@@ -130,12 +136,6 @@ class _ImportDirectoryState extends State<ImportDirectory> {
                   ),
                 ),
               ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: AssetReference(
-                entity.path,
-                entity is File ? AssetType.file : AssetType.collection,
-              ),
-              gain: widget.projectContext.world.soundOptions.defaultGain,
             );
           },
           itemCount: entities.length,
@@ -171,8 +171,8 @@ class _ImportDirectoryState extends State<ImportDirectory> {
             }
             widget.projectContext.save();
           },
-          child: const Icon(Icons.done_outline),
           tooltip: 'Done',
+          child: const Icon(Icons.done_outline),
         );
       }
     }
@@ -187,6 +187,7 @@ class _ImportDirectoryState extends State<ImportDirectory> {
     );
   }
 
+  /// Submit the form.
   void submitForm() {
     if (_formKey.currentState?.validate() == true) {
       setState(() {

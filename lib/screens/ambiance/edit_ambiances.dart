@@ -30,11 +30,11 @@ class EditAmbiances extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditAmbiancesState createState() => _EditAmbiancesState();
+  EditAmbiancesState createState() => EditAmbiancesState();
 }
 
 /// State for [EditAmbiances].
-class _EditAmbiancesState extends State<EditAmbiances> {
+class EditAmbiancesState extends State<EditAmbiances> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,15 @@ class _EditAmbiancesState extends State<EditAmbiances> {
     final world = widget.projectContext.world;
     return Cancel(
       child: WithKeyboardShortcuts(
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Add a new ambiance.',
+            keyName: 'N',
+            control: true,
+          )
+        ],
         child: Shortcuts(
+          shortcuts: {AddAmbianceIntent.hotkey: const AddAmbianceIntent()},
           child: Actions(
             actions: {AddAmbianceIntent: addAmbianceAction},
             child: Scaffold(
@@ -77,20 +85,12 @@ class _EditAmbiancesState extends State<EditAmbiances> {
               floatingActionButton: FloatingActionButton(
                 onPressed: () => addAmbiance(context),
                 autofocus: widget.ambiances.isEmpty,
-                child: const Icon(Icons.add_outlined),
                 tooltip: 'Add Ambiance',
+                child: const Icon(Icons.add_outlined),
               ),
             ),
           ),
-          shortcuts: {AddAmbianceIntent.hotkey: const AddAmbianceIntent()},
         ),
-        keyboardShortcuts: const [
-          KeyboardShortcut(
-            description: 'Add a new ambiance.',
-            keyName: 'N',
-            control: true,
-          )
-        ],
       ),
     );
   }

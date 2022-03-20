@@ -18,11 +18,11 @@ class ProjectTerrains extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectTerrainsState createState() => _ProjectTerrainsState();
+  ProjectTerrainsState createState() => ProjectTerrainsState();
 }
 
 /// State for [ProjectTerrains].
-class _ProjectTerrainsState extends State<ProjectTerrains> {
+class ProjectTerrainsState extends State<ProjectTerrains> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

@@ -50,11 +50,11 @@ class EditCoordinates extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCoordinatesState createState() => _EditCoordinatesState();
+  EditCoordinatesState createState() => EditCoordinatesState();
 }
 
 /// State for [EditCoordinates].
-class _EditCoordinatesState extends State<EditCoordinates> {
+class EditCoordinatesState extends State<EditCoordinates> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

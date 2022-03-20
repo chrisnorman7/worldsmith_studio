@@ -19,11 +19,11 @@ class ProjectSoundSettings extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectSoundSettingsState createState() => _ProjectSoundSettingsState();
+  ProjectSoundSettingsState createState() => ProjectSoundSettingsState();
 }
 
 /// State for [ProjectSoundSettings].
-class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
+class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -105,6 +105,7 @@ class _ProjectSoundSettingsState extends State<ProjectSoundSettings> {
     );
   }
 
+  /// Save the project.
   void save() {
     widget.projectContext.save();
     setState(() {});

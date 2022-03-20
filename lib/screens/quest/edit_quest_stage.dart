@@ -28,11 +28,11 @@ class EditQuestStage extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditQuestStageState createState() => _EditQuestStageState();
+  EditQuestStageState createState() => EditQuestStageState();
 }
 
 /// State for [EditQuestStage].
-class _EditQuestStageState extends State<EditQuestStage> {
+class EditQuestStageState extends State<EditQuestStage> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

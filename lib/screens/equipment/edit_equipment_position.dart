@@ -25,11 +25,11 @@ class EditEquipmentPosition extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditEquipmentPositionState createState() => _EditEquipmentPositionState();
+  EditEquipmentPositionState createState() => EditEquipmentPositionState();
 }
 
 /// State for [EditEquipmentPosition].
-class _EditEquipmentPositionState extends State<EditEquipmentPosition> {
+class EditEquipmentPositionState extends State<EditEquipmentPosition> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

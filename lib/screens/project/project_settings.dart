@@ -21,11 +21,11 @@ class ProjectSettings extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectSettingsState createState() => _ProjectSettingsState();
+  ProjectSettingsState createState() => ProjectSettingsState();
 }
 
 /// State for [ProjectSettings].
-class _ProjectSettingsState extends State<ProjectSettings> {
+class ProjectSettingsState extends State<ProjectSettings> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,10 @@ class _ProjectSettingsState extends State<ProjectSettings> {
           nullable: true,
         ),
         Shortcuts(
+          shortcuts: const {
+            IncreaseIntent.hotkey: IncreaseIntent(),
+            DecreaseIntent.hotkey: DecreaseIntent()
+          },
           child: Actions(
             actions: {
               IncreaseIntent: CallbackAction<IncreaseIntent>(
@@ -86,10 +90,6 @@ class _ProjectSettingsState extends State<ProjectSettings> {
               validator: (value) => validateInt(value: value),
             ),
           ),
-          shortcuts: const {
-            IncreaseIntent.hotkey: IncreaseIntent(),
-            DecreaseIntent.hotkey: DecreaseIntent()
-          },
         ),
         TextListTile(
           value: options.orgName,

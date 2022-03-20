@@ -23,12 +23,12 @@ class ProjectConversationCategories extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectConversationCategoriesState createState() =>
-      _ProjectConversationCategoriesState();
+  ProjectConversationCategoriesState createState() =>
+      ProjectConversationCategoriesState();
 }
 
 /// State for [ProjectConversationCategories].
-class _ProjectConversationCategoriesState
+class ProjectConversationCategoriesState
     extends State<ProjectConversationCategories> {
   /// Build a widget.
   @override

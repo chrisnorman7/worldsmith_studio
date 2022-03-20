@@ -40,11 +40,11 @@ class GetNumber extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _GetNumberState createState() => _GetNumberState();
+  GetNumberState createState() => GetNumberState();
 }
 
 /// State for [GetNumber].
-class _GetNumberState extends State<GetNumber> {
+class GetNumberState extends State<GetNumber> {
   late final TextEditingController _textEditingController;
   late final GlobalKey<FormState> _formKey;
 
@@ -70,6 +70,7 @@ class _GetNumberState extends State<GetNumber> {
             title: Text(widget.title),
           ),
           body: Form(
+            key: _formKey,
             child: Center(
               child: TextFormField(
                 autofocus: true,
@@ -81,12 +82,11 @@ class _GetNumberState extends State<GetNumber> {
                 validator: validate,
               ),
             ),
-            key: _formKey,
           ),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.done),
             onPressed: () => submitForm(context),
             tooltip: 'Done',
+            child: const Icon(Icons.done),
           ),
         ),
       );

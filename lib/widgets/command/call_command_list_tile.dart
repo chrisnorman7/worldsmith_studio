@@ -37,11 +37,11 @@ class CallCommandListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _CallCommandListTileState createState() => _CallCommandListTileState();
+  CallCommandListTileState createState() => CallCommandListTileState();
 }
 
 /// State for [CallCommandListTile].
-class _CallCommandListTileState extends State<CallCommandListTile> {
+class CallCommandListTileState extends State<CallCommandListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

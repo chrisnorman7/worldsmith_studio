@@ -25,11 +25,11 @@ class SelectAssetStore extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SelectAssetStoreState createState() => _SelectAssetStoreState();
+  SelectAssetStoreState createState() => SelectAssetStoreState();
 }
 
 /// State for [SelectAssetStore].
-class _SelectAssetStoreState extends State<SelectAssetStore> {
+class SelectAssetStoreState extends State<SelectAssetStore> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

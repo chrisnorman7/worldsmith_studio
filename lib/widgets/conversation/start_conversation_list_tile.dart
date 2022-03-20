@@ -39,12 +39,12 @@ class StartConversationListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _StartConversationListTileState createState() =>
-      _StartConversationListTileState();
+  StartConversationListTileState createState() =>
+      StartConversationListTileState();
 }
 
 /// State for [StartConversationListTile].
-class _StartConversationListTileState extends State<StartConversationListTile> {
+class StartConversationListTileState extends State<StartConversationListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,30 @@ class _StartConversationListTileState extends State<StartConversationListTile> {
                 id: sound.id)
             .reference;
     return CallbackShortcuts(
+      bindings: {
+        EditIntent.hotkey: () async {
+          if (conversation != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditConversation(
+                projectContext: widget.projectContext,
+                category: widget.projectContext.world.conversationCategories
+                    .firstWhere(
+                  (element) => element.conversations
+                      .where((element) => element.id == conversation.id)
+                      .isNotEmpty,
+                ),
+                conversation: conversation,
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
       child: PlaySoundSemantics(
+        soundChannel: widget.projectContext.game.interfaceSounds,
+        assetReference: assetReference,
+        gain: sound?.gain ?? 0.0,
         child: ListTile(
           autofocus: widget.autofocus,
           title: Text(widget.title),
@@ -103,30 +126,7 @@ class _StartConversationListTileState extends State<StartConversationListTile> {
             setState(() {});
           },
         ),
-        soundChannel: widget.projectContext.game.interfaceSounds,
-        assetReference: assetReference,
-        gain: sound?.gain ?? 0.0,
       ),
-      bindings: {
-        EditIntent.hotkey: () async {
-          if (conversation != null) {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditConversation(
-                projectContext: widget.projectContext,
-                category: widget.projectContext.world.conversationCategories
-                    .firstWhere(
-                  (element) => element.conversations
-                      .where((element) => element.id == conversation.id)
-                      .isNotEmpty,
-                ),
-                conversation: conversation,
-              ),
-            );
-            setState(() {});
-          }
-        }
-      },
     );
   }
 }

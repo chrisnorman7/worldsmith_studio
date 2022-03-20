@@ -21,11 +21,11 @@ class ProjectMenus extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectMenusState createState() => _ProjectMenusState();
+  ProjectMenusState createState() => ProjectMenusState();
 }
 
 /// State for [ProjectMenus].
-class _ProjectMenusState extends State<ProjectMenus> {
+class ProjectMenusState extends State<ProjectMenus> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

@@ -97,6 +97,8 @@ class _SoundListTileState extends State<SoundListTile> {
       )} (${sound.gain})';
     }
     return Semantics(
+      onDidGainAccessibilityFocus: play,
+      onDidLoseAccessibilityFocus: stop,
       child: Shortcuts(
         shortcuts: const {
           IncreaseIntent.hotkey: IncreaseIntent(),
@@ -169,8 +171,6 @@ class _SoundListTileState extends State<SoundListTile> {
           ),
         ),
       ),
-      onDidGainAccessibilityFocus: play,
-      onDidLoseAccessibilityFocus: stop,
     );
   }
 

@@ -121,10 +121,10 @@ class ProjectContext {
       assetReference = world.menuMoveSound;
     }
     return PlaySoundSemantics(
-      child: child,
       soundChannel: game.interfaceSounds,
       assetReference: assetReference,
       gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
+      child: child,
     );
   }
 

@@ -39,11 +39,11 @@ class CustomSoundListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _CustomSoundListTileState createState() => _CustomSoundListTileState();
+  CustomSoundListTileState createState() => CustomSoundListTileState();
 }
 
 /// State for [CustomSoundListTile].
-class _CustomSoundListTileState extends State<CustomSoundListTile> {
+class CustomSoundListTileState extends State<CustomSoundListTile> {
   CustomSound? _sound;
 
   /// Build a widget.
@@ -97,6 +97,9 @@ class _CustomSoundListTileState extends State<CustomSoundListTile> {
       (element) => element.variableName == sound.id,
     );
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: reference.reference,
+      gain: sound.gain,
       child: ListTile(
         title: Text(widget.title),
         subtitle: Text('${assetStore.comment}/${reference.comment}'),
@@ -142,9 +145,6 @@ class _CustomSoundListTileState extends State<CustomSoundListTile> {
           ),
         ),
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: reference.reference,
-      gain: sound.gain,
     );
   }
 

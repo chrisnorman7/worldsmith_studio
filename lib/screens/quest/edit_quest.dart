@@ -28,11 +28,11 @@ class EditQuest extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditQuestState createState() => _EditQuestState();
+  EditQuestState createState() => EditQuestState();
 }
 
 /// State for [EditQuest].
-class _EditQuestState extends State<EditQuest> {
+class EditQuestState extends State<EditQuest> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -118,6 +118,9 @@ class _EditQuestState extends State<EditQuest> {
                     id: sound.id,
                   ).reference;
             return PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: assetReference,
+              gain: sound?.gain ?? 0,
               child: ListTile(
                 title: Text(stage.description ?? 'Not Described'),
                 onTap: () async {
@@ -132,15 +135,11 @@ class _EditQuestState extends State<EditQuest> {
                   setState(() {});
                 },
               ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: assetReference,
-              gain: sound?.gain ?? 0,
             );
           },
           itemCount: children.length + widget.quest.stages.length,
         ),
         floatingActionButton: FloatingActionButton(
-          child: createIcon,
           onPressed: () async {
             final stage = QuestStage(
               id: newId(),
@@ -159,6 +158,7 @@ class _EditQuestState extends State<EditQuest> {
             setState(() {});
           },
           tooltip: 'Add Stage',
+          child: createIcon,
         ),
       ),
     );

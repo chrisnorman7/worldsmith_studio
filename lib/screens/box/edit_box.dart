@@ -34,11 +34,11 @@ class EditBox extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditBoxState createState() => _EditBoxState();
+  EditBoxState createState() => EditBoxState();
 }
 
 /// State for [EditBox].
-class _EditBoxState extends State<EditBox> {
+class EditBoxState extends State<EditBox> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) => Cancel(

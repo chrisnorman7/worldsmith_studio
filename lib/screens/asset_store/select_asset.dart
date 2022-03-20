@@ -55,7 +55,15 @@ class _SelectAssetState extends State<SelectAsset> {
     assets.addAll(widget.assetStore.assets);
     final id = widget.currentId;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new asset.',
+          keyName: 'A',
+          control: true,
+        )
+      ],
       child: CallbackShortcuts(
+        bindings: {AddIntent.hotkey: () => addAsset(context)},
         child: SelectItem<AssetReferenceReference?>(
           onDone: widget.onDone,
           values: assets,
@@ -64,10 +72,10 @@ class _SelectAssetState extends State<SelectAsset> {
               return const Text('Clear');
             }
             return PlaySoundSemantics(
-              child: Text(value.comment ?? 'Untitled Asset'),
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: value.reference,
               gain: widget.projectContext.world.soundOptions.defaultGain,
+              child: Text(value.comment ?? 'Untitled Asset'),
             );
           },
           title: widget.title,
@@ -86,15 +94,7 @@ class _SelectAssetState extends State<SelectAsset> {
             )
           ],
         ),
-        bindings: {AddIntent.hotkey: () => addAsset(context)},
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Add a new asset.',
-          keyName: 'A',
-          control: true,
-        )
-      ],
     );
   }
 

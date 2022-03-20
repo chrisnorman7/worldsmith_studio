@@ -40,11 +40,11 @@ class MusicWidget extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _MusicWidgetState createState() => _MusicWidgetState();
+  MusicWidgetState createState() => MusicWidgetState();
 }
 
 /// State for [MusicWidget].
-class _MusicWidgetState extends State<MusicWidget> {
+class MusicWidgetState extends State<MusicWidget> {
   MusicPlayer? _musicPlayer;
 
   /// Build a widget.

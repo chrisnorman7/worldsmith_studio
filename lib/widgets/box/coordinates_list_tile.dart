@@ -106,6 +106,24 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
       },
     );
     return Shortcuts(
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.arrowUp, alt: true):
+            ModifyCoordinateIntent(
+          CoordinateModification.increaseY,
+        ),
+        SingleActivator(LogicalKeyboardKey.arrowDown, alt: true):
+            ModifyCoordinateIntent(
+          CoordinateModification.decreaseY,
+        ),
+        SingleActivator(LogicalKeyboardKey.arrowLeft, alt: true):
+            ModifyCoordinateIntent(
+          CoordinateModification.decreaseX,
+        ),
+        SingleActivator(LogicalKeyboardKey.arrowRight, alt: true):
+            ModifyCoordinateIntent(
+          CoordinateModification.increaseX,
+        ),
+      },
       child: Actions(
         actions: {ModifyCoordinateIntent: modifyCoordinateAction},
         child: ListTile(
@@ -128,24 +146,6 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
           },
         ),
       ),
-      shortcuts: const {
-        SingleActivator(LogicalKeyboardKey.arrowUp, alt: true):
-            ModifyCoordinateIntent(
-          CoordinateModification.increaseY,
-        ),
-        SingleActivator(LogicalKeyboardKey.arrowDown, alt: true):
-            ModifyCoordinateIntent(
-          CoordinateModification.decreaseY,
-        ),
-        SingleActivator(LogicalKeyboardKey.arrowLeft, alt: true):
-            ModifyCoordinateIntent(
-          CoordinateModification.decreaseX,
-        ),
-        SingleActivator(LogicalKeyboardKey.arrowRight, alt: true):
-            ModifyCoordinateIntent(
-          CoordinateModification.increaseX,
-        ),
-      },
     );
   }
 

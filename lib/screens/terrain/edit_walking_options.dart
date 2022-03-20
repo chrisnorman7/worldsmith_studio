@@ -27,11 +27,11 @@ class EditWalkingOptions extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditWalkingOptionsState createState() => _EditWalkingOptionsState();
+  EditWalkingOptionsState createState() => EditWalkingOptionsState();
 }
 
 /// State for [EditWalkingOptions].
-class _EditWalkingOptionsState extends State<EditWalkingOptions> {
+class EditWalkingOptionsState extends State<EditWalkingOptions> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

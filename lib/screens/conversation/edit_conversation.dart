@@ -72,11 +72,11 @@ class EditConversation extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditConversationState createState() => _EditConversationState();
+  EditConversationState createState() => EditConversationState();
 }
 
 /// State for [EditConversation].
-class _EditConversationState extends State<EditConversation> {
+class EditConversationState extends State<EditConversation> {
   int? _index;
   ConversationBranch? _branch;
   ConversationResponse? _response;
@@ -156,6 +156,28 @@ class _EditConversationState extends State<EditConversation> {
         )
       ];
       child = WithKeyboardShortcuts(
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Edit the selected response.',
+            keyName: 'E',
+            control: true,
+          ),
+          KeyboardShortcut(
+            description: 'Remove the current response from this branch.',
+            keyName: 'Delete',
+          ),
+          KeyboardShortcut(
+            description: 'Move the selected response up in the list.',
+            keyName: 'Up Arrow',
+            alt: true,
+          ),
+          KeyboardShortcut(
+            description: 'Move the selected response down in the list.',
+            keyName: 'Down Arrow',
+            alt: true,
+          ),
+          _backKeyboardShortcut
+        ],
         child: ListView.builder(
           itemBuilder: (context, index) {
             if (index < children.length) {
@@ -166,35 +188,6 @@ class _EditConversationState extends State<EditConversation> {
             final response = widget.conversation.getResponse(id);
             final sound = response.sound;
             return CallbackShortcuts(
-              child: PlaySoundSemantics(
-                child: ListTile(
-                  autofocus: _index == index,
-                  title: Text('Response ${index - children.length + 1}'),
-                  subtitle: Text('${response.text}'),
-                  onTap: () => setState(
-                    () {
-                      _previousStates.add(
-                        PreviousState(
-                          branchId: branch.id,
-                          index: index,
-                        ),
-                      );
-                      _index = index;
-                      _response = response;
-                      _branch = null;
-                    },
-                  ),
-                ),
-                soundChannel:
-                    channel ?? widget.projectContext.game.interfaceSounds,
-                assetReference: sound == null
-                    ? null
-                    : getAssetReferenceReference(
-                        assets: world.conversationAssets,
-                        id: sound.id,
-                      ).reference,
-                gain: sound?.gain ?? world.soundOptions.defaultGain,
-              ),
               bindings: {
                 EditIntent.hotkey: () => pushWidget(
                       context: context,
@@ -227,32 +220,39 @@ class _EditConversationState extends State<EditConversation> {
                   save();
                 },
               },
+              child: PlaySoundSemantics(
+                soundChannel:
+                    channel ?? widget.projectContext.game.interfaceSounds,
+                assetReference: sound == null
+                    ? null
+                    : getAssetReferenceReference(
+                        assets: world.conversationAssets,
+                        id: sound.id,
+                      ).reference,
+                gain: sound?.gain ?? world.soundOptions.defaultGain,
+                child: ListTile(
+                  autofocus: _index == index,
+                  title: Text('Response ${index - children.length + 1}'),
+                  subtitle: Text('${response.text}'),
+                  onTap: () => setState(
+                    () {
+                      _previousStates.add(
+                        PreviousState(
+                          branchId: branch.id,
+                          index: index,
+                        ),
+                      );
+                      _index = index;
+                      _response = response;
+                      _branch = null;
+                    },
+                  ),
+                ),
+              ),
             );
           },
           itemCount: branch.responseIds.length + children.length,
         ),
-        keyboardShortcuts: const [
-          KeyboardShortcut(
-            description: 'Edit the selected response.',
-            keyName: 'E',
-            control: true,
-          ),
-          KeyboardShortcut(
-            description: 'Remove the current response from this branch.',
-            keyName: 'Delete',
-          ),
-          KeyboardShortcut(
-            description: 'Move the selected response up in the list.',
-            keyName: 'Up Arrow',
-            alt: true,
-          ),
-          KeyboardShortcut(
-            description: 'Move the selected response down in the list.',
-            keyName: 'Down Arrow',
-            alt: true,
-          ),
-          _backKeyboardShortcut
-        ],
       );
     } else if (response != null) {
       title = 'Edit Response';
@@ -261,7 +261,30 @@ class _EditConversationState extends State<EditConversation> {
       final id = nextBranch?.branchId;
       final branch = id == null ? null : widget.conversation.getBranch(id);
       child = WithKeyboardShortcuts(
+        keyboardShortcuts: const [
+          KeyboardShortcut(
+            description: 'Edit next branch parameters.',
+            keyName: 'E',
+            control: true,
+          ),
+          _backKeyboardShortcut
+        ],
         child: CallbackShortcuts(
+          bindings: {
+            EditIntent.hotkey: () {
+              if (nextBranch != null) {
+                pushWidget(
+                  context: context,
+                  builder: (context) => EditConversationNextBranch(
+                    projectContext: widget.projectContext,
+                    conversation: widget.conversation,
+                    response: response,
+                    nextBranch: nextBranch,
+                  ),
+                );
+              }
+            }
+          },
           child: ListView(
             children: [
               TextListTile(
@@ -330,30 +353,7 @@ class _EditConversationState extends State<EditConversation> {
               )
             ],
           ),
-          bindings: {
-            EditIntent.hotkey: () {
-              if (nextBranch != null) {
-                pushWidget(
-                  context: context,
-                  builder: (context) => EditConversationNextBranch(
-                    projectContext: widget.projectContext,
-                    conversation: widget.conversation,
-                    response: response,
-                    nextBranch: nextBranch,
-                  ),
-                );
-              }
-            }
-          },
         ),
-        keyboardShortcuts: const [
-          KeyboardShortcut(
-            description: 'Edit next branch parameters.',
-            keyName: 'E',
-            control: true,
-          ),
-          _backKeyboardShortcut
-        ],
       );
     } else {
       title = 'If you are seeing this there is a bug!!';
@@ -367,6 +367,7 @@ class _EditConversationState extends State<EditConversation> {
                 widget.conversation.initialBranchId,
               );
               return WithKeyboardShortcuts(
+                keyboardShortcuts: const [_backKeyboardShortcut],
                 child: ListView(
                   children: [
                     TextListTile(
@@ -423,7 +424,6 @@ class _EditConversationState extends State<EditConversation> {
                     )
                   ],
                 ),
-                keyboardShortcuts: const [_backKeyboardShortcut],
               );
             },
             actions: [
@@ -465,40 +465,40 @@ class _EditConversationState extends State<EditConversation> {
                   SearchableListTile(
                     searchString: branch.text ?? 'Untitled Branch',
                     child: WithKeyboardShortcuts(
-                      child: CallbackShortcuts(
-                        child: EditConversationBranchListTile(
-                          autofocus: i == 0,
-                          conversation: widget.conversation,
-                          branch: branch,
-                          projectContext: widget.projectContext,
-                        ),
-                        bindings: {
-                          DeleteIntent.hotkey: () =>
-                              deleteBranch(context: context, branch: branch)
-                        },
-                      ),
                       keyboardShortcuts: const [
                         KeyboardShortcut(
                           description: 'Delete the current branch.',
                           keyName: 'Delete',
                         )
                       ],
+                      child: CallbackShortcuts(
+                        bindings: {
+                          DeleteIntent.hotkey: () =>
+                              deleteBranch(context: context, branch: branch)
+                        },
+                        child: EditConversationBranchListTile(
+                          autofocus: i == 0,
+                          conversation: widget.conversation,
+                          branch: branch,
+                          projectContext: widget.projectContext,
+                        ),
+                      ),
                     ),
                   ),
                 );
               }
               return CallbackShortcuts(
-                child: SearchableListView(children: children),
                 bindings: {
                   CreateConversationBranchIntent.hotkey: () =>
                       addConversationBranch(context)
                 },
+                child: SearchableListView(children: children),
               );
             },
             floatingActionButton: FloatingActionButton(
               onPressed: () => addConversationBranch(context),
-              child: createIcon,
               tooltip: 'Add Branch',
+              child: createIcon,
             ),
           ),
           TabbedScaffoldTab(
@@ -518,41 +518,41 @@ class _EditConversationState extends State<EditConversation> {
                     searchString:
                         response.text ?? 'Untitled Conversation Response',
                     child: WithKeyboardShortcuts(
-                      child: CallbackShortcuts(
-                        child: ConversationResponseListTile(
-                          autofocus: i == 0,
-                          projectContext: widget.projectContext,
-                          conversation: widget.conversation,
-                          response: response,
-                        ),
-                        bindings: {
-                          DeleteIntent.hotkey: () => deleteResponse(
-                              context: context, response: response)
-                        },
-                      ),
                       keyboardShortcuts: const [
                         KeyboardShortcut(
                           description: 'Delete the current response.',
                           keyName: 'Delete',
                         )
                       ],
+                      child: CallbackShortcuts(
+                        bindings: {
+                          DeleteIntent.hotkey: () => deleteResponse(
+                              context: context, response: response)
+                        },
+                        child: ConversationResponseListTile(
+                          autofocus: i == 0,
+                          projectContext: widget.projectContext,
+                          conversation: widget.conversation,
+                          response: response,
+                        ),
+                      ),
                     ),
                   ),
                 );
               }
               return CallbackShortcuts(
-                child: SearchableListView(children: children),
                 bindings: {
                   CreateConversationResponseIntent.hotkey: () =>
                       addConversationResponse(context),
                 },
+                child: SearchableListView(children: children),
               );
             },
             floatingActionButton: FloatingActionButton(
               autofocus: widget.conversation.responses.isEmpty,
               onPressed: () => addConversationResponse(context),
-              child: createIcon,
               tooltip: 'Add Response',
+              child: createIcon,
             ),
           ),
         ],
@@ -563,12 +563,6 @@ class _EditConversationState extends State<EditConversation> {
     }
     return Cancel(
       child: CallbackShortcuts(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-          ),
-          body: child,
-        ),
         bindings: {
           GoUpIntent.hotkey: () {
             if (_previousStates.isNotEmpty) {
@@ -597,6 +591,12 @@ class _EditConversationState extends State<EditConversation> {
             }
           }
         },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+          ),
+          body: child,
+        ),
       ),
     );
   }

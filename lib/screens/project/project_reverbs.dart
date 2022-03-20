@@ -23,11 +23,11 @@ class ProjectReverbs extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectReverbsState createState() => _ProjectReverbsState();
+  ProjectReverbsState createState() => ProjectReverbsState();
 }
 
 /// State for [ProjectReverbs].
-class _ProjectReverbsState extends State<ProjectReverbs> {
+class ProjectReverbsState extends State<ProjectReverbs> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -86,8 +86,8 @@ class _ProjectReverbsState extends State<ProjectReverbs> {
             setState(() {});
           },
           autofocus: world.reverbs.isEmpty,
-          child: createIcon,
           tooltip: 'Add Reverb',
+          child: createIcon,
         ),
       ),
     );

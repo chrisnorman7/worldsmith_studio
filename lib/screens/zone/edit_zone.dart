@@ -56,11 +56,11 @@ class EditZone extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditZoneState createState() => _EditZoneState();
+  EditZoneState createState() => EditZoneState();
 }
 
 /// State for [EditZone].
-class _EditZoneState extends State<EditZone> {
+class EditZoneState extends State<EditZone> {
   late ZoneLevel _level;
   Box? _currentBox;
 
@@ -127,8 +127,8 @@ class _EditZoneState extends State<EditZone> {
               floatingActionButton: FloatingActionButton(
                 onPressed: () => createZoneObject(context),
                 autofocus: widget.zone.objects.isEmpty,
-                child: createIcon,
                 tooltip: 'Add Object',
+                child: createIcon,
               ),
             ),
             TabbedScaffoldTab(
@@ -147,9 +147,9 @@ class _EditZoneState extends State<EditZone> {
               ),
               floatingActionButton: FloatingActionButton(
                 autofocus: widget.zone.locationMarkers.isEmpty,
-                child: createIcon,
                 onPressed: () => addLocationMarker(context),
                 tooltip: 'Add Location Marker',
+                child: createIcon,
               ),
             )
           ],
@@ -460,7 +460,74 @@ class _EditZoneState extends State<EditZone> {
     );
     final box = _currentBox;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+            description: 'Create new box.', keyName: 'N', control: true),
+        KeyboardShortcut(
+          description: 'Move north, east, south, or west.',
+          keyName: 'Arrow keys',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Increase and decrease x coordinate.',
+          keyName: 'Left and Right Arrows',
+          alt: true,
+        ),
+        KeyboardShortcut(
+          description: 'Increase and decrease y coordinate.',
+          keyName: 'Up or Down Arrows',
+          alt: true,
+        ),
+        KeyboardShortcut(
+          description: 'Move to the previous box.',
+          keyName: 'comma (,)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Move to the next box.',
+          keyName: 'Period (.)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Show keyboard shortcuts.',
+          keyName: 'slash (/)',
+          control: true,
+        ),
+      ],
       child: Shortcuts(
+        shortcuts: {
+          SingleActivator(
+            LogicalKeyboardKey.arrowUp,
+            control: !Platform.isMacOS,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
+            MoveDirections.north,
+          ),
+          SingleActivator(
+            LogicalKeyboardKey.arrowRight,
+            control: !Platform.isMacOS,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
+            MoveDirections.east,
+          ),
+          SingleActivator(
+            LogicalKeyboardKey.arrowDown,
+            control: !Platform.isMacOS,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
+            MoveDirections.south,
+          ),
+          SingleActivator(
+            LogicalKeyboardKey.arrowLeft,
+            control: !Platform.isMacOS,
+            meta: Platform.isMacOS,
+          ): const MoveIntent(
+            MoveDirections.west,
+          ),
+          CreateBoxIntent.hotkey: _createBoxIntent,
+          PreviousBoxIntent.hotkey: const PreviousBoxIntent(),
+          NextBoxIntent.hotkey: const NextBoxIntent(),
+        },
         child: Actions(
           actions: {
             MoveIntent: moveAction,
@@ -510,74 +577,7 @@ class _EditZoneState extends State<EditZone> {
             ],
           ),
         ),
-        shortcuts: {
-          SingleActivator(
-            LogicalKeyboardKey.arrowUp,
-            control: !Platform.isMacOS,
-            meta: Platform.isMacOS,
-          ): const MoveIntent(
-            MoveDirections.north,
-          ),
-          SingleActivator(
-            LogicalKeyboardKey.arrowRight,
-            control: !Platform.isMacOS,
-            meta: Platform.isMacOS,
-          ): const MoveIntent(
-            MoveDirections.east,
-          ),
-          SingleActivator(
-            LogicalKeyboardKey.arrowDown,
-            control: !Platform.isMacOS,
-            meta: Platform.isMacOS,
-          ): const MoveIntent(
-            MoveDirections.south,
-          ),
-          SingleActivator(
-            LogicalKeyboardKey.arrowLeft,
-            control: !Platform.isMacOS,
-            meta: Platform.isMacOS,
-          ): const MoveIntent(
-            MoveDirections.west,
-          ),
-          CreateBoxIntent.hotkey: _createBoxIntent,
-          PreviousBoxIntent.hotkey: const PreviousBoxIntent(),
-          NextBoxIntent.hotkey: const NextBoxIntent(),
-        },
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-            description: 'Create new box.', keyName: 'N', control: true),
-        KeyboardShortcut(
-          description: 'Move north, east, south, or west.',
-          keyName: 'Arrow keys',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Increase and decrease x coordinate.',
-          keyName: 'Left and Right Arrows',
-          alt: true,
-        ),
-        KeyboardShortcut(
-          description: 'Increase and decrease y coordinate.',
-          keyName: 'Up or Down Arrows',
-          alt: true,
-        ),
-        KeyboardShortcut(
-          description: 'Move to the previous box.',
-          keyName: 'comma (,)',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Move to the next box.',
-          keyName: 'Period (.)',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Show keyboard shortcuts.',
-          keyName: 'slash (/)',
-          control: true,
-        ),
-      ],
     );
   }
 
@@ -701,11 +701,11 @@ class _EditZoneState extends State<EditZone> {
       child = SearchableListView(children: children);
     }
     return Shortcuts(
+      shortcuts: {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
       child: Actions(
         actions: {CreateZoneObjectIntent: createZoneObjectAction},
         child: child,
       ),
-      shortcuts: {CreateZoneObjectIntent.hotkey: _createZoneObjectIntent},
     );
   }
 
@@ -815,6 +815,8 @@ class _EditZoneState extends State<EditZone> {
         SearchableListTile(
           searchString: marker.message.text ?? '',
           child: PlaySoundSemantics(
+            soundChannel: widget.projectContext.game.interfaceSounds,
+            assetReference: assetReference,
             child: ListTile(
               autofocus: i == 0,
               title: Text(message.text ?? 'Untitled Marker'),
@@ -831,8 +833,6 @@ class _EditZoneState extends State<EditZone> {
                 save();
               },
             ),
-            soundChannel: widget.projectContext.game.interfaceSounds,
-            assetReference: assetReference,
           ),
         ),
       );

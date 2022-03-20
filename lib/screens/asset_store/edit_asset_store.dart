@@ -44,11 +44,11 @@ class EditAssetStore extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditAssetStoreState createState() => _EditAssetStoreState();
+  EditAssetStoreState createState() => EditAssetStoreState();
 }
 
 /// State for [EditAssetStore].
-class _EditAssetStoreState extends State<EditAssetStore> {
+class EditAssetStoreState extends State<EditAssetStore> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -123,6 +123,10 @@ class _EditAssetStoreState extends State<EditAssetStore> {
         SearchableListTile(
           searchString: assetReference.comment ?? assetReference.reference.name,
           child: Shortcuts(
+            shortcuts: {
+              DeleteIntent.hotkey: const DeleteIntent(),
+              CopyIntent.hotkey: const CopyIntent()
+            },
             child: Actions(
               actions: {
                 DeleteIntent: CallbackAction<DeleteIntent>(
@@ -150,6 +154,9 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                 )
               },
               child: PlaySoundSemantics(
+                soundChannel: widget.projectContext.game.interfaceSounds,
+                assetReference: relativeAssetReference,
+                looping: true,
                 child: Builder(
                   builder: (context) => ListTile(
                     autofocus: i == 0,
@@ -170,22 +177,40 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                     },
                   ),
                 ),
-                soundChannel: widget.projectContext.game.interfaceSounds,
-                assetReference: relativeAssetReference,
-                looping: true,
               ),
             ),
-            shortcuts: {
-              DeleteIntent.hotkey: const DeleteIntent(),
-              CopyIntent.hotkey: const CopyIntent()
-            },
           ),
         ),
       );
     }
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new asset',
+          keyName: 'o',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Import a directory as different assets',
+          keyName: 'D',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Delete the currently selected asset',
+          keyName: 'Delete',
+        ),
+        KeyboardShortcut(
+          description: 'Copy the dart of the current asset to the clipboard.',
+          keyName: 'c',
+          control: true,
+        ),
+      ],
       child: Cancel(
         child: Shortcuts(
+          shortcuts: {
+            OpenProjectIntent.hotkey: _openProjectIntent,
+            ImportDirectoryIntent.hotkey: _importDirectoryIntent
+          },
           child: Actions(
             actions: {
               OpenProjectIntent: addAssetAction,
@@ -211,43 +236,18 @@ class _EditAssetStoreState extends State<EditAssetStore> {
                     : SearchableListView(children: children),
                 floatingActionButton: FloatingActionButton(
                   autofocus: assets.isEmpty,
-                  child: const Icon(Icons.add_outlined),
                   onPressed: Actions.handler<OpenProjectIntent>(
                     context,
                     _openProjectIntent,
                   ),
                   tooltip: 'Add Asset',
+                  child: const Icon(Icons.add_outlined),
                 ),
               ),
             ),
           ),
-          shortcuts: {
-            OpenProjectIntent.hotkey: _openProjectIntent,
-            ImportDirectoryIntent.hotkey: _importDirectoryIntent
-          },
         ),
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Add a new asset',
-          keyName: 'o',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Import a directory as different assets',
-          keyName: 'D',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Delete the currently selected asset',
-          keyName: 'Delete',
-        ),
-        KeyboardShortcut(
-          description: 'Copy the dart of the current asset to the clipboard.',
-          keyName: 'c',
-          control: true,
-        ),
-      ],
     );
   }
 

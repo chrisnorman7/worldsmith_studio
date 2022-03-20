@@ -31,14 +31,18 @@ class GainListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _GainListTileState createState() => _GainListTileState();
+  GainListTileState createState() => GainListTileState();
 }
 
 /// State for [GainListTile].
-class _GainListTileState extends State<GainListTile> {
+class GainListTileState extends State<GainListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) => Shortcuts(
+        shortcuts: const {
+          IncreaseIntent.hotkey: IncreaseIntent(),
+          DecreaseIntent.hotkey: DecreaseIntent()
+        },
         child: Actions(
           actions: {
             IncreaseIntent: CallbackAction<IncreaseIntent>(
@@ -73,9 +77,5 @@ class _GainListTileState extends State<GainListTile> {
             ),
           ),
         ),
-        shortcuts: const {
-          IncreaseIntent.hotkey: IncreaseIntent(),
-          DecreaseIntent.hotkey: DecreaseIntent()
-        },
       );
 }

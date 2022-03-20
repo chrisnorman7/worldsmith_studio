@@ -26,11 +26,11 @@ class EditReturnToMainMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditReturnToMainMenuState createState() => _EditReturnToMainMenuState();
+  EditReturnToMainMenuState createState() => EditReturnToMainMenuState();
 }
 
 /// State for [EditReturnToMainMenu].
-class _EditReturnToMainMenuState extends State<EditReturnToMainMenu> {
+class EditReturnToMainMenuState extends State<EditReturnToMainMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

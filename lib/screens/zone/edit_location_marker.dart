@@ -29,11 +29,11 @@ class EditLocationMarker extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditLocationMarkerState createState() => _EditLocationMarkerState();
+  EditLocationMarkerState createState() => EditLocationMarkerState();
 }
 
 /// State for [EditLocationMarker].
-class _EditLocationMarkerState extends State<EditLocationMarker> {
+class EditLocationMarkerState extends State<EditLocationMarker> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) => Cancel(

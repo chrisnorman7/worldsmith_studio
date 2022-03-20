@@ -31,11 +31,11 @@ class EditCommandCategory extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCommandCategoryState createState() => _EditCommandCategoryState();
+  EditCommandCategoryState createState() => EditCommandCategoryState();
 }
 
 /// State for [EditCommandCategory].
-class _EditCommandCategoryState extends State<EditCommandCategory> {
+class EditCommandCategoryState extends State<EditCommandCategory> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -66,6 +66,7 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
           SearchableListTile(
             searchString: command.name,
             child: CallbackShortcuts(
+              bindings: {CopyIntent.hotkey: () => setClipboardText(command.id)},
               child: ListTile(
                 autofocus: i == 0,
                 title: Text(command.name),
@@ -81,7 +82,6 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
                   save();
                 },
               ),
-              bindings: {CopyIntent.hotkey: () => setClipboardText(command.id)},
             ),
           ),
         );
@@ -91,6 +91,7 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
       );
     }
     return Shortcuts(
+      shortcuts: {RenameIntent.hotkey: _renameIntent},
       child: Actions(
         actions: {RenameIntent: renameAction},
         child: Cancel(
@@ -139,15 +140,14 @@ class _EditCommandCategoryState extends State<EditCommandCategory> {
                     );
                     setState(() {});
                   },
-                  child: createIcon,
                   tooltip: 'Add Command',
+                  child: createIcon,
                 ),
               ),
             ),
           ),
         ),
       ),
-      shortcuts: {RenameIntent.hotkey: _renameIntent},
     );
   }
 

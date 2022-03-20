@@ -22,11 +22,11 @@ class ProjectScenes extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectScenesState createState() => _ProjectScenesState();
+  ProjectScenesState createState() => ProjectScenesState();
 }
 
 /// State for [ProjectScenes].
-class _ProjectScenesState extends State<ProjectScenes> {
+class ProjectScenesState extends State<ProjectScenes> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,6 @@ class _ProjectScenesState extends State<ProjectScenes> {
         body: child,
         floatingActionButton: FloatingActionButton(
           autofocus: scenes.isEmpty,
-          child: createIcon,
           onPressed: () async {
             final scene = Scene(
               id: newId(),
@@ -83,6 +82,7 @@ class _ProjectScenesState extends State<ProjectScenes> {
             setState(() {});
           },
           tooltip: 'Add Scene',
+          child: createIcon,
         ),
       ),
     );

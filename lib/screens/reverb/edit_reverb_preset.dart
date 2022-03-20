@@ -111,12 +111,15 @@ class EditReverbPreset extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditReverbPresetState createState() => _EditReverbPresetState();
+  EditReverbPresetState createState() => EditReverbPresetState();
 }
 
 /// State for [EditReverbPreset].
-class _EditReverbPresetState extends State<EditReverbPreset> {
+class EditReverbPresetState extends State<EditReverbPreset> {
+  /// The channel to play sounds through.
   late final SoundChannel channel;
+
+  /// The reverb that [SoundChannel] will use.
   CreateReverb? reverb;
   PlaySound? _playSound;
 
@@ -238,8 +241,28 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
       )
     ];
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Play or pause the preview sound.',
+          keyName: 'P',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Increase the selected value.',
+          keyName: 'Equals (=)',
+          control: true,
+        ),
+        KeyboardShortcut(
+          description: 'Decrease the selected value',
+          keyName: 'Dash (-)',
+          control: true,
+        )
+      ],
       child: Cancel(
         child: Shortcuts(
+          shortcuts: {
+            PlayPauseIntent.hotkey: const PlayPauseIntent(),
+          },
           child: Actions(
             actions: {
               PlayPauseIntent: playPauseAction,
@@ -308,28 +331,8 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
               ),
             ),
           ),
-          shortcuts: {
-            PlayPauseIntent.hotkey: const PlayPauseIntent(),
-          },
         ),
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Play or pause the preview sound.',
-          keyName: 'P',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Increase the selected value.',
-          keyName: 'Equals (=)',
-          control: true,
-        ),
-        KeyboardShortcut(
-          description: 'Decrease the selected value',
-          keyName: 'Dash (-)',
-          control: true,
-        )
-      ],
     );
   }
 
@@ -438,6 +441,10 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
     );
     final valueString = value.toString();
     return Shortcuts(
+      shortcuts: const {
+        IncreaseIntent.hotkey: IncreaseIntent(),
+        DecreaseIntent.hotkey: DecreaseIntent(),
+      },
       child: Actions(
         actions: {
           IncreaseIntent: increaseAction,
@@ -468,10 +475,6 @@ class _EditReverbPresetState extends State<EditReverbPreset> {
           ),
         ),
       ),
-      shortcuts: const {
-        IncreaseIntent.hotkey: IncreaseIntent(),
-        DecreaseIntent.hotkey: DecreaseIntent(),
-      },
     );
   }
 

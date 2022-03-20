@@ -28,11 +28,11 @@ class EditDirection extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditDirectionState createState() => _EditDirectionState();
+  EditDirectionState createState() => EditDirectionState();
 }
 
 /// State for [EditDirection].
-class _EditDirectionState extends State<EditDirection> {
+class EditDirectionState extends State<EditDirection> {
   late String _name;
   late double _degrees;
 

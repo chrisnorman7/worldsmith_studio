@@ -43,11 +43,11 @@ class EditSound extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditSoundState createState() => _EditSoundState();
+  EditSoundState createState() => EditSoundState();
 }
 
 /// State for [EditSound].
-class _EditSoundState extends State<EditSound> {
+class EditSoundState extends State<EditSound> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -78,6 +78,9 @@ class _EditSoundState extends State<EditSound> {
         body: ListView(
           children: [
             PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: asset.reference,
+              gain: gain,
               child: Builder(
                 builder: (context) => ListTile(
                   autofocus: true,
@@ -104,9 +107,6 @@ class _EditSoundState extends State<EditSound> {
                   },
                 ),
               ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: asset.reference,
-              gain: gain,
             ),
             GainListTile(
               gain: gain,

@@ -32,12 +32,12 @@ class ConversationResponseListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ConversationResponseListTileState createState() =>
-      _ConversationResponseListTileState();
+  ConversationResponseListTileState createState() =>
+      ConversationResponseListTileState();
 }
 
 /// State for [ConversationResponseListTile].
-class _ConversationResponseListTileState
+class ConversationResponseListTileState
     extends State<ConversationResponseListTile> {
   /// Build a widget.
   @override
@@ -54,6 +54,9 @@ class _ConversationResponseListTileState
             .reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: asset,
+      gain: gain,
       child: Builder(
         builder: (context) => ListTile(
           autofocus: widget.autofocus,
@@ -75,9 +78,6 @@ class _ConversationResponseListTileState
           },
         ),
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: asset,
-      gain: gain,
     );
   }
 }

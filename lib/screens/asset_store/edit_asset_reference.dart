@@ -33,11 +33,11 @@ class EditAssetReference extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditAssetReferenceState createState() => _EditAssetReferenceState();
+  EditAssetReferenceState createState() => EditAssetReferenceState();
 }
 
 /// State for [EditAssetReference].
-class _EditAssetReferenceState extends State<EditAssetReference> {
+class EditAssetReferenceState extends State<EditAssetReference> {
   AssetReferenceReference? _assetReferenceReference;
 
   /// Build a widget.

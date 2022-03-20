@@ -17,11 +17,11 @@ class EditQuestMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditQuestMenuState createState() => _EditQuestMenuState();
+  EditQuestMenuState createState() => EditQuestMenuState();
 }
 
 /// State for [EditQuestMenu].
-class _EditQuestMenuState extends State<EditQuestMenu> {
+class EditQuestMenuState extends State<EditQuestMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

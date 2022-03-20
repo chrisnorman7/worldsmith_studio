@@ -28,11 +28,11 @@ class EditCustomMessage extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCustomMessageState createState() => _EditCustomMessageState();
+  EditCustomMessageState createState() => EditCustomMessageState();
 }
 
 /// State for [EditCustomMessage].
-class _EditCustomMessageState extends State<EditCustomMessage> {
+class EditCustomMessageState extends State<EditCustomMessage> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

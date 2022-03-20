@@ -36,11 +36,11 @@ class ZoneObjectListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ZoneObjectListTileState createState() => _ZoneObjectListTileState();
+  ZoneObjectListTileState createState() => ZoneObjectListTileState();
 }
 
 /// State for [ZoneObjectListTile].
-class _ZoneObjectListTileState extends State<ZoneObjectListTile> {
+class ZoneObjectListTileState extends State<ZoneObjectListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -55,6 +55,10 @@ class _ZoneObjectListTileState extends State<ZoneObjectListTile> {
             id: sound.id,
           );
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: assetReference?.reference,
+      gain: sound?.gain ?? widget.projectContext.world.soundOptions.defaultGain,
+      looping: true,
       child: Builder(
         builder: (context) => ListTile(
           autofocus: widget.autofocus,
@@ -76,10 +80,6 @@ class _ZoneObjectListTileState extends State<ZoneObjectListTile> {
           },
         ),
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: assetReference?.reference,
-      gain: sound?.gain ?? widget.projectContext.world.soundOptions.defaultGain,
-      looping: true,
     );
   }
 }

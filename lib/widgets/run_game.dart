@@ -26,12 +26,15 @@ class RunGame extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _RunGameState createState() => _RunGameState();
+  RunGameState createState() => RunGameState();
 }
 
 /// State for [RunGame].
-class _RunGameState extends State<RunGame> {
+class RunGameState extends State<RunGame> {
+  /// Every sound event that the game has emitted.
   late final List<SoundEvent> soundEvents;
+
+  /// Whether or not the game has finished.
   bool? done;
   Game? _game;
 

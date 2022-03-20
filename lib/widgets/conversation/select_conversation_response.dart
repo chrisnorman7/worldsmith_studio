@@ -37,19 +37,27 @@ class SelectConversationResponse extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SelectConversationResponseState createState() =>
-      _SelectConversationResponseState();
+  SelectConversationResponseState createState() =>
+      SelectConversationResponseState();
 }
 
 /// State for [SelectConversationResponse].
-class _SelectConversationResponseState
+class SelectConversationResponseState
     extends State<SelectConversationResponse> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
     final world = widget.projectContext.world;
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Add a new response',
+          keyName: 'A',
+          control: true,
+        )
+      ],
       child: CallbackShortcuts(
+        bindings: {AddIntent.hotkey: addResponse},
         child: SelectItem<ConversationResponse>(
           onDone: widget.onDone,
           values: widget.conversation.responses
@@ -61,7 +69,6 @@ class _SelectConversationResponseState
           getItemWidget: (item) {
             final sound = item.sound;
             return PlaySoundSemantics(
-              child: Text('${item.text}'),
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: sound == null
                   ? null
@@ -70,6 +77,7 @@ class _SelectConversationResponseState
                       id: sound.id,
                     ).reference,
               gain: sound?.gain ?? world.soundOptions.defaultGain,
+              child: Text('${item.text}'),
             );
           },
           actions: [
@@ -83,15 +91,7 @@ class _SelectConversationResponseState
           ],
           title: 'Select Response',
         ),
-        bindings: {AddIntent.hotkey: addResponse},
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Add a new response',
-          keyName: 'A',
-          control: true,
-        )
-      ],
     );
   }
 

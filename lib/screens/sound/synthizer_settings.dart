@@ -21,11 +21,11 @@ class SynthizerSettings extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SynthizerSettingsState createState() => _SynthizerSettingsState();
+  SynthizerSettingsState createState() => SynthizerSettingsState();
 }
 
 /// State for [SynthizerSettings].
-class _SynthizerSettingsState extends State<SynthizerSettings> {
+class SynthizerSettingsState extends State<SynthizerSettings> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

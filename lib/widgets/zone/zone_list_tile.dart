@@ -46,19 +46,6 @@ class _ZoneListTileState extends State<ZoneListTile> {
     final world = widget.projectContext.world;
     final currentZone = id == null ? null : world.getZone(id);
     return CallbackShortcuts(
-      child: ListTile(
-        autofocus: widget.autofocus,
-        title: Text(widget.title),
-        subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (context) => SelectZone(
-            projectContext: widget.projectContext,
-            onDone: widget.onDone,
-            zone: currentZone,
-          ),
-        ),
-      ),
       bindings: {
         EditIntent.hotkey: () async {
           if (currentZone != null) {
@@ -73,6 +60,19 @@ class _ZoneListTileState extends State<ZoneListTile> {
           }
         }
       },
+      child: ListTile(
+        autofocus: widget.autofocus,
+        title: Text(widget.title),
+        subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectZone(
+            projectContext: widget.projectContext,
+            onDone: widget.onDone,
+            zone: currentZone,
+          ),
+        ),
+      ),
     );
   }
 }

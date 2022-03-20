@@ -45,18 +45,6 @@ class _TerrainListTileState extends State<TerrainListTile> {
       (element) => element.id == widget.currentTerrainId,
     );
     return CallbackShortcuts(
-      child: ListTile(
-        title: Text(widget.title),
-        subtitle: Text(currentTerrain.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (context) => SelectTerrain(
-            onDone: widget.onDone,
-            terrains: widget.terrains,
-            currentTerrainId: widget.currentTerrainId,
-          ),
-        ),
-      ),
       bindings: {
         EditIntent.hotkey: () async {
           await pushWidget(
@@ -69,6 +57,18 @@ class _TerrainListTileState extends State<TerrainListTile> {
           setState(() {});
         }
       },
+      child: ListTile(
+        title: Text(widget.title),
+        subtitle: Text(currentTerrain.name),
+        onTap: () => pushWidget(
+          context: context,
+          builder: (context) => SelectTerrain(
+            onDone: widget.onDone,
+            terrains: widget.terrains,
+            currentTerrainId: widget.currentTerrainId,
+          ),
+        ),
+      ),
     );
   }
 }

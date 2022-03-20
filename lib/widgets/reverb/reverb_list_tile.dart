@@ -53,6 +53,21 @@ class _ReverbListTileState extends State<ReverbListTile> {
       );
     }
     return CallbackShortcuts(
+      bindings: {
+        EditIntent.hotkey: () async {
+          final preset = currentReverbPreset;
+          if (preset != null) {
+            await pushWidget(
+              context: context,
+              builder: (context) => EditReverbPreset(
+                projectContext: widget.projectContext,
+                reverbPresetReference: preset,
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
       child: ListTile(
         title: Text(widget.title),
         subtitle: Text(
@@ -74,21 +89,6 @@ class _ReverbListTileState extends State<ReverbListTile> {
           ),
         ),
       ),
-      bindings: {
-        EditIntent.hotkey: () async {
-          final preset = currentReverbPreset;
-          if (preset != null) {
-            await pushWidget(
-              context: context,
-              builder: (context) => EditReverbPreset(
-                projectContext: widget.projectContext,
-                reverbPresetReference: preset,
-              ),
-            );
-            setState(() {});
-          }
-        }
-      },
     );
   }
 }

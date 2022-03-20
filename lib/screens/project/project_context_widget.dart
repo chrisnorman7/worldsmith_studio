@@ -37,11 +37,11 @@ class ProjectContextWidget extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectContextWidgetState createState() => _ProjectContextWidgetState();
+  ProjectContextWidgetState createState() => ProjectContextWidgetState();
 }
 
 /// State for [ProjectContextWidget].
-class _ProjectContextWidgetState extends State<ProjectContextWidget> {
+class ProjectContextWidgetState extends State<ProjectContextWidget> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -53,19 +53,6 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
       onInvoke: (intent) => run(),
     );
     return WithKeyboardShortcuts(
-      child: Shortcuts(
-        child: Actions(
-          actions: {
-            CloseProjectIntent: closeProjectAction,
-            RunIntent: runProjectAction,
-          },
-          child: Builder(builder: (context) => getTabbedScaffold(world)),
-        ),
-        shortcuts: {
-          CloseProjectIntent.hotkey: const CloseProjectIntent(),
-          RunIntent.hotkey: const RunIntent()
-        },
-      ),
       keyboardShortcuts: const [
         KeyboardShortcut(
           description: 'Close the project and return to the main menu.',
@@ -78,6 +65,19 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           control: true,
         )
       ],
+      child: Shortcuts(
+        shortcuts: {
+          CloseProjectIntent.hotkey: const CloseProjectIntent(),
+          RunIntent.hotkey: const RunIntent()
+        },
+        child: Actions(
+          actions: {
+            CloseProjectIntent: closeProjectAction,
+            RunIntent: runProjectAction,
+          },
+          child: Builder(builder: (context) => getTabbedScaffold(world)),
+        ),
+      ),
     );
   }
 
@@ -94,8 +94,8 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: run,
-            child: const Icon(Icons.run_circle_outlined),
             tooltip: 'Run Project',
+            child: const Icon(Icons.run_circle_outlined),
           ),
         ),
         TabbedScaffoldTab(
@@ -123,8 +123,8 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               );
               setState(() {});
             },
-            child: createIcon,
             tooltip: 'Add Command Category',
+            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(
@@ -135,7 +135,6 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
           floatingActionButton: FloatingActionButton(
             autofocus: world.conversationCategories.isEmpty,
-            child: createIcon,
             onPressed: () async {
               final category = ConversationCategory(
                 id: newId(),
@@ -154,6 +153,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               setState(() {});
             },
             tooltip: 'Add Conversation Category',
+            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(
@@ -190,8 +190,8 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               setState(() {});
             },
             autofocus: world.zones.isEmpty,
-            child: createIcon,
             tooltip: 'Add Zone',
+            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(
@@ -202,7 +202,6 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
           floatingActionButton: FloatingActionButton(
             autofocus: world.quests.isEmpty,
-            child: createIcon,
             onPressed: () async {
               final quest = Quest(
                 id: newId(),
@@ -221,6 +220,7 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               setState(() {});
             },
             tooltip: 'Add Quest',
+            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(
@@ -255,8 +255,8 @@ class _ProjectContextWidgetState extends State<ProjectContextWidget> {
               setState(() {});
             },
             autofocus: world.terrains.isEmpty,
-            child: createIcon,
             tooltip: 'Add Terrain',
+            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(

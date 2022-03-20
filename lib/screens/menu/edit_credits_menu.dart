@@ -28,11 +28,11 @@ class EditCreditsMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditCreditsMenuState createState() => _EditCreditsMenuState();
+  EditCreditsMenuState createState() => EditCreditsMenuState();
 }
 
 /// State for [EditCreditsMenu].
-class _EditCreditsMenuState extends State<EditCreditsMenu> {
+class EditCreditsMenuState extends State<EditCreditsMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,18 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
         getMusic: () => world.creditsMenuMusic,
         soundChannel: widget.projectContext.game.musicSounds,
         title: options.title,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final credit = WorldCredit(
+              id: newId(),
+              title: 'Person: Responsibility',
+            );
+            world.credits.add(credit);
+            save();
+          },
+          tooltip: 'Add Credit',
+          child: createIcon,
+        ),
         child: ListView(
           children: [
             TextListTile(
@@ -83,18 +95,6 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
               getCreditListTile(context: context, credit: credit)
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final credit = WorldCredit(
-              id: newId(),
-              title: 'Person: Responsibility',
-            );
-            world.credits.add(credit);
-            save();
-          },
-          child: createIcon,
-          tooltip: 'Add Credit',
-        ),
       ),
     );
   }
@@ -124,6 +124,9 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
     final gain =
         sound?.gain ?? world.soundOptions.menuMoveSound?.gain ?? defaultGain;
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.interfaceSounds,
+      assetReference: assetReference,
+      gain: gain,
       child: ListTile(
         leading: credit.id == world.credits.first.id
             ? null
@@ -154,9 +157,6 @@ class _EditCreditsMenuState extends State<EditCreditsMenu> {
           setState(() {});
         },
       ),
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: assetReference,
-      gain: gain,
     );
   }
 }

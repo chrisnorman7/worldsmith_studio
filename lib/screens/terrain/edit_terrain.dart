@@ -28,11 +28,11 @@ class EditTerrain extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditTerrainState createState() => _EditTerrainState();
+  EditTerrainState createState() => EditTerrainState();
 }
 
 /// State for [EditTerrain].
-class _EditTerrainState extends State<EditTerrain> {
+class EditTerrainState extends State<EditTerrain> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -99,6 +99,14 @@ class _EditTerrainState extends State<EditTerrain> {
               validator: (value) => validateNonEmptyValue(value: value),
             ),
             PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: slowWalkSound == null
+                  ? null
+                  : getAssetReferenceReference(
+                      assets: terrainAssets,
+                      id: slowWalkSound.id,
+                    ).reference,
+              gain: slowWalkSound?.gain ?? 0.0,
               child: ListTile(
                 title: const Text('Slow Walk Settings'),
                 onTap: () async {
@@ -113,16 +121,16 @@ class _EditTerrainState extends State<EditTerrain> {
                   setState(() {});
                 },
               ),
+            ),
+            PlaySoundSemantics(
               soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: slowWalkSound == null
+              assetReference: fastWalkSound == null
                   ? null
                   : getAssetReferenceReference(
                       assets: terrainAssets,
-                      id: slowWalkSound.id,
+                      id: fastWalkSound.id,
                     ).reference,
-              gain: slowWalkSound?.gain ?? 0.0,
-            ),
-            PlaySoundSemantics(
+              gain: fastWalkSound?.gain ?? 0.0,
               child: ListTile(
                 title: const Text('Fast Walk Settings'),
                 onTap: () async {
@@ -137,14 +145,6 @@ class _EditTerrainState extends State<EditTerrain> {
                   setState(() {});
                 },
               ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: fastWalkSound == null
-                  ? null
-                  : getAssetReferenceReference(
-                      assets: terrainAssets,
-                      id: fastWalkSound.id,
-                    ).reference,
-              gain: fastWalkSound?.gain ?? 0.0,
             ),
           ],
         ),

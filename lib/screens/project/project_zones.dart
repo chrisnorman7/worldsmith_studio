@@ -22,11 +22,11 @@ class ProjectZones extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectZonesState createState() => _ProjectZonesState();
+  ProjectZonesState createState() => ProjectZonesState();
 }
 
 /// State for [ProjectZones].
-class _ProjectZonesState extends State<ProjectZones> {
+class ProjectZonesState extends State<ProjectZones> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -43,6 +43,15 @@ class _ProjectZonesState extends State<ProjectZones> {
         SearchableListTile(
           searchString: zone.name,
           child: PlaySoundSemantics(
+            soundChannel: widget.projectContext.game.interfaceSounds,
+            assetReference: music == null
+                ? null
+                : getAssetReferenceReference(
+                    assets: world.musicAssets,
+                    id: music.id,
+                  ).reference,
+            gain: music?.gain ?? world.soundOptions.defaultGain,
+            looping: true,
             child: Builder(
               builder: (context) => ListTile(
                 autofocus: i == 0,
@@ -61,15 +70,6 @@ class _ProjectZonesState extends State<ProjectZones> {
                 },
               ),
             ),
-            soundChannel: widget.projectContext.game.interfaceSounds,
-            assetReference: music == null
-                ? null
-                : getAssetReferenceReference(
-                    assets: world.musicAssets,
-                    id: music.id,
-                  ).reference,
-            gain: music?.gain ?? world.soundOptions.defaultGain,
-            looping: true,
           ),
         ),
       );

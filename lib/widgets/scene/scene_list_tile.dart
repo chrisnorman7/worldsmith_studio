@@ -34,11 +34,11 @@ class SceneListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _SceneListTileState createState() => _SceneListTileState();
+  SceneListTileState createState() => SceneListTileState();
 }
 
 /// State for [SceneListTile].
-class _SceneListTileState extends State<SceneListTile> {
+class SceneListTileState extends State<SceneListTile> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

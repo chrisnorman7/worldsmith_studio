@@ -43,11 +43,11 @@ class EditWorldCommand extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditWorldCommandState createState() => _EditWorldCommandState();
+  EditWorldCommandState createState() => EditWorldCommandState();
 }
 
 /// State for [EditWorldCommand].
-class _EditWorldCommandState extends State<EditWorldCommand> {
+class EditWorldCommandState extends State<EditWorldCommand> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,15 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
       ),
     );
     return WithKeyboardShortcuts(
+      keyboardShortcuts: const [
+        KeyboardShortcut(
+          description: 'Rename the command.',
+          keyName: 'R',
+          control: true,
+        )
+      ],
       child: Shortcuts(
+        shortcuts: {RenameIntent.hotkey: _renameIntent},
         child: Actions(
           actions: {RenameIntent: renameAction},
           child: Cancel(
@@ -84,12 +92,12 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
                       ),
                     ),
                     ElevatedButton(
-                      child: const Icon(Icons.drive_file_rename_outline,
-                          semanticLabel: 'Rename Command'),
                       onPressed: Actions.handler<RenameIntent>(
                         context,
                         _renameIntent,
                       ),
+                      child: const Icon(Icons.drive_file_rename_outline,
+                          semanticLabel: 'Rename Command'),
                     )
                   ],
                   title: const Text('Edit Command'),
@@ -99,15 +107,7 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
             ),
           ),
         ),
-        shortcuts: {RenameIntent.hotkey: _renameIntent},
       ),
-      keyboardShortcuts: const [
-        KeyboardShortcut(
-          description: 'Rename the command.',
-          keyName: 'R',
-          control: true,
-        )
-      ],
     );
   }
 
@@ -146,6 +146,20 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
           title: 'Message',
         ),
         CallbackShortcuts(
+          bindings: {
+            EditIntent.hotkey: () async {
+              if (zone != null) {
+                await pushWidget(
+                  context: context,
+                  builder: (context) => EditZone(
+                    projectContext: widget.projectContext,
+                    zone: zone,
+                  ),
+                );
+                setState(() {});
+              }
+            }
+          },
           child: ListTile(
             title: const Text('Set Current Zone'),
             subtitle: Text(zone == null ? 'Not set' : zone.name),
@@ -193,20 +207,6 @@ class _EditWorldCommandState extends State<EditWorldCommand> {
               }
             },
           ),
-          bindings: {
-            EditIntent.hotkey: () async {
-              if (zone != null) {
-                await pushWidget(
-                  context: context,
-                  builder: (context) => EditZone(
-                    projectContext: widget.projectContext,
-                    zone: zone,
-                  ),
-                );
-                setState(() {});
-              }
-            }
-          },
         ),
         ListTile(
           title: const Text('Change Walking Mode'),

@@ -22,11 +22,11 @@ class EditSoundMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditSoundMenuState createState() => _EditSoundMenuState();
+  EditSoundMenuState createState() => EditSoundMenuState();
 }
 
 /// State for [EditSoundMenu].
-class _EditSoundMenuState extends State<EditSoundMenu> {
+class EditSoundMenuState extends State<EditSoundMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,9 @@ class _EditSoundMenuState extends State<EditSoundMenu> {
     return Cancel(
       child: MusicWidget(
         title: options.title,
+        soundChannel: widget.projectContext.game.musicSounds,
+        getMusic: () => world.soundMenuMusic,
+        getFadeTime: () => options.fadeTime,
         child: ListView(
           children: [
             TextListTile(
@@ -146,9 +149,6 @@ class _EditSoundMenuState extends State<EditSoundMenu> {
             ),
           ],
         ),
-        soundChannel: widget.projectContext.game.musicSounds,
-        getMusic: () => world.soundMenuMusic,
-        getFadeTime: () => options.fadeTime,
       ),
     );
   }

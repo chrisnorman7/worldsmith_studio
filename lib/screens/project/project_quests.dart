@@ -19,11 +19,11 @@ class ProjectQuests extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectQuestsState createState() => _ProjectQuestsState();
+  ProjectQuestsState createState() => ProjectQuestsState();
 }
 
 /// State for [ProjectQuests].
-class _ProjectQuestsState extends State<ProjectQuests> {
+class ProjectQuestsState extends State<ProjectQuests> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

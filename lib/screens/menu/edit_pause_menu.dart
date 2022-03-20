@@ -22,11 +22,11 @@ class EditPauseMenu extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditPauseMenuState createState() => _EditPauseMenuState();
+  EditPauseMenuState createState() => EditPauseMenuState();
 }
 
 /// State for [EditPauseMenu].
-class _EditPauseMenuState extends State<EditPauseMenu> {
+class EditPauseMenuState extends State<EditPauseMenu> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
@@ -105,6 +105,7 @@ class _EditPauseMenuState extends State<EditPauseMenu> {
     );
   }
 
+  /// Save the project context.
   void save() {
     widget.projectContext.save();
     setState(() {});

@@ -44,11 +44,11 @@ class GetText extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _GetTextState createState() => _GetTextState();
+  GetTextState createState() => GetTextState();
 }
 
 /// State for [GetText].
-class _GetTextState extends State<GetText> {
+class GetTextState extends State<GetText> {
   late final TextEditingController _controller;
   late final GlobalKey<FormState> _formKey;
 
@@ -76,6 +76,7 @@ class _GetTextState extends State<GetText> {
             title: Text(widget.title),
           ),
           body: Form(
+            key: _formKey,
             child: Column(
               children: [
                 TextFormField(
@@ -87,12 +88,11 @@ class _GetTextState extends State<GetText> {
                 )
               ],
             ),
-            key: _formKey,
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: onSubmit,
-            child: widget.icon,
             tooltip: widget.tooltip,
+            child: widget.icon,
           ),
         ),
       );

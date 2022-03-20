@@ -34,11 +34,11 @@ class EditZoneObject extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditZoneObjectState createState() => _EditZoneObjectState();
+  EditZoneObjectState createState() => EditZoneObjectState();
 }
 
 /// State for [EditZoneObject].
-class _EditZoneObjectState extends State<EditZoneObject> {
+class EditZoneObjectState extends State<EditZoneObject> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

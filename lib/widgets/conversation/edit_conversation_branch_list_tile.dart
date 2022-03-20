@@ -32,12 +32,12 @@ class EditConversationBranchListTile extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditConversationBranchListTileState createState() =>
-      _EditConversationBranchListTileState();
+  EditConversationBranchListTileState createState() =>
+      EditConversationBranchListTileState();
 }
 
 /// State for [EditConversationBranchListTile].
-class _EditConversationBranchListTileState
+class EditConversationBranchListTileState
     extends State<EditConversationBranchListTile> {
   /// Build a widget.
   @override
@@ -58,6 +58,9 @@ class _EditConversationBranchListTileState
           ).reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
+      soundChannel: widget.projectContext.game.musicSounds,
+      assetReference: asset,
+      gain: gain,
       child: Builder(
         builder: (context) => ListTile(
           autofocus: widget.autofocus,
@@ -79,9 +82,6 @@ class _EditConversationBranchListTileState
           },
         ),
       ),
-      soundChannel: widget.projectContext.game.musicSounds,
-      assetReference: asset,
-      gain: gain,
     );
   }
 }

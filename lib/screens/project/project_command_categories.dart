@@ -20,12 +20,12 @@ class ProjectCommandCategories extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _ProjectCommandCategoriesState createState() =>
-      _ProjectCommandCategoriesState();
+  ProjectCommandCategoriesState createState() =>
+      ProjectCommandCategoriesState();
 }
 
 /// State for [ProjectCommandCategories].
-class _ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
+class ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {

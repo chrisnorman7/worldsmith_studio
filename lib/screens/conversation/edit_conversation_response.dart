@@ -29,12 +29,12 @@ class EditConversationResponse extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  _EditConversationResponseState createState() =>
-      _EditConversationResponseState();
+  EditConversationResponseState createState() =>
+      EditConversationResponseState();
 }
 
 /// State for [EditConversationResponse].
-class _EditConversationResponseState extends State<EditConversationResponse> {
+class EditConversationResponseState extends State<EditConversationResponse> {
   /// Build a widget.
   @override
   Widget build(BuildContext context) {
