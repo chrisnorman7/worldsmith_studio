@@ -15,7 +15,7 @@ import 'widgets/play_sound_semantics.dart';
 /// A class to hold information about the current project.
 class ProjectContext {
   /// Create an instance.
-  const ProjectContext({
+  ProjectContext({
     required this.file,
     required this.world,
     required this.game,
@@ -128,10 +128,27 @@ class ProjectContext {
     );
   }
 
+  WorldContext? _worldContext;
+
   /// Get a world context.
-  WorldContext get worldContext => WorldContext(
+  WorldContext get worldContext {
+    final value = _worldContext;
+    if (value == null) {
+      final context = WorldContext(
         game: game,
         world: world,
         sdl: sdl,
       );
+      _worldContext = context;
+      for (var i = 0; i < sdl.numJoysticks; i++) {
+        sdl.openJoystick(i);
+      }
+      for (var i = 0; i < sdl.numHaptics; i++) {
+        final haptic = sdl.openHaptic(i)..init();
+        context.hapticDevices.add(haptic);
+      }
+      return context;
+    }
+    return value;
+  }
 }

@@ -7,6 +7,7 @@ import '../../util.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/command/call_commands_list_tile.dart';
+import '../../widgets/command/play_rumble_list_tile.dart';
 import '../../widgets/command/return_to_main_menu_list_tile.dart';
 import '../../widgets/conversation/start_conversation_list_tile.dart';
 import '../../widgets/custom_message/custom_message_list_tile.dart';
@@ -279,6 +280,14 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           returnToMainMenu: returnToMainMenu,
           onChanged: (value) {
             widget.command.returnToMainMenu = value;
+            save();
+          },
+        ),
+        PlayRumbleListTile(
+          projectContext: widget.projectContext,
+          playRumble: widget.command.playRumble,
+          onChanged: (value) {
+            widget.command.playRumble = value;
             save();
           },
         )
