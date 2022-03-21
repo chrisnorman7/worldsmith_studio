@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:short_uuids/short_uuids.dart';
 
 /// The application version.
-const appVersion = '0.0.6';
+const appVersion = '0.0.7';
 
 /// The app name.
 const appName = 'Worldsmith Studio';
