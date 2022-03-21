@@ -1,10 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-import '../../intents.dart';
-import '../../util.dart';
-import '../get_number.dart';
+import '../number_list_tile.dart';
 
 /// A widget for editing a gain value.
 class GainListTile extends StatefulWidget {
@@ -38,44 +34,14 @@ class GainListTile extends StatefulWidget {
 class GainListTileState extends State<GainListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Shortcuts(
-        shortcuts: const {
-          IncreaseIntent.hotkey: IncreaseIntent(),
-          DecreaseIntent.hotkey: DecreaseIntent()
-        },
-        child: Actions(
-          actions: {
-            IncreaseIntent: CallbackAction<IncreaseIntent>(
-              onInvoke: (intent) => widget.onChange(
-                roundDouble(widget.gain + 0.1),
-              ),
-            ),
-            DecreaseIntent: CallbackAction<DecreaseIntent>(
-              onInvoke: (intent) => widget.onChange(
-                max(
-                  0.0,
-                  roundDouble(widget.gain - 0.1),
-                ),
-              ),
-            )
-          },
-          child: ListTile(
-            autofocus: widget.autofocus,
-            title: Text(widget.title),
-            subtitle: Text(widget.gain.toString()),
-            onTap: () => pushWidget(
-              context: context,
-              builder: (context) => GetNumber(
-                value: widget.gain,
-                onDone: (value) {
-                  Navigator.pop(context);
-                  widget.onChange(value);
-                },
-                min: 0.0,
-                title: widget.title,
-              ),
-            ),
-          ),
-        ),
+  Widget build(BuildContext context) => NumberListTile(
+        autofocus: widget.autofocus,
+        title: widget.title,
+        subtitle: widget.gain.toString(),
+        onChanged: widget.onChange,
+        value: widget.gain,
+        min: 0.0,
+        max: 5.0,
+        modifier: 0.2,
       );
 }
