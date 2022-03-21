@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/world_context.dart';
@@ -92,7 +91,7 @@ class RunGameState extends State<RunGame> {
   /// Start the game running.
   Future<void> startGame() async {
     final world = widget.projectContext.world;
-    Sdl? sdl;
+    final sdl = widget.projectContext.sdl;
     BufferCache? bufferCache;
     try {
       final game = Game(
@@ -113,7 +112,6 @@ class RunGameState extends State<RunGame> {
         bufferCache: bufferCache,
         soundsDirectory: widget.projectContext.directory.path,
       );
-      sdl = Sdl()..init();
       final worldContext = WorldContext(
         sdl: sdl,
         game: game,
@@ -128,8 +126,6 @@ class RunGameState extends State<RunGame> {
           });
         },
       );
-    } on Exception {
-      rethrow;
     } finally {
       bufferCache?.destroy();
       _game = null;
