@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -37,6 +39,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
     final leftFrequency = widget.playRumble.leftFrequency;
     final rightFrequency = widget.playRumble.rightFrequency;
     final duration = widget.playRumble.duration;
+    final numberOfJoysticks = widget.projectContext.sdl.numJoysticks;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -88,9 +91,12 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
               title: 'Right Motor Strength',
             ),
             ListTile(
-              title: const Text('Test Rumble'),
-              subtitle: Text('${widget.projectContext.sdl.numJoysticks}'),
-              onTap: playHaptic,
+              title: const Text('Play Rumble'),
+              subtitle: Text(
+                '$numberOfJoysticks joystick'
+                '${numberOfJoysticks == 1 ? "" : "s"}',
+              ),
+              onTap: playRumble,
             )
           ],
         ),
@@ -105,7 +111,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
   }
 
   /// Play the rumble effect.
-  void playHaptic() {
+  void playRumble() {
     final game = widget.projectContext.game;
     final sdl = widget.projectContext.sdl;
     for (var i = 0; i < sdl.numJoysticks; i++) {
@@ -114,7 +120,26 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
         j = sdl.openJoystick(i);
         game.joysticks[i] = j;
       }
+      j.rumble(
+        duration: widget.playRumble.duration,
+        lowFrequency: widget.playRumble.leftFrequency,
+        highFrequency: widget.playRumble.rightFrequency,
+      );
     }
-    widget.projectContext.worldContext.handlePlayRumble(widget.playRumble);
+    Timer(Duration(milliseconds: widget.playRumble.duration), stopRumble);
+  }
+
+  /// Stop the rumble effect.
+  void stopRumble() {
+    for (final joystick in widget.projectContext.game.joysticks.values) {
+      joystick.rumble(duration: 1, highFrequency: 0, lowFrequency: 0);
+    }
+  }
+
+  /// Stop rumbles.
+  @override
+  void dispose() {
+    super.dispose();
+    stopRumble();
   }
 }
