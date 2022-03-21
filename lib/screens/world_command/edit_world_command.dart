@@ -290,6 +290,14 @@ class EditWorldCommandState extends State<EditWorldCommand> {
             widget.command.playRumble = value;
             save();
           },
+        ),
+        TextListTile(
+          value: widget.command.url ?? '',
+          onChanged: (value) {
+            widget.command.url = value.isEmpty ? null : value;
+            save();
+          },
+          header: 'Open URL',
         )
       ],
     );
