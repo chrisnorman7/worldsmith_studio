@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../intents.dart';
 import '../util.dart';
 import 'get_number.dart';
 
@@ -11,6 +12,7 @@ class NumberListTile extends StatelessWidget {
     required this.onChanged,
     this.min,
     this.max,
+    this.modifier = 1.0,
     this.title = 'Number',
     this.subtitle,
     this.autofocus = false,
@@ -29,6 +31,9 @@ class NumberListTile extends StatelessWidget {
   /// The maximum value.
   final double? max;
 
+  /// How much to increment and decrement [value].
+  final double modifier;
+
   /// The title for the resulting [ListTile].
   final String title;
 
@@ -39,7 +44,37 @@ class NumberListTile extends StatelessWidget {
   final bool autofocus;
 
   @override
-  Widget build(BuildContext context) => ListTile(
+  Widget build(BuildContext context) {
+    final minValue = min;
+    final maxValue = max;
+    return CallbackShortcuts(
+      bindings: {
+        DecreaseIntent.hotkey: () {
+          var n = value - modifier;
+          if (minValue != null && n < minValue) {
+            n = minValue;
+          }
+          onChanged(n);
+        },
+        IncreaseIntent.hotkey: () {
+          var n = value + modifier;
+          if (maxValue != null && n > maxValue) {
+            n = maxValue;
+          }
+          onChanged(n);
+        },
+        HomeIntent.hotkey: () {
+          if (minValue != null) {
+            onChanged(minValue);
+          }
+        },
+        EndIntent.hotkey: () {
+          if (maxValue != null) {
+            onChanged(maxValue);
+          }
+        }
+      },
+      child: ListTile(
         autofocus: autofocus,
         title: Text(title),
         subtitle: Text(subtitle ?? value.toString()),
@@ -56,5 +91,7 @@ class NumberListTile extends StatelessWidget {
             title: title,
           ),
         ),
-      );
+      ),
+    );
+  }
 }

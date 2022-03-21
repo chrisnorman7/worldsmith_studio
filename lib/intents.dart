@@ -382,3 +382,21 @@ class RunIntent extends Intent {
     meta: Platform.isMacOS,
   );
 }
+
+/// An intent to go to the start of something.
+class HomeIntent extends Intent {
+  /// Create an instance.
+  const HomeIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.home);
+}
+
+/// And intent to go to the end of something.
+class EndIntent extends Intent {
+  /// Create an instance.
+  const EndIntent();
+
+  /// The hotkey to use.
+  static const hotkey = SingleActivator(LogicalKeyboardKey.end);
+}
