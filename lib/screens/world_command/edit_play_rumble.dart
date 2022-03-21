@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/number_list_tile.dart';
@@ -40,65 +41,68 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
     final rightFrequency = widget.playRumble.rightFrequency;
     final duration = widget.playRumble.duration;
     final numberOfJoysticks = widget.projectContext.sdl.numJoysticks;
-    return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.onDone(null);
-              },
-              child: const Icon(
-                Icons.clear,
-                semanticLabel: 'Clear Value',
+    return CallbackShortcuts(
+      bindings: {PlayPauseIntent.hotkey: playRumble},
+      child: Cancel(
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onDone(null);
+                },
+                child: const Icon(
+                  Icons.clear,
+                  semanticLabel: 'Clear Value',
+                ),
               ),
-            ),
-          ],
-          title: const Text('Edit Rumble'),
-        ),
-        body: ListView(
-          children: [
-            NumberListTile(
-              value: duration.toDouble(),
-              onChanged: (value) {
-                widget.playRumble.duration = value.floor();
-                save();
-              },
-              min: 5.0,
-              autofocus: true,
-              title: 'Duration',
-              subtitle: '$duration milliseconds',
-            ),
-            NumberListTile(
-              value: leftFrequency.toDouble(),
-              onChanged: (value) {
-                widget.playRumble.leftFrequency = value.floor();
-                save();
-              },
-              min: 0,
-              max: 65535,
-              title: 'Left Motor Strength',
-            ),
-            NumberListTile(
-              value: rightFrequency.toDouble(),
-              onChanged: (value) {
-                widget.playRumble.rightFrequency = value.floor();
-                save();
-              },
-              min: 0,
-              max: 65535,
-              title: 'Right Motor Strength',
-            ),
-            ListTile(
-              title: const Text('Play Rumble'),
-              subtitle: Text(
-                '$numberOfJoysticks joystick'
-                '${numberOfJoysticks == 1 ? "" : "s"}',
+            ],
+            title: const Text('Edit Rumble'),
+          ),
+          body: ListView(
+            children: [
+              NumberListTile(
+                value: duration.toDouble(),
+                onChanged: (value) {
+                  widget.playRumble.duration = value.floor();
+                  save();
+                },
+                min: 5.0,
+                autofocus: true,
+                title: 'Duration',
+                subtitle: '$duration milliseconds',
               ),
-              onTap: playRumble,
-            )
-          ],
+              NumberListTile(
+                value: leftFrequency.toDouble(),
+                onChanged: (value) {
+                  widget.playRumble.leftFrequency = value.floor();
+                  save();
+                },
+                min: 0,
+                max: 65535,
+                title: 'Left Motor Strength',
+              ),
+              NumberListTile(
+                value: rightFrequency.toDouble(),
+                onChanged: (value) {
+                  widget.playRumble.rightFrequency = value.floor();
+                  save();
+                },
+                min: 0,
+                max: 65535,
+                title: 'Right Motor Strength',
+              ),
+              ListTile(
+                title: const Text('Play Rumble'),
+                subtitle: Text(
+                  '$numberOfJoysticks joystick'
+                  '${numberOfJoysticks == 1 ? "" : "s"}',
+                ),
+                onTap: playRumble,
+              )
+            ],
+          ),
         ),
       ),
     );
