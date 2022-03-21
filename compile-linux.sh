@@ -1,2 +1,2 @@
 #!/bin/sh
-flutter build linux --release && cp *.so build/linux/x64/release/bundle
+flutter build linux --release && cp *.so changelog.md build/linux/x64/release/bundle
