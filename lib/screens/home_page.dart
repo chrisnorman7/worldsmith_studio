@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     synthizer = Synthizer();
-    sdl = Sdl();
+    sdl = Sdl()..init();
   }
 
   /// Build the widget.
@@ -399,8 +399,12 @@ class _HomePageState extends State<HomePage> {
       soundManager
         ..bufferCache?.destroy()
         ..context.destroy();
-      synthizer.shutdown();
-      sdl.quit();
+    }
+    _game?.destroy();
+    synthizer.shutdown();
+    sdl.quit();
+    for (final joystick in (_game?.joysticks ?? {}).values) {
+      joystick.close();
     }
   }
 
