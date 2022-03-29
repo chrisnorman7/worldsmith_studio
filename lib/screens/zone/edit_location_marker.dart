@@ -73,19 +73,6 @@ class EditLocationMarkerState extends State<EditLocationMarker> {
 
   /// Delete the location marker.
   void deleteLocationMarker(BuildContext context) {
-    final world = widget.projectContext.world;
-    for (final category in world.commandCategories) {
-      for (final command in category.commands) {
-        if (command.localTeleport?.locationMarkerId ==
-            widget.locationMarker.id) {
-          return showError(
-            context: context,
-            message: 'You cannot delete the location marker used by the '
-                '${command.name} command of the ${category.name} category.',
-          );
-        }
-      }
-    }
     confirm(
         context: context,
         message: 'Are you sure you want to delete this location marker?',
