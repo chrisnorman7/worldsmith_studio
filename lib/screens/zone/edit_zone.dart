@@ -231,7 +231,7 @@ class EditZoneState extends State<EditZone> {
                 title: 'Zone Ambiances',
               ),
             );
-            resetLevel();
+            setState(resetLevel);
           },
         ),
         FadeTimeListTile(
