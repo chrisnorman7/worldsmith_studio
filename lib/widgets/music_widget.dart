@@ -14,7 +14,7 @@ class MusicWidget extends StatefulWidget {
     required this.getFadeTime,
     this.actions = const [],
     this.floatingActionButton,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The title of the resulting [Scaffold].
@@ -49,7 +49,7 @@ class MusicWidgetState extends State<MusicWidget> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final music = widget.getMusic();
     final musicPlayer = _musicPlayer;
     if (music == null) {

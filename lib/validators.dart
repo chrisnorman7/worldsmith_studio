@@ -3,8 +3,8 @@ import 'dart:io';
 
 /// Returns [message] if [value] is `null` or empty.
 String? validateNonEmptyValue({
-  required String? value,
-  String message = 'You must supply a value',
+  required final String? value,
+  final String message = 'You must supply a value',
 }) {
   if (value == null || value.isEmpty) {
     return message;
@@ -14,10 +14,10 @@ String? validateNonEmptyValue({
 
 /// Ensure the given [value] is a path.
 String? validatePath({
-  required String? value,
-  bool allowDirectories = true,
-  String emptyMessage = 'You must provide a file or folder to import',
-  String invalidPathMessage = 'Not a file or folder',
+  required final String? value,
+  final bool allowDirectories = true,
+  final String emptyMessage = 'You must provide a file or folder to import',
+  final String invalidPathMessage = 'Not a file or folder',
 }) {
   if (value == null || value.isEmpty) {
     return emptyMessage;
@@ -36,8 +36,10 @@ String? validatePath({
 }
 
 /// Ensure the given [value] is an integer.
-String? validateInt(
-        {required String? value, String message = 'Invalid number'}) =>
+String? validateInt({
+  required final String? value,
+  final String message = 'Invalid number',
+}) =>
     value == null || value.isEmpty || int.tryParse(value) == null
         ? message
         : null;

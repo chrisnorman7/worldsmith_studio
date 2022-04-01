@@ -14,7 +14,7 @@ class EditConversationNextBranch extends StatefulWidget {
     required this.conversation,
     required this.response,
     required this.nextBranch,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -40,7 +40,7 @@ class EditConversationNextBranchState
     extends State<EditConversationNextBranch> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: [
@@ -66,7 +66,7 @@ class EditConversationNextBranchState
                 branch: widget.conversation.getBranch(
                   widget.nextBranch.branchId,
                 ),
-                onChanged: (value) {
+                onChanged: (final value) {
                   Navigator.pop(context);
                   widget.nextBranch.branchId = value.id;
                   save();
@@ -75,7 +75,7 @@ class EditConversationNextBranchState
               ),
               NumberListTile(
                 value: widget.nextBranch.fadeTime,
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.nextBranch.fadeTime = value;
                   save();
                 },

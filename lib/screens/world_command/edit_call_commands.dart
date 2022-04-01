@@ -17,7 +17,7 @@ class EditCallCommands extends StatefulWidget {
   const EditCallCommands({
     required this.projectContext,
     required this.callCommands,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,7 +35,7 @@ class EditCallCommands extends StatefulWidget {
 class EditCallCommandsState extends State<EditCallCommands> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final callCommands = widget.callCommands;
     final Widget child;
@@ -55,10 +55,10 @@ class EditCallCommandsState extends State<EditCallCommands> {
               subtitle: Text('${callCommand.conditions.length}'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => EditCallCommand(
+                builder: (final context) => EditCallCommand(
                   projectContext: widget.projectContext,
                   callCommand: callCommand,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     if (value == null) {
                       callCommands.removeAt(i);
                     }
@@ -82,18 +82,18 @@ class EditCallCommandsState extends State<EditCallCommands> {
           autofocus: callCommands.isEmpty,
           onPressed: () => pushWidget(
             context: context,
-            builder: (context) => SelectCommandCategory(
+            builder: (final context) => SelectCommandCategory(
               projectContext: widget.projectContext,
-              onDone: (category) {
+              onDone: (final category) {
                 if (category == null) {
                   return Navigator.pop(context);
                 }
                 pushWidget(
                   context: context,
-                  builder: (context) => SelectWorldCommand(
+                  builder: (final context) => SelectWorldCommand(
                     projectContext: widget.projectContext,
                     category: category,
-                    onDone: (command) async {
+                    onDone: (final command) async {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       if (command != null) {
@@ -102,10 +102,10 @@ class EditCallCommandsState extends State<EditCallCommands> {
                         widget.projectContext.save();
                         await pushWidget(
                           context: context,
-                          builder: (context) => EditCallCommand(
+                          builder: (final context) => EditCallCommand(
                             projectContext: widget.projectContext,
                             callCommand: callCommand,
-                            onChanged: (value) {
+                            onChanged: (final value) {
                               if (value == null) {
                                 callCommands.removeLast();
                               }

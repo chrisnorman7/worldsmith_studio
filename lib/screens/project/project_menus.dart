@@ -13,7 +13,7 @@ class ProjectMenus extends StatefulWidget {
   /// Create an instance.
   const ProjectMenus({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -28,7 +28,7 @@ class ProjectMenus extends StatefulWidget {
 class ProjectMenusState extends State<ProjectMenus> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final options = world.mainMenuOptions;
     return ListView(
@@ -41,7 +41,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) => EditMainMenu(
+                builder: (final context) => EditMainMenu(
                   projectContext: widget.projectContext,
                 ),
               );
@@ -58,7 +58,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) => EditCreditsMenu(
+                builder: (final context) => EditCreditsMenu(
                   projectContext: widget.projectContext,
                 ),
               );
@@ -75,7 +75,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) => EditSoundMenu(
+                builder: (final context) => EditSoundMenu(
                   projectContext: widget.projectContext,
                 ),
               );
@@ -90,7 +90,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) => EditPauseMenu(
+                builder: (final context) => EditPauseMenu(
                   projectContext: widget.projectContext,
                 ),
               );
@@ -104,7 +104,7 @@ class ProjectMenusState extends State<ProjectMenus> {
             onTap: () async {
               await pushWidget(
                 context: context,
-                builder: (context) => EditQuestMenu(
+                builder: (final context) => EditQuestMenu(
                   projectContext: widget.projectContext,
                 ),
               );

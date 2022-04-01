@@ -12,7 +12,7 @@ class EditReturnToMainMenu extends StatefulWidget {
     required this.projectContext,
     required this.returnToMainMenu,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -33,7 +33,7 @@ class EditReturnToMainMenu extends StatefulWidget {
 class EditReturnToMainMenuState extends State<EditReturnToMainMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final value = widget.returnToMainMenu;
     return Cancel(
       child: Scaffold(
@@ -56,8 +56,8 @@ class EditReturnToMainMenuState extends State<EditReturnToMainMenu> {
           children: [
             CheckboxListTile(
               value: value.savePlayerPreferences,
-              onChanged: (checked) {
-                value.savePlayerPreferences = checked == true;
+              onChanged: (final checked) {
+                value.savePlayerPreferences = checked ?? false;
                 save();
               },
               autofocus: true,
@@ -69,7 +69,7 @@ class EditReturnToMainMenuState extends State<EditReturnToMainMenu> {
             ),
             FadeTimeListTile(
               value: value.fadeTime,
-              onChanged: (fadeTime) {
+              onChanged: (final fadeTime) {
                 value.fadeTime = fadeTime;
                 save();
               },

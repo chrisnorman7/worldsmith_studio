@@ -17,7 +17,8 @@ class GitTag {
   });
 
   /// Create an instance from a JSON object.
-  factory GitTag.fromJson(Map<String, dynamic> json) => _$GitTagFromJson(json);
+  factory GitTag.fromJson(final Map<String, dynamic> json) =>
+      _$GitTagFromJson(json);
 
   /// The name of the tag.
   final String name;

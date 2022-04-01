@@ -19,7 +19,7 @@ class StartConversationListTile extends StatefulWidget {
     required this.onChanged,
     this.autofocus = false,
     this.title = 'Start Conversation',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -47,7 +47,7 @@ class StartConversationListTile extends StatefulWidget {
 class StartConversationListTileState extends State<StartConversationListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final conversationId = widget.startConversation?.conversationId;
     final conversation = conversationId == null
         ? null
@@ -57,21 +57,21 @@ class StartConversationListTileState extends State<StartConversationListTile> {
     final assetReference = sound == null
         ? null
         : getAssetReferenceReference(
-                assets: widget.projectContext.world.conversationAssets,
-                id: sound.id)
-            .reference;
+            assets: widget.projectContext.world.conversationAssets,
+            id: sound.id,
+          ).reference;
     return CallbackShortcuts(
       bindings: {
         EditIntent.hotkey: () async {
           if (conversation != null) {
             await pushWidget(
               context: context,
-              builder: (context) => EditConversation(
+              builder: (final context) => EditConversation(
                 projectContext: widget.projectContext,
                 category: widget.projectContext.world.conversationCategories
                     .firstWhere(
-                  (element) => element.conversations
-                      .where((element) => element.id == conversation.id)
+                  (final element) => element.conversations
+                      .where((final element) => element.id == conversation.id)
                       .isNotEmpty,
                 ),
                 conversation: conversation,
@@ -99,15 +99,16 @@ class StartConversationListTileState extends State<StartConversationListTile> {
             if (startConversation == null) {
               await pushWidget(
                 context: context,
-                builder: (context) => SelectConversation(
+                builder: (final context) => SelectConversation(
                   projectContext: widget.projectContext,
-                  onDone: (value) {
+                  onDone: (final value) {
                     if (value == null) {
                       widget.onChanged(null);
                     } else {
                       widget.onChanged(
                         StartConversation(
-                            conversationId: value.conversation.id),
+                          conversationId: value.conversation.id,
+                        ),
                       );
                     }
                   },
@@ -116,7 +117,7 @@ class StartConversationListTileState extends State<StartConversationListTile> {
             } else {
               await pushWidget(
                 context: context,
-                builder: (context) => EditStartConversation(
+                builder: (final context) => EditStartConversation(
                   projectContext: widget.projectContext,
                   startConversation: startConversation,
                   onChanged: widget.onChanged,

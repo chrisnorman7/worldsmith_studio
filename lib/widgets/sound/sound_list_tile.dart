@@ -27,7 +27,7 @@ class SoundListTile extends StatefulWidget {
     this.autofocus = false,
     this.playSound = true,
     this.soundChannel,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -82,7 +82,7 @@ class _SoundListTileState extends State<SoundListTile> {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final sound = widget.value;
     final String subtitle;
     if (sound == null) {
@@ -107,7 +107,7 @@ class _SoundListTileState extends State<SoundListTile> {
         child: Actions(
           actions: {
             DecreaseIntent: CallbackAction<DecreaseIntent>(
-              onInvoke: (intent) {
+              onInvoke: (final intent) {
                 final sound = widget.value;
                 if (sound == null) {
                   return null;
@@ -120,7 +120,7 @@ class _SoundListTileState extends State<SoundListTile> {
               },
             ),
             IncreaseIntent: CallbackAction<IncreaseIntent>(
-              onInvoke: (intent) {
+              onInvoke: (final intent) {
                 final sound = widget.value;
                 if (sound == null) {
                   return null;
@@ -147,12 +147,12 @@ class _SoundListTileState extends State<SoundListTile> {
               stop();
               final v = widget.value;
               if (v == null) {
-                pushWidget(
+                await pushWidget(
                   context: context,
-                  builder: (context) => SelectAsset(
+                  builder: (final context) => SelectAsset(
                     projectContext: widget.projectContext,
                     assetStore: widget.assetStore,
-                    onDone: (value) {
+                    onDone: (final value) {
                       Navigator.pop(context);
                       final sound = Sound(
                         id: value!.variableName,
@@ -165,7 +165,7 @@ class _SoundListTileState extends State<SoundListTile> {
                   ),
                 );
               } else {
-                pushEditSoundWidget(context: context, sound: v);
+                await pushEditSoundWidget(context: context, sound: v);
               }
             },
           ),
@@ -176,12 +176,12 @@ class _SoundListTileState extends State<SoundListTile> {
 
   /// Push the [EditSound] widget.
   Future<void> pushEditSoundWidget({
-    required BuildContext context,
-    required Sound sound,
+    required final BuildContext context,
+    required final Sound sound,
   }) async =>
       pushWidget(
         context: context,
-        builder: (context) => EditSound(
+        builder: (final context) => EditSound(
           projectContext: widget.projectContext,
           assetStore: widget.assetStore,
           sound: sound,

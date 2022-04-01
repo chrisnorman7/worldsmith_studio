@@ -13,7 +13,7 @@ class CallCommandsListTile extends StatefulWidget {
     required this.callCommands,
     this.title = 'Call Commands',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,14 +37,14 @@ class CallCommandsListTile extends StatefulWidget {
 class CallCommandsListTileState extends State<CallCommandsListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => ListTile(
+  Widget build(final BuildContext context) => ListTile(
         autofocus: widget.autofocus,
         title: Text(widget.title),
         subtitle: Text('${widget.callCommands.length}'),
         onTap: () async {
           await pushWidget(
             context: context,
-            builder: (context) {
+            builder: (final context) {
               final callCommands = widget.callCommands;
               return EditCallCommands(
                 projectContext: widget.projectContext,

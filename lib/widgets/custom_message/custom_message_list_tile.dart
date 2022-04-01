@@ -17,7 +17,7 @@ class CustomMessageListTile extends StatefulWidget {
     this.assetReference,
     this.autofocus = false,
     this.validator,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -47,7 +47,7 @@ class CustomMessageListTile extends StatefulWidget {
 class CustomMessageListTileState extends State<CustomMessageListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final text = widget.customMessage.text;
     final sound = widget.customMessage.sound;
     return PlaySoundSemantics(
@@ -56,7 +56,7 @@ class CustomMessageListTileState extends State<CustomMessageListTile> {
           ? widget.assetReference
           : widget.projectContext.worldContext.getCustomSound(sound),
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           autofocus: widget.autofocus,
           title: Text(widget.title),
           subtitle: Text('$text'),
@@ -64,7 +64,7 @@ class CustomMessageListTileState extends State<CustomMessageListTile> {
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
               context: context,
-              builder: (context) => EditCustomMessage(
+              builder: (final context) => EditCustomMessage(
                 projectContext: widget.projectContext,
                 customMessage: widget.customMessage,
               ),

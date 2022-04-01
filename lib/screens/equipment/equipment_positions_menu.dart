@@ -18,7 +18,7 @@ class EquipmentPositionsMenu extends StatefulWidget {
   /// Create an instance.
   const EquipmentPositionsMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -33,11 +33,11 @@ class EquipmentPositionsMenu extends StatefulWidget {
 class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final createEquipmentPositionAction =
         CallbackAction<CreateEquipmentPositionIntent>(
-      onInvoke: (intent) async {
+      onInvoke: (final intent) async {
         final position = EquipmentPosition(
           id: newId(),
           name: 'Untitled Equipment Position',
@@ -45,7 +45,7 @@ class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
         world.equipmentPositions.add(position);
         await pushWidget(
           context: context,
-          builder: (context) => EditEquipmentPosition(
+          builder: (final context) => EditEquipmentPosition(
             projectContext: widget.projectContext,
             equipmentPosition: position,
           ),
@@ -81,19 +81,19 @@ class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
           },
           child: Cancel(
             child: Builder(
-              builder: (context) => Scaffold(
+              builder: (final context) => Scaffold(
                 appBar: AppBar(
                   title: const Text('Equipment Positions'),
                 ),
                 body: ListView.builder(
-                  itemBuilder: (context, index) {
+                  itemBuilder: (final context, final index) {
                     final position = world.equipmentPositions[index];
                     final shortcuts = <ShortcutActivator, Intent>{
                       DeleteIntent.hotkey: const DeleteIntent()
                     };
                     final actions = <Type, Action>{
                       DeleteIntent: CallbackAction<DeleteIntent>(
-                        onInvoke: (intent) => deleteEquipmentPosition(
+                        onInvoke: (final intent) => deleteEquipmentPosition(
                           context: context,
                           equipmentPosition: position,
                           world: world,
@@ -103,7 +103,7 @@ class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                     };
                     if (index <= (world.equipmentPositions.length - 1)) {
                       final moveDownAction = CallbackAction<MoveDownIntent>(
-                        onInvoke: (intent) {
+                        onInvoke: (final intent) {
                           world.equipmentPositions.removeAt(index);
                           final newIndex = index + 1;
                           if (newIndex ==
@@ -121,7 +121,7 @@ class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                     }
                     if (index > 0) {
                       final moveUpAction = CallbackAction<MoveUpIntent>(
-                        onInvoke: (intent) {
+                        onInvoke: (final intent) {
                           world.equipmentPositions.removeAt(index);
                           world.equipmentPositions.insert(index - 1, position);
                           save();
@@ -141,7 +141,7 @@ class EquipmentPositionsMenuState extends State<EquipmentPositionsMenu> {
                           onTap: () async {
                             await pushWidget(
                               context: context,
-                              builder: (context) => EditEquipmentPosition(
+                              builder: (final context) => EditEquipmentPosition(
                                 projectContext: widget.projectContext,
                                 equipmentPosition: position,
                               ),

@@ -16,11 +16,11 @@ class AppPreferences {
   });
 
   /// Create an instance from a JSON object.
-  factory AppPreferences.fromJson(Map<String, dynamic> json) =>
+  factory AppPreferences.fromJson(final Map<String, dynamic> json) =>
       _$AppPreferencesFromJson(json);
 
   /// Load an instance from shared preferences.
-  factory AppPreferences.load(SharedPreferences preferences) {
+  factory AppPreferences.load(final SharedPreferences preferences) {
     final data = preferences.getString(_key);
     if (data == null) {
       return AppPreferences(recentProjects: List<String>.empty(growable: true));
@@ -39,9 +39,9 @@ class AppPreferences {
   Map<String, dynamic> toJson() => _$AppPreferencesToJson(this);
 
   /// Save this instance.
-  void save(SharedPreferences preferences) {
+  void save(final SharedPreferences preferences) {
     recentProjects
-        .removeWhere((element) => File(element).existsSync() == false);
+        .removeWhere((final element) => File(element).existsSync() == false);
     final json = indentedJsonEncoder.convert(toJson());
     preferences.setString(_key, json);
   }

@@ -14,7 +14,7 @@ class SelectConversation extends StatefulWidget {
     required this.projectContext,
     required this.onDone,
     this.location,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,12 +37,12 @@ class SelectConversationState extends State<SelectConversation> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final category = _category;
     if (category == null) {
       return SelectItem<ConversationCategory>(
-        onDone: (value) => setState(() => _category = value),
+        onDone: (final value) => setState(() => _category = value),
         values: world.conversationCategories,
         actions: [
           ElevatedButton(
@@ -56,13 +56,13 @@ class SelectConversationState extends State<SelectConversation> {
             ),
           )
         ],
-        getItemWidget: (item) => Text(item.name),
+        getItemWidget: (final item) => Text(item.name),
         title: 'Select Category',
         value: widget.location?.category,
       );
     } else {
       return SelectItem<Conversation>(
-        onDone: (value) {
+        onDone: (final value) {
           Navigator.pop(context);
           widget.onDone(
             ConversationLocation(
@@ -72,7 +72,7 @@ class SelectConversationState extends State<SelectConversation> {
           );
         },
         values: category.conversations,
-        getItemWidget: (item) {
+        getItemWidget: (final item) {
           final branch = item.getBranch(item.initialBranchId);
           final sound = branch.sound;
           final assetReference = sound == null

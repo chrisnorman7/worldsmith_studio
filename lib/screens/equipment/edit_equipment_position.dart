@@ -14,7 +14,7 @@ class EditEquipmentPosition extends StatefulWidget {
   const EditEquipmentPosition({
     required this.projectContext,
     required this.equipmentPosition,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -32,7 +32,7 @@ class EditEquipmentPosition extends StatefulWidget {
 class EditEquipmentPositionState extends State<EditEquipmentPosition> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return Cancel(
       child: Scaffold(
@@ -57,7 +57,7 @@ class EditEquipmentPositionState extends State<EditEquipmentPosition> {
           children: [
             TextListTile(
               value: widget.equipmentPosition.name,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.equipmentPosition.name = value;
                 widget.projectContext.save();
                 setState(() {});
@@ -65,7 +65,7 @@ class EditEquipmentPositionState extends State<EditEquipmentPosition> {
               header: 'Name',
               autofocus: true,
               title: 'Equipment Position Name',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             )
           ],
         ),

@@ -14,7 +14,7 @@ class EditDirection extends StatefulWidget {
     required this.projectContext,
     required this.name,
     required this.degrees,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -46,7 +46,7 @@ class EditDirectionState extends State<EditDirection> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return Cancel(
       child: Scaffold(
@@ -54,18 +54,20 @@ class EditDirectionState extends State<EditDirection> {
           actions: [
             ElevatedButton(
               onPressed: () => confirm(
-                  context: context,
-                  message:
-                      'Are you sure you want to delete the $_name direction?',
-                  title: 'Delete Direction',
-                  yesCallback: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    world.directions.removeWhere(
-                      (key, value) => key == _name && value == _degrees,
-                    );
-                    widget.projectContext.save();
-                  }),
+                context: context,
+                message:
+                    'Are you sure you want to delete the $_name direction?',
+                title: 'Delete Direction',
+                yesCallback: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  world.directions.removeWhere(
+                    (final key, final value) =>
+                        key == _name && value == _degrees,
+                  );
+                  widget.projectContext.save();
+                },
+              ),
               child: deleteIcon,
             )
           ],
@@ -75,16 +77,16 @@ class EditDirectionState extends State<EditDirection> {
           children: [
             TextListTile(
               value: _name,
-              onChanged: (value) => save(name: value),
+              onChanged: (final value) => save(name: value),
               header: 'Direction Name',
               autofocus: true,
               labelText: 'Name',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             ListTile(
               title: const Text('Degrees'),
               subtitle: Slider(
-                onChanged: (value) => save(degrees: value * 360),
+                onChanged: (final value) => save(degrees: value * 360),
                 value: _degrees / 360.0,
                 label: '${_degrees.floor()} °',
                 divisions: 360,
@@ -105,7 +107,7 @@ class EditDirectionState extends State<EditDirection> {
     degrees ??= _degrees;
     final world = widget.projectContext.world;
     world.directions.removeWhere(
-      (key, value) => key == _name && value == _degrees,
+      (final key, final value) => key == _name && value == _degrees,
     );
     world.directions[name] = degrees;
     widget.projectContext.save();

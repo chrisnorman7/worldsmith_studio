@@ -11,7 +11,7 @@ class DirectionsList extends StatefulWidget {
   /// Create an instance.
   const DirectionsList({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -26,11 +26,11 @@ class DirectionsList extends StatefulWidget {
 class DirectionsListState extends State<DirectionsList> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
-    final List<Widget> children = [];
+    final children = <Widget>[];
     final entries = world.directions.entries.toList()
-      ..sort((a, b) => a.value.compareTo(b.value));
+      ..sort((final a, final b) => a.value.compareTo(b.value));
     for (var i = 0; i < entries.length; i++) {
       final entry = entries[i];
       children.add(
@@ -41,7 +41,7 @@ class DirectionsListState extends State<DirectionsList> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) => EditDirection(
+              builder: (final context) => EditDirection(
                 projectContext: widget.projectContext,
                 name: entry.key,
                 degrees: entry.value,
@@ -65,7 +65,7 @@ class DirectionsListState extends State<DirectionsList> {
             for (var i = 0; i <= 360; i++) {
               if (world.directions.values
                   .where(
-                    (element) => element.floor() == i,
+                    (final element) => element.floor() == i,
                   )
                   .isEmpty) {
                 world.directions['Untitled Direction'] = i.toDouble();

@@ -16,7 +16,7 @@ class ZoneListTile extends StatefulWidget {
     this.zoneId,
     this.title = 'Zone',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,7 +41,7 @@ class ZoneListTile extends StatefulWidget {
 class _ZoneListTileState extends State<ZoneListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final id = widget.zoneId;
     final world = widget.projectContext.world;
     final currentZone = id == null ? null : world.getZone(id);
@@ -51,7 +51,7 @@ class _ZoneListTileState extends State<ZoneListTile> {
           if (currentZone != null) {
             await pushWidget(
               context: context,
-              builder: (context) => EditZone(
+              builder: (final context) => EditZone(
                 projectContext: widget.projectContext,
                 zone: currentZone,
               ),
@@ -66,7 +66,7 @@ class _ZoneListTileState extends State<ZoneListTile> {
         subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectZone(
+          builder: (final context) => SelectZone(
             projectContext: widget.projectContext,
             onDone: widget.onDone,
             zone: currentZone,

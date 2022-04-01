@@ -70,9 +70,10 @@ class ProjectContext {
   }
 
   /// Delete the given [assetReferenceReference] from the given [assetStore].
-  void deleteAssetReferenceReference(
-      {required AssetStore assetStore,
-      required AssetReferenceReference assetReferenceReference}) {
+  void deleteAssetReferenceReference({
+    required final AssetStore assetStore,
+    required final AssetReferenceReference assetReferenceReference,
+  }) {
     assetStore.assets.remove(assetReferenceReference);
     save();
     final reference = assetReferenceReference.reference;
@@ -93,7 +94,7 @@ class ProjectContext {
   }
 
   /// Play the menu activate sound.
-  void playActivateSound({double? gain}) {
+  void playActivateSound({final double? gain}) {
     final activateSound = world.menuActivateSound;
     if (activateSound != null) {
       game.interfaceSounds.playSound(
@@ -108,8 +109,8 @@ class ProjectContext {
   /// Get a play sound semantics widget which will play the [world]'s
   /// `menuMoveSound`.
   PlaySoundSemantics getMenuMoveSemantics({
-    required Widget child,
-    CustomSound? sound,
+    required final Widget child,
+    final CustomSound? sound,
   }) {
     final defaultGain = sound?.gain ??
         world.soundOptions.menuMoveSound?.gain ??

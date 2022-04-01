@@ -36,7 +36,7 @@ class KeyboardShortcut {
 
   /// Returns a string representation of the required key.
   String get keyDescription {
-    final List<String> keys = [];
+    final keys = <String>[];
     if (control) {
       keys.add(Platform.isMacOS ? 'CMD' : 'Control');
     }
@@ -57,7 +57,7 @@ class KeyboardShortcuts extends StatelessWidget {
   const KeyboardShortcuts({
     required this.keyboardShortcuts,
     this.title = 'Keyboard Shortcuts',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The keyboard shortcuts list to use.
@@ -68,7 +68,7 @@ class KeyboardShortcuts extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: [
@@ -83,7 +83,7 @@ class KeyboardShortcuts extends StatelessWidget {
             title: Text(title),
           ),
           body: ListView.builder(
-            itemBuilder: (context, index) {
+            itemBuilder: (final context, final index) {
               final keyboardShortcut = keyboardShortcuts[index];
               return ListTile(
                 autofocus: index == 0,
@@ -108,7 +108,7 @@ class WithKeyboardShortcuts extends StatelessWidget {
   const WithKeyboardShortcuts({
     required this.child,
     required this.keyboardShortcuts,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The widget below this one in the tree.
@@ -119,11 +119,11 @@ class WithKeyboardShortcuts extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final helpAction = CallbackAction<HelpIntent>(
-      onInvoke: (intent) => pushWidget(
+      onInvoke: (final intent) => pushWidget(
         context: context,
-        builder: (context) =>
+        builder: (final context) =>
             KeyboardShortcuts(keyboardShortcuts: keyboardShortcuts),
       ),
     );

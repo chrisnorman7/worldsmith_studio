@@ -14,7 +14,7 @@ class ProjectScenes extends StatefulWidget {
   /// Create an instance.
   const ProjectScenes({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -29,7 +29,7 @@ class ProjectScenes extends StatefulWidget {
 class ProjectScenesState extends State<ProjectScenes> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final scenes = world.scenes;
     final Widget child;
@@ -50,7 +50,7 @@ class ProjectScenesState extends State<ProjectScenes> {
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditScene(
+                  builder: (final context) => EditScene(
                     projectContext: widget.projectContext,
                     scene: scene,
                   ),

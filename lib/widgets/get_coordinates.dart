@@ -16,7 +16,7 @@ class GetCoordinates extends StatelessWidget {
     this.actions = const [],
     this.title = 'Get Coordinates',
     this.validator,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The function to be called when editing is complete.
@@ -38,16 +38,16 @@ class GetCoordinates extends StatelessWidget {
   final FormFieldValidator<Point<int>>? validator;
 
   @override
-  Widget build(BuildContext context) => GetText(
-        onDone: (value) {
-          final Point<int> coordinates = getPoint(value);
+  Widget build(final BuildContext context) => GetText(
+        onDone: (final value) {
+          final coordinates = getPoint(value);
           onDone(coordinates);
         },
         actions: actions,
         labelText: labelText,
         text: '${value.x},${value.y}',
         title: title,
-        validator: (value) {
+        validator: (final value) {
           if (value == null || value.isEmpty) {
             return 'You must supply a value.';
           } else if (_regExp.hasMatch(value)) {
@@ -64,7 +64,7 @@ class GetCoordinates extends StatelessWidget {
       );
 
   /// Get a valid set of coordinates from the given [value].
-  Point<int> getPoint(String value) {
+  Point<int> getPoint(final String value) {
     final match = _regExp.firstMatch(value)!;
     final x = int.parse(match.group(1)!);
     final y = int.parse(match.group(2)!);

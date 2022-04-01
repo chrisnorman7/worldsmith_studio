@@ -8,8 +8,8 @@ class MusicPlayer {
   /// Create an instance.
   MusicPlayer({
     required this.channel,
-    required AssetReference assetReference,
-    required double gain,
+    required final AssetReference assetReference,
+    required final double gain,
     required this.fadeBuilder,
   })  : _assetReference = assetReference,
         _gain = gain;
@@ -24,7 +24,7 @@ class MusicPlayer {
   AssetReference get assetReference => _assetReference;
 
   /// Set the current [assetReference].
-  set assetReference(AssetReference value) {
+  set assetReference(final AssetReference value) {
     final current = _assetReference;
     if (value.name != current.name ||
         value.type != current.type ||
@@ -42,7 +42,7 @@ class MusicPlayer {
   double get gain => _gain;
 
   /// Set the current [gain].
-  set gain(double value) {
+  set gain(final double value) {
     _gain = value;
     _playSound?.gain = value;
   }

@@ -20,7 +20,7 @@ class EditCreditsMenu extends StatefulWidget {
   /// Create an instance.
   const EditCreditsMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,7 +35,7 @@ class EditCreditsMenu extends StatefulWidget {
 class EditCreditsMenuState extends State<EditCreditsMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
     final options = world.creditsMenuOptions;
@@ -61,19 +61,19 @@ class EditCreditsMenuState extends State<EditCreditsMenu> {
           children: [
             TextListTile(
               value: options.title,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.title = value;
                 save();
               },
               header: 'Title',
               autofocus: true,
               title: 'Menu Title',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             SoundListTile(
               projectContext: widget.projectContext,
               value: options.music,
-              onDone: (value) {
+              onDone: (final value) {
                 options.music = value;
                 save();
               },
@@ -85,7 +85,7 @@ class EditCreditsMenuState extends State<EditCreditsMenu> {
             ),
             FadeTimeListTile(
               value: options.fadeTime,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.fadeTime = value;
                 save();
               },
@@ -107,8 +107,8 @@ class EditCreditsMenuState extends State<EditCreditsMenu> {
 
   /// Return  list tile suitable for editing the given [credit].
   Widget getCreditListTile({
-    required BuildContext context,
-    required WorldCredit credit,
+    required final BuildContext context,
+    required final WorldCredit credit,
   }) {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
@@ -133,7 +133,7 @@ class EditCreditsMenuState extends State<EditCreditsMenu> {
             : IconButton(
                 onPressed: () {
                   final index = world.credits.indexWhere(
-                    (element) => element.id == credit.id,
+                    (final element) => element.id == credit.id,
                   );
                   world.credits.removeAt(index);
                   world.credits.insert(index - 1, credit);
@@ -149,7 +149,7 @@ class EditCreditsMenuState extends State<EditCreditsMenu> {
           widget.projectContext.playActivateSound();
           await pushWidget(
             context: context,
-            builder: (context) => EditCredit(
+            builder: (final context) => EditCredit(
               projectContext: widget.projectContext,
               credit: credit,
             ),

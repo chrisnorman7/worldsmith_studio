@@ -15,7 +15,7 @@ class EditPlayRumble extends StatefulWidget {
     required this.projectContext,
     required this.playRumble,
     required this.onDone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -36,7 +36,7 @@ class EditPlayRumble extends StatefulWidget {
 class EditPlayRumbleState extends State<EditPlayRumble> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final leftFrequency = widget.playRumble.leftFrequency;
     final rightFrequency = widget.playRumble.rightFrequency;
     final duration = widget.playRumble.duration;
@@ -64,7 +64,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
             children: [
               NumberListTile(
                 value: duration.toDouble(),
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.playRumble.duration = value.floor();
                   save();
                 },
@@ -75,7 +75,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
               ),
               NumberListTile(
                 value: leftFrequency.toDouble(),
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.playRumble.leftFrequency = value.floor();
                   save();
                 },
@@ -85,7 +85,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
               ),
               NumberListTile(
                 value: rightFrequency.toDouble(),
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.playRumble.rightFrequency = value.floor();
                   save();
                 },

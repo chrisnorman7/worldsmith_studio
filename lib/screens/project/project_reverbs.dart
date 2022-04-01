@@ -15,7 +15,7 @@ class ProjectReverbs extends StatefulWidget {
   /// Create an instance.
   const ProjectReverbs({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -30,7 +30,7 @@ class ProjectReverbs extends StatefulWidget {
 class ProjectReverbsState extends State<ProjectReverbs> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final reverbPresets = widget.projectContext.world.reverbs;
     final Widget child;
@@ -49,9 +49,10 @@ class ProjectReverbsState extends State<ProjectReverbs> {
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditReverbPreset(
-                      projectContext: widget.projectContext,
-                      reverbPresetReference: reverbReference),
+                  builder: (final context) => EditReverbPreset(
+                    projectContext: widget.projectContext,
+                    reverbPresetReference: reverbReference,
+                  ),
                 );
                 setState(() {});
               },
@@ -78,7 +79,7 @@ class ProjectReverbsState extends State<ProjectReverbs> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (context) => EditReverbPreset(
+              builder: (final context) => EditReverbPreset(
                 projectContext: widget.projectContext,
                 reverbPresetReference: reverbPresetReference,
               ),

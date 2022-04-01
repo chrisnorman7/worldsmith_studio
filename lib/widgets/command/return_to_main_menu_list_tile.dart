@@ -14,7 +14,7 @@ class ReturnToMainMenuListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Return To Main Menu',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -42,7 +42,7 @@ class ReturnToMainMenuListTile extends StatefulWidget {
 class ReturnToMainMenuListTileState extends State<ReturnToMainMenuListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final value = widget.returnToMainMenu;
     return ListTile(
       autofocus: widget.autofocus,
@@ -63,7 +63,7 @@ class ReturnToMainMenuListTileState extends State<ReturnToMainMenuListTile> {
         }
         await pushWidget(
           context: context,
-          builder: (context) => EditReturnToMainMenu(
+          builder: (final context) => EditReturnToMainMenu(
             projectContext: widget.projectContext,
             returnToMainMenu: returnToMainMenu,
             onChanged: widget.onChanged,

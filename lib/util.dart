@@ -15,15 +15,15 @@ import 'src/json/git_tag.dart';
 /// Round the given [value] to the given number of decimal [places].
 ///
 /// This code copied and modified from[here](https://www.bezkoder.com/dart-round-double/#:~:text=Dart%20round%20double%20to%20N%20decimal%20places,-We%20have%202&text=%E2%80%93%20Multiply%20the%20number%20by%2010,12.3412%20*%2010%5E2%20%3D%201234.12).
-double roundDouble(double value, {int places = 2}) {
+double roundDouble(final double value, {final int places = 2}) {
   final mod = pow(10.0, places);
   return (value * mod).round().toDouble() / mod;
 }
 
 /// Push the result of the given [builder] onto the stack.
 Future<void> pushWidget({
-  required BuildContext context,
-  required WidgetBuilder builder,
+  required final BuildContext context,
+  required final WidgetBuilder builder,
 }) =>
     Navigator.of(context).push<void>(
       MaterialPageRoute(
@@ -35,7 +35,10 @@ Future<void> pushWidget({
 String newId() => shortUuid.generate();
 
 /// Returns a newly formed asset store.
-AssetStore createAssetStore({required String name, required String comment}) =>
+AssetStore createAssetStore({
+  required final String name,
+  required final String comment,
+}) =>
     AssetStore(
       filename: '$name.dart',
       destination: path.join(assetsPath, name),
@@ -45,17 +48,17 @@ AssetStore createAssetStore({required String name, required String comment}) =>
 
 /// Confirm something.
 Future<void> confirm({
-  required BuildContext context,
-  String title = 'Confirm',
-  String message = 'Are you sure?',
-  VoidCallback? yesCallback,
-  VoidCallback? noCallback,
-  String yesLabel = 'Yes',
-  String noLabel = 'No',
+  required final BuildContext context,
+  final String title = 'Confirm',
+  final String message = 'Are you sure?',
+  final VoidCallback? yesCallback,
+  final VoidCallback? noCallback,
+  final String yesLabel = 'Yes',
+  final String noLabel = 'No',
 }) =>
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (final context) => AlertDialog(
         title: Text(title),
         content: Text(message),
         actions: [
@@ -74,13 +77,13 @@ Future<void> confirm({
 
 /// Show a snackbar, with an optional action.
 void showError({
-  required BuildContext context,
-  required String message,
-  String title = 'Error',
+  required final BuildContext context,
+  required final String message,
+  final String title = 'Error',
 }) =>
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (final context) => AlertDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -94,22 +97,22 @@ void showError({
     );
 
 /// Make a printable string from the given [assetReferenceReference].
-String assetString(AssetReferenceReference assetReferenceReference) =>
+String assetString(final AssetReferenceReference assetReferenceReference) =>
     '${assetReferenceReference.comment} '
     '(${assetReferenceReference.reference.type.name})';
 
 /// Copy the given [text] to the [Clipboard].
-void setClipboardText(String text) {
+void setClipboardText(final String text) {
   final data = ClipboardData(text: text);
   Clipboard.setData(data);
 }
 
 /// Delete the given [equipmentPosition].
 void deleteEquipmentPosition({
-  required BuildContext context,
-  required EquipmentPosition equipmentPosition,
-  required World world,
-  required VoidCallback onDone,
+  required final BuildContext context,
+  required final EquipmentPosition equipmentPosition,
+  required final World world,
+  required final VoidCallback onDone,
 }) =>
     confirm(
       context: context,
@@ -119,7 +122,7 @@ void deleteEquipmentPosition({
       yesCallback: () {
         Navigator.pop(context);
         world.equipmentPositions.removeWhere(
-          (element) => element.id == equipmentPosition.id,
+          (final element) => element.id == equipmentPosition.id,
         );
         onDone();
       },

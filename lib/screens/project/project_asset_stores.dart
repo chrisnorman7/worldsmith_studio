@@ -9,7 +9,7 @@ class ProjectAssetStores extends StatefulWidget {
   /// Create an instance.
   const ProjectAssetStores({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -24,7 +24,7 @@ class ProjectAssetStores extends StatefulWidget {
 class ProjectAssetStoresState extends State<ProjectAssetStores> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return SearchableListView(
       children: [
@@ -32,13 +32,13 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
           autofocus: true,
           afterOnTap: () => setState(() {}),
           assetStore: world.equipmentAssetStore,
-          canDelete: (reference) => null,
+          canDelete: (final reference) => null,
           projectContext: widget.projectContext,
         ),
         AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.terrainAssetStore,
-          canDelete: (reference) {
+          canDelete: (final reference) {
             final id = reference.variableName;
             for (final zone in world.zones) {
               if (zone.defaultTerrainId == id) {
@@ -61,7 +61,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
           projectContext: widget.projectContext,
           assetStore: world.questsAssetStore,
           afterOnTap: () => setState(() {}),
-          canDelete: (reference) {
+          canDelete: (final reference) {
             for (final quest in world.quests) {
               for (final stage in quest.stages) {
                 if (stage.sound?.id == reference.variableName) {
@@ -75,7 +75,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
         AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.musicAssetStore,
-          canDelete: (reference) {
+          canDelete: (final reference) {
             final id = reference.variableName;
             if (world.mainMenuOptions.music?.id == id) {
               return 'You cannot delete the main music for the game.';
@@ -96,7 +96,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
           projectContext: widget.projectContext,
           assetStore: world.ambianceAssetStore,
           afterOnTap: () => setState(() {}),
-          canDelete: (asset) {
+          canDelete: (final asset) {
             final id = asset.variableName;
             for (final zone in world.zones) {
               for (final object in zone.objects) {
@@ -119,7 +119,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
           projectContext: widget.projectContext,
           assetStore: world.conversationAssetStore,
           afterOnTap: () => setState(() {}),
-          canDelete: (asset) {
+          canDelete: (final asset) {
             for (final category in world.conversationCategories) {
               for (final conversation in category.conversations) {
                 for (final branch in conversation.branches) {
@@ -138,7 +138,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
         AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.interfaceSoundsAssetStore,
-          canDelete: (reference) {
+          canDelete: (final reference) {
             final id = reference.variableName;
             if (world.soundOptions.menuActivateSound?.id == id) {
               return 'You cannot delete the menu activate sound.';
@@ -159,7 +159,7 @@ class ProjectAssetStoresState extends State<ProjectAssetStores> {
         AssetStoreListTile(
           afterOnTap: () => setState(() {}),
           assetStore: world.creditsAssetStore,
-          canDelete: (reference) {
+          canDelete: (final reference) {
             for (final credit in world.credits) {
               final id = reference.variableName;
               if (credit.sound?.id == id) {

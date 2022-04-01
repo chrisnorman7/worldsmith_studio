@@ -14,7 +14,7 @@ class PlayRumbleListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Play Rumble',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -40,7 +40,7 @@ class PlayRumbleListTile extends StatefulWidget {
 class PlayRumbleListTileState extends State<PlayRumbleListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final value = widget.playRumble;
     return ListTile(
       autofocus: widget.autofocus,
@@ -52,14 +52,14 @@ class PlayRumbleListTileState extends State<PlayRumbleListTile> {
                 '${value.duration} milliseconds',
       ),
       onTap: () async {
-        PlayRumble? rumble = value;
+        var rumble = value;
         if (rumble == null) {
           rumble = PlayRumble();
           widget.onChanged(rumble);
         }
         await pushWidget(
           context: context,
-          builder: (context) => EditPlayRumble(
+          builder: (final context) => EditPlayRumble(
             projectContext: widget.projectContext,
             playRumble: rumble!,
             onDone: widget.onChanged,

@@ -16,7 +16,7 @@ class EditCredit extends StatefulWidget {
   const EditCredit({
     required this.projectContext,
     required this.credit,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -34,7 +34,7 @@ class EditCredit extends StatefulWidget {
 class EditCreditState extends State<EditCredit> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final url = widget.credit.url;
     return Cancel(
@@ -50,7 +50,7 @@ class EditCreditState extends State<EditCredit> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   world.credits.removeWhere(
-                    (element) => element.id == widget.credit.id,
+                    (final element) => element.id == widget.credit.id,
                   );
                   widget.projectContext.save();
                 },
@@ -71,18 +71,18 @@ class EditCreditState extends State<EditCredit> {
           children: [
             TextListTile(
               value: widget.credit.title,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.credit.title = value;
                 save();
               },
               header: 'Title',
               autofocus: true,
               title: 'Credit Title',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             TextListTile(
               value: widget.credit.url ?? '',
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.credit.url = value.isEmpty ? null : value;
                 save();
               },
@@ -92,7 +92,7 @@ class EditCreditState extends State<EditCredit> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.credit.sound,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.credit.sound = value;
                 save();
               },

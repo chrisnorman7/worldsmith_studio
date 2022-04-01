@@ -9,7 +9,7 @@ class SelectBoxCorner extends StatelessWidget {
   const SelectBoxCorner({
     required this.onDone,
     this.value,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The function to be called with the new corner.
@@ -19,13 +19,13 @@ class SelectBoxCorner extends StatelessWidget {
   final BoxCorner? value;
 
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Choose Box Corner'),
           ),
           body: ListView.builder(
-            itemBuilder: (context, index) {
+            itemBuilder: (final context, final index) {
               final corner = BoxCorner.values[index];
               return ListTile(
                 autofocus: (value == null && index == 0) || corner == value,

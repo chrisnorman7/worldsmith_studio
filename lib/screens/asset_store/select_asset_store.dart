@@ -11,7 +11,7 @@ class SelectAssetStore extends StatefulWidget {
     required this.projectContext,
     required this.onDone,
     this.currentAssetStore,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -32,7 +32,7 @@ class SelectAssetStore extends StatefulWidget {
 class SelectAssetStoreState extends State<SelectAssetStore> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final assetStores = {
       CustomSoundAssetStore.ambiances: world.ambianceAssetStore,
@@ -50,7 +50,7 @@ class SelectAssetStoreState extends State<SelectAssetStore> {
           title: const Text('Select Asset Store'),
         ),
         body: ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             if (index == 0) {
               return ListTile(
                 autofocus: widget.currentAssetStore == null,

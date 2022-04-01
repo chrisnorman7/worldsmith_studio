@@ -18,7 +18,7 @@ class EditZoneTeleport extends StatefulWidget {
     required this.projectContext,
     required this.zoneTeleport,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -39,7 +39,7 @@ class EditZoneTeleport extends StatefulWidget {
 class EditZoneTeleportState extends State<EditZoneTeleport> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final clearMaxCoordinatesActions = [
       ElevatedButton(
         onPressed: () {
@@ -91,7 +91,7 @@ class EditZoneTeleportState extends State<EditZoneTeleport> {
             children: [
               ZoneListTile(
                 projectContext: widget.projectContext,
-                onDone: (zone) {
+                onDone: (final zone) {
                   Navigator.pop(context);
                   widget.zoneTeleport.zoneId = zone.id;
                   minCoordinates.clamp = null;
@@ -114,55 +114,57 @@ class EditZoneTeleportState extends State<EditZoneTeleport> {
                     : 'Minimum Coordinates',
                 canChangeClamp: true,
               ),
-              maxCoordinates == null
-                  ? ListTile(
-                      title: const Text('Maximum Coordinates'),
-                      subtitle: const Text('Not set'),
-                      onTap: () async {
-                        final coordinates = Coordinates(0, 0);
-                        widget.zoneTeleport.maxCoordinates = coordinates;
-                        await pushWidget(
-                          context: context,
-                          builder: (context) => EditCoordinates(
-                            projectContext: widget.projectContext,
-                            zone: zone,
-                            value: coordinates,
-                            actions: clearMaxCoordinatesActions,
-                            canChangeClamp: true,
-                          ),
-                        );
-                        save();
-                      },
-                    )
-                  : CoordinatesListTile(
-                      projectContext: widget.projectContext,
-                      zone: zone,
-                      value: maxCoordinates,
-                      onChanged: save,
-                      actions: clearMaxCoordinatesActions,
-                      title: 'Maximum Coordinates',
-                      canChangeClamp: true,
-                    ),
+              if (maxCoordinates == null)
+                ListTile(
+                  title: const Text('Maximum Coordinates'),
+                  subtitle: const Text('Not set'),
+                  onTap: () async {
+                    final coordinates = Coordinates(0, 0);
+                    widget.zoneTeleport.maxCoordinates = coordinates;
+                    await pushWidget(
+                      context: context,
+                      builder: (final context) => EditCoordinates(
+                        projectContext: widget.projectContext,
+                        zone: zone,
+                        value: coordinates,
+                        actions: clearMaxCoordinatesActions,
+                        canChangeClamp: true,
+                      ),
+                    );
+                    save();
+                  },
+                )
+              else
+                CoordinatesListTile(
+                  projectContext: widget.projectContext,
+                  zone: zone,
+                  value: maxCoordinates,
+                  onChanged: save,
+                  actions: clearMaxCoordinatesActions,
+                  title: 'Maximum Coordinates',
+                  canChangeClamp: true,
+                ),
               ListTile(
                 title: const Text('Heading'),
                 subtitle: Text('$directionName ($heading)'),
                 onTap: () => pushWidget(
-                    context: context,
-                    builder: (context) => GetNumber(
-                          value: heading.toDouble(),
-                          onDone: (value) {
-                            Navigator.pop(context);
-                            widget.zoneTeleport.heading = value.floor();
-                            save();
-                          },
-                          min: 0.0,
-                          max: 360.0,
-                          title: 'Heading',
-                        )),
+                  context: context,
+                  builder: (final context) => GetNumber(
+                    value: heading.toDouble(),
+                    onDone: (final value) {
+                      Navigator.pop(context);
+                      widget.zoneTeleport.heading = value.floor();
+                      save();
+                    },
+                    min: 0.0,
+                    max: 360.0,
+                    title: 'Heading',
+                  ),
+                ),
               ),
               NumberListTile(
-                value: fadeTime?.toDouble() ?? 0.0,
-                onChanged: (value) {
+                value: fadeTime ?? 0.0,
+                onChanged: (final value) {
                   widget.zoneTeleport.fadeTime = value == 0 ? null : value;
                   save();
                 },

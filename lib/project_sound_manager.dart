@@ -8,10 +8,10 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 class ProjectSoundManager extends SoundManager {
   /// Create an instance.
   ProjectSoundManager({
-    required Game game,
-    required Context context,
+    required final Game game,
+    required final Context context,
     required this.soundsDirectory,
-    required BufferCache bufferCache,
+    required final BufferCache bufferCache,
   }) : super(
           game: game,
           context: context,
@@ -23,7 +23,7 @@ class ProjectSoundManager extends SoundManager {
 
   /// Use [soundsDirectory].
   @override
-  void handlePlaySound(PlaySound event) {
+  void handlePlaySound(final PlaySound event) {
     final reference = event.sound;
     final newEvent = PlaySound(
       game: event.game,

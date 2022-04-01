@@ -17,7 +17,7 @@ class RunGame extends StatefulWidget {
   /// Create an instance.
   const RunGame({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -46,7 +46,7 @@ class RunGameState extends State<RunGame> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final Widget child;
     if (done == null) {
@@ -56,7 +56,7 @@ class RunGameState extends State<RunGame> {
       child = const CenterText(text: 'No sound events yet.');
     } else {
       child = ListView.builder(
-        itemBuilder: (context, index) {
+        itemBuilder: (final context, final index) {
           final event = soundEvents[index];
           return ListTile(
             autofocus: index == 0,
@@ -119,7 +119,7 @@ class RunGameState extends State<RunGame> {
       );
       setState(() => done = false);
       await worldContext.run(
-        onSound: (event) {
+        onSound: (final event) {
           soundManager.handleEvent(event);
           setState(() {
             soundEvents.add(event);

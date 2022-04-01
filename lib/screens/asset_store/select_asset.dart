@@ -19,7 +19,7 @@ class SelectAsset extends StatefulWidget {
     this.currentId,
     this.nullable = false,
     this.title = 'Select Asset',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -47,7 +47,7 @@ class SelectAsset extends StatefulWidget {
 class _SelectAssetState extends State<SelectAsset> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final assets = <AssetReferenceReference?>[];
     if (widget.nullable == true) {
       assets.add(null);
@@ -67,7 +67,7 @@ class _SelectAssetState extends State<SelectAsset> {
         child: SelectItem<AssetReferenceReference?>(
           onDone: widget.onDone,
           values: assets,
-          getItemWidget: (value) {
+          getItemWidget: (final value) {
             if (value == null) {
               return const Text('Clear');
             }
@@ -82,7 +82,7 @@ class _SelectAssetState extends State<SelectAsset> {
           value: id == null
               ? null
               : widget.assetStore.assets.firstWhere(
-                  (element) => element.variableName == id,
+                  (final element) => element.variableName == id,
                 ),
           actions: [
             ElevatedButton(
@@ -99,10 +99,10 @@ class _SelectAssetState extends State<SelectAsset> {
   }
 
   /// Add a new asset.
-  Future<void> addAsset(BuildContext context) async {
+  Future<void> addAsset(final BuildContext context) async {
     await pushWidget(
       context: context,
-      builder: (context) => AddAsset(
+      builder: (final context) => AddAsset(
         projectContext: widget.projectContext,
         assetStore: widget.assetStore,
       ),

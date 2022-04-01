@@ -9,7 +9,7 @@ class EditQuestMenu extends StatefulWidget {
   /// Create an instance.
   const EditQuestMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -24,7 +24,7 @@ class EditQuestMenu extends StatefulWidget {
 class EditQuestMenuState extends State<EditQuestMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final options = widget.projectContext.world.questMenuOptions;
     return Scaffold(
       appBar: AppBar(
@@ -34,17 +34,17 @@ class EditQuestMenuState extends State<EditQuestMenu> {
         children: [
           TextListTile(
             value: options.title,
-            onChanged: (value) {
+            onChanged: (final value) {
               options.title = value;
               save();
             },
             header: 'Title',
             autofocus: true,
-            validator: (value) => validateNonEmptyValue(value: value),
+            validator: (final value) => validateNonEmptyValue(value: value),
           ),
           TextListTile(
             value: options.noQuestsMessage,
-            onChanged: (value) {
+            onChanged: (final value) {
               options.noQuestsMessage = value;
               save();
             },

@@ -17,7 +17,7 @@ class EditTerrain extends StatefulWidget {
   const EditTerrain({
     required this.projectContext,
     required this.terrain,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,7 +35,7 @@ class EditTerrain extends StatefulWidget {
 class EditTerrainState extends State<EditTerrain> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final terrain = widget.terrain;
     final terrainAssets = widget.projectContext.world.terrainAssets;
     final fastWalkSound = terrain.fastWalk.sound;
@@ -74,7 +74,7 @@ class EditTerrainState extends State<EditTerrain> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     world.terrains.removeWhere(
-                      (element) => element.id == id,
+                      (final element) => element.id == id,
                     );
                     widget.projectContext.save();
                   },
@@ -89,14 +89,14 @@ class EditTerrainState extends State<EditTerrain> {
           children: [
             TextListTile(
               value: terrain.name,
-              onChanged: (value) {
+              onChanged: (final value) {
                 terrain.name = value;
                 widget.projectContext.save();
                 setState(() {});
               },
               header: 'Name',
               autofocus: true,
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             PlaySoundSemantics(
               soundChannel: widget.projectContext.game.interfaceSounds,
@@ -112,7 +112,7 @@ class EditTerrainState extends State<EditTerrain> {
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditWalkingOptions(
+                    builder: (final context) => EditWalkingOptions(
                       projectContext: widget.projectContext,
                       walkingOptions: terrain.slowWalk,
                       title: 'Slow Walk Settings',
@@ -136,7 +136,7 @@ class EditTerrainState extends State<EditTerrain> {
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditWalkingOptions(
+                    builder: (final context) => EditWalkingOptions(
                       projectContext: widget.projectContext,
                       walkingOptions: terrain.fastWalk,
                       title: 'Fast Walk Settings',

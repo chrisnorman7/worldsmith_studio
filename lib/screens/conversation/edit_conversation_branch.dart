@@ -22,7 +22,7 @@ class EditConversationBranch extends StatefulWidget {
     required this.projectContext,
     required this.conversation,
     required this.branch,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -43,7 +43,7 @@ class EditConversationBranch extends StatefulWidget {
 class EditConversationBranchState extends State<EditConversationBranch> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return Cancel(
       child: TabbedScaffold(
@@ -51,11 +51,11 @@ class EditConversationBranchState extends State<EditConversationBranch> {
           TabbedScaffoldTab(
             title: 'Branch Settings',
             icon: const Icon(Icons.settings_outlined),
-            builder: (context) => ListView(
+            builder: (final context) => ListView(
               children: [
                 TextListTile(
                   value: widget.branch.text ?? '',
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     if (value.isEmpty) {
                       widget.branch.text = null;
                     } else {
@@ -69,7 +69,7 @@ class EditConversationBranchState extends State<EditConversationBranch> {
                 SoundListTile(
                   projectContext: widget.projectContext,
                   value: widget.branch.sound,
-                  onDone: (value) {
+                  onDone: (final value) {
                     widget.branch.sound = value;
                     save();
                   },
@@ -83,7 +83,7 @@ class EditConversationBranchState extends State<EditConversationBranch> {
           TabbedScaffoldTab(
             title: 'Responses',
             icon: const Icon(Icons.reply_outlined),
-            builder: (context) => WithKeyboardShortcuts(
+            builder: (final context) => WithKeyboardShortcuts(
               keyboardShortcuts: const [
                 KeyboardShortcut(
                   description: 'Add an existing response.',
@@ -117,7 +117,7 @@ class EditConversationBranchState extends State<EditConversationBranch> {
                       createConversationResponse(context)
                 },
                 child: ListView.builder(
-                  itemBuilder: (context, index) {
+                  itemBuilder: (final context, final index) {
                     final id = widget.branch.responseIds[index];
                     final response = widget.conversation.getResponse(id);
                     final sound = response.sound;
@@ -155,14 +155,15 @@ class EditConversationBranchState extends State<EditConversationBranch> {
                               ).reference,
                         gain: world.soundOptions.defaultGain,
                         child: Builder(
-                          builder: (context) => ListTile(
+                          builder: (final context) => ListTile(
                             autofocus: index == 0,
                             title: Text('${response.text}'),
                             onTap: () async {
                               PlaySoundSemantics.of(context)?.stop();
                               await pushWidget(
                                 context: context,
-                                builder: (context) => EditConversationResponse(
+                                builder: (final context) =>
+                                    EditConversationResponse(
                                   projectContext: widget.projectContext,
                                   conversation: widget.conversation,
                                   response: response,
@@ -207,14 +208,14 @@ class EditConversationBranchState extends State<EditConversationBranch> {
   }
 
   /// Create a new response.
-  Future<void> createConversationResponse(BuildContext context) async {
+  Future<void> createConversationResponse(final BuildContext context) async {
     final response = ConversationResponse(id: newId());
     widget.conversation.responses.add(response);
     widget.branch.responseIds.add(response.id);
     widget.projectContext.save();
     await pushWidget(
       context: context,
-      builder: (context) => EditConversationResponse(
+      builder: (final context) => EditConversationResponse(
         projectContext: widget.projectContext,
         conversation: widget.conversation,
         response: response,
@@ -224,12 +225,13 @@ class EditConversationBranchState extends State<EditConversationBranch> {
   }
 
   /// Add an existing conversation response.
-  Future<void> addConversationResponse(BuildContext context) => pushWidget(
+  Future<void> addConversationResponse(final BuildContext context) =>
+      pushWidget(
         context: context,
-        builder: (context) => SelectConversationResponse(
+        builder: (final context) => SelectConversationResponse(
           projectContext: widget.projectContext,
           conversation: widget.conversation,
-          onDone: (value) {
+          onDone: (final value) {
             Navigator.pop(context);
             widget.branch.responseIds.add(value.id);
             save();

@@ -15,7 +15,7 @@ class ProjectConversationCategories extends StatefulWidget {
   /// Create an instance.
   const ProjectConversationCategories({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -32,7 +32,7 @@ class ProjectConversationCategoriesState
     extends State<ProjectConversationCategories> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final categories = world.conversationCategories;
     if (categories.isEmpty) {
@@ -48,8 +48,8 @@ class ProjectConversationCategoriesState
               bindings: {
                 RenameIntent.hotkey: () => pushWidget(
                       context: context,
-                      builder: (context) => GetText(
-                        onDone: (value) {
+                      builder: (final context) => GetText(
+                        onDone: (final value) {
                           Navigator.pop(context);
                           category.name = value;
                           save();
@@ -57,7 +57,7 @@ class ProjectConversationCategoriesState
                         labelText: 'Name',
                         text: category.name,
                         title: 'Rename Conversation Category',
-                        validator: (value) => validateNonEmptyValue(
+                        validator: (final value) => validateNonEmptyValue(
                           value: value,
                         ),
                       ),
@@ -72,7 +72,7 @@ class ProjectConversationCategoriesState
                       yesCallback: () {
                         Navigator.pop(context);
                         world.conversationCategories.removeWhere(
-                          (element) => element.id == category.id,
+                          (final element) => element.id == category.id,
                         );
                         save();
                       },
@@ -91,7 +91,7 @@ class ProjectConversationCategoriesState
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditConversationCategory(
+                    builder: (final context) => EditConversationCategory(
                       projectContext: widget.projectContext,
                       conversationCategory: category,
                     ),

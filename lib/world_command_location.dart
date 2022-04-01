@@ -10,25 +10,25 @@ class WorldCommandLocation {
 
   /// Find the right location from the given [categories].
   WorldCommandLocation.find({
-    required List<CommandCategory> categories,
-    required String commandId,
+    required final List<CommandCategory> categories,
+    required final String commandId,
   })  : category = categories.firstWhere(
-          (element) => element.commands
+          (final element) => element.commands
               .where(
-                (element) => element.id == commandId,
+                (final element) => element.id == commandId,
               )
               .isNotEmpty,
         ),
         command = categories
             .firstWhere(
-              (element) => element.commands
+              (final element) => element.commands
                   .where(
-                    (element) => element.id == commandId,
+                    (final element) => element.id == commandId,
                   )
                   .isNotEmpty,
             )
             .commands
-            .firstWhere((element) => element.id == commandId);
+            .firstWhere((final element) => element.id == commandId);
 
   /// The category for the [command].
   final CommandCategory category;

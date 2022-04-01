@@ -11,11 +11,11 @@ class PlaySoundSemantics extends StatefulWidget {
     this.assetReference,
     this.gain = 0.7,
     this.looping = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// Find an instance by the given [context].
-  static PlaySoundSemanticsState? of(BuildContext context) =>
+  static PlaySoundSemanticsState? of(final BuildContext context) =>
       context.findAncestorStateOfType<PlaySoundSemanticsState>();
 
   /// The widget below this one in the tree.
@@ -46,7 +46,7 @@ class PlaySoundSemanticsState extends State<PlaySoundSemantics> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(final BuildContext context) => Semantics(
         onDidGainAccessibilityFocus: play,
         onDidLoseAccessibilityFocus: stop,
         child: widget.child,

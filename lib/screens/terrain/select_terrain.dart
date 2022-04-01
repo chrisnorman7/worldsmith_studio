@@ -11,7 +11,7 @@ class SelectTerrain extends StatelessWidget {
     required this.terrains,
     this.currentTerrainId,
     this.title = 'Select Terrain',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The function to call with the new value.
@@ -28,13 +28,13 @@ class SelectTerrain extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             title: Text(title),
           ),
           body: ListView.builder(
-            itemBuilder: (context, index) {
+            itemBuilder: (final context, final index) {
               final terrain = terrains[index];
               final selected = terrain.id == currentTerrainId;
               return ListTile(

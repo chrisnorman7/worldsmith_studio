@@ -73,7 +73,7 @@ class TabbedScaffold extends StatefulWidget {
   /// Create an instance.
   const TabbedScaffold({
     required this.tabs,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The tabs to use.
@@ -97,9 +97,9 @@ class TabbedScaffoldState extends State<TabbedScaffold> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final gotoPageAction = CallbackAction<GotoPageIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         final page = intent.page;
         if (page < widget.tabs.length) {
           setState(() {
@@ -110,7 +110,7 @@ class TabbedScaffoldState extends State<TabbedScaffold> {
       },
     );
     final switchPageAction = CallbackAction<SwitchPageIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         final direction = intent.direction;
         var index = _index;
         switch (direction) {
@@ -161,14 +161,14 @@ class TabbedScaffoldState extends State<TabbedScaffold> {
           bottomNavigationBar: BottomNavigationBar(
             items: widget.tabs
                 .map(
-                  (e) => BottomNavigationBarItem(
+                  (final e) => BottomNavigationBarItem(
                     icon: e.icon,
                     label: e.title,
                   ),
                 )
                 .toList(),
             currentIndex: _index,
-            onTap: (index) => setState(() => _index = index),
+            onTap: (final index) => setState(() => _index = index),
           ),
         ),
       ),

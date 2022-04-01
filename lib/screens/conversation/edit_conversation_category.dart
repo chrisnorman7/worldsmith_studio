@@ -20,7 +20,7 @@ class EditConversationCategory extends StatefulWidget {
   const EditConversationCategory({
     required this.projectContext,
     required this.conversationCategory,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -39,7 +39,7 @@ class EditConversationCategory extends StatefulWidget {
 class EditConversationCategoryState extends State<EditConversationCategory> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final Widget child;
     final world = widget.projectContext.world;
     final conversations = widget.conversationCategory.conversations;
@@ -64,8 +64,8 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
               bindings: {
                 RenameIntent.hotkey: () => pushWidget(
                       context: context,
-                      builder: (context) => GetText(
-                        onDone: (value) {
+                      builder: (final context) => GetText(
+                        onDone: (final value) {
                           conversation.name = value;
                           Navigator.pop(context);
                           save();
@@ -73,7 +73,7 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
                         labelText: 'Name',
                         text: conversation.name,
                         title: 'Rename Conversation',
-                        validator: (value) => validateNonEmptyValue(
+                        validator: (final value) => validateNonEmptyValue(
                           value: value,
                         ),
                       ),
@@ -85,14 +85,14 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
                 gain: gain,
                 looping: true,
                 child: Builder(
-                  builder: (context) => ListTile(
+                  builder: (final context) => ListTile(
                     autofocus: i == 0,
                     title: Text(conversation.name),
                     onTap: () async {
                       PlaySoundSemantics.of(context)?.stop();
                       await pushWidget(
                         context: context,
-                        builder: (context) => EditConversation(
+                        builder: (final context) => EditConversation(
                           projectContext: widget.projectContext,
                           category: widget.conversationCategory,
                           conversation: conversation,
@@ -116,8 +116,8 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
             ElevatedButton(
               onPressed: () => pushWidget(
                 context: context,
-                builder: (context) => GetText(
-                  onDone: (value) {
+                builder: (final context) => GetText(
+                  onDone: (final value) {
                     widget.conversationCategory.name = value;
                     widget.projectContext.save();
                     Navigator.pop(context);
@@ -125,7 +125,8 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
                   labelText: 'Name',
                   text: widget.conversationCategory.name,
                   title: 'Rename Conversation Category',
-                  validator: (value) => validateNonEmptyValue(value: value),
+                  validator: (final value) =>
+                      validateNonEmptyValue(value: value),
                 ),
               ),
               child: const Icon(
@@ -156,7 +157,7 @@ class EditConversationCategoryState extends State<EditConversationCategory> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (context) => EditConversation(
+              builder: (final context) => EditConversation(
                 projectContext: widget.projectContext,
                 category: widget.conversationCategory,
                 conversation: conversation,

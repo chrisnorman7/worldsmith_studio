@@ -13,7 +13,7 @@ class SelectCommandCategory extends StatelessWidget {
     required this.onDone,
     this.currentId,
     this.nullable = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -30,7 +30,7 @@ class SelectCommandCategory extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final listTiles = <ListTile>[];
     if (nullable) {
       listTiles.add(
@@ -60,7 +60,7 @@ class SelectCommandCategory extends StatelessWidget {
         body: listTiles.isEmpty
             ? const CenterText(text: 'There are no command categories.')
             : ListView.builder(
-                itemBuilder: (context, index) => listTiles[index],
+                itemBuilder: (final context, final index) => listTiles[index],
                 itemCount: listTiles.length,
               ),
       ),

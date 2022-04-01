@@ -23,7 +23,7 @@ class SearchableListView extends StatefulWidget {
   /// Create an instance.
   const SearchableListView({
     required this.children,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The list of children.
@@ -48,7 +48,7 @@ class _SearchableListViewState extends State<SearchableListView> {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final searchString = _searchString;
     final List<SearchableListTile> results;
     if (searchString == null) {
@@ -56,7 +56,7 @@ class _SearchableListViewState extends State<SearchableListView> {
     } else {
       results = widget.children
           .where(
-            (element) => element.searchString.toLowerCase().startsWith(
+            (final element) => element.searchString.toLowerCase().startsWith(
                   searchString.toLowerCase(),
                 ),
           )
@@ -70,7 +70,7 @@ class _SearchableListViewState extends State<SearchableListView> {
         )
       ],
       child: ListView.builder(
-        itemBuilder: (context, index) {
+        itemBuilder: (final context, final index) {
           if (index == 0) {
             var labelText = 'Search';
             if (searchString != null) {
@@ -88,7 +88,7 @@ class _SearchableListViewState extends State<SearchableListView> {
                 decoration: InputDecoration(
                   labelText: labelText,
                 ),
-                onChanged: (value) => setState(
+                onChanged: (final value) => setState(
                   () => _searchString = value.isEmpty ? null : value,
                 ),
               ),
@@ -117,7 +117,7 @@ class _SearchableListViewState extends State<SearchableListView> {
             child: Actions(
               actions: {
                 SearchIntent: CallbackAction<SearchIntent>(
-                  onInvoke: (intent) {
+                  onInvoke: (final intent) {
                     _textFieldFocusNode.requestFocus();
                     _controller.selection = TextSelection(
                       baseOffset: 0,

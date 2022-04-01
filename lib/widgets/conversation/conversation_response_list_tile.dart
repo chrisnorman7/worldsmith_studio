@@ -15,7 +15,7 @@ class ConversationResponseListTile extends StatefulWidget {
     required this.conversation,
     required this.response,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,24 +41,25 @@ class ConversationResponseListTileState
     extends State<ConversationResponseListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final attached = widget.conversation.branches.any(
-      (element) => element.responseIds.contains(widget.response.id),
+      (final element) => element.responseIds.contains(widget.response.id),
     );
     final world = widget.projectContext.world;
     final sound = widget.response.sound;
     final asset = sound == null
         ? null
         : getAssetReferenceReference(
-                assets: world.conversationAssets, id: sound.id)
-            .reference;
+            assets: world.conversationAssets,
+            id: sound.id,
+          ).reference;
     final gain = sound?.gain ?? world.soundOptions.defaultGain;
     return PlaySoundSemantics(
       soundChannel: widget.projectContext.game.interfaceSounds,
       assetReference: asset,
       gain: gain,
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           autofocus: widget.autofocus,
           title: Text(
             widget.response.text ?? 'Response with no text',
@@ -68,7 +69,7 @@ class ConversationResponseListTileState
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
               context: context,
-              builder: (context) => EditConversationResponse(
+              builder: (final context) => EditConversationResponse(
                 projectContext: widget.projectContext,
                 conversation: widget.conversation,
                 response: widget.response,

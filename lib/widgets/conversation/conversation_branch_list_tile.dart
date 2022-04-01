@@ -16,7 +16,7 @@ class ConversationBranchListTile extends StatelessWidget {
     this.title,
     this.autofocus = false,
     this.soundChannel,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -42,7 +42,7 @@ class ConversationBranchListTile extends StatelessWidget {
 
   /// Return the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = projectContext.world;
     final b = branch;
     final sound = b?.sound;

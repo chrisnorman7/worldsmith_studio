@@ -16,7 +16,7 @@ class ZoneObjectListTile extends StatefulWidget {
     required this.zoneObject,
     required this.onDone,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -43,7 +43,7 @@ class ZoneObjectListTile extends StatefulWidget {
 class ZoneObjectListTileState extends State<ZoneObjectListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final coordinates = widget.zone.getAbsoluteCoordinates(
       widget.zoneObject.initialCoordinates,
     );
@@ -60,7 +60,7 @@ class ZoneObjectListTileState extends State<ZoneObjectListTile> {
       gain: sound?.gain ?? widget.projectContext.world.soundOptions.defaultGain,
       looping: true,
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           autofocus: widget.autofocus,
           title: Text(widget.zoneObject.name),
           subtitle: Text('${coordinates.x}, ${coordinates.y}'),
@@ -68,7 +68,7 @@ class ZoneObjectListTileState extends State<ZoneObjectListTile> {
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
               context: context,
-              builder: (context) => EditZoneObject(
+              builder: (final context) => EditZoneObject(
                 projectContext: widget.projectContext,
                 zone: widget.zone,
                 zoneObject: widget.zoneObject,

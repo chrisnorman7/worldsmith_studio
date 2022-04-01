@@ -14,7 +14,7 @@ class SceneListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Scene',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,7 +41,7 @@ class SceneListTile extends StatefulWidget {
 class SceneListTileState extends State<SceneListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final scene = widget.scene;
     final world = widget.projectContext.world;
     return ListTile(
@@ -50,13 +50,13 @@ class SceneListTileState extends State<SceneListTile> {
       subtitle: Text(scene.name),
       onTap: () => pushWidget(
         context: context,
-        builder: (context) => SelectItem<Scene>(
-          onDone: (value) {
+        builder: (final context) => SelectItem<Scene>(
+          onDone: (final value) {
             Navigator.pop(context);
             widget.onChanged(value);
           },
           values: world.scenes,
-          getItemWidget: (item) => Text(item.name),
+          getItemWidget: (final item) => Text(item.name),
           title: 'Select Scene',
           value: widget.scene,
         ),

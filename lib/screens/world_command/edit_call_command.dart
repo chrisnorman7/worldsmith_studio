@@ -22,7 +22,7 @@ class EditCallCommand extends StatefulWidget {
     required this.projectContext,
     required this.callCommand,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -43,7 +43,7 @@ class EditCallCommand extends StatefulWidget {
 class EditCallCommandState extends State<EditCallCommand> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final location = WorldCommandLocation.find(
       categories: widget.projectContext.world.commandCategories,
       commandId: widget.callCommand.commandId,
@@ -54,7 +54,7 @@ class EditCallCommandState extends State<EditCallCommand> {
           TabbedScaffoldTab(
             title: 'Settings',
             icon: const Icon(Icons.settings),
-            builder: (context) {
+            builder: (final context) {
               final callAfter = widget.callCommand.callAfter;
               var callAfterString = '$callAfter';
               if (callAfter != null) {
@@ -68,7 +68,7 @@ class EditCallCommandState extends State<EditCallCommand> {
                   WorldCommandListTile(
                     projectContext: widget.projectContext,
                     currentId: location.command.id,
-                    onChanged: (value) {
+                    onChanged: (final value) {
                       widget.callCommand.commandId = value!.id;
                       save();
                     },
@@ -77,7 +77,7 @@ class EditCallCommandState extends State<EditCallCommand> {
                   ),
                   NumberListTile(
                     value: widget.callCommand.callAfter?.toDouble() ?? 0.0,
-                    onChanged: (value) {
+                    onChanged: (final value) {
                       if (value <= 0) {
                         widget.callCommand.callAfter = null;
                       } else {
@@ -108,7 +108,7 @@ class EditCallCommandState extends State<EditCallCommand> {
           TabbedScaffoldTab(
             title: 'Conditions',
             icon: const Icon(Icons.question_answer),
-            builder: (context) {
+            builder: (final context) {
               final conditions = widget.callCommand.conditions;
               if (conditions.isEmpty) {
                 return const CenterText(text: 'There are no conditions.');
@@ -151,7 +151,10 @@ class EditCallCommandState extends State<EditCallCommand> {
   }
 
   /// Get the table row for the given [conditional].
-  TableRow getTableRow(BuildContext context, Conditional conditional) {
+  TableRow getTableRow(
+    final BuildContext context,
+    final Conditional conditional,
+  ) {
     final world = widget.projectContext.world;
     final questCondition = conditional.questCondition;
     final quest =
@@ -175,7 +178,7 @@ class EditCallCommandState extends State<EditCallCommand> {
               projectContext: widget.projectContext,
               quest: quest,
               stage: questStage,
-              onDone: (value) {
+              onDone: (final value) {
                 if (value == null) {
                   conditional.questCondition = null;
                 } else {
@@ -207,9 +210,9 @@ class EditCallCommandState extends State<EditCallCommand> {
             child: TextButton(
               onPressed: () => pushWidget(
                 context: context,
-                builder: (context) => GetNumber(
+                builder: (final context) => GetNumber(
                   value: chance.toDouble(),
-                  onDone: (value) {
+                  onDone: (final value) {
                     Navigator.pop(context);
                     conditional.chance = value.floor();
                     save();
@@ -230,8 +233,8 @@ class EditCallCommandState extends State<EditCallCommand> {
           child: TextButton(
             onPressed: () => pushWidget(
               context: context,
-              builder: (context) => GetText(
-                onDone: (value) {
+              builder: (final context) => GetText(
+                onDone: (final value) {
                   Navigator.pop(context);
                   conditional.conditionFunctionName =
                       value.isEmpty ? null : value;

@@ -13,7 +13,7 @@ class EditStartConversation extends StatefulWidget {
     required this.projectContext,
     required this.startConversation,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -34,7 +34,7 @@ class EditStartConversation extends StatefulWidget {
 class EditStartConversationState extends State<EditStartConversation> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final pushAfter = widget.startConversation.pushInitialBranchAfter;
     final fadeTime = widget.startConversation.fadeTime;
     return Cancel(
@@ -59,7 +59,7 @@ class EditStartConversationState extends State<EditStartConversation> {
             ConversationListTile(
               projectContext: widget.projectContext,
               value: widget.startConversation.conversationId,
-              onChanged: (value) {
+              onChanged: (final value) {
                 if (value == null) {
                   Navigator.pop(context);
                   widget.onChanged(null);
@@ -73,7 +73,7 @@ class EditStartConversationState extends State<EditStartConversation> {
             ),
             NumberListTile(
               value: pushAfter.toDouble(),
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.startConversation.pushInitialBranchAfter = value.floor();
                 save();
               },
@@ -83,7 +83,7 @@ class EditStartConversationState extends State<EditStartConversation> {
             ),
             NumberListTile(
               value: fadeTime?.toDouble() ?? 0.0,
-              onChanged: (value) {
+              onChanged: (final value) {
                 final i = value.floor();
                 if (i == 0) {
                   widget.startConversation.fadeTime = null;

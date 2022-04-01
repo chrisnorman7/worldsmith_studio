@@ -14,7 +14,7 @@ class EditCustomMessage extends StatefulWidget {
     required this.projectContext,
     required this.customMessage,
     this.validator,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,7 +35,7 @@ class EditCustomMessage extends StatefulWidget {
 class EditCustomMessageState extends State<EditCustomMessage> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final text = widget.customMessage.text;
     final sound = widget.customMessage.sound;
     return Cancel(
@@ -47,7 +47,7 @@ class EditCustomMessageState extends State<EditCustomMessage> {
           children: [
             TextListTile(
               value: text ?? '',
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.customMessage.text = value.isEmpty ? null : value;
                 save();
               },
@@ -62,7 +62,7 @@ class EditCustomMessageState extends State<EditCustomMessage> {
                 widget.customMessage.sound = null;
                 save();
               },
-              onCreate: (value) {
+              onCreate: (final value) {
                 widget.customMessage.sound = value;
                 save();
               },
@@ -70,7 +70,7 @@ class EditCustomMessageState extends State<EditCustomMessage> {
             if (sound != null)
               GainListTile(
                 gain: sound.gain,
-                onChange: (value) {
+                onChange: (final value) {
                   sound.gain = value;
                   widget.projectContext.save();
                   setState(() {});

@@ -29,7 +29,7 @@ class ProjectContextWidget extends StatefulWidget {
   /// Create an instance.
   const ProjectContextWidget({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -44,13 +44,13 @@ class ProjectContextWidget extends StatefulWidget {
 class ProjectContextWidgetState extends State<ProjectContextWidget> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final closeProjectAction = CallbackAction<CloseProjectIntent>(
-      onInvoke: (intent) => Navigator.pop(context),
+      onInvoke: (final intent) => Navigator.pop(context),
     );
     final runProjectAction = CallbackAction<RunIntent>(
-      onInvoke: (intent) => run(),
+      onInvoke: (final intent) => run(),
     );
     return WithKeyboardShortcuts(
       keyboardShortcuts: const [
@@ -75,21 +75,21 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
             CloseProjectIntent: closeProjectAction,
             RunIntent: runProjectAction,
           },
-          child: Builder(builder: (context) => getTabbedScaffold(world)),
+          child: Builder(builder: (final context) => getTabbedScaffold(world)),
         ),
       ),
     );
   }
 
   /// Get the tabbed scaffold.
-  TabbedScaffold getTabbedScaffold(World world) {
+  TabbedScaffold getTabbedScaffold(final World world) {
     final projectContext = widget.projectContext;
     return TabbedScaffold(
       tabs: [
         TabbedScaffoldTab(
           title: 'World Options',
           icon: const Icon(Icons.settings_outlined),
-          builder: (context) => ProjectSettings(
+          builder: (final context) => ProjectSettings(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -101,7 +101,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Commands',
           icon: const Icon(Icons.category_outlined),
-          builder: (context) => ProjectCommandCategories(
+          builder: (final context) => ProjectCommandCategories(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -116,7 +116,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
               projectContext.save();
               await pushWidget(
                 context: context,
-                builder: (context) => EditCommandCategory(
+                builder: (final context) => EditCommandCategory(
                   projectContext: projectContext,
                   category: category,
                 ),
@@ -130,7 +130,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Conversations',
           icon: const Icon(Icons.message_outlined),
-          builder: (context) => ProjectConversationCategories(
+          builder: (final context) => ProjectConversationCategories(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -145,7 +145,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
               projectContext.save();
               await pushWidget(
                 context: context,
-                builder: (context) => EditConversationCategory(
+                builder: (final context) => EditConversationCategory(
                   projectContext: projectContext,
                   conversationCategory: category,
                 ),
@@ -159,7 +159,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Zones',
           icon: const Icon(Icons.map_outlined),
-          builder: (context) => ProjectZones(
+          builder: (final context) => ProjectZones(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -182,7 +182,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
               projectContext.save();
               await pushWidget(
                 context: context,
-                builder: (context) => EditZone(
+                builder: (final context) => EditZone(
                   projectContext: projectContext,
                   zone: zone,
                 ),
@@ -197,7 +197,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Quests',
           icon: const Icon(Icons.elderly_outlined),
-          builder: (context) => ProjectQuests(
+          builder: (final context) => ProjectQuests(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -212,7 +212,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
               projectContext.save();
               await pushWidget(
                 context: context,
-                builder: (context) => EditQuest(
+                builder: (final context) => EditQuest(
                   projectContext: projectContext,
                   quest: quest,
                 ),
@@ -226,7 +226,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Terrain Types',
           icon: const Icon(Icons.add_location_outlined),
-          builder: (context) => ProjectTerrains(
+          builder: (final context) => ProjectTerrains(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
@@ -247,7 +247,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
               projectContext.save();
               await pushWidget(
                 context: context,
-                builder: (context) => EditTerrain(
+                builder: (final context) => EditTerrain(
                   projectContext: projectContext,
                   terrain: terrain,
                 ),
@@ -262,28 +262,28 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
         TabbedScaffoldTab(
           title: 'Asset Stores',
           icon: const Icon(Icons.store_mall_directory_outlined),
-          builder: (context) => ProjectAssetStores(
+          builder: (final context) => ProjectAssetStores(
             projectContext: projectContext,
           ),
         ),
         TabbedScaffoldTab(
           title: 'Sound Settings',
           icon: const Icon(Icons.speaker_outlined),
-          builder: (context) => ProjectSoundSettings(
+          builder: (final context) => ProjectSoundSettings(
             projectContext: projectContext,
           ),
         ),
         TabbedScaffoldTab(
           title: 'Menus',
           icon: const Icon(Icons.menu_book_outlined),
-          builder: (context) => ProjectMenus(
+          builder: (final context) => ProjectMenus(
             projectContext: projectContext,
           ),
         ),
         TabbedScaffoldTab(
           title: 'More',
           icon: const Icon(Icons.more_outlined),
-          builder: (context) => ProjectMoreMenu(
+          builder: (final context) => ProjectMoreMenu(
             projectContext: projectContext,
           ),
         )
@@ -301,7 +301,7 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
   Future<void> run() async {
     await pushWidget(
       context: context,
-      builder: (context) => RunGame(
+      builder: (final context) => RunGame(
         projectContext: widget.projectContext,
       ),
     );

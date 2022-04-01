@@ -10,7 +10,7 @@ class ProjectTerrains extends StatefulWidget {
   /// Create an instance.
   const ProjectTerrains({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -25,7 +25,7 @@ class ProjectTerrains extends StatefulWidget {
 class ProjectTerrainsState extends State<ProjectTerrains> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final children = <SearchableListTile>[];
     for (var i = 0; i < world.terrains.length; i++) {
@@ -39,7 +39,7 @@ class ProjectTerrainsState extends State<ProjectTerrains> {
             onTap: () async {
               await pushWidget(
                 context: context,
-                builder: (context) => EditTerrain(
+                builder: (final context) => EditTerrain(
                   projectContext: widget.projectContext,
                   terrain: terrain,
                 ),

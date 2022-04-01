@@ -45,7 +45,7 @@ class EditZone extends StatefulWidget {
   const EditZone({
     required this.projectContext,
     required this.zone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -90,7 +90,7 @@ class EditZoneState extends State<EditZone> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: TabbedScaffold(
           tabs: [
             TabbedScaffoldTab(
@@ -139,7 +139,7 @@ class EditZoneState extends State<EditZone> {
             TabbedScaffoldTab(
               title: 'Location Markers',
               icon: const Icon(Icons.location_pin),
-              builder: (context) => CallbackShortcuts(
+              builder: (final context) => CallbackShortcuts(
                 bindings: {
                   CreateProjectIntent.hotkey: () => addLocationMarker(context)
                 },
@@ -171,26 +171,26 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Get the zone settings list view.
-  ListView getSettingsListView(BuildContext context) {
+  ListView getSettingsListView(final BuildContext context) {
     final world = widget.projectContext.world;
     final music = widget.zone.music;
     return ListView(
       children: [
         TextListTile(
           value: widget.zone.name,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.zone.name = value;
             widget.projectContext.save();
             setState(() {});
           },
           header: 'Name',
           autofocus: true,
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         ),
         SoundListTile(
           projectContext: widget.projectContext,
           value: music,
-          onDone: (value) {
+          onDone: (final value) {
             widget.zone.music = value;
             widget.projectContext.save();
             setState(() {});
@@ -204,7 +204,7 @@ class EditZoneState extends State<EditZone> {
         ),
         FadeTimeListTile(
           value: widget.zone.musicFadeTime,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.zone.musicFadeTime = value;
             save();
           },
@@ -212,7 +212,7 @@ class EditZoneState extends State<EditZone> {
         ),
         GainListTile(
           gain: widget.zone.musicFadeGain,
-          onChange: (value) {
+          onChange: (final value) {
             widget.projectContext.playActivateSound(gain: value);
             widget.zone.musicFadeGain = value;
             save();
@@ -225,7 +225,7 @@ class EditZoneState extends State<EditZone> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) => EditAmbiances(
+              builder: (final context) => EditAmbiances(
                 projectContext: widget.projectContext,
                 ambiances: widget.zone.ambiances,
                 title: 'Zone Ambiances',
@@ -236,7 +236,7 @@ class EditZoneState extends State<EditZone> {
         ),
         FadeTimeListTile(
           value: widget.zone.ambianceFadeTime,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.zone.ambianceFadeTime = value;
             save();
           },
@@ -244,7 +244,7 @@ class EditZoneState extends State<EditZone> {
         ),
         GainListTile(
           gain: widget.zone.ambianceFadeGain,
-          onChange: (value) {
+          onChange: (final value) {
             widget.projectContext.playActivateSound(gain: value);
             widget.zone.ambianceFadeGain = value;
             save();
@@ -260,8 +260,8 @@ class EditZoneState extends State<EditZone> {
           ),
           onTap: () => pushWidget(
             context: context,
-            builder: (context) => SelectTerrain(
-              onDone: (value) {
+            builder: (final context) => SelectTerrain(
+              onDone: (final value) {
                 Navigator.pop(context);
                 widget.zone.defaultTerrainId = value.id;
                 widget.projectContext.save();
@@ -275,7 +275,7 @@ class EditZoneState extends State<EditZone> {
         ),
         NumberListTile(
           value: widget.zone.turnAmount.toDouble(),
-          onChanged: (value) {
+          onChanged: (final value) {
             Navigator.pop(context);
             widget.zone.turnAmount = value.floor();
             save();
@@ -291,7 +291,7 @@ class EditZoneState extends State<EditZone> {
                 : 'Enable Top-Down Map',
           ),
           value: widget.zone.topDownMap,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.zone.topDownMap = !widget.zone.topDownMap;
             widget.projectContext.save();
             setState(() {});
@@ -300,7 +300,7 @@ class EditZoneState extends State<EditZone> {
         CallCommandListTile(
           projectContext: widget.projectContext,
           callCommand: widget.zone.edgeCommand,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.zone.edgeCommand = value;
             save();
           },
@@ -311,7 +311,7 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Get the boxes list view.
-  Widget getBoxesListView(BuildContext context) {
+  Widget getBoxesListView(final BuildContext context) {
     if (widget.zone.boxes.isEmpty) {
       return const CenterText(text: 'There are currently no boxes.');
     }
@@ -326,7 +326,7 @@ class EditZoneState extends State<EditZone> {
     } else {
       boxes = List<Box>.from(widget.zone.boxes, growable: false)
         ..sort(
-          (a, b) {
+          (final a, final b) {
             final aStart = startCoordinates[a.id] ??
                 widget.zone.getAbsoluteCoordinates(a.start);
             startCoordinates[a.id] = aStart;
@@ -370,7 +370,7 @@ class EditZoneState extends State<EditZone> {
             onTap: () async {
               await pushWidget(
                 context: context,
-                builder: (context) => EditBox(
+                builder: (final context) => EditBox(
                   projectContext: widget.projectContext,
                   zone: widget.zone,
                   box: box,
@@ -387,11 +387,11 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Get the WYSIWYG editor.
-  Widget getCanvas(BuildContext context) {
+  Widget getCanvas(final BuildContext context) {
     var x = _level.coordinates.x;
     var y = _level.coordinates.y;
     final moveAction = CallbackAction<MoveIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         switch (intent.direction) {
           case MoveDirections.north:
             y++;
@@ -415,20 +415,20 @@ class EditZoneState extends State<EditZone> {
       },
     );
     final previousBoxAction = CallbackAction<PreviousBoxIntent>(
-      onInvoke: (intent) => switchBox(-1),
+      onInvoke: (final intent) => switchBox(-1),
     );
     final nextBoxAction = CallbackAction<NextBoxIntent>(
-      onInvoke: (intent) => switchBox(1),
+      onInvoke: (final intent) => switchBox(1),
     );
     final createBoxAction = CallbackAction<CreateBoxIntent>(
-      onInvoke: (intent) => pushWidget(
+      onInvoke: (final intent) => pushWidget(
         context: context,
-        builder: (context) => SelectBox(
+        builder: (final context) => SelectBox(
           zone: widget.zone,
-          onDone: (box) => pushWidget(
+          onDone: (final box) => pushWidget(
             context: context,
-            builder: (context) => SelectBoxCorner(
-              onDone: (corner) async {
+            builder: (final context) => SelectBoxCorner(
+              onDone: (final corner) async {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 final clamp = CoordinateClamp(boxId: box.id, corner: corner);
@@ -444,7 +444,7 @@ class EditZoneState extends State<EditZone> {
                 widget.zone.boxes.add(newBox);
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditBox(
+                  builder: (final context) => EditBox(
                     projectContext: widget.projectContext,
                     zone: widget.zone,
                     box: newBox,
@@ -462,7 +462,10 @@ class EditZoneState extends State<EditZone> {
     return WithKeyboardShortcuts(
       keyboardShortcuts: const [
         KeyboardShortcut(
-            description: 'Create new box.', keyName: 'N', control: true),
+          description: 'Create new box.',
+          keyName: 'N',
+          control: true,
+        ),
         KeyboardShortcut(
           description: 'Move north, east, south, or west.',
           keyName: 'Arrow keys',
@@ -543,9 +546,9 @@ class EditZoneState extends State<EditZone> {
                 subtitle: Text('${x.floor()}, ${y.floor()}'),
                 onTap: () => pushWidget(
                   context: context,
-                  builder: (context) => GetCoordinates(
+                  builder: (final context) => GetCoordinates(
                     value: Point(x.floor(), y.floor()),
-                    onDone: (value) {
+                    onDone: (final value) {
                       Navigator.pop(context);
                       _level.coordinates = Point(
                         value.x.toDouble(),
@@ -554,7 +557,7 @@ class EditZoneState extends State<EditZone> {
                       setState(() {});
                     },
                     title: 'Focus Coordinates',
-                    validator: (value) {
+                    validator: (final value) {
                       if (value == null) {
                         return 'You must provide a value.';
                       }
@@ -583,8 +586,8 @@ class EditZoneState extends State<EditZone> {
 
   /// Get a list tile for the given [box].
   List<Widget> getBoxListTiles({
-    required BuildContext context,
-    required Box? box,
+    required final BuildContext context,
+    required final Box? box,
   }) {
     if (box == null) {
       return [
@@ -598,13 +601,13 @@ class EditZoneState extends State<EditZone> {
     return [
       TextListTile(
         value: box.name,
-        onChanged: (value) {
+        onChanged: (final value) {
           box.name = value;
           save();
         },
         header: 'Box Name',
         labelText: 'Name',
-        validator: (value) => validateNonEmptyValue(value: value),
+        validator: (final value) => validateNonEmptyValue(value: value),
       ),
       CoordinatesListTile(
         projectContext: widget.projectContext,
@@ -624,7 +627,7 @@ class EditZoneState extends State<EditZone> {
       ),
       TerrainListTile(
         projectContext: widget.projectContext,
-        onDone: (value) {
+        onDone: (final value) {
           Navigator.pop(context);
           box.terrainId = value.id;
           save();
@@ -634,7 +637,7 @@ class EditZoneState extends State<EditZone> {
       ),
       ReverbListTile(
         projectContext: widget.projectContext,
-        onDone: (value) {
+        onDone: (final value) {
           Navigator.pop(context);
           box.reverbId = value?.id;
           save();
@@ -645,7 +648,7 @@ class EditZoneState extends State<EditZone> {
       ),
       CheckboxListTile(
         value: box.enclosed,
-        onChanged: (value) {
+        onChanged: (final value) {
           box.enclosed = value == null;
           save();
         },
@@ -655,13 +658,13 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Create a new object.
-  Future<void> createZoneObject(BuildContext context) async {
+  Future<void> createZoneObject(final BuildContext context) async {
     final object = ZoneObject(id: newId(), name: 'Untitled Object');
     widget.zone.objects.add(object);
     widget.projectContext.save();
     await pushWidget(
       context: context,
-      builder: (context) => EditZoneObject(
+      builder: (final context) => EditZoneObject(
         projectContext: widget.projectContext,
         zone: widget.zone,
         zoneObject: object,
@@ -673,9 +676,9 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Get the list of objects.
-  Widget getObjectsListView(BuildContext context) {
+  Widget getObjectsListView(final BuildContext context) {
     final createZoneObjectAction = CallbackAction<CreateZoneObjectIntent>(
-      onInvoke: (intent) => createZoneObject(context),
+      onInvoke: (final intent) => createZoneObject(context),
     );
     final objects = widget.zone.objects;
     final Widget child;
@@ -726,13 +729,14 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Switch boxes.
-  void switchBox(int direction) {
+  void switchBox(final int direction) {
     final box = _currentBox;
     int index;
     if (box == null) {
       index = 0;
     } else {
-      index = widget.zone.boxes.indexWhere((element) => element.id == box.id);
+      index =
+          widget.zone.boxes.indexWhere((final element) => element.id == box.id);
     }
     index++;
     if (index >= widget.zone.boxes.length) {
@@ -747,7 +751,7 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Delete the current zone.
-  void deleteZone(BuildContext context) {
+  void deleteZone(final BuildContext context) {
     final world = widget.projectContext.world;
     final id = widget.zone.id;
     for (final category in world.commandCategories) {
@@ -768,14 +772,14 @@ class EditZoneState extends State<EditZone> {
       yesCallback: () {
         Navigator.pop(context);
         Navigator.pop(context);
-        world.zones.removeWhere((element) => element.id == id);
+        world.zones.removeWhere((final element) => element.id == id);
         widget.projectContext.save();
       },
     );
   }
 
   /// Create a new location marker.
-  Future<void> addLocationMarker(BuildContext context) async {
+  Future<void> addLocationMarker(final BuildContext context) async {
     final marker = LocationMarker(
       id: newId(),
       message: CustomMessage(text: 'Untitled Marker'),
@@ -785,7 +789,7 @@ class EditZoneState extends State<EditZone> {
     widget.projectContext.save();
     await pushWidget(
       context: context,
-      builder: (context) => EditLocationMarker(
+      builder: (final context) => EditLocationMarker(
         projectContext: widget.projectContext,
         zone: widget.zone,
         locationMarker: marker,
@@ -795,7 +799,7 @@ class EditZoneState extends State<EditZone> {
   }
 
   /// Get the list of location markers for the current zone.
-  Widget getLocationMarkersList(BuildContext context) {
+  Widget getLocationMarkersList(final BuildContext context) {
     final markers = widget.zone.locationMarkers;
     if (markers.isEmpty) {
       return const CenterText(text: 'There are no location markers.');
@@ -824,7 +828,7 @@ class EditZoneState extends State<EditZone> {
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditLocationMarker(
+                  builder: (final context) => EditLocationMarker(
                     projectContext: widget.projectContext,
                     zone: widget.zone,
                     locationMarker: marker,

@@ -10,7 +10,7 @@ class GainListTile extends StatefulWidget {
     required this.onChange,
     this.title = 'Gain',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The initial gain value.
@@ -34,7 +34,7 @@ class GainListTile extends StatefulWidget {
 class GainListTileState extends State<GainListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => NumberListTile(
+  Widget build(final BuildContext context) => NumberListTile(
         autofocus: widget.autofocus,
         title: widget.title,
         subtitle: widget.gain.toString(),

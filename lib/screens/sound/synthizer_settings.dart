@@ -13,7 +13,7 @@ class SynthizerSettings extends StatefulWidget {
   /// Create an instance.
   const SynthizerSettings({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -28,7 +28,7 @@ class SynthizerSettings extends StatefulWidget {
 class SynthizerSettingsState extends State<SynthizerSettings> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final options = widget.projectContext.world.soundOptions;
     return Cancel(
       child: Scaffold(
@@ -43,14 +43,14 @@ class SynthizerSettingsState extends State<SynthizerSettings> {
               subtitle: Text(options.synthizerLogLevel?.name ?? 'Not set'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => SelectItem<LogLevel?>(
-                  onDone: (value) {
+                builder: (final context) => SelectItem<LogLevel?>(
+                  onDone: (final value) {
                     Navigator.pop(context);
                     options.synthizerLogLevel = value;
                     save();
                   },
                   values: const [null, ...LogLevel.values],
-                  getItemWidget: (value) => Text(
+                  getItemWidget: (final value) => Text(
                     value == null ? 'Clear' : value.name,
                   ),
                   value: options.synthizerLogLevel,
@@ -64,14 +64,14 @@ class SynthizerSettingsState extends State<SynthizerSettings> {
                   Text(options.synthizerLoggingBackend?.name ?? 'Not set'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => SelectItem<LoggingBackend?>(
-                  onDone: (value) {
+                builder: (final context) => SelectItem<LoggingBackend?>(
+                  onDone: (final value) {
                     Navigator.pop(context);
                     options.synthizerLoggingBackend = value;
                     save();
                   },
                   values: const [null, ...LoggingBackend.values],
-                  getItemWidget: (value) => Text(
+                  getItemWidget: (final value) => Text(
                     value == null ? 'Clear' : value.name,
                   ),
                   title: 'Synthizer Logging Backend',
@@ -81,33 +81,33 @@ class SynthizerSettingsState extends State<SynthizerSettings> {
             ),
             TextListTile(
               value: options.libsndfilePathLinux,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.libsndfilePathLinux = value;
                 save();
               },
               header: 'Linux Libsndfile Path',
               labelText: 'Path',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             TextListTile(
               value: options.libsndfilePathMac,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.libsndfilePathMac = value;
                 save();
               },
               header: 'Mac OS Libsndfile Path',
               labelText: 'Path',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             TextListTile(
               value: options.libsndfilePathWindows,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.libsndfilePathWindows = value;
                 save();
               },
               header: 'Windows Libsndfile Path',
               labelText: 'Path',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             )
           ],
         ),

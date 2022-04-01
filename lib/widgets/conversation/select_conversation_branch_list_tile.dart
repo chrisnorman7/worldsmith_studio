@@ -17,7 +17,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
     required this.onChanged,
     this.title = 'Branch',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -40,7 +40,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
 
   /// Build the list tile.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = projectContext.world;
     final sound = branch.sound;
     final asset = sound == null
@@ -59,7 +59,7 @@ class SelectConversationBranchListTile extends StatelessWidget {
         subtitle: Text(branch.text ?? 'Branch with no text'),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectConversationBranch(
+          builder: (final context) => SelectConversationBranch(
             projectContext: projectContext,
             conversation: conversation,
             onDone: onChanged,

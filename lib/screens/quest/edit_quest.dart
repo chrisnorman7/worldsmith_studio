@@ -17,7 +17,7 @@ class EditQuest extends StatefulWidget {
   const EditQuest({
     required this.projectContext,
     required this.quest,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,18 +35,18 @@ class EditQuest extends StatefulWidget {
 class EditQuestState extends State<EditQuest> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final children = [
       TextListTile(
         value: widget.quest.name,
-        onChanged: (value) {
+        onChanged: (final value) {
           widget.quest.name = value;
           save();
         },
         header: 'Name',
         autofocus: true,
-        validator: (value) => validateNonEmptyValue(value: value),
+        validator: (final value) => validateNonEmptyValue(value: value),
       )
     ];
     return Cancel(
@@ -82,19 +82,19 @@ class EditQuestState extends State<EditQuest> {
                   }
                 }
                 confirm(
-                    context: context,
-                    message:
-                        'Are you sure you want to delete the ${quest.name} '
-                        'quest?',
-                    title: 'Delete Quest',
-                    yesCallback: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      world.quests.removeWhere(
-                        (element) => element.id == id,
-                      );
-                      save();
-                    });
+                  context: context,
+                  message: 'Are you sure you want to delete the ${quest.name} '
+                      'quest?',
+                  title: 'Delete Quest',
+                  yesCallback: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    world.quests.removeWhere(
+                      (final element) => element.id == id,
+                    );
+                    save();
+                  },
+                );
               },
               child: const Icon(
                 Icons.delete,
@@ -105,7 +105,7 @@ class EditQuestState extends State<EditQuest> {
           title: const Text('Edit Quest'),
         ),
         body: ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             if (index < children.length) {
               return children[index];
             }
@@ -126,7 +126,7 @@ class EditQuestState extends State<EditQuest> {
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditQuestStage(
+                    builder: (final context) => EditQuestStage(
                       projectContext: widget.projectContext,
                       quest: widget.quest,
                       stage: stage,
@@ -149,7 +149,7 @@ class EditQuestState extends State<EditQuest> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (context) => EditQuestStage(
+              builder: (final context) => EditQuestStage(
                 projectContext: widget.projectContext,
                 quest: widget.quest,
                 stage: stage,

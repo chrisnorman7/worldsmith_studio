@@ -12,7 +12,7 @@ class SelectItem<T> extends StatelessWidget {
     this.title = 'Select Item',
     this.value,
     this.getItemWidget,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The function to call with the resulting value.
@@ -35,14 +35,14 @@ class SelectItem<T> extends StatelessWidget {
 
   /// Create the widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: actions,
             title: Text(title),
           ),
           body: ListView.builder(
-            itemBuilder: (context, index) {
+            itemBuilder: (final context, final index) {
               final item = values[index];
               final getWidget = getItemWidget;
               return ListTile(

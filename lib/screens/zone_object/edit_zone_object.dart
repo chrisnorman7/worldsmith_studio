@@ -17,7 +17,7 @@ class EditZoneObject extends StatefulWidget {
     required this.zone,
     required this.zoneObject,
     required this.onDone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,7 +41,7 @@ class EditZoneObject extends StatefulWidget {
 class EditZoneObjectState extends State<EditZoneObject> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final coordinates = widget.zoneObject.initialCoordinates;
     final ambiance = widget.zoneObject.ambiance;
@@ -75,7 +75,7 @@ class EditZoneObjectState extends State<EditZoneObject> {
           children: [
             TextListTile(
               value: widget.zoneObject.name,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.zoneObject.name = value;
                 save();
               },
@@ -95,7 +95,7 @@ class EditZoneObjectState extends State<EditZoneObject> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: ambiance,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.zoneObject.ambiance = value;
                 save();
               },
@@ -108,7 +108,7 @@ class EditZoneObjectState extends State<EditZoneObject> {
             CallCommandListTile(
               projectContext: widget.projectContext,
               callCommand: widget.zoneObject.collideCommand,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.zoneObject.collideCommand = value;
                 save();
               },

@@ -42,7 +42,7 @@ class CoordinatesListTile extends StatefulWidget {
     this.actions = const [],
     this.title = 'Coordinates',
     this.canChangeClamp = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -74,10 +74,10 @@ class CoordinatesListTile extends StatefulWidget {
 
 class _CoordinatesListTileState extends State<CoordinatesListTile> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final coordinates = widget.zone.getAbsoluteCoordinates(widget.value);
     final modifyCoordinateAction = CallbackAction<ModifyCoordinateIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         final int x;
         final int y;
         switch (intent.modification) {
@@ -132,7 +132,7 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) => EditCoordinates(
+              builder: (final context) => EditCoordinates(
                 projectContext: widget.projectContext,
                 zone: widget.zone,
                 box: widget.box,

@@ -16,7 +16,7 @@ class NumberListTile extends StatelessWidget {
     this.title = 'Number',
     this.subtitle,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The initial value.
@@ -44,7 +44,7 @@ class NumberListTile extends StatelessWidget {
   final bool autofocus;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final minValue = min;
     final maxValue = max;
     return CallbackShortcuts(
@@ -80,9 +80,9 @@ class NumberListTile extends StatelessWidget {
         subtitle: Text(subtitle ?? value.toString()),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => GetNumber(
+          builder: (final context) => GetNumber(
             value: value,
-            onDone: (value) {
+            onDone: (final value) {
               Navigator.pop(context);
               onChanged(value);
             },

@@ -9,17 +9,18 @@ class ConversationLocation {
   });
 
   /// Return an instance with the properties inferred.
-  ConversationLocation.find(
-      {required World world, required String conversationId})
-      : category = world.conversationCategories.firstWhere(
-          (element) => element.conversations
+  ConversationLocation.find({
+    required final World world,
+    required final String conversationId,
+  })  : category = world.conversationCategories.firstWhere(
+          (final element) => element.conversations
               .where(
-                (element) => element.id == conversationId,
+                (final element) => element.id == conversationId,
               )
               .isNotEmpty,
         ),
         conversation = world.conversations
-            .firstWhere((element) => element.id == conversationId);
+            .firstWhere((final element) => element.id == conversationId);
 
   /// The category where the [conversation] resides.
   final ConversationCategory category;

@@ -13,7 +13,7 @@ class EditShowScene extends StatefulWidget {
     required this.projectContext,
     required this.showScene,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -34,7 +34,7 @@ class EditShowScene extends StatefulWidget {
 class EditShowSceneState extends State<EditShowScene> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final scene = world.getScene(widget.showScene.sceneId);
     return Cancel(
@@ -59,7 +59,7 @@ class EditShowSceneState extends State<EditShowScene> {
             SceneListTile(
               projectContext: widget.projectContext,
               scene: scene,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.showScene.sceneId = value.id;
                 save();
               },
@@ -68,7 +68,7 @@ class EditShowSceneState extends State<EditShowScene> {
             CallCommandListTile(
               projectContext: widget.projectContext,
               callCommand: widget.showScene.callCommand,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.showScene.callCommand = value;
                 save();
               },

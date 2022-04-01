@@ -20,7 +20,7 @@ class WorldCommandListTile extends StatefulWidget {
     required this.title,
     this.nullable = false,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -48,9 +48,9 @@ class WorldCommandListTile extends StatefulWidget {
 class _WorldCommandListTileState extends State<WorldCommandListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final id = widget.currentId;
-    final WorldCommandLocation? location = id == null
+    final location = id == null
         ? null
         : WorldCommandLocation.find(
             categories: widget.projectContext.world.commandCategories,
@@ -74,7 +74,7 @@ class _WorldCommandListTileState extends State<WorldCommandListTile> {
             if (category != null && command != null) {
               await pushWidget(
                 context: context,
-                builder: (context) => EditWorldCommand(
+                builder: (final context) => EditWorldCommand(
                   projectContext: widget.projectContext,
                   category: category,
                   command: command,
@@ -95,19 +95,19 @@ class _WorldCommandListTileState extends State<WorldCommandListTile> {
           ),
           onTap: () => pushWidget(
             context: context,
-            builder: (context) => SelectCommandCategory(
+            builder: (final context) => SelectCommandCategory(
               projectContext: widget.projectContext,
-              onDone: (commandCategory) {
+              onDone: (final commandCategory) {
                 if (widget.nullable == true && commandCategory == null) {
                   Navigator.pop(context);
                   return widget.onChanged(null);
                 }
                 pushWidget(
                   context: context,
-                  builder: (context) => SelectWorldCommand(
+                  builder: (final context) => SelectWorldCommand(
                     projectContext: widget.projectContext,
                     category: commandCategory!,
-                    onDone: (worldCommand) {
+                    onDone: (final worldCommand) {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       widget.onChanged(worldCommand);

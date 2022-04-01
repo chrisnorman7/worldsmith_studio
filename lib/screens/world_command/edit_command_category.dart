@@ -20,7 +20,7 @@ class EditCommandCategory extends StatefulWidget {
   const EditCommandCategory({
     required this.projectContext,
     required this.category,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -38,12 +38,12 @@ class EditCommandCategory extends StatefulWidget {
 class EditCommandCategoryState extends State<EditCommandCategory> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final renameAction = CallbackAction<RenameIntent>(
-      onInvoke: (intent) => pushWidget(
+      onInvoke: (final intent) => pushWidget(
         context: context,
-        builder: (context) => GetText(
-          onDone: (value) {
+        builder: (final context) => GetText(
+          onDone: (final value) {
             Navigator.pop(context);
             widget.category.name = value;
             save();
@@ -73,7 +73,7 @@ class EditCommandCategoryState extends State<EditCommandCategory> {
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditWorldCommand(
+                    builder: (final context) => EditWorldCommand(
                       projectContext: widget.projectContext,
                       category: widget.category,
                       command: command,
@@ -104,7 +104,7 @@ class EditCommandCategoryState extends State<EditCommandCategory> {
               )
             ],
             child: Builder(
-              builder: (context) => Scaffold(
+              builder: (final context) => Scaffold(
                 appBar: AppBar(
                   actions: [
                     ElevatedButton(
@@ -132,7 +132,7 @@ class EditCommandCategoryState extends State<EditCommandCategory> {
                     widget.projectContext.save();
                     await pushWidget(
                       context: context,
-                      builder: (context) => EditWorldCommand(
+                      builder: (final context) => EditWorldCommand(
                         projectContext: widget.projectContext,
                         category: widget.category,
                         command: command,

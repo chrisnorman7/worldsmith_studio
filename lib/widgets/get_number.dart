@@ -14,7 +14,7 @@ class GetNumber extends StatefulWidget {
     this.actions = const [],
     this.title = 'Enter Value',
     this.labelText = 'New value',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The initial value.
@@ -63,7 +63,7 @@ class GetNumberState extends State<GetNumber> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: widget.actions,
@@ -78,7 +78,7 @@ class GetNumberState extends State<GetNumber> {
                 decoration: InputDecoration(
                   labelText: widget.labelText,
                 ),
-                onFieldSubmitted: (value) => submitForm(context),
+                onFieldSubmitted: (final value) => submitForm(context),
                 validator: validate,
               ),
             ),
@@ -99,7 +99,7 @@ class GetNumberState extends State<GetNumber> {
   }
 
   /// Validate the entered value.
-  String? validate(String? value) {
+  String? validate(final String? value) {
     if (value == null || value.isEmpty) {
       return 'You must enter a value';
     }
@@ -119,8 +119,8 @@ class GetNumberState extends State<GetNumber> {
   }
 
   /// Submit the form.
-  void submitForm(BuildContext context) {
-    if (_formKey.currentState?.validate() == true) {
+  void submitForm(final BuildContext context) {
+    if (_formKey.currentState?.validate() ?? true) {
       widget.onDone(double.parse(_textEditingController.text));
     }
   }

@@ -18,14 +18,14 @@ class AssetStoreListTile extends SearchableListTile {
     this.autofocus = false,
   }) : super(
           child: Builder(
-            builder: (context) => ListTile(
+            builder: (final context) => ListTile(
               autofocus: autofocus,
               title: Text('${assetStore.comment}'),
               subtitle: Text('Assets: ${assetStore.assets.length}'),
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditAssetStore(
+                  builder: (final context) => EditAssetStore(
                     projectContext: projectContext,
                     assetStore: assetStore,
                     canDelete: canDelete,

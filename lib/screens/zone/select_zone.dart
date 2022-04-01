@@ -12,7 +12,7 @@ class SelectZone extends StatelessWidget {
     required this.projectContext,
     required this.onDone,
     this.zone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -26,11 +26,11 @@ class SelectZone extends StatelessWidget {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: SelectItem<Zone>(
           onDone: onDone,
           values: projectContext.world.zones,
-          getItemWidget: (zone) => Text(zone.name),
+          getItemWidget: (final zone) => Text(zone.name),
           title: 'Select Zone',
           value: zone,
         ),

@@ -17,7 +17,7 @@ class SelectReverb extends StatefulWidget {
     this.nullable = false,
     this.title = 'Select Reverb Preset',
     this.actions = const [],
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -57,7 +57,7 @@ class _SelectReverbState extends State<SelectReverb> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final children = <Widget>[];
     if (widget.nullable) {
       children.add(
@@ -121,7 +121,7 @@ class _SelectReverbState extends State<SelectReverb> {
           title: Text(widget.title),
         ),
         body: ListView.builder(
-          itemBuilder: (context, index) => children[index],
+          itemBuilder: (final context, final index) => children[index],
           itemCount: children.length,
         ),
       ),

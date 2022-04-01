@@ -16,7 +16,7 @@ class EditAmbiances extends StatefulWidget {
     required this.projectContext,
     required this.ambiances,
     this.title = 'Ambiances',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,9 +37,9 @@ class EditAmbiances extends StatefulWidget {
 class EditAmbiancesState extends State<EditAmbiances> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final addAmbianceAction = CallbackAction<AddAmbianceIntent>(
-      onInvoke: (intent) => addAmbiance(context),
+      onInvoke: (final intent) => addAmbiance(context),
     );
     final world = widget.projectContext.world;
     return Cancel(
@@ -60,12 +60,12 @@ class EditAmbiancesState extends State<EditAmbiances> {
                 title: Text(widget.title),
               ),
               body: ListView.builder(
-                itemBuilder: (context, index) {
+                itemBuilder: (final context, final index) {
                   final sound = widget.ambiances[index];
                   return SoundListTile(
                     projectContext: widget.projectContext,
                     value: sound,
-                    onDone: (value) {
+                    onDone: (final value) {
                       if (value == null) {
                         widget.ambiances.remove(sound);
                         save();
@@ -102,12 +102,12 @@ class EditAmbiancesState extends State<EditAmbiances> {
   }
 
   /// Add an ambiance.
-  void addAmbiance(BuildContext context) async => pushWidget(
+  Future<void> addAmbiance(final BuildContext context) async => pushWidget(
         context: context,
-        builder: (context) => SelectAsset(
+        builder: (final context) => SelectAsset(
           projectContext: widget.projectContext,
           assetStore: widget.projectContext.world.ambianceAssetStore,
-          onDone: (value) {
+          onDone: (final value) {
             final sound = Sound(id: value!.variableName);
             widget.ambiances.add(sound);
             Navigator.pop(context);

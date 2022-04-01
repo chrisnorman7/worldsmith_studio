@@ -11,7 +11,7 @@ class ProjectQuests extends StatefulWidget {
   /// Create an instance.
   const ProjectQuests({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -26,7 +26,7 @@ class ProjectQuests extends StatefulWidget {
 class ProjectQuestsState extends State<ProjectQuests> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final quests = world.quests;
     if (quests.isEmpty) {
@@ -44,7 +44,7 @@ class ProjectQuestsState extends State<ProjectQuests> {
             onTap: () async {
               await pushWidget(
                 context: context,
-                builder: (context) => EditQuest(
+                builder: (final context) => EditQuest(
                   projectContext: widget.projectContext,
                   quest: quest,
                 ),

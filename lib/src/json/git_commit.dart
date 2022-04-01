@@ -12,7 +12,7 @@ class GitCommit {
   });
 
   /// Create an instance from a JSON object.
-  factory GitCommit.fromJson(Map<String, dynamic> json) =>
+  factory GitCommit.fromJson(final Map<String, dynamic> json) =>
       _$GitCommitFromJson(json);
 
   /// The hash of the commit.

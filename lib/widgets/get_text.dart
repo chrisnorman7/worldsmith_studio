@@ -15,7 +15,7 @@ class GetText extends StatefulWidget {
     this.labelText = 'Text',
     this.icon = const Icon(Icons.done_rounded),
     this.tooltip = 'Done',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// What to do with the resulting text.
@@ -69,7 +69,7 @@ class GetTextState extends State<GetText> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: widget.actions,
@@ -83,7 +83,7 @@ class GetTextState extends State<GetText> {
                   autofocus: true,
                   controller: _controller,
                   decoration: InputDecoration(labelText: widget.labelText),
-                  onFieldSubmitted: (value) => onSubmit(),
+                  onFieldSubmitted: (final value) => onSubmit(),
                   validator: widget.validator,
                 )
               ],
@@ -99,7 +99,7 @@ class GetTextState extends State<GetText> {
 
   /// Submit the form.
   void onSubmit() {
-    if (_formKey.currentState?.validate() == true) {
+    if (_formKey.currentState?.validate() ?? true) {
       widget.onDone(_controller.text);
     }
   }

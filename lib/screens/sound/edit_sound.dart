@@ -20,7 +20,7 @@ class EditSound extends StatefulWidget {
     required this.onChanged,
     this.nullable = false,
     this.title = 'Edit Sound',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -50,7 +50,7 @@ class EditSound extends StatefulWidget {
 class EditSoundState extends State<EditSound> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final id = widget.sound.id;
     final gain = widget.sound.gain;
     final asset = getAssetReferenceReference(
@@ -82,7 +82,7 @@ class EditSoundState extends State<EditSound> {
               assetReference: asset.reference,
               gain: gain,
               child: Builder(
-                builder: (context) => ListTile(
+                builder: (final context) => ListTile(
                   autofocus: true,
                   title: const Text('Asset'),
                   subtitle: Text(
@@ -91,10 +91,10 @@ class EditSoundState extends State<EditSound> {
                   onTap: () {
                     pushWidget(
                       context: context,
-                      builder: (context) => SelectAsset(
+                      builder: (final context) => SelectAsset(
                         projectContext: widget.projectContext,
                         assetStore: widget.assetStore,
-                        onDone: (value) {
+                        onDone: (final value) {
                           Navigator.pop(context);
                           widget.sound.id = value!.variableName;
                           saveSound();
@@ -110,7 +110,7 @@ class EditSoundState extends State<EditSound> {
             ),
             GainListTile(
               gain: gain,
-              onChange: (value) {
+              onChange: (final value) {
                 widget.sound.gain = value;
                 saveSound();
                 setState(() {});

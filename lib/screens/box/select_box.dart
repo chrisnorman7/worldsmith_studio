@@ -12,7 +12,7 @@ class SelectBox extends StatelessWidget {
     this.currentBoxId,
     this.excludedBoxIds = const [],
     this.title = 'Select Box',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The zone which contains the boxes to choose from.
@@ -31,10 +31,10 @@ class SelectBox extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final boxes = zone.boxes
         .where(
-          (element) => excludedBoxIds.contains(element.id) == false,
+          (final element) => excludedBoxIds.contains(element.id) == false,
         )
         .toList();
     return Cancel(
@@ -43,7 +43,7 @@ class SelectBox extends StatelessWidget {
           title: Text(title),
         ),
         body: ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             final box = boxes[index];
             final startCoordinates = zone.getAbsoluteCoordinates(box.start);
             final endCoordinates = zone.getAbsoluteCoordinates(box.end);

@@ -19,7 +19,7 @@ class EditScene extends StatefulWidget {
   const EditScene({
     required this.projectContext,
     required this.scene,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,7 +37,7 @@ class EditScene extends StatefulWidget {
 class EditSceneState extends State<EditScene> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final scene = widget.scene;
     final sections = scene.sections;
@@ -47,21 +47,22 @@ class EditSceneState extends State<EditScene> {
           TabbedScaffoldTab(
             title: 'Settings',
             icon: const Icon(Icons.settings),
-            builder: (context) => ListView(
+            builder: (final context) => ListView(
               children: [
                 TextListTile(
                   value: scene.name,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     scene.name = value;
                     save();
                   },
                   header: 'Name',
                   autofocus: true,
-                  validator: (value) => validateNonEmptyValue(value: value),
+                  validator: (final value) =>
+                      validateNonEmptyValue(value: value),
                 ),
                 ReverbListTile(
                   projectContext: widget.projectContext,
-                  onDone: (value) {
+                  onDone: (final value) {
                     scene.reverbId = value?.id;
                     save();
                   },
@@ -95,7 +96,7 @@ class EditSceneState extends State<EditScene> {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       world.scenes.removeWhere(
-                        (element) => element.id == id,
+                        (final element) => element.id == id,
                       );
                       widget.projectContext.save();
                     },
@@ -111,8 +112,8 @@ class EditSceneState extends State<EditScene> {
           TabbedScaffoldTab(
             title: 'Sections',
             icon: const Icon(Icons.pages_outlined),
-            builder: (context) => ListView.builder(
-              itemBuilder: (context, index) {
+            builder: (final context) => ListView.builder(
+              itemBuilder: (final context, final index) {
                 final section = sections[index];
                 return CallbackShortcuts(
                   bindings: {
@@ -153,7 +154,7 @@ class EditSceneState extends State<EditScene> {
                 widget.projectContext.save();
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditCustomMessage(
+                  builder: (final context) => EditCustomMessage(
                     projectContext: widget.projectContext,
                     customMessage: section.message,
                   ),

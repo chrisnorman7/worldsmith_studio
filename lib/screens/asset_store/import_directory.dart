@@ -18,7 +18,7 @@ class ImportDirectory extends StatefulWidget {
   const ImportDirectory({
     required this.projectContext,
     required this.assetStore,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -52,7 +52,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final directory = _directory;
     final String title;
     final Widget child;
@@ -69,7 +69,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
               decoration: const InputDecoration(
                 labelText: 'Directory Name',
               ),
-              validator: (value) {
+              validator: (final value) {
                 if (value == null || value.isEmpty) {
                   return 'You must enter a path.';
                 }
@@ -82,7 +82,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
                 }
                 return null;
               },
-              onFieldSubmitted: (value) => submitForm,
+              onFieldSubmitted: (final value) => submitForm,
             )
           ],
         ),
@@ -104,12 +104,12 @@ class ImportDirectoryState extends State<ImportDirectory> {
         );
       } else {
         child = ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             final entity = entities[index];
-            final String title = path.basename(entity.path);
+            final title = path.basename(entity.path);
             final String subtitle;
             if (widget.assetStore.assets
-                .where((element) => element.comment == title)
+                .where((final element) => element.comment == title)
                 .isNotEmpty) {
               subtitle = 'Duplicate';
             } else if (entity is File) {
@@ -132,7 +132,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
                 subtitle: Text('($subtitle)'),
                 onTap: () => setState(
                   () => entities.removeWhere(
-                    (element) => element.path == entity.path,
+                    (final element) => element.path == entity.path,
                   ),
                 ),
               ),
@@ -148,7 +148,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
               final comment = path.basename(entity.path);
               if (widget.assetStore.assets
                   .where(
-                    (element) => element.comment == comment,
+                    (final element) => element.comment == comment,
                   )
                   .isNotEmpty) {
                 continue;
@@ -189,7 +189,7 @@ class ImportDirectoryState extends State<ImportDirectory> {
 
   /// Submit the form.
   void submitForm() {
-    if (_formKey.currentState?.validate() == true) {
+    if (_formKey.currentState?.validate() ?? true) {
       setState(() {
         final directory = Directory(_controller.text);
         for (final entity in directory.listSync()) {

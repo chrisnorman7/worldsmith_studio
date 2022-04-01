@@ -17,7 +17,7 @@ class EditBox extends StatefulWidget {
     required this.zone,
     required this.box,
     required this.onDone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,7 +41,7 @@ class EditBox extends StatefulWidget {
 class EditBoxState extends State<EditBox> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Edit Box'),
@@ -50,7 +50,7 @@ class EditBoxState extends State<EditBox> {
             children: [
               TextListTile(
                 value: widget.box.name,
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.box.name = value;
                   save();
                 },
@@ -76,7 +76,7 @@ class EditBoxState extends State<EditBox> {
               ),
               TerrainListTile(
                 projectContext: widget.projectContext,
-                onDone: (value) {
+                onDone: (final value) {
                   Navigator.pop(context);
                   widget.box.terrainId = value.id;
                   save();
@@ -86,7 +86,7 @@ class EditBoxState extends State<EditBox> {
               ),
               ReverbListTile(
                 projectContext: widget.projectContext,
-                onDone: (value) {
+                onDone: (final value) {
                   widget.box.reverbId = value?.id;
                   widget.onDone();
                   save();
@@ -98,7 +98,7 @@ class EditBoxState extends State<EditBox> {
               CallCommandListTile(
                 projectContext: widget.projectContext,
                 callCommand: widget.box.enterCommand,
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.box.enterCommand = value;
                   save();
                 },
@@ -107,7 +107,7 @@ class EditBoxState extends State<EditBox> {
               CallCommandListTile(
                 projectContext: widget.projectContext,
                 callCommand: widget.box.leaveCommand,
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.box.leaveCommand = value;
                   save();
                 },
@@ -115,8 +115,8 @@ class EditBoxState extends State<EditBox> {
               ),
               CheckboxListTile(
                 value: widget.box.enclosed,
-                onChanged: (value) {
-                  widget.box.enclosed = value == true;
+                onChanged: (final value) {
+                  widget.box.enclosed = value ?? true;
                   save();
                 },
                 title: const Text('Soundproof Box'),

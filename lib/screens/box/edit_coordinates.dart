@@ -21,7 +21,7 @@ class EditCoordinates extends StatefulWidget {
     this.actions = const [],
     this.title = 'Edit Coordinates',
     this.canChangeClamp = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -57,7 +57,7 @@ class EditCoordinates extends StatefulWidget {
 class EditCoordinatesState extends State<EditCoordinates> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final clamp = widget.value.clamp;
     final boxId = widget.box?.id;
     return Cancel(
@@ -77,9 +77,9 @@ class EditCoordinatesState extends State<EditCoordinates> {
                 ),
                 onTap: () => pushWidget(
                   context: context,
-                  builder: (context) => SelectBox(
+                  builder: (final context) => SelectBox(
                     zone: widget.zone,
-                    onDone: (value) {
+                    onDone: (final value) {
                       Navigator.pop(context);
                       setState(() => widget.value.clamp!.boxId = value.id);
                     },
@@ -93,8 +93,8 @@ class EditCoordinatesState extends State<EditCoordinates> {
                 subtitle: Text(clamp.corner.name),
                 onTap: () => pushWidget(
                   context: context,
-                  builder: (context) => SelectBoxCorner(
-                    onDone: (value) {
+                  builder: (final context) => SelectBoxCorner(
+                    onDone: (final value) {
                       Navigator.pop(context);
                       setState(() => clamp.corner = value);
                     },
@@ -109,12 +109,12 @@ class EditCoordinatesState extends State<EditCoordinates> {
                 onTap: () async {
                   await pushWidget(
                     context: context,
-                    builder: (context) => SelectBox(
+                    builder: (final context) => SelectBox(
                       zone: widget.zone,
-                      onDone: (box) => pushWidget(
+                      onDone: (final box) => pushWidget(
                         context: context,
-                        builder: (context) => SelectBoxCorner(
-                          onDone: (corner) {
+                        builder: (final context) => SelectBoxCorner(
+                          onDone: (final corner) {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             widget.value.clamp = CoordinateClamp(
@@ -136,9 +136,9 @@ class EditCoordinatesState extends State<EditCoordinates> {
               subtitle: Text('${widget.value.x},${widget.value.y}'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => GetCoordinates(
+                builder: (final context) => GetCoordinates(
                   value: Point(widget.value.x, widget.value.y),
-                  onDone: (value) {
+                  onDone: (final value) {
                     Navigator.pop(context);
                     setState(
                       () => widget.value

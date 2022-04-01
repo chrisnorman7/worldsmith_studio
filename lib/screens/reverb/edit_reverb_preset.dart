@@ -100,7 +100,7 @@ class EditReverbPreset extends StatefulWidget {
   const EditReverbPreset({
     required this.projectContext,
     required this.reverbPresetReference,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -132,13 +132,13 @@ class EditReverbPresetState extends State<EditReverbPreset> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final playPauseAction = CallbackAction<PlayPauseIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         if (_playSound == null) {
           play();
         } else {
-          stop(false);
+          stop(destroyReverb: false);
         }
         setState(() {});
         return null;
@@ -157,87 +157,92 @@ class EditReverbPresetState extends State<EditReverbPreset> {
           widget.reverbPresetReference.sound = null;
           save();
         },
-        onCreate: (value) {
+        onCreate: (final value) {
           widget.reverbPresetReference.sound = value;
           save();
         },
       ),
       TextListTile(
         value: preset.name,
-        onChanged: (value) {
+        onChanged: (final value) {
           setReverbValue(name: value);
         },
         header: 'Name',
         autofocus: true,
-        validator: (value) => validateNonEmptyValue(value: value),
+        validator: (final value) => validateNonEmptyValue(value: value),
       ),
       getSettingTile(
         context: context,
         value: preset.gain,
         setting: _gainSetting,
-        onDone: (value) => setReverbValue(gain: value),
+        onDone: (final value) => setReverbValue(gain: value),
       ),
       getSettingTile(
         context: context,
         value: preset.meanFreePath,
         setting: _meanFreePathSetting,
-        onDone: (value) => setReverbValue(meanFreePath: value),
+        onDone: (final value) => setReverbValue(meanFreePath: value),
       ),
       getSettingTile(
         context: context,
         value: preset.t60,
         setting: _t60Setting,
-        onDone: (value) => setReverbValue(t60: value),
+        onDone: (final value) => setReverbValue(t60: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsLfRolloff,
         setting: _lateReflectionsLfRolloffSetting,
-        onDone: (value) => setReverbValue(lateReflectionsLfRolloff: value),
+        onDone: (final value) =>
+            setReverbValue(lateReflectionsLfRolloff: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsLfReference,
         setting: _lateReflectionsLfReferenceSetting,
-        onDone: (value) => setReverbValue(lateReflectionsLfReference: value),
+        onDone: (final value) =>
+            setReverbValue(lateReflectionsLfReference: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsHfRolloff,
         setting: _lateReflectionsHfRolloffSetting,
-        onDone: (value) => setReverbValue(lateReflectionsHfRolloff: value),
+        onDone: (final value) =>
+            setReverbValue(lateReflectionsHfRolloff: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsHfReference,
         setting: _lateReflectionsHfReferenceSetting,
-        onDone: (value) => setReverbValue(lateReflectionsHfReference: value),
+        onDone: (final value) =>
+            setReverbValue(lateReflectionsHfReference: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsDiffusion,
         setting: _lateReflectionsDiffusionSetting,
-        onDone: (value) => setReverbValue(lateReflectionsDiffusion: value),
+        onDone: (final value) =>
+            setReverbValue(lateReflectionsDiffusion: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsModulationDepth,
         setting: _lateReflectionsModulationDepthSetting,
-        onDone: (value) =>
+        onDone: (final value) =>
             setReverbValue(lateReflectionsModulationDepth: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsModulationFrequency,
         setting: _lateReflectionsModulationFrequencySetting,
-        onDone: (value) =>
+        onDone: (final value) =>
             setReverbValue(lateReflectionsModulationFrequency: value),
       ),
       getSettingTile(
         context: context,
         value: preset.lateReflectionsDelay,
         setting: _lateReflectionsDelaySetting,
-        onDone: (value) => setReverbValue(lateReflectionsDelay: value),
+        onDone: (final value) => setReverbValue(lateReflectionsDelay: value),
       )
     ];
     return WithKeyboardShortcuts(
@@ -268,7 +273,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
               PlayPauseIntent: playPauseAction,
             },
             child: Builder(
-              builder: (context) => Scaffold(
+              builder: (final context) => Scaffold(
                 appBar: AppBar(
                   title: const Text('Edit Reverb Preset'),
                   actions: [
@@ -292,7 +297,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                             widget.projectContext.world.reverbs.removeWhere(
-                              (element) => element.id == id,
+                              (final element) => element.id == id,
                             );
                           },
                           message: 'Are you sure you want to delete the '
@@ -338,20 +343,20 @@ class EditReverbPresetState extends State<EditReverbPreset> {
 
   /// Set a reverb value.
   void setReverbValue({
-    AssetReference? assetReference,
-    String? name,
-    String? variableName,
-    double? gain,
-    double? lateReflectionsDelay,
-    double? lateReflectionsDiffusion,
-    double? lateReflectionsHfReference,
-    double? lateReflectionsHfRolloff,
-    double? lateReflectionsLfReference,
-    double? lateReflectionsLfRolloff,
-    double? lateReflectionsModulationDepth,
-    double? lateReflectionsModulationFrequency,
-    double? meanFreePath,
-    double? t60,
+    final AssetReference? assetReference,
+    final String? name,
+    final String? variableName,
+    final double? gain,
+    final double? lateReflectionsDelay,
+    final double? lateReflectionsDiffusion,
+    final double? lateReflectionsHfReference,
+    final double? lateReflectionsHfRolloff,
+    final double? lateReflectionsLfReference,
+    final double? lateReflectionsLfRolloff,
+    final double? lateReflectionsModulationDepth,
+    final double? lateReflectionsModulationFrequency,
+    final double? meanFreePath,
+    final double? t60,
   }) {
     final oldPreset = widget.reverbPresetReference.reverbPreset;
     widget.reverbPresetReference.reverbPreset = ReverbPreset(
@@ -380,7 +385,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
   }
 
   /// Stop the sound.
-  void stop(bool destroyReverb) {
+  void stop({required final bool destroyReverb}) {
     _playSound?.destroy();
     _playSound = null;
     if (destroyReverb) {
@@ -402,7 +407,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
 
   /// Play the sound (if any).
   void play() {
-    stop(true);
+    stop(destroyReverb: true);
     final sound = widget.reverbPresetReference.sound;
     if (sound != null) {
       resetReverb();
@@ -422,22 +427,24 @@ class EditReverbPresetState extends State<EditReverbPreset> {
   @override
   void dispose() {
     super.dispose();
-    stop(true);
+    stop(destroyReverb: true);
     channel.destroy();
   }
 
   /// Get a list tile for the given setting.
   Shortcuts getSettingTile({
-    required BuildContext context,
-    required double value,
-    required ReverbSetting setting,
-    required ValueChanged<double> onDone,
+    required final BuildContext context,
+    required final double value,
+    required final ReverbSetting setting,
+    required final ValueChanged<double> onDone,
   }) {
     final increaseAction = CallbackAction<IncreaseIntent>(
-      onInvoke: (intent) => onDone(min(setting.max, value + setting.modify)),
+      onInvoke: (final intent) =>
+          onDone(min(setting.max, value + setting.modify)),
     );
     final decreaseAction = CallbackAction<DecreaseIntent>(
-      onInvoke: (intent) => onDone(max(setting.min, value - setting.modify)),
+      onInvoke: (final intent) =>
+          onDone(max(setting.min, value - setting.modify)),
     );
     final valueString = value.toString();
     return Shortcuts(
@@ -455,9 +462,9 @@ class EditReverbPresetState extends State<EditReverbPreset> {
             child: Text('${setting.name}: $valueString'),
             onPressed: () => pushWidget(
               context: context,
-              builder: (context) => GetNumber(
+              builder: (final context) => GetNumber(
                 value: value,
-                onDone: (value) {
+                onDone: (final value) {
                   Navigator.pop(context);
                   onDone(value);
                 },

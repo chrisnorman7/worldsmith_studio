@@ -17,7 +17,7 @@ class SelectConversationResponse extends StatefulWidget {
     required this.conversation,
     required this.onDone,
     this.ignoredResponses = const [],
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -46,7 +46,7 @@ class SelectConversationResponseState
     extends State<SelectConversationResponse> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return WithKeyboardShortcuts(
       keyboardShortcuts: const [
@@ -62,11 +62,11 @@ class SelectConversationResponseState
           onDone: widget.onDone,
           values: widget.conversation.responses
               .where(
-                (element) =>
+                (final element) =>
                     widget.ignoredResponses.contains(element.id) == false,
               )
               .toList(),
-          getItemWidget: (item) {
+          getItemWidget: (final item) {
             final sound = item.sound;
             return PlaySoundSemantics(
               soundChannel: widget.projectContext.game.interfaceSounds,

@@ -21,7 +21,7 @@ class QuestListTile extends StatefulWidget {
     required this.onDone,
     this.title = 'Quest',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   })  : assert(
           quest != null || stage == null,
           'If `quest` is not `null`, then `stage` must not be either.',
@@ -55,7 +55,7 @@ class QuestListTile extends StatefulWidget {
 class QuestListTileState extends State<QuestListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final quest = widget.quest;
     final stage = widget.stage;
@@ -77,7 +77,7 @@ class QuestListTileState extends State<QuestListTile> {
             if (stage == null) {
               await pushWidget(
                 context: context,
-                builder: (context) => EditQuest(
+                builder: (final context) => EditQuest(
                   projectContext: widget.projectContext,
                   quest: quest,
                 ),
@@ -85,7 +85,7 @@ class QuestListTileState extends State<QuestListTile> {
             } else {
               await pushWidget(
                 context: context,
-                builder: (context) => EditQuestStage(
+                builder: (final context) => EditQuestStage(
                   projectContext: widget.projectContext,
                   quest: quest,
                   stage: stage,
@@ -102,16 +102,16 @@ class QuestListTileState extends State<QuestListTile> {
         subtitle: title == null ? null : Text(questDescription),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectItem<Quest?>(
-            onDone: (newQuest) {
+          builder: (final context) => SelectItem<Quest?>(
+            onDone: (final newQuest) {
               if (newQuest == null) {
                 Navigator.pop(context);
                 widget.onDone(null);
               } else {
                 pushWidget(
                   context: context,
-                  builder: (context) => SelectItem<QuestStage?>(
-                    onDone: (newStage) {
+                  builder: (final context) => SelectItem<QuestStage?>(
+                    onDone: (final newStage) {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       widget.onDone(
@@ -122,7 +122,7 @@ class QuestListTileState extends State<QuestListTile> {
                       );
                     },
                     values: [null, ...newQuest.stages],
-                    getItemWidget: (item) {
+                    getItemWidget: (final item) {
                       if (item == null) {
                         return const Text('Not Started');
                       } else {
@@ -149,7 +149,7 @@ class QuestListTileState extends State<QuestListTile> {
               }
             },
             values: [null, ...world.quests],
-            getItemWidget: (item) {
+            getItemWidget: (final item) {
               if (item == null) {
                 return const Text('Clear');
               } else {

@@ -16,7 +16,7 @@ class CustomSoundListTile extends StatefulWidget {
     required this.onCreate,
     this.title = 'Sound',
     this.onClear,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -48,7 +48,7 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final onClear = widget.onClear;
     final sound = _sound ?? widget.value;
     if (sound == null) {
@@ -57,21 +57,21 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
         subtitle: const Text('Not set'),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectAssetStore(
+          builder: (final context) => SelectAssetStore(
             projectContext: widget.projectContext,
-            onDone: (customAssetStore) {
+            onDone: (final customAssetStore) {
               if (customAssetStore == null) {
                 Navigator.pop(context);
                 return;
               }
               pushWidget(
                 context: context,
-                builder: (context) => SelectAsset(
+                builder: (final context) => SelectAsset(
                   projectContext: widget.projectContext,
                   assetStore: widget.projectContext.worldContext.getAssetStore(
                     customAssetStore,
                   ),
-                  onDone: (reference) {
+                  onDone: (final reference) {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     if (reference == null) {
@@ -94,7 +94,7 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
       sound.assetStore,
     );
     final reference = assetStore.assets.firstWhere(
-      (element) => element.variableName == sound.id,
+      (final element) => element.variableName == sound.id,
     );
     return PlaySoundSemantics(
       soundChannel: widget.projectContext.game.interfaceSounds,
@@ -105,9 +105,9 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
         subtitle: Text('${assetStore.comment}/${reference.comment}'),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectAssetStore(
+          builder: (final context) => SelectAssetStore(
             projectContext: widget.projectContext,
-            onDone: (customSoundAssetStore) {
+            onDone: (final customSoundAssetStore) {
               if (customSoundAssetStore == null) {
                 if (onClear != null) {
                   onClear();
@@ -117,11 +117,11 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
               } else {
                 pushWidget(
                   context: context,
-                  builder: (context) => SelectAsset(
+                  builder: (final context) => SelectAsset(
                     projectContext: widget.projectContext,
                     assetStore: widget.projectContext.worldContext
                         .getAssetStore(customSoundAssetStore),
-                    onDone: (newAssetReference) {
+                    onDone: (final newAssetReference) {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       if (newAssetReference == null) {

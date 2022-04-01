@@ -15,7 +15,7 @@ class TextListTile extends StatelessWidget {
     this.labelText,
     this.validator,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The title of the list tile.
@@ -42,14 +42,14 @@ class TextListTile extends StatelessWidget {
   /// Whether the resulting [ListTile] should be autofocused.
   final bool autofocus;
   @override
-  Widget build(BuildContext context) => ListTile(
+  Widget build(final BuildContext context) => ListTile(
         autofocus: autofocus,
         title: Text(header),
         subtitle: Text(value),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => GetText(
-            onDone: (value) {
+          builder: (final context) => GetText(
+            onDone: (final value) {
               Navigator.pop(context);
               onChanged(value);
             },

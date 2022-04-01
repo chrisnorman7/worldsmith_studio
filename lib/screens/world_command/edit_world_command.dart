@@ -30,7 +30,7 @@ class EditWorldCommand extends StatefulWidget {
     required this.projectContext,
     required this.category,
     required this.command,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -51,12 +51,12 @@ class EditWorldCommand extends StatefulWidget {
 class EditWorldCommandState extends State<EditWorldCommand> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final renameAction = CallbackAction<RenameIntent>(
-      onInvoke: (intent) => pushWidget(
+      onInvoke: (final intent) => pushWidget(
         context: context,
-        builder: (context) => GetText(
-          onDone: (value) {
+        builder: (final context) => GetText(
+          onDone: (final value) {
             Navigator.pop(context);
             widget.command.name = value;
             save();
@@ -64,7 +64,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           labelText: 'Name',
           text: widget.command.name,
           title: 'Rename Command',
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         ),
       ),
     );
@@ -82,7 +82,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           actions: {RenameIntent: renameAction},
           child: Cancel(
             child: Builder(
-              builder: (context) => Scaffold(
+              builder: (final context) => Scaffold(
                 appBar: AppBar(
                   actions: [
                     ElevatedButton(
@@ -97,8 +97,10 @@ class EditWorldCommandState extends State<EditWorldCommand> {
                         context,
                         _renameIntent,
                       ),
-                      child: const Icon(Icons.drive_file_rename_outline,
-                          semanticLabel: 'Rename Command'),
+                      child: const Icon(
+                        Icons.drive_file_rename_outline,
+                        semanticLabel: 'Rename Command',
+                      ),
                     )
                   ],
                   title: const Text('Edit Command'),
@@ -119,7 +121,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
   }
 
   /// Get the list view for the [Scaffold] to use.
-  ListView getCommandListView({required BuildContext context}) {
+  ListView getCommandListView({required final BuildContext context}) {
     final world = widget.projectContext.world;
     final setQuestStage = widget.command.setQuestStage;
     final questId = setQuestStage?.questId;
@@ -152,7 +154,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
               if (zone != null) {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditZone(
+                  builder: (final context) => EditZone(
                     projectContext: widget.projectContext,
                     zone: zone,
                   ),
@@ -168,9 +170,9 @@ class EditWorldCommandState extends State<EditWorldCommand> {
               if (zoneTeleport == null) {
                 await pushWidget(
                   context: context,
-                  builder: (context) => SelectZone(
+                  builder: (final context) => SelectZone(
                     projectContext: widget.projectContext,
-                    onDone: (zone) async {
+                    onDone: (final zone) async {
                       Navigator.pop(context);
                       final teleport = ZoneTeleport(
                         zoneId: zone.id,
@@ -179,10 +181,10 @@ class EditWorldCommandState extends State<EditWorldCommand> {
                       widget.command.zoneTeleport = teleport;
                       await pushWidget(
                         context: context,
-                        builder: (context) => EditZoneTeleport(
+                        builder: (final context) => EditZoneTeleport(
                           projectContext: widget.projectContext,
                           zoneTeleport: teleport,
-                          onChanged: (value) {
+                          onChanged: (final value) {
                             widget.command.zoneTeleport = value;
                             save();
                           },
@@ -195,10 +197,10 @@ class EditWorldCommandState extends State<EditWorldCommand> {
               } else {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditZoneTeleport(
+                  builder: (final context) => EditZoneTeleport(
                     projectContext: widget.projectContext,
                     zoneTeleport: zoneTeleport,
-                    onChanged: (value) {
+                    onChanged: (final value) {
                       widget.command.zoneTeleport = value;
                       save();
                     },
@@ -214,11 +216,11 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           subtitle: Text(walkingMode == null ? 'Not set' : walkingMode.name),
           onTap: () => pushWidget(
             context: context,
-            builder: (context) => SelectItem<WalkingMode?>(
-              getItemWidget: (value) => Text(
+            builder: (final context) => SelectItem<WalkingMode?>(
+              getItemWidget: (final value) => Text(
                 value == null ? 'Clear' : value.name,
               ),
-              onDone: (value) {
+              onDone: (final value) {
                 Navigator.pop(context);
                 widget.command.walkingMode = value;
                 save();
@@ -233,7 +235,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           projectContext: widget.projectContext,
           quest: quest,
           stage: stage,
-          onDone: (value) {
+          onDone: (final value) {
             if (value == null) {
               widget.command.setQuestStage = null;
             } else {
@@ -252,7 +254,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         ),
         TextListTile(
           value: customCommandName ?? '',
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.customCommandName = value.isEmpty ? null : value;
             save();
           },
@@ -262,7 +264,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         StartConversationListTile(
           projectContext: widget.projectContext,
           startConversation: widget.command.startConversation,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.startConversation = value;
             save();
           },
@@ -270,7 +272,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         ShowSceneListTile(
           projectContext: widget.projectContext,
           showScene: widget.command.showScene,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.showScene = value;
             save();
           },
@@ -278,7 +280,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         ReturnToMainMenuListTile(
           projectContext: widget.projectContext,
           returnToMainMenu: returnToMainMenu,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.returnToMainMenu = value;
             save();
           },
@@ -286,14 +288,14 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         PlayRumbleListTile(
           projectContext: widget.projectContext,
           playRumble: widget.command.playRumble,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.playRumble = value;
             save();
           },
         ),
         TextListTile(
           value: widget.command.url ?? '',
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.url = value.isEmpty ? null : value;
             save();
           },
@@ -304,7 +306,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
   }
 
   /// Delete the command.
-  void deleteCommand(BuildContext context) {
+  void deleteCommand(final BuildContext context) {
     final id = widget.command.id;
     final world = widget.projectContext.world;
     if (world.mainMenuOptions.startGameCommandId == id) {
@@ -371,17 +373,18 @@ class EditWorldCommandState extends State<EditWorldCommand> {
       }
     }
     confirm(
-        context: context,
-        message: 'Are you sure you want to delete the ${widget.command.name} '
-            'command from the ${widget.category.name} category?',
-        title: 'Delete Command',
-        yesCallback: () {
-          widget.category.commands.removeWhere(
-            (element) => element.id == id,
-          );
-          Navigator.pop(context);
-          Navigator.pop(context);
-          widget.projectContext.save();
-        });
+      context: context,
+      message: 'Are you sure you want to delete the ${widget.command.name} '
+          'command from the ${widget.category.name} category?',
+      title: 'Delete Command',
+      yesCallback: () {
+        widget.category.commands.removeWhere(
+          (final element) => element.id == id,
+        );
+        Navigator.pop(context);
+        Navigator.pop(context);
+        widget.projectContext.save();
+      },
+    );
   }
 }

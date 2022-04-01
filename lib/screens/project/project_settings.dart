@@ -13,7 +13,7 @@ class ProjectSettings extends StatefulWidget {
   /// Create an instance.
   const ProjectSettings({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -28,35 +28,35 @@ class ProjectSettings extends StatefulWidget {
 class ProjectSettingsState extends State<ProjectSettings> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final options = world.globalOptions;
     return ListView(
       children: [
         TextListTile(
           value: world.title,
-          onChanged: (value) {
+          onChanged: (final value) {
             world.title = value;
             save();
           },
           header: 'Title',
           autofocus: true,
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         ),
         TextListTile(
           value: options.version,
-          onChanged: (value) {
+          onChanged: (final value) {
             options.version = value;
             save();
           },
           header: 'Version',
           labelText: 'Version',
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         ),
         WorldCommandListTile(
           projectContext: widget.projectContext,
           currentId: world.mainMenuOptions.startGameCommandId,
-          onChanged: (value) {
+          onChanged: (final value) {
             world.mainMenuOptions.startGameCommandId = value?.id;
             save();
           },
@@ -71,11 +71,11 @@ class ProjectSettingsState extends State<ProjectSettings> {
           child: Actions(
             actions: {
               IncreaseIntent: CallbackAction<IncreaseIntent>(
-                onInvoke: (intent) =>
+                onInvoke: (final intent) =>
                     framesPerSecond = world.globalOptions.framesPerSecond * 2,
               ),
               DecreaseIntent: CallbackAction<DecreaseIntent>(
-                onInvoke: (intent) => framesPerSecond = max(
+                onInvoke: (final intent) => framesPerSecond = max(
                   15,
                   (world.globalOptions.framesPerSecond / 2).floor(),
                 ),
@@ -83,40 +83,40 @@ class ProjectSettingsState extends State<ProjectSettings> {
             },
             child: TextListTile(
               value: '${options.framesPerSecond}',
-              onChanged: (value) {
+              onChanged: (final value) {
                 framesPerSecond = int.parse(value);
               },
               header: 'Frames Per Second',
-              validator: (value) => validateInt(value: value),
+              validator: (final value) => validateInt(value: value),
             ),
           ),
         ),
         TextListTile(
           value: options.orgName,
-          onChanged: (value) {
+          onChanged: (final value) {
             options.orgName = value;
             save();
           },
           header: 'Organisation Name',
           labelText: 'Name',
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         ),
         TextListTile(
           value: options.appName,
-          onChanged: (value) {
+          onChanged: (final value) {
             options.appName = value;
             save();
           },
           header: 'Application Name',
           labelText: 'Name',
-          validator: (value) => validateNonEmptyValue(value: value),
+          validator: (final value) => validateNonEmptyValue(value: value),
         )
       ],
     );
   }
 
   /// Set frames per second.
-  set framesPerSecond(int value) {
+  set framesPerSecond(final int value) {
     widget.projectContext.world.globalOptions.framesPerSecond = value;
     save();
   }

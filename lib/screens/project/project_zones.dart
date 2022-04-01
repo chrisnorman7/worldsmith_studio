@@ -14,7 +14,7 @@ class ProjectZones extends StatefulWidget {
   /// Create an instance.
   const ProjectZones({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -29,7 +29,7 @@ class ProjectZones extends StatefulWidget {
 class ProjectZonesState extends State<ProjectZones> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final zones = world.zones;
     if (zones.isEmpty) {
@@ -53,7 +53,7 @@ class ProjectZonesState extends State<ProjectZones> {
             gain: music?.gain ?? world.soundOptions.defaultGain,
             looping: true,
             child: Builder(
-              builder: (context) => ListTile(
+              builder: (final context) => ListTile(
                 autofocus: i == 0,
                 title: Text(zone.name),
                 subtitle: Text('Boxes: ${zone.boxes.length}'),
@@ -61,7 +61,7 @@ class ProjectZonesState extends State<ProjectZones> {
                   PlaySoundSemantics.of(context)?.stop();
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditZone(
+                    builder: (final context) => EditZone(
                       projectContext: widget.projectContext,
                       zone: zone,
                     ),

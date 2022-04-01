@@ -14,7 +14,7 @@ class FadeTimeListTile extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.title = 'Fade Time',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The current fade time.
@@ -28,12 +28,12 @@ class FadeTimeListTile extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final increaseAction = CallbackAction<IncreaseIntent>(
-      onInvoke: (intent) => onChanged((value ?? 0.0) + 1.0),
+      onInvoke: (final intent) => onChanged((value ?? 0.0) + 1.0),
     );
     final decreaseAction = CallbackAction<DecreaseIntent>(
-      onInvoke: (intent) {
+      onInvoke: (final intent) {
         final i = value;
         if (i == 1.0 || i == null) {
           onChanged(null);
@@ -58,9 +58,9 @@ class FadeTimeListTile extends StatelessWidget {
           subtitle: Text('${value ?? "Not set"}'),
           onTap: () => pushWidget(
             context: context,
-            builder: (context) => GetNumber(
+            builder: (final context) => GetNumber(
               value: value ?? 0.0,
-              onDone: (value) {
+              onDone: (final value) {
                 Navigator.pop(context);
                 if (value == 0.0) {
                   onChanged(null);

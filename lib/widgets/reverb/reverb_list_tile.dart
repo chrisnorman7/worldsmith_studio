@@ -17,7 +17,7 @@ class ReverbListTile extends StatefulWidget {
     this.currentReverbId,
     this.nullable = false,
     this.title = 'Reverb Preset',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to send to [SelectReverb].
@@ -45,11 +45,11 @@ class ReverbListTile extends StatefulWidget {
 
 class _ReverbListTileState extends State<ReverbListTile> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     ReverbPresetReference? currentReverbPreset;
     if (widget.currentReverbId != null) {
       currentReverbPreset = widget.reverbPresets.firstWhere(
-        (element) => element.id == widget.currentReverbId,
+        (final element) => element.id == widget.currentReverbId,
       );
     }
     return CallbackShortcuts(
@@ -59,7 +59,7 @@ class _ReverbListTileState extends State<ReverbListTile> {
           if (preset != null) {
             await pushWidget(
               context: context,
-              builder: (context) => EditReverbPreset(
+              builder: (final context) => EditReverbPreset(
                 projectContext: widget.projectContext,
                 reverbPresetReference: preset,
               ),
@@ -77,9 +77,9 @@ class _ReverbListTileState extends State<ReverbListTile> {
         ),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectReverb(
+          builder: (final context) => SelectReverb(
             projectContext: widget.projectContext,
-            onDone: (reverb) {
+            onDone: (final reverb) {
               Navigator.pop(context);
               widget.onDone(reverb);
             },

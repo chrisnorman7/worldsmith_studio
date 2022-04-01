@@ -17,7 +17,7 @@ class ConversationNextBranchListTile extends StatefulWidget {
     required this.response,
     required this.nextBranch,
     required this.onChanged,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -46,7 +46,7 @@ class ConversationNextBranchListTileState
     extends State<ConversationNextBranchListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final nextBranch = widget.nextBranch;
     final branch = nextBranch == null
@@ -64,7 +64,7 @@ class ConversationNextBranchListTileState
       assetReference: asset?.reference,
       gain: world.soundOptions.defaultGain,
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           title: const Text('Next Branch'),
           subtitle: Text(
             branch == null
@@ -76,8 +76,8 @@ class ConversationNextBranchListTileState
             if (nextBranch == null) {
               await pushWidget(
                 context: context,
-                builder: (context) => SelectItem<ConversationBranch>(
-                  onDone: (value) {
+                builder: (final context) => SelectItem<ConversationBranch>(
+                  onDone: (final value) {
                     Navigator.pop(context);
                     widget.onChanged(
                       ConversationNextBranch(
@@ -86,7 +86,7 @@ class ConversationNextBranchListTileState
                     );
                   },
                   values: widget.conversation.branches,
-                  getItemWidget: (item) {
+                  getItemWidget: (final item) {
                     final sound = item.sound;
                     return PlaySoundSemantics(
                       soundChannel: widget.projectContext.game.interfaceSounds,
@@ -105,7 +105,7 @@ class ConversationNextBranchListTileState
             } else {
               await pushWidget(
                 context: context,
-                builder: (context) => EditConversationNextBranch(
+                builder: (final context) => EditConversationNextBranch(
                   projectContext: widget.projectContext,
                   conversation: widget.conversation,
                   response: widget.response,

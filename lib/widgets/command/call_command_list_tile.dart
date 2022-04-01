@@ -17,7 +17,7 @@ class CallCommandListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Call Command',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -44,7 +44,7 @@ class CallCommandListTile extends StatefulWidget {
 class CallCommandListTileState extends State<CallCommandListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final callCommand = widget.callCommand;
     final location = callCommand == null
         ? null
@@ -66,15 +66,15 @@ class CallCommandListTileState extends State<CallCommandListTile> {
       onTap: () async {
         await pushWidget(
           context: context,
-          builder: (context) => callCommand == null
+          builder: (final context) => callCommand == null
               ? SelectCommandCategory(
                   projectContext: widget.projectContext,
-                  onDone: (category) => pushWidget(
+                  onDone: (final category) => pushWidget(
                     context: context,
-                    builder: (context) => SelectWorldCommand(
+                    builder: (final context) => SelectWorldCommand(
                       projectContext: widget.projectContext,
                       category: category!,
-                      onDone: (command) {
+                      onDone: (final command) {
                         Navigator.pop(context);
                         Navigator.pop(context);
                         widget.onChanged(CallCommand(commandId: command!.id));

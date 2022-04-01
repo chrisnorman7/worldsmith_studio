@@ -12,7 +12,7 @@ class ProjectCommandCategories extends StatefulWidget {
   /// Create an instance.
   const ProjectCommandCategories({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -28,7 +28,7 @@ class ProjectCommandCategories extends StatefulWidget {
 class ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final categories = widget.projectContext.world.commandCategories;
     if (categories.isEmpty) {
       return const CenterText(text: 'There are no command categories to show.');
@@ -45,7 +45,7 @@ class ProjectCommandCategoriesState extends State<ProjectCommandCategories> {
             onTap: () async {
               await pushWidget(
                 context: context,
-                builder: (context) => EditCommandCategory(
+                builder: (final context) => EditCommandCategory(
                   projectContext: widget.projectContext,
                   category: category,
                 ),

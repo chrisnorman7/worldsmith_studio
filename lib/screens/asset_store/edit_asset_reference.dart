@@ -16,7 +16,7 @@ class EditAssetReference extends StatefulWidget {
     required this.assetStore,
     required this.assetReferenceReference,
     required this.canDelete,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -42,12 +42,9 @@ class EditAssetReferenceState extends State<EditAssetReference> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
-    var reference = _assetReferenceReference;
-    if (reference == null) {
-      reference = widget.assetReferenceReference;
-      _assetReferenceReference = reference;
-    }
+  Widget build(final BuildContext context) {
+    _assetReferenceReference ??= widget.assetReferenceReference;
+    final reference = _assetReferenceReference!;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -57,17 +54,18 @@ class EditAssetReferenceState extends State<EditAssetReference> {
                 final result = widget.canDelete(widget.assetReferenceReference);
                 if (result == null) {
                   confirm(
-                      context: context,
-                      message: 'Are you sure you want to delete this asset?',
-                      title: 'Delete Asset',
-                      yesCallback: () {
-                        widget.projectContext.deleteAssetReferenceReference(
-                          assetStore: widget.assetStore,
-                          assetReferenceReference: reference!,
-                        );
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                    context: context,
+                    message: 'Are you sure you want to delete this asset?',
+                    title: 'Delete Asset',
+                    yesCallback: () {
+                      widget.projectContext.deleteAssetReferenceReference(
+                        assetStore: widget.assetStore,
+                        assetReferenceReference: reference,
+                      );
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  );
                 } else {
                   showError(context: context, message: result);
                 }
@@ -84,8 +82,8 @@ class EditAssetReferenceState extends State<EditAssetReference> {
               header: 'Comment',
               value: reference.comment ?? 'Comment Me!',
               title: 'Comment',
-              onChanged: (value) {
-                widget.assetStore.assets.remove(reference!);
+              onChanged: (final value) {
+                widget.assetStore.assets.remove(reference);
                 final newReference = AssetReferenceReference(
                   variableName: reference.variableName,
                   reference: reference.reference,
@@ -95,7 +93,7 @@ class EditAssetReferenceState extends State<EditAssetReference> {
                 widget.projectContext.save();
                 setState(() => _assetReferenceReference = newReference);
               },
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             ListTile(
               title: const Text('Filename'),

@@ -11,7 +11,7 @@ class ProjectSoundSettings extends StatefulWidget {
   /// Create an instance.
   const ProjectSoundSettings({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -26,7 +26,7 @@ class ProjectSoundSettings extends StatefulWidget {
 class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final soundOptions = world.soundOptions;
     return ListView(
@@ -34,7 +34,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         GainListTile(
           autofocus: true,
           gain: soundOptions.defaultGain,
-          onChange: (value) {
+          onChange: (final value) {
             soundOptions.defaultGain = value;
             save();
           },
@@ -43,7 +43,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         SoundListTile(
           projectContext: widget.projectContext,
           value: soundOptions.menuMoveSound,
-          onDone: (value) {
+          onDone: (final value) {
             soundOptions.menuMoveSound = value;
             save();
           },
@@ -55,7 +55,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         SoundListTile(
           projectContext: widget.projectContext,
           value: soundOptions.menuActivateSound,
-          onDone: (value) {
+          onDone: (final value) {
             soundOptions.menuActivateSound = value;
             save();
           },
@@ -67,7 +67,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         SoundListTile(
           projectContext: widget.projectContext,
           value: soundOptions.menuSwitchSound,
-          onDone: (value) {
+          onDone: (final value) {
             soundOptions.menuSwitchSound = value;
             save();
           },
@@ -79,7 +79,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         SoundListTile(
           projectContext: widget.projectContext,
           value: soundOptions.menuCancelSound,
-          onDone: (value) {
+          onDone: (final value) {
             soundOptions.menuCancelSound = value;
             save();
           },
@@ -94,7 +94,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) => SynthizerSettings(
+              builder: (final context) => SynthizerSettings(
                 projectContext: widget.projectContext,
               ),
             );
@@ -112,7 +112,7 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
   }
 
   /// Set default gain.
-  set defaultGain(double value) {
+  set defaultGain(final double value) {
     widget.projectContext.world.soundOptions.defaultGain = value;
     widget.projectContext.save();
     setState(() {});

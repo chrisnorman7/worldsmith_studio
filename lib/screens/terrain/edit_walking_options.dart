@@ -13,7 +13,7 @@ class EditWalkingOptions extends StatefulWidget {
     required this.projectContext,
     required this.walkingOptions,
     this.title = 'Edit Walking Options',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -34,7 +34,7 @@ class EditWalkingOptions extends StatefulWidget {
 class EditWalkingOptionsState extends State<EditWalkingOptions> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final sound = widget.walkingOptions.sound;
     return Cancel(
@@ -59,7 +59,7 @@ class EditWalkingOptionsState extends State<EditWalkingOptions> {
           children: [
             NumberListTile(
               value: widget.walkingOptions.distance,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.walkingOptions.distance = value;
                 save();
               },
@@ -68,7 +68,7 @@ class EditWalkingOptionsState extends State<EditWalkingOptions> {
             ),
             NumberListTile(
               value: widget.walkingOptions.interval.toDouble(),
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.walkingOptions.interval = value.floor();
                 save();
               },
@@ -79,7 +79,7 @@ class EditWalkingOptionsState extends State<EditWalkingOptions> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: sound,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.walkingOptions.sound = value;
                 widget.projectContext.save();
                 setState(() {});
@@ -91,7 +91,7 @@ class EditWalkingOptionsState extends State<EditWalkingOptions> {
             ),
             NumberListTile(
               value: widget.walkingOptions.joystickValue,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.walkingOptions.joystickValue = value;
                 save();
               },

@@ -14,7 +14,7 @@ class EditMainMenu extends StatefulWidget {
   /// Create an instance.
   const EditMainMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -29,7 +29,7 @@ class EditMainMenu extends StatefulWidget {
 class EditMainMenuState extends State<EditMainMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
     final options = world.mainMenuOptions;
@@ -43,19 +43,19 @@ class EditMainMenuState extends State<EditMainMenu> {
           children: [
             TextListTile(
               value: options.title,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.title = value;
                 save();
               },
               header: 'Title',
               autofocus: true,
               title: 'Menu Title',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             SoundListTile(
               projectContext: widget.projectContext,
               value: options.music,
-              onDone: (value) {
+              onDone: (final value) {
                 options.music = value;
                 save();
               },
@@ -67,7 +67,7 @@ class EditMainMenuState extends State<EditMainMenu> {
             ),
             FadeTimeListTile(
               value: options.fadeTime,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.fadeTime = value;
                 save();
               },

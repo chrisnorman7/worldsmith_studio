@@ -58,7 +58,7 @@ class EditConversation extends StatefulWidget {
     required this.projectContext,
     required this.category,
     required this.conversation,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -93,7 +93,7 @@ class EditConversationState extends State<EditConversation> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final reverbId = widget.conversation.reverbId;
     var channel = _channel;
@@ -116,7 +116,7 @@ class EditConversationState extends State<EditConversation> {
       final children = [
         TextListTile(
           value: branch.text ?? '',
-          onChanged: (value) {
+          onChanged: (final value) {
             branch.text = value.isEmpty ? null : value;
             save();
           },
@@ -126,7 +126,7 @@ class EditConversationState extends State<EditConversation> {
         SoundListTile(
           projectContext: widget.projectContext,
           value: branch.sound,
-          onDone: (value) {
+          onDone: (final value) {
             branch.sound = value;
             save();
           },
@@ -141,10 +141,10 @@ class EditConversationState extends State<EditConversation> {
           onTap: () {
             pushWidget(
               context: context,
-              builder: (context) => SelectConversationResponse(
+              builder: (final context) => SelectConversationResponse(
                 projectContext: widget.projectContext,
                 conversation: widget.conversation,
-                onDone: (value) {
+                onDone: (final value) {
                   Navigator.pop(context);
                   branch.responseIds.add(value.id);
                   save();
@@ -179,7 +179,7 @@ class EditConversationState extends State<EditConversation> {
           _backKeyboardShortcut
         ],
         child: ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             if (index < children.length) {
               return children[index];
             }
@@ -191,7 +191,7 @@ class EditConversationState extends State<EditConversation> {
               bindings: {
                 EditIntent.hotkey: () => pushWidget(
                       context: context,
-                      builder: (context) => EditConversationResponse(
+                      builder: (final context) => EditConversationResponse(
                         projectContext: widget.projectContext,
                         conversation: widget.conversation,
                         response: response,
@@ -275,7 +275,7 @@ class EditConversationState extends State<EditConversation> {
               if (nextBranch != null) {
                 pushWidget(
                   context: context,
-                  builder: (context) => EditConversationNextBranch(
+                  builder: (final context) => EditConversationNextBranch(
                     projectContext: widget.projectContext,
                     conversation: widget.conversation,
                     response: response,
@@ -289,7 +289,7 @@ class EditConversationState extends State<EditConversation> {
             children: [
               TextListTile(
                 value: response.text ?? '',
-                onChanged: (value) {
+                onChanged: (final value) {
                   response.text = value.isEmpty ? null : value;
                   save();
                 },
@@ -299,7 +299,7 @@ class EditConversationState extends State<EditConversation> {
               SoundListTile(
                 projectContext: widget.projectContext,
                 value: sound,
-                onDone: (value) {
+                onDone: (final value) {
                   response.sound = value;
                   save();
                 },
@@ -315,10 +315,10 @@ class EditConversationState extends State<EditConversation> {
                   if (branch == null) {
                     pushWidget(
                       context: context,
-                      builder: (context) => SelectConversationBranch(
+                      builder: (final context) => SelectConversationBranch(
                         projectContext: widget.projectContext,
                         conversation: widget.conversation,
-                        onDone: (value) {
+                        onDone: (final value) {
                           Navigator.pop(context);
                           response.nextBranch = ConversationNextBranch(
                             branchId: value.id,
@@ -346,7 +346,7 @@ class EditConversationState extends State<EditConversation> {
               CallCommandListTile(
                 projectContext: widget.projectContext,
                 callCommand: response.command,
-                onChanged: (value) {
+                onChanged: (final value) {
                   response.command = value;
                   save();
                 },
@@ -362,7 +362,7 @@ class EditConversationState extends State<EditConversation> {
           TabbedScaffoldTab(
             title: 'Conversation Settings',
             icon: const Icon(Icons.settings_outlined),
-            builder: (context) {
+            builder: (final context) {
               final initialBranch = widget.conversation.getBranch(
                 widget.conversation.initialBranchId,
               );
@@ -372,19 +372,20 @@ class EditConversationState extends State<EditConversation> {
                   children: [
                     TextListTile(
                       value: widget.conversation.name,
-                      onChanged: (value) {
+                      onChanged: (final value) {
                         widget.conversation.name = value;
                         save();
                       },
                       header: 'Conversation Name',
                       autofocus: true,
                       labelText: 'Name',
-                      validator: (value) => validateNonEmptyValue(value: value),
+                      validator: (final value) =>
+                          validateNonEmptyValue(value: value),
                     ),
                     SoundListTile(
                       projectContext: widget.projectContext,
                       value: widget.conversation.music,
-                      onDone: (value) {
+                      onDone: (final value) {
                         widget.conversation.music = value;
                         save();
                       },
@@ -410,7 +411,7 @@ class EditConversationState extends State<EditConversation> {
                     ),
                     ReverbListTile(
                       projectContext: widget.projectContext,
-                      onDone: (reverb) {
+                      onDone: (final reverb) {
                         _reverb?.destroy();
                         _reverb = null;
                         _channel?.destroy();
@@ -438,7 +439,7 @@ class EditConversationState extends State<EditConversation> {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       widget.category.conversations.removeWhere(
-                        (element) => element.id == widget.conversation.id,
+                        (final element) => element.id == widget.conversation.id,
                       );
                       widget.projectContext.save();
                     },
@@ -454,7 +455,7 @@ class EditConversationState extends State<EditConversation> {
           TabbedScaffoldTab(
             title: 'Branches',
             icon: const Icon(Icons.question_answer_outlined),
-            builder: (context) {
+            builder: (final context) {
               final branches = widget.conversation.branches;
               // No need to check if there are no branches, since there must
               // always be one for `Conversation.initialBranchId`.
@@ -504,11 +505,12 @@ class EditConversationState extends State<EditConversation> {
           TabbedScaffoldTab(
             title: 'Responses',
             icon: const Icon(Icons.reply_outlined),
-            builder: (context) {
+            builder: (final context) {
               final responses = widget.conversation.responses;
               if (responses.isEmpty) {
                 return const CenterText(
-                    text: 'There are no responses to show.');
+                  text: 'There are no responses to show.',
+                );
               }
               final children = <SearchableListTile>[];
               for (var i = 0; i < responses.length; i++) {
@@ -527,7 +529,9 @@ class EditConversationState extends State<EditConversation> {
                       child: CallbackShortcuts(
                         bindings: {
                           DeleteIntent.hotkey: () => deleteResponse(
-                              context: context, response: response)
+                                context: context,
+                                response: response,
+                              )
                         },
                         child: ConversationResponseListTile(
                           autofocus: i == 0,
@@ -603,12 +607,12 @@ class EditConversationState extends State<EditConversation> {
 
   /// Delete the given [branch].
   void deleteBranch({
-    required BuildContext context,
-    required ConversationBranch branch,
+    required final BuildContext context,
+    required final ConversationBranch branch,
   }) {
-    final bool attached = widget.conversation.initialBranchId == branch.id ||
+    final attached = widget.conversation.initialBranchId == branch.id ||
         widget.conversation.responses
-            .where((element) => element.nextBranch?.branchId == branch.id)
+            .where((final element) => element.nextBranch?.branchId == branch.id)
             .isNotEmpty;
     if (attached) {
       showError(
@@ -618,16 +622,17 @@ class EditConversationState extends State<EditConversation> {
       );
     } else {
       confirm(
-          context: context,
-          message: 'Are you sure you want to delete this branch?',
-          title: 'Delete Branch',
-          yesCallback: () {
-            Navigator.pop(context);
-            widget.conversation.branches.removeWhere(
-              (element) => element.id == branch.id,
-            );
-            save();
-          });
+        context: context,
+        message: 'Are you sure you want to delete this branch?',
+        title: 'Delete Branch',
+        yesCallback: () {
+          Navigator.pop(context);
+          widget.conversation.branches.removeWhere(
+            (final element) => element.id == branch.id,
+          );
+          save();
+        },
+      );
     }
   }
 
@@ -638,7 +643,7 @@ class EditConversationState extends State<EditConversation> {
   }
 
   /// Add a conversation response.
-  Future<void> addConversationResponse(BuildContext context) async {
+  Future<void> addConversationResponse(final BuildContext context) async {
     final response = ConversationResponse(
       id: newId(),
       text: 'Change me',
@@ -647,7 +652,7 @@ class EditConversationState extends State<EditConversation> {
     widget.projectContext.save();
     await pushWidget(
       context: context,
-      builder: (context) => EditConversationResponse(
+      builder: (final context) => EditConversationResponse(
         projectContext: widget.projectContext,
         conversation: widget.conversation,
         response: response,
@@ -657,13 +662,13 @@ class EditConversationState extends State<EditConversation> {
   }
 
   /// Add a new conversation branch.
-  Future<void> addConversationBranch(BuildContext context) async {
+  Future<void> addConversationBranch(final BuildContext context) async {
     final branch = ConversationBranch(id: newId(), responseIds: []);
     widget.conversation.branches.add(branch);
     widget.projectContext.save();
     await pushWidget(
       context: context,
-      builder: (context) => EditConversationBranch(
+      builder: (final context) => EditConversationBranch(
         projectContext: widget.projectContext,
         conversation: widget.conversation,
         branch: branch,
@@ -682,11 +687,11 @@ class EditConversationState extends State<EditConversation> {
 
   /// Delete the given [response].
   void deleteResponse({
-    required BuildContext context,
-    required ConversationResponse response,
+    required final BuildContext context,
+    required final ConversationResponse response,
   }) {
     final attached = widget.conversation.branches.any(
-      (element) => element.responseIds.contains(response.id),
+      (final element) => element.responseIds.contains(response.id),
     );
     if (attached) {
       showError(
@@ -696,16 +701,17 @@ class EditConversationState extends State<EditConversation> {
       );
     } else {
       confirm(
-          context: context,
-          message: 'Are you sure you want to delete this response?',
-          title: 'Delete Response',
-          yesCallback: () {
-            Navigator.pop(context);
-            widget.conversation.responses.removeWhere(
-              (element) => element.id == response.id,
-            );
-            save();
-          });
+        context: context,
+        message: 'Are you sure you want to delete this response?',
+        title: 'Delete Response',
+        yesCallback: () {
+          Navigator.pop(context);
+          widget.conversation.responses.removeWhere(
+            (final element) => element.id == response.id,
+          );
+          save();
+        },
+      );
     }
   }
 }

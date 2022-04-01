@@ -17,7 +17,7 @@ class ConversationListTile extends StatelessWidget {
     required this.onChanged,
     this.title = 'Conversation',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,7 +37,7 @@ class ConversationListTile extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = projectContext.world;
     final id = value;
     final conversation = id == null ? null : world.getConversation(id);
@@ -52,7 +52,9 @@ class ConversationListTile extends StatelessWidget {
     final location = conversation == null
         ? null
         : ConversationLocation.find(
-            world: world, conversationId: conversation.id);
+            world: world,
+            conversationId: conversation.id,
+          );
     return PlaySoundSemantics(
       soundChannel: projectContext.game.interfaceSounds,
       assetReference: assetReference,
@@ -65,9 +67,9 @@ class ConversationListTile extends StatelessWidget {
         ),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectConversation(
+          builder: (final context) => SelectConversation(
             projectContext: projectContext,
-            onDone: (value) => onChanged(value?.conversation),
+            onDone: (final value) => onChanged(value?.conversation),
             location: location,
           ),
         ),

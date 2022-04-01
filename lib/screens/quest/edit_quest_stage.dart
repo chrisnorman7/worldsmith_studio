@@ -14,7 +14,7 @@ class EditQuestStage extends StatefulWidget {
     required this.projectContext,
     required this.quest,
     required this.stage,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -35,7 +35,7 @@ class EditQuestStage extends StatefulWidget {
 class EditQuestStageState extends State<EditQuestStage> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return Cancel(
       child: Scaffold(
@@ -73,17 +73,18 @@ class EditQuestStageState extends State<EditQuestStage> {
                   }
                 }
                 confirm(
-                    context: context,
-                    message: 'Are you sure you want to delete this stage?',
-                    title: 'Delete Quest Stage',
-                    yesCallback: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      widget.quest.stages.removeWhere(
-                        (element) => element.id == widget.stage.id,
-                      );
-                      widget.projectContext.save();
-                    });
+                  context: context,
+                  message: 'Are you sure you want to delete this stage?',
+                  title: 'Delete Quest Stage',
+                  yesCallback: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    widget.quest.stages.removeWhere(
+                      (final element) => element.id == widget.stage.id,
+                    );
+                    widget.projectContext.save();
+                  },
+                );
               },
               child: const Icon(
                 Icons.delete,
@@ -97,7 +98,7 @@ class EditQuestStageState extends State<EditQuestStage> {
           children: [
             TextListTile(
               value: widget.stage.description ?? '',
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.stage.description = value.isEmpty ? null : value;
                 save();
               },
@@ -108,7 +109,7 @@ class EditQuestStageState extends State<EditQuestStage> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.stage.sound,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.stage.sound = value;
                 save();
               },

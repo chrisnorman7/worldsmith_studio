@@ -26,7 +26,7 @@ import 'project/project_context_widget.dart';
 class HomePage extends StatefulWidget {
   /// Create an instance.
   const HomePage({
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   @override
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final prefs = _preferences;
     final documentsDirectory = _documentsDirectory;
     final Widget child;
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       final preferences = AppPreferences.load(prefs);
       final recentProjectPaths = preferences.recentProjects
-          .where((element) => File(element).existsSync() == true)
+          .where((final element) => File(element).existsSync() == true)
           .toList();
       final children = [
         ListTile(
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
             )
           ],
           child: ListView.builder(
-            itemBuilder: (context, index) {
+            itemBuilder: (final context, final index) {
               if (index < children.length) {
                 return children[index];
               } else {
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         actions: [
           PopupMenuButton<VoidCallback>(
-            itemBuilder: (context) => [
+            itemBuilder: (final context) => [
               PopupMenuItem(
                 child: const Text('Check For Updates'),
                 value: () => setState(() {
@@ -177,9 +177,9 @@ class _HomePageState extends State<HomePage> {
               PopupMenuItem(
                 child: const Text('About'),
                 value: () async {
-                  showDialog<void>(
+                  await showDialog<void>(
                     context: context,
-                    builder: (context) => const AboutDialog(
+                    builder: (final context) => const AboutDialog(
                       applicationLegalese:
                           'This is free and unencumbered software released '
                           'into the public domain.',
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
             ],
             icon: const Icon(Icons.help_outline),
             initialValue: launchManual,
-            onSelected: (f) => f(),
+            onSelected: (final f) => f(),
             tooltip: 'Help',
           )
         ],
@@ -212,9 +212,9 @@ class _HomePageState extends State<HomePage> {
 
   /// Create a new project.
   Future<void> newProject({
-    required BuildContext context,
-    required AppPreferences preferences,
-    required String documentsDirectory,
+    required final BuildContext context,
+    required final AppPreferences preferences,
+    required final String documentsDirectory,
   }) async {
     final filename = await FilePicker.platform.saveFile(
       allowedExtensions: ['json'],
@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
     }
     final file = File(filename);
     if (file.existsSync()) {
-      confirm(
+      await confirm(
         context: context,
         message: 'Are you sure you want to overwrite $filename?',
         title: 'Overwrite File',
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
         },
       );
     } else {
-      createProjectContext(
+      await createProjectContext(
         context: context,
         preferences: preferences,
         file: file,
@@ -256,9 +256,9 @@ class _HomePageState extends State<HomePage> {
 
   /// Finish off the project creation process.
   Future<void> createProjectContext({
-    required BuildContext context,
-    required AppPreferences preferences,
-    required File file,
+    required final BuildContext context,
+    required final AppPreferences preferences,
+    required final File file,
     World? world,
   }) async {
     final worldWasNull = world == null;
@@ -302,14 +302,14 @@ class _HomePageState extends State<HomePage> {
       );
       _soundManager = soundManager;
       game.sounds.listen(
-        (event) {
+        (final event) {
           // ignore: avoid_print
           print('Sound: $event');
           soundManager!.handleEvent(event);
         },
         // ignore: avoid_print
         onDone: () => print('Sound stream finished.'),
-        onError: (Object e, StackTrace? s) {
+        onError: (final dynamic e, final dynamic s) {
           // ignore: avoid_print
           print(e);
           if (s != null) {
@@ -333,7 +333,8 @@ class _HomePageState extends State<HomePage> {
       projectContext.save();
     }
     final prefs = await SharedPreferences.getInstance();
-    preferences.recentProjects.removeWhere((element) => element == filename);
+    preferences.recentProjects
+        .removeWhere((final element) => element == filename);
     if (preferences.recentProjects.isEmpty) {
       preferences.recentProjects.add(filename);
     } else {
@@ -342,7 +343,7 @@ class _HomePageState extends State<HomePage> {
     preferences.save(prefs);
     await pushWidget(
       context: context,
-      builder: (context) => ProjectContextWidget(
+      builder: (final context) => ProjectContextWidget(
         projectContext: projectContext,
       ),
     );
@@ -353,11 +354,12 @@ class _HomePageState extends State<HomePage> {
   ///
   /// If [filename] is `null`, then use the file picker dialogue.
   Future<void> openProject({
-    required BuildContext context,
-    required AppPreferences preferences,
-    String? filename,
+    required final BuildContext context,
+    required final AppPreferences preferences,
+    final String? filename,
   }) async {
-    if (filename == null) {
+    var projectPath = filename;
+    if (projectPath == null) {
       final result = await FilePicker.platform.pickFiles(
         allowedExtensions: ['.json'],
         dialogTitle: 'Open Project',
@@ -365,8 +367,8 @@ class _HomePageState extends State<HomePage> {
       if (result == null) {
         return;
       }
-      filename = result.files.single.path;
-      if (filename == null) {
+      projectPath = result.files.single.path;
+      if (projectPath == null) {
         return showError(
           context: context,
           message:
@@ -374,14 +376,14 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }
-    final file = File(filename);
+    final file = File(projectPath);
     if (file.existsSync() == false) {
       return showError(
         context: context,
         message: 'The file $filename no longer exists.',
       );
     }
-    final world = World.fromFilename(filename);
+    final world = World.fromFilename(projectPath);
     return createProjectContext(
       context: context,
       preferences: preferences,
@@ -409,14 +411,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Check for updates.
-  Future<void> checkForUpdates(BuildContext context) async {
+  Future<void> checkForUpdates(final BuildContext context) async {
     try {
       final tag = await getLatestTag();
       final name = tag.name;
       if (name != appVersion) {
-        showDialog<void>(
+        await showDialog<void>(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (final context) => AlertDialog(
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -438,14 +440,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         );
-      } else if (_checkedForUpdate == true) {
+      } else if (_checkedForUpdate ?? true) {
         showError(
           context: context,
           message: 'You are up to date.',
           title: 'No Updates Available',
         );
       }
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       showError(
         context: context,
         message: '$e\n$s',

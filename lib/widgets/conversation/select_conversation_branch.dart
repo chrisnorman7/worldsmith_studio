@@ -16,7 +16,7 @@ class SelectConversationBranch extends StatefulWidget {
     required this.projectContext,
     required this.conversation,
     required this.onDone,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -38,7 +38,7 @@ class SelectConversationBranch extends StatefulWidget {
 class SelectConversationBranchState extends State<SelectConversationBranch> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return WithKeyboardShortcuts(
       keyboardShortcuts: const [
@@ -53,7 +53,7 @@ class SelectConversationBranchState extends State<SelectConversationBranch> {
         child: SelectItem<ConversationBranch>(
           onDone: widget.onDone,
           values: widget.conversation.branches,
-          getItemWidget: (item) {
+          getItemWidget: (final item) {
             final sound = item.sound;
             return PlaySoundSemantics(
               soundChannel: widget.projectContext.game.interfaceSounds,

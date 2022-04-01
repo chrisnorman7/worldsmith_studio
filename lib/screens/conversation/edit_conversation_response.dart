@@ -15,7 +15,7 @@ class EditConversationResponse extends StatefulWidget {
     required this.projectContext,
     required this.conversation,
     required this.response,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -37,7 +37,7 @@ class EditConversationResponse extends StatefulWidget {
 class EditConversationResponseState extends State<EditConversationResponse> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return Cancel(
       child: Scaffold(
@@ -48,7 +48,7 @@ class EditConversationResponseState extends State<EditConversationResponse> {
           children: [
             TextListTile(
               value: widget.response.text ?? '',
-              onChanged: (value) {
+              onChanged: (final value) {
                 if (value.isEmpty) {
                   widget.response.text = null;
                 } else {
@@ -62,7 +62,7 @@ class EditConversationResponseState extends State<EditConversationResponse> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.response.sound,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.response.sound = value;
                 save();
               },
@@ -75,18 +75,19 @@ class EditConversationResponseState extends State<EditConversationResponse> {
               conversation: widget.conversation,
               response: widget.response,
               nextBranch: widget.response.nextBranch,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.response.nextBranch = value;
                 save();
               },
             ),
             CallCommandListTile(
-                projectContext: widget.projectContext,
-                callCommand: widget.response.command,
-                onChanged: (value) {
-                  widget.response.command = value;
-                  save();
-                })
+              projectContext: widget.projectContext,
+              callCommand: widget.response.command,
+              onChanged: (final value) {
+                widget.response.command = value;
+                save();
+              },
+            )
           ],
         ),
       ),

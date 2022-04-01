@@ -17,7 +17,7 @@ class SelectWorldCommand extends StatefulWidget {
     required this.onDone,
     this.currentId,
     this.nullable = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,7 +41,7 @@ class SelectWorldCommand extends StatefulWidget {
 
 class _SelectWorldCommandState extends State<SelectWorldCommand> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final listTiles = <ListTile>[];
     if (widget.nullable) {
       listTiles.add(
@@ -91,7 +91,8 @@ class _SelectWorldCommandState extends State<SelectWorldCommand> {
             body: listTiles.isEmpty
                 ? const CenterText(text: 'There are no commands to show.')
                 : ListView.builder(
-                    itemBuilder: (context, index) => listTiles[index],
+                    itemBuilder: (final context, final index) =>
+                        listTiles[index],
                     itemCount: listTiles.length,
                   ),
           ),

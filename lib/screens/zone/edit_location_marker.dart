@@ -15,7 +15,7 @@ class EditLocationMarker extends StatefulWidget {
     required this.projectContext,
     required this.zone,
     required this.locationMarker,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -36,7 +36,7 @@ class EditLocationMarker extends StatefulWidget {
 class EditLocationMarkerState extends State<EditLocationMarker> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) => Cancel(
+  Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
             actions: [
@@ -57,7 +57,7 @@ class EditLocationMarkerState extends State<EditLocationMarker> {
                 customMessage: widget.locationMarker.message,
                 title: 'Message',
                 autofocus: true,
-                validator: (value) => validateNonEmptyValue(value: value),
+                validator: (final value) => validateNonEmptyValue(value: value),
               ),
               CoordinatesListTile(
                 projectContext: widget.projectContext,
@@ -72,18 +72,19 @@ class EditLocationMarkerState extends State<EditLocationMarker> {
       );
 
   /// Delete the location marker.
-  void deleteLocationMarker(BuildContext context) {
+  void deleteLocationMarker(final BuildContext context) {
     confirm(
-        context: context,
-        message: 'Are you sure you want to delete this location marker?',
-        title: 'Delete Location Marker',
-        yesCallback: () {
-          Navigator.pop(context);
-          Navigator.pop(context);
-          widget.zone.locationMarkers.removeWhere(
-            (element) => element.id == widget.locationMarker.id,
-          );
-        });
+      context: context,
+      message: 'Are you sure you want to delete this location marker?',
+      title: 'Delete Location Marker',
+      yesCallback: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        widget.zone.locationMarkers.removeWhere(
+          (final element) => element.id == widget.locationMarker.id,
+        );
+      },
+    );
   }
 
   /// Save the project context.

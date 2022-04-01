@@ -30,7 +30,7 @@ class EditAssetStore extends StatefulWidget {
     required this.projectContext,
     required this.assetStore,
     required this.canDelete,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -51,12 +51,12 @@ class EditAssetStore extends StatefulWidget {
 class EditAssetStoreState extends State<EditAssetStore> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final addAssetAction = CallbackAction<OpenProjectIntent>(
-      onInvoke: (intent) async {
+      onInvoke: (final intent) async {
         await pushWidget(
           context: context,
-          builder: (context) => AddAsset(
+          builder: (final context) => AddAsset(
             projectContext: widget.projectContext,
             assetStore: widget.assetStore,
           ),
@@ -66,10 +66,10 @@ class EditAssetStoreState extends State<EditAssetStore> {
       },
     );
     final importDirectoryAction = CallbackAction<ImportDirectoryIntent>(
-      onInvoke: (intent) async {
+      onInvoke: (final intent) async {
         await pushWidget(
           context: context,
-          builder: (context) => ImportDirectory(
+          builder: (final context) => ImportDirectory(
             projectContext: widget.projectContext,
             assetStore: widget.assetStore,
           ),
@@ -80,7 +80,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
     );
     final assets = [for (final reference in widget.assetStore.assets) reference]
       ..sort(
-        (a, b) => a.comment.toString().toLowerCase().compareTo(
+        (final a, final b) => a.comment.toString().toLowerCase().compareTo(
               b.comment.toString().toLowerCase(),
             ),
       );
@@ -114,7 +114,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
           ];
           assetSize = filesize(
             fileSizes.reduce(
-              (value, element) => value + element,
+              (final value, final element) => value + element,
             ),
           );
           break;
@@ -130,7 +130,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
             child: Actions(
               actions: {
                 DeleteIntent: CallbackAction<DeleteIntent>(
-                  onInvoke: (intent) {
+                  onInvoke: (final intent) {
                     deleteAsset(
                       assetReferenceReference: assetReference,
                       context: context,
@@ -139,7 +139,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
                   },
                 ),
                 CopyIntent: CallbackAction<CopyIntent>(
-                  onInvoke: (intent) {
+                  onInvoke: (final intent) {
                     final asset = assetReference.reference;
                     final stringBuffer = StringBuffer()
                       ..write('AssetReference(')
@@ -158,7 +158,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
                 assetReference: relativeAssetReference,
                 looping: true,
                 child: Builder(
-                  builder: (context) => ListTile(
+                  builder: (final context) => ListTile(
                     autofocus: i == 0,
                     title: Text(assetString(assetReference)),
                     subtitle: Text(assetSize),
@@ -166,7 +166,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
                       PlaySoundSemantics.of(context)!.stop();
                       await pushWidget(
                         context: context,
-                        builder: (context) => EditAssetReference(
+                        builder: (final context) => EditAssetReference(
                           projectContext: widget.projectContext,
                           assetStore: widget.assetStore,
                           assetReferenceReference: assetReference,
@@ -217,7 +217,7 @@ class EditAssetStoreState extends State<EditAssetStore> {
               ImportDirectoryIntent: importDirectoryAction
             },
             child: Builder(
-              builder: (context) => Scaffold(
+              builder: (final context) => Scaffold(
                 appBar: AppBar(
                   actions: [
                     TextButton(
@@ -232,7 +232,8 @@ class EditAssetStoreState extends State<EditAssetStore> {
                 ),
                 body: assets.isEmpty
                     ? const CenterText(
-                        text: 'There are no assets in this store.')
+                        text: 'There are no assets in this store.',
+                      )
                     : SearchableListView(children: children),
                 floatingActionButton: FloatingActionButton(
                   autofocus: assets.isEmpty,
@@ -253,8 +254,8 @@ class EditAssetStoreState extends State<EditAssetStore> {
 
   /// Delete the given [assetReferenceReference].
   void deleteAsset({
-    required BuildContext context,
-    required AssetReferenceReference assetReferenceReference,
+    required final BuildContext context,
+    required final AssetReferenceReference assetReferenceReference,
   }) {
     final result = widget.canDelete(assetReferenceReference);
     if (result == null) {

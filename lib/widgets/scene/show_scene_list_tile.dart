@@ -17,7 +17,7 @@ class ShowSceneListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Show Scene',
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -44,7 +44,7 @@ class ShowSceneListTile extends StatefulWidget {
 class ShowSceneListTileState extends State<ShowSceneListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final showScene = widget.showScene;
     final scene = showScene == null ? null : world.getScene(showScene.sceneId);
@@ -61,7 +61,7 @@ class ShowSceneListTileState extends State<ShowSceneListTile> {
           if (scene != null) {
             await pushWidget(
               context: context,
-              builder: (context) => EditScene(
+              builder: (final context) => EditScene(
                 projectContext: widget.projectContext,
                 scene: scene,
               ),
@@ -88,10 +88,11 @@ class ShowSceneListTileState extends State<ShowSceneListTile> {
           widget.onChanged(value);
           await pushWidget(
             context: context,
-            builder: (context) => EditShowScene(
-                projectContext: widget.projectContext,
-                showScene: value,
-                onChanged: widget.onChanged),
+            builder: (final context) => EditShowScene(
+              projectContext: widget.projectContext,
+              showScene: value,
+              onChanged: widget.onChanged,
+            ),
           );
         },
       ),

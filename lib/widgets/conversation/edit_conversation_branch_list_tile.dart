@@ -15,7 +15,7 @@ class EditConversationBranchListTile extends StatefulWidget {
     required this.conversation,
     required this.branch,
     this.autofocus = false,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -41,13 +41,14 @@ class EditConversationBranchListTileState
     extends State<EditConversationBranchListTile> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
-    final bool attached = widget.conversation.initialBranchId ==
-            widget.branch.id ||
+    final attached = widget.conversation.initialBranchId == widget.branch.id ||
         widget.conversation.responses
             .where(
-                (element) => element.nextBranch?.branchId == widget.branch.id)
+              (final element) =>
+                  element.nextBranch?.branchId == widget.branch.id,
+            )
             .isNotEmpty;
     final sound = widget.branch.sound;
     final asset = sound == null
@@ -62,7 +63,7 @@ class EditConversationBranchListTileState
       assetReference: asset,
       gain: gain,
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           autofocus: widget.autofocus,
           title: Text(
             widget.branch.text ?? 'Conversation branch without any text',
@@ -72,7 +73,7 @@ class EditConversationBranchListTileState
             PlaySoundSemantics.of(context)?.stop();
             await pushWidget(
               context: context,
-              builder: (context) => EditConversationBranch(
+              builder: (final context) => EditConversationBranch(
                 projectContext: widget.projectContext,
                 branch: widget.branch,
                 conversation: widget.conversation,

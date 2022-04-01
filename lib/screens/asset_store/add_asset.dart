@@ -19,7 +19,7 @@ class AddAsset extends StatefulWidget {
   const AddAsset({
     required this.projectContext,
     required this.assetStore,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -50,12 +50,12 @@ class AddAssetState extends State<AddAsset> {
 
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final importFileAction = CallbackAction<ImportFileIntent>(
-      onInvoke: (intent) => importFile(context),
+      onInvoke: (final intent) => importFile(context),
     );
     final importDirectoryAction = CallbackAction<ImportDirectoryIntent>(
-      onInvoke: (intent) => importDirectory(context),
+      onInvoke: (final intent) => importDirectory(context),
     );
     return WithKeyboardShortcuts(
       keyboardShortcuts: const [
@@ -112,11 +112,11 @@ class AddAssetState extends State<AddAsset> {
                         labelText: 'Path',
                         hintText: 'Enter the path to a file or folder',
                       ),
-                      onChanged: (value) => _commentController.text =
+                      onChanged: (final value) => _commentController.text =
                           path.basenameWithoutExtension(
                         value,
                       ),
-                      validator: (value) => validatePath(value: value),
+                      validator: (final value) => validatePath(value: value),
                     ),
                     TextFormField(
                       controller: _commentController,
@@ -125,7 +125,8 @@ class AddAssetState extends State<AddAsset> {
                         hintText:
                             'Enter a human-readable description for this asset',
                       ),
-                      validator: (value) => validateNonEmptyValue(value: value),
+                      validator: (final value) =>
+                          validateNonEmptyValue(value: value),
                     )
                   ],
                 ),
@@ -150,8 +151,8 @@ class AddAssetState extends State<AddAsset> {
   }
 
   /// Submit the form.
-  void submitForm(BuildContext context) {
-    if (_formKey.currentState?.validate() == true) {
+  void submitForm(final BuildContext context) {
+    if (_formKey.currentState?.validate() ?? true) {
       final id = newId();
       final filename = _pathController.text;
       final comment = _commentController.text;
@@ -180,7 +181,7 @@ class AddAssetState extends State<AddAsset> {
   }
 
   /// Import a file.
-  Future<void> importFile(BuildContext context) async {
+  Future<void> importFile(final BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Choose File',
     );
@@ -202,7 +203,7 @@ class AddAssetState extends State<AddAsset> {
   }
 
   /// Import a directory.
-  Future<void> importDirectory(BuildContext context) async {
+  Future<void> importDirectory(final BuildContext context) async {
     final directoryName = await FilePicker.platform.getDirectoryPath(
       dialogTitle: 'Select Directory',
     );

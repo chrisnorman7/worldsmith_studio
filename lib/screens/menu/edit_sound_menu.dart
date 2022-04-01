@@ -14,7 +14,7 @@ class EditSoundMenu extends StatefulWidget {
   /// Create an instance.
   const EditSoundMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -29,7 +29,7 @@ class EditSoundMenu extends StatefulWidget {
 class EditSoundMenuState extends State<EditSoundMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final options = world.soundMenuOptions;
     return Cancel(
@@ -42,18 +42,18 @@ class EditSoundMenuState extends State<EditSoundMenu> {
           children: [
             TextListTile(
               value: options.title,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.title = value;
                 save();
               },
               header: 'Title',
               autofocus: true,
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             SoundListTile(
               projectContext: widget.projectContext,
               value: options.music,
-              onDone: (value) {
+              onDone: (final value) {
                 options.music = value;
                 save();
               },
@@ -64,14 +64,14 @@ class EditSoundMenuState extends State<EditSoundMenu> {
             ),
             FadeTimeListTile(
               value: options.fadeTime,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.fadeTime = value;
                 save();
               },
             ),
             NumberListTile(
               value: options.gainAdjust,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.gainAdjust = value;
                 save();
               },
@@ -82,70 +82,70 @@ class EditSoundMenuState extends State<EditSoundMenu> {
             widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.interfaceSoundsVolumeTitle,
-                onChanged: (value) {
+                onChanged: (final value) {
                   options.interfaceSoundsVolumeTitle = value;
                   save();
                 },
                 header: 'Interface Sounds Volume Title',
                 labelText: 'Title',
-                validator: (value) => validateNonEmptyValue(value: value),
+                validator: (final value) => validateNonEmptyValue(value: value),
               ),
             ),
             widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.musicVolumeTitle,
-                onChanged: (value) {
+                onChanged: (final value) {
                   options.musicVolumeTitle = value;
                   save();
                 },
                 header: 'Music Sounds Volume Title',
                 labelText: 'Title',
-                validator: (value) => validateNonEmptyValue(value: value),
+                validator: (final value) => validateNonEmptyValue(value: value),
               ),
             ),
             widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.ambianceSoundsVolumeTitle,
-                onChanged: (value) {
+                onChanged: (final value) {
                   options.ambianceSoundsVolumeTitle = value;
                   save();
                 },
                 header: 'Ambiance Sounds Volume Title',
                 labelText: 'Title',
-                validator: (value) => validateNonEmptyValue(value: value),
+                validator: (final value) => validateNonEmptyValue(value: value),
               ),
             ),
             widget.projectContext.getMenuMoveSemantics(
               child: TextListTile(
                 value: options.outputTypeTitle,
-                onChanged: (value) {
+                onChanged: (final value) {
                   options.outputTypeTitle = value;
                   save();
                 },
                 header: 'Output Type Title',
                 labelText: 'Title',
-                validator: (value) => validateNonEmptyValue(value: value),
+                validator: (final value) => validateNonEmptyValue(value: value),
               ),
             ),
             TextListTile(
               value: options.headphonesPresetTitle,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.headphonesPresetTitle = value;
                 save();
               },
               header: 'Headphones Preset Name',
               labelText: 'Name',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
             TextListTile(
               value: options.speakersPresetTitle,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.speakersPresetTitle = value;
                 save();
               },
               header: 'Speakers Preset Name',
               labelText: 'Name',
-              validator: (value) => validateNonEmptyValue(value: value),
+              validator: (final value) => validateNonEmptyValue(value: value),
             ),
           ],
         ),

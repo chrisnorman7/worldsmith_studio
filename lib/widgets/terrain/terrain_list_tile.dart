@@ -16,7 +16,7 @@ class TerrainListTile extends StatefulWidget {
     required this.terrains,
     this.currentTerrainId,
     this.title = 'Terrain',
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -40,16 +40,16 @@ class TerrainListTile extends StatefulWidget {
 
 class _TerrainListTileState extends State<TerrainListTile> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final currentTerrain = widget.terrains.firstWhere(
-      (element) => element.id == widget.currentTerrainId,
+      (final element) => element.id == widget.currentTerrainId,
     );
     return CallbackShortcuts(
       bindings: {
         EditIntent.hotkey: () async {
           await pushWidget(
             context: context,
-            builder: (context) => EditTerrain(
+            builder: (final context) => EditTerrain(
               projectContext: widget.projectContext,
               terrain: currentTerrain,
             ),
@@ -62,7 +62,7 @@ class _TerrainListTileState extends State<TerrainListTile> {
         subtitle: Text(currentTerrain.name),
         onTap: () => pushWidget(
           context: context,
-          builder: (context) => SelectTerrain(
+          builder: (final context) => SelectTerrain(
             onDone: widget.onDone,
             terrains: widget.terrains,
             currentTerrainId: widget.currentTerrainId,

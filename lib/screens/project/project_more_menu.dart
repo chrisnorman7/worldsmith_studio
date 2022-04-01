@@ -12,7 +12,7 @@ class ProjectMoreMenu extends StatefulWidget {
   /// Create an instance.
   const ProjectMoreMenu({
     required this.projectContext,
-    Key? key,
+    final Key? key,
   }) : super(key: key);
 
   /// The project context to use.
@@ -27,7 +27,7 @@ class ProjectMoreMenu extends StatefulWidget {
 class ProjectMoreMenuState extends State<ProjectMoreMenu> {
   /// Build a widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     return ListView(
       children: [
@@ -38,7 +38,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) =>
+              builder: (final context) =>
                   ProjectScenes(projectContext: widget.projectContext),
             );
             setState(() {});
@@ -50,7 +50,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) =>
+              builder: (final context) =>
                   EquipmentPositionsMenu(projectContext: widget.projectContext),
             );
             setState(() {});
@@ -62,7 +62,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) => ProjectReverbs(
+              builder: (final context) => ProjectReverbs(
                 projectContext: widget.projectContext,
               ),
             );
@@ -75,7 +75,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
           onTap: () async {
             await pushWidget(
               context: context,
-              builder: (context) =>
+              builder: (final context) =>
                   DirectionsList(projectContext: widget.projectContext),
             );
             setState(() {});
