@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.10
+
+- Fixed the version number.
+
 ## 0.0.9
 
 - Updated many packages.
