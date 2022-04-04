@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../command_triggers_list_view.dart';
 import '../directions/directions_list.dart';
 import '../equipment/equipment_positions_menu.dart';
 import 'project_reverbs.dart';
@@ -81,6 +82,13 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
             setState(() {});
           },
         ),
+        ListTile(
+          title: const Text('Default Command Triggers'),
+          onTap: () => pushWidget(
+            context: context,
+            builder: (final context) => const CommandTriggersListView(),
+          ),
+        )
       ],
     );
   }
