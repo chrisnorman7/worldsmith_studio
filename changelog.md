@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.9
+
+- Updated many packages.
+- Added a page for viewing the default trigger map.
+
 ## 0.0.8
 
 - Seemingly fixed the "Run Game" option, although it should still be treated as suspect.
