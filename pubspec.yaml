@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.2
-  dart_sdl: ^0.9.3
+  dart_sdl: ^0.9.7
   dart_synthizer: ^0.8.0
   dio: ^4.0.4
   file_picker: ^4.5.0
