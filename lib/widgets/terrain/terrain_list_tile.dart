@@ -6,6 +6,7 @@ import '../../project_context.dart';
 import '../../screens/terrain/edit_terrain.dart';
 import '../../screens/terrain/select_terrain.dart';
 import '../../util.dart';
+import '../push_widget_list_tile.dart';
 
 /// A widget for selecting a new terrain.
 class TerrainListTile extends StatefulWidget {
@@ -57,16 +58,13 @@ class _TerrainListTileState extends State<TerrainListTile> {
           setState(() {});
         }
       },
-      child: ListTile(
-        title: Text(widget.title),
-        subtitle: Text(currentTerrain.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectTerrain(
-            onDone: widget.onDone,
-            terrains: widget.terrains,
-            currentTerrainId: widget.currentTerrainId,
-          ),
+      child: PushWidgetListTile(
+        title: widget.title,
+        subtitle: currentTerrain.name,
+        builder: (final context) => SelectTerrain(
+          onDone: widget.onDone,
+          terrains: widget.terrains,
+          currentTerrainId: widget.currentTerrainId,
         ),
       ),
     );

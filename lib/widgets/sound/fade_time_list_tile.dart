@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../intents.dart';
-import '../../util.dart';
 import '../get_number.dart';
+import '../push_widget_list_tile.dart';
 
 const _increaseIntent = IncreaseIntent();
 const _decreaseIntent = DecreaseIntent();
@@ -53,34 +53,31 @@ class FadeTimeListTile extends StatelessWidget {
           IncreaseIntent: increaseAction,
           DecreaseIntent: decreaseAction
         },
-        child: ListTile(
-          title: Text(title),
-          subtitle: Text('${value ?? "Not set"}'),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (final context) => GetNumber(
-              value: value ?? 0.0,
-              onDone: (final value) {
-                Navigator.pop(context);
-                if (value == 0.0) {
-                  onChanged(null);
-                } else {
-                  onChanged(value);
-                }
-              },
-              labelText: 'Fade Time',
-              min: 0.0,
-              title: 'Fade Time',
-              actions: [
-                ElevatedButton(
-                  onPressed: () => onChanged(null),
-                  child: const Icon(
-                    Icons.clear_outlined,
-                    semanticLabel: 'Clear Fade Time',
-                  ),
-                )
-              ],
-            ),
+        child: PushWidgetListTile(
+          title: title,
+          subtitle: '${value ?? "Not set"}',
+          builder: (final context) => GetNumber(
+            value: value ?? 0.0,
+            onDone: (final value) {
+              Navigator.pop(context);
+              if (value == 0.0) {
+                onChanged(null);
+              } else {
+                onChanged(value);
+              }
+            },
+            labelText: 'Fade Time',
+            min: 0.0,
+            title: 'Fade Time',
+            actions: [
+              ElevatedButton(
+                onPressed: () => onChanged(null),
+                child: const Icon(
+                  Icons.clear_outlined,
+                  semanticLabel: 'Clear Fade Time',
+                ),
+              )
+            ],
           ),
         ),
       ),

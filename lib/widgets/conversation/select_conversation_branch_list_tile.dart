@@ -3,8 +3,8 @@ import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
 import '../play_sound_semantics.dart';
+import '../push_widget_list_tile.dart';
 import 'select_conversation_branch.dart';
 
 /// A widget for showing and changing the given [branch].
@@ -53,17 +53,14 @@ class SelectConversationBranchListTile extends StatelessWidget {
       soundChannel: projectContext.game.interfaceSounds,
       assetReference: asset,
       gain: sound?.gain ?? world.soundOptions.defaultGain,
-      child: ListTile(
+      child: PushWidgetListTile(
         autofocus: autofocus,
-        title: Text(title),
-        subtitle: Text(branch.text ?? 'Branch with no text'),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectConversationBranch(
-            projectContext: projectContext,
-            conversation: conversation,
-            onDone: onChanged,
-          ),
+        title: title,
+        subtitle: branch.text ?? 'Branch with no text',
+        builder: (final context) => SelectConversationBranch(
+          projectContext: projectContext,
+          conversation: conversation,
+          onDone: onChanged,
         ),
       ),
     );

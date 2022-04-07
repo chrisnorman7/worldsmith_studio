@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
+import '../push_widget_list_tile.dart';
 import '../select_item.dart';
 
 /// A list tile that shows a [scene].
@@ -44,22 +44,19 @@ class SceneListTileState extends State<SceneListTile> {
   Widget build(final BuildContext context) {
     final scene = widget.scene;
     final world = widget.projectContext.world;
-    return ListTile(
+    return PushWidgetListTile(
       autofocus: widget.autofocus,
-      title: Text(widget.title),
-      subtitle: Text(scene.name),
-      onTap: () => pushWidget(
-        context: context,
-        builder: (final context) => SelectItem<Scene>(
-          onDone: (final value) {
-            Navigator.pop(context);
-            widget.onChanged(value);
-          },
-          values: world.scenes,
-          getItemWidget: (final item) => Text(item.name),
-          title: 'Select Scene',
-          value: widget.scene,
-        ),
+      title: widget.title,
+      subtitle: scene.name,
+      builder: (final context) => SelectItem<Scene>(
+        onDone: (final value) {
+          Navigator.pop(context);
+          widget.onChanged(value);
+        },
+        values: world.scenes,
+        getItemWidget: (final item) => Text(item.name),
+        title: 'Select Scene',
+        value: widget.scene,
       ),
     );
   }

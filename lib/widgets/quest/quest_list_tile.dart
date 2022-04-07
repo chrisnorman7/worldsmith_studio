@@ -9,6 +9,7 @@ import '../../screens/quest/edit_quest.dart';
 import '../../screens/quest/edit_quest_stage.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
+import '../push_widget_list_tile.dart';
 import '../select_item.dart';
 
 /// A widget for showing a reference to a [Quest] [stage].
@@ -96,69 +97,66 @@ class QuestListTileState extends State<QuestListTile> {
           }
         }
       },
-      child: ListTile(
+      child: PushWidgetListTile(
         autofocus: widget.autofocus,
-        title: Text(title ?? questDescription),
-        subtitle: title == null ? null : Text(questDescription),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectItem<Quest?>(
-            onDone: (final newQuest) {
-              if (newQuest == null) {
-                Navigator.pop(context);
-                widget.onDone(null);
-              } else {
-                pushWidget(
-                  context: context,
-                  builder: (final context) => SelectItem<QuestStage?>(
-                    onDone: (final newStage) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      widget.onDone(
-                        QuestLocation(
-                          quest: newQuest,
-                          stage: newStage,
-                        ),
+        title: title ?? questDescription,
+        subtitle: title == null ? null : questDescription,
+        builder: (final context) => SelectItem<Quest?>(
+          onDone: (final newQuest) {
+            if (newQuest == null) {
+              Navigator.pop(context);
+              widget.onDone(null);
+            } else {
+              pushWidget(
+                context: context,
+                builder: (final context) => SelectItem<QuestStage?>(
+                  onDone: (final newStage) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    widget.onDone(
+                      QuestLocation(
+                        quest: newQuest,
+                        stage: newStage,
+                      ),
+                    );
+                  },
+                  values: [null, ...newQuest.stages],
+                  getItemWidget: (final item) {
+                    if (item == null) {
+                      return const Text('Not Started');
+                    } else {
+                      final sound = item.sound;
+                      final assetReference = sound == null
+                          ? null
+                          : getAssetReferenceReference(
+                              assets: world.questAssets,
+                              id: sound.id,
+                            ).reference;
+                      return PlaySoundSemantics(
+                        soundChannel:
+                            widget.projectContext.game.interfaceSounds,
+                        assetReference: assetReference,
+                        gain: sound?.gain ?? world.soundOptions.defaultGain,
+                        child: Text('${item.description}'),
                       );
-                    },
-                    values: [null, ...newQuest.stages],
-                    getItemWidget: (final item) {
-                      if (item == null) {
-                        return const Text('Not Started');
-                      } else {
-                        final sound = item.sound;
-                        final assetReference = sound == null
-                            ? null
-                            : getAssetReferenceReference(
-                                assets: world.questAssets,
-                                id: sound.id,
-                              ).reference;
-                        return PlaySoundSemantics(
-                          soundChannel:
-                              widget.projectContext.game.interfaceSounds,
-                          assetReference: assetReference,
-                          gain: sound?.gain ?? world.soundOptions.defaultGain,
-                          child: Text('${item.description}'),
-                        );
-                      }
-                    },
-                    title: 'Select Stage',
-                    value: stage,
-                  ),
-                );
-              }
-            },
-            values: [null, ...world.quests],
-            getItemWidget: (final item) {
-              if (item == null) {
-                return const Text('Clear');
-              } else {
-                return Text(item.name);
-              }
-            },
-            title: 'Select Quest',
-            value: quest,
-          ),
+                    }
+                  },
+                  title: 'Select Stage',
+                  value: stage,
+                ),
+              );
+            }
+          },
+          values: [null, ...world.quests],
+          getItemWidget: (final item) {
+            if (item == null) {
+              return const Text('Clear');
+            } else {
+              return Text(item.name);
+            }
+          },
+          title: 'Select Quest',
+          value: quest,
         ),
       ),
     );

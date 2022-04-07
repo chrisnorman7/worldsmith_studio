@@ -4,7 +4,7 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 import '../../constants.dart';
 import '../../project_context.dart';
 import '../../screens/asset_store/edit_asset_store.dart';
-import '../../util.dart';
+import '../push_widget_list_tile.dart';
 import '../searchable_list_view.dart';
 
 /// A list tile that shows an asset store.
@@ -18,21 +18,16 @@ class AssetStoreListTile extends SearchableListTile {
     this.autofocus = false,
   }) : super(
           child: Builder(
-            builder: (final context) => ListTile(
+            builder: (final context) => PushWidgetListTile(
               autofocus: autofocus,
-              title: Text('${assetStore.comment}'),
-              subtitle: Text('Assets: ${assetStore.assets.length}'),
-              onTap: () async {
-                await pushWidget(
-                  context: context,
-                  builder: (final context) => EditAssetStore(
-                    projectContext: projectContext,
-                    assetStore: assetStore,
-                    canDelete: canDelete,
-                  ),
-                );
-                afterOnTap();
-              },
+              title: '${assetStore.comment}',
+              subtitle: 'Assets: ${assetStore.assets.length}',
+              builder: (final context) => EditAssetStore(
+                projectContext: projectContext,
+                assetStore: assetStore,
+                canDelete: canDelete,
+              ),
+              onSetState: afterOnTap,
             ),
           ),
           searchString: assetStore.comment!,

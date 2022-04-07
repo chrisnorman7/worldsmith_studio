@@ -7,6 +7,7 @@ import '../../screens/world_command/select_command_category.dart';
 import '../../screens/world_command/select_world_command.dart';
 import '../../util.dart';
 import '../../world_command_location.dart';
+import '../push_widget_list_tile.dart';
 
 /// A widget for viewing and editing its [callCommand].
 class CallCommandListTile extends StatefulWidget {
@@ -60,36 +61,30 @@ class CallCommandListTileState extends State<CallCommandListTile> {
       subtitle = '${location.description} (Call after: $callAfter millisecond'
           '${callAfter == 1 ? "" : "s"})';
     }
-    return ListTile(
-      title: Text(widget.title),
-      subtitle: Text(subtitle),
-      onTap: () async {
-        await pushWidget(
-          context: context,
-          builder: (final context) => callCommand == null
-              ? SelectCommandCategory(
+    return PushWidgetListTile(
+      title: widget.title,
+      subtitle: subtitle,
+      builder: (final context) => callCommand == null
+          ? SelectCommandCategory(
+              projectContext: widget.projectContext,
+              onDone: (final category) => pushWidget(
+                context: context,
+                builder: (final context) => SelectWorldCommand(
                   projectContext: widget.projectContext,
-                  onDone: (final category) => pushWidget(
-                    context: context,
-                    builder: (final context) => SelectWorldCommand(
-                      projectContext: widget.projectContext,
-                      category: category!,
-                      onDone: (final command) {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        widget.onChanged(CallCommand(commandId: command!.id));
-                      },
-                    ),
-                  ),
-                )
-              : EditCallCommand(
-                  projectContext: widget.projectContext,
-                  callCommand: callCommand,
-                  onChanged: widget.onChanged,
+                  category: category!,
+                  onDone: (final command) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    widget.onChanged(CallCommand(commandId: command!.id));
+                  },
                 ),
-        );
-        setState(() {});
-      },
+              ),
+            )
+          : EditCallCommand(
+              projectContext: widget.projectContext,
+              callCommand: callCommand,
+              onChanged: widget.onChanged,
+            ),
       autofocus: widget.autofocus,
     );
   }

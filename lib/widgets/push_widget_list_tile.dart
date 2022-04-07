@@ -8,6 +8,7 @@ class PushWidgetListTile extends StatefulWidget {
   const PushWidgetListTile({
     required this.title,
     required this.builder,
+    this.onSetState,
     this.subtitle,
     this.autofocus = false,
     final Key? key,
@@ -18,6 +19,9 @@ class PushWidgetListTile extends StatefulWidget {
 
   /// The widget builder to use.
   final WidgetBuilder builder;
+
+  /// The function to call when setting the state for this widget.
+  final VoidCallback? onSetState;
 
   /// The subtitle for this widget.
   ///
@@ -44,7 +48,12 @@ class PushWidgetListTileState extends State<PushWidgetListTile> {
       subtitle: subtitle == null ? null : Text(subtitle),
       onTap: () async {
         await pushWidget(context: context, builder: widget.builder);
-        setState(() {});
+        setState(() {
+          final f = widget.onSetState;
+          if (f != null) {
+            f();
+          }
+        });
       },
     );
   }

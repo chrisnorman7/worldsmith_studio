@@ -6,6 +6,7 @@ import '../../project_context.dart';
 import '../../screens/zone/edit_zone.dart';
 import '../../screens/zone/select_zone.dart';
 import '../../util.dart';
+import '../push_widget_list_tile.dart';
 
 /// A widget for viewing and editing a zone.
 class ZoneListTile extends StatefulWidget {
@@ -60,17 +61,14 @@ class _ZoneListTileState extends State<ZoneListTile> {
           }
         }
       },
-      child: ListTile(
+      child: PushWidgetListTile(
         autofocus: widget.autofocus,
-        title: Text(widget.title),
-        subtitle: Text(currentZone == null ? 'Not set' : currentZone.name),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectZone(
-            projectContext: widget.projectContext,
-            onDone: widget.onDone,
-            zone: currentZone,
-          ),
+        title: widget.title,
+        subtitle: currentZone == null ? 'Not set' : currentZone.name,
+        builder: (final context) => SelectZone(
+          projectContext: widget.projectContext,
+          onDone: widget.onDone,
+          zone: currentZone,
         ),
       ),
     );

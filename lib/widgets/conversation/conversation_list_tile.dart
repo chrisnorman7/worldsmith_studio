@@ -5,8 +5,8 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../conversation_location.dart';
 import '../../project_context.dart';
 import '../../screens/conversation/select_conversation.dart';
-import '../../util.dart';
 import '../play_sound_semantics.dart';
+import '../push_widget_list_tile.dart';
 
 /// A list tile for selecting a new conversation.
 class ConversationListTile extends StatelessWidget {
@@ -59,19 +59,14 @@ class ConversationListTile extends StatelessWidget {
       soundChannel: projectContext.game.interfaceSounds,
       assetReference: assetReference,
       gain: sound?.gain ?? world.soundOptions.defaultGain,
-      child: ListTile(
+      child: PushWidgetListTile(
         autofocus: autofocus,
-        title: Text(title),
-        subtitle: Text(
-          conversation == null ? 'Not set' : conversation.name,
-        ),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectConversation(
-            projectContext: projectContext,
-            onDone: (final value) => onChanged(value?.conversation),
-            location: location,
-          ),
+        title: title,
+        subtitle: conversation == null ? 'Not set' : conversation.name,
+        builder: (final context) => SelectConversation(
+          projectContext: projectContext,
+          onDone: (final value) => onChanged(value?.conversation),
+          location: location,
         ),
       ),
     );

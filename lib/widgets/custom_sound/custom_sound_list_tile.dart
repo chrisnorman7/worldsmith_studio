@@ -6,6 +6,7 @@ import '../../screens/asset_store/select_asset.dart';
 import '../../screens/asset_store/select_asset_store.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
+import '../push_widget_list_tile.dart';
 
 /// A widget for displaying a [CustomSound].
 class CustomSoundListTile extends StatefulWidget {
@@ -100,49 +101,46 @@ class CustomSoundListTileState extends State<CustomSoundListTile> {
       soundChannel: widget.projectContext.game.interfaceSounds,
       assetReference: reference.reference,
       gain: sound.gain,
-      child: ListTile(
-        title: Text(widget.title),
-        subtitle: Text('${assetStore.comment}/${reference.comment}'),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectAssetStore(
-            projectContext: widget.projectContext,
-            onDone: (final customSoundAssetStore) {
-              if (customSoundAssetStore == null) {
-                if (onClear != null) {
-                  onClear();
-                }
-                Navigator.pop(context);
-                save();
-              } else {
-                pushWidget(
-                  context: context,
-                  builder: (final context) => SelectAsset(
-                    projectContext: widget.projectContext,
-                    assetStore: widget.projectContext.worldContext
-                        .getAssetStore(customSoundAssetStore),
-                    onDone: (final newAssetReference) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      if (newAssetReference == null) {
-                        if (onClear != null) {
-                          onClear();
-                        }
-                      } else {
-                        sound
-                          ..assetStore = customSoundAssetStore
-                          ..id = newAssetReference.variableName;
-                      }
-                      save();
-                    },
-                    currentId: sound.id,
-                    nullable: onClear != null,
-                  ),
-                );
+      child: PushWidgetListTile(
+        title: widget.title,
+        subtitle: '${assetStore.comment}/${reference.comment}',
+        builder: (final context) => SelectAssetStore(
+          projectContext: widget.projectContext,
+          onDone: (final customSoundAssetStore) {
+            if (customSoundAssetStore == null) {
+              if (onClear != null) {
+                onClear();
               }
-            },
-            currentAssetStore: sound.assetStore,
-          ),
+              Navigator.pop(context);
+              save();
+            } else {
+              pushWidget(
+                context: context,
+                builder: (final context) => SelectAsset(
+                  projectContext: widget.projectContext,
+                  assetStore: widget.projectContext.worldContext
+                      .getAssetStore(customSoundAssetStore),
+                  onDone: (final newAssetReference) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    if (newAssetReference == null) {
+                      if (onClear != null) {
+                        onClear();
+                      }
+                    } else {
+                      sound
+                        ..assetStore = customSoundAssetStore
+                        ..id = newAssetReference.variableName;
+                    }
+                    save();
+                  },
+                  currentId: sound.id,
+                  nullable: onClear != null,
+                ),
+              );
+            }
+          },
+          currentAssetStore: sound.assetStore,
         ),
       ),
     );

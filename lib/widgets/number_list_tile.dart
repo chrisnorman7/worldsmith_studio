@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../intents.dart';
-import '../util.dart';
 import 'get_number.dart';
+import 'push_widget_list_tile.dart';
 
 /// A list tile that displays and allows the editing of a numerical [value].
 class NumberListTile extends StatelessWidget {
@@ -74,22 +74,19 @@ class NumberListTile extends StatelessWidget {
           }
         }
       },
-      child: ListTile(
+      child: PushWidgetListTile(
         autofocus: autofocus,
-        title: Text(title),
-        subtitle: Text(subtitle ?? value.toString()),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => GetNumber(
-            value: value,
-            onDone: (final value) {
-              Navigator.pop(context);
-              onChanged(value);
-            },
-            max: max,
-            min: min,
-            title: title,
-          ),
+        title: title,
+        subtitle: subtitle ?? value.toString(),
+        builder: (final context) => GetNumber(
+          value: value,
+          onDone: (final value) {
+            Navigator.pop(context);
+            onChanged(value);
+          },
+          max: max,
+          min: min,
+          title: title,
         ),
       ),
     );

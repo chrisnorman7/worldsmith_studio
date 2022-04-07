@@ -9,6 +9,7 @@ import '../../screens/conversation/edit_start_conversation.dart';
 import '../../screens/conversation/select_conversation.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
+import '../push_widget_list_tile.dart';
 
 /// A list for showing a [startConversation].
 class StartConversationListTile extends StatefulWidget {
@@ -85,46 +86,37 @@ class StartConversationListTileState extends State<StartConversationListTile> {
         soundChannel: widget.projectContext.game.interfaceSounds,
         assetReference: assetReference,
         gain: sound?.gain ?? 0.0,
-        child: ListTile(
+        child: PushWidgetListTile(
           autofocus: widget.autofocus,
-          title: Text(widget.title),
-          subtitle: Text(
-            conversation == null
-                ? 'Not set'
-                : '${conversation.name} '
-                    '(${widget.startConversation?.fadeTime})',
-          ),
-          onTap: () async {
+          title: widget.title,
+          subtitle: conversation == null
+              ? 'Not set'
+              : '${conversation.name} '
+                  '(${widget.startConversation?.fadeTime})',
+          builder: (final context) {
             final startConversation = widget.startConversation;
             if (startConversation == null) {
-              await pushWidget(
-                context: context,
-                builder: (final context) => SelectConversation(
-                  projectContext: widget.projectContext,
-                  onDone: (final value) {
-                    if (value == null) {
-                      widget.onChanged(null);
-                    } else {
-                      widget.onChanged(
-                        StartConversation(
-                          conversationId: value.conversation.id,
-                        ),
-                      );
-                    }
-                  },
-                ),
+              return SelectConversation(
+                projectContext: widget.projectContext,
+                onDone: (final value) {
+                  if (value == null) {
+                    widget.onChanged(null);
+                  } else {
+                    widget.onChanged(
+                      StartConversation(
+                        conversationId: value.conversation.id,
+                      ),
+                    );
+                  }
+                },
               );
             } else {
-              await pushWidget(
-                context: context,
-                builder: (final context) => EditStartConversation(
-                  projectContext: widget.projectContext,
-                  startConversation: startConversation,
-                  onChanged: widget.onChanged,
-                ),
+              return EditStartConversation(
+                projectContext: widget.projectContext,
+                startConversation: startConversation,
+                onChanged: widget.onChanged,
               );
             }
-            setState(() {});
           },
         ),
       ),

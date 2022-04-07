@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../util.dart';
 import 'get_text.dart';
+import 'push_widget_list_tile.dart';
 
 /// A list tile that displays and allows the editing of some text.
 class TextListTile extends StatelessWidget {
@@ -42,23 +42,20 @@ class TextListTile extends StatelessWidget {
   /// Whether the resulting [ListTile] should be autofocused.
   final bool autofocus;
   @override
-  Widget build(final BuildContext context) => ListTile(
-        autofocus: autofocus,
-        title: Text(header),
-        subtitle: Text(value),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => GetText(
-            onDone: (final value) {
-              Navigator.pop(context);
-              onChanged(value);
-            },
-            labelText: labelText ?? title ?? header,
-            text: value,
-            actions: actions,
-            title: title ?? header,
-            validator: validator,
-          ),
+  Widget build(final BuildContext context) => PushWidgetListTile(
+        title: header,
+        subtitle: value,
+        builder: (final context) => GetText(
+          onDone: (final value) {
+            Navigator.pop(context);
+            onChanged(value);
+          },
+          labelText: labelText ?? title ?? header,
+          text: value,
+          actions: actions,
+          title: title ?? header,
+          validator: validator,
         ),
+        autofocus: autofocus,
       );
 }

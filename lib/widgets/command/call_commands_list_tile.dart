@@ -3,7 +3,7 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../screens/world_command/edit_call_commands.dart';
-import '../../util.dart';
+import '../push_widget_list_tile.dart';
 
 /// A list tile that shows a list of [callCommands].
 class CallCommandsListTile extends StatefulWidget {
@@ -37,22 +37,16 @@ class CallCommandsListTile extends StatefulWidget {
 class CallCommandsListTileState extends State<CallCommandsListTile> {
   /// Build a widget.
   @override
-  Widget build(final BuildContext context) => ListTile(
-        autofocus: widget.autofocus,
-        title: Text(widget.title),
-        subtitle: Text('${widget.callCommands.length}'),
-        onTap: () async {
-          await pushWidget(
-            context: context,
-            builder: (final context) {
-              final callCommands = widget.callCommands;
-              return EditCallCommands(
-                projectContext: widget.projectContext,
-                callCommands: callCommands,
-              );
-            },
-          );
-          setState(() {});
-        },
-      );
+  Widget build(final BuildContext context) {
+    final callCommands = widget.callCommands;
+    return PushWidgetListTile(
+      autofocus: widget.autofocus,
+      title: widget.title,
+      subtitle: '${callCommands.length}',
+      builder: (final context) => EditCallCommands(
+        projectContext: widget.projectContext,
+        callCommands: callCommands,
+      ),
+    );
+  }
 }

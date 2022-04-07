@@ -6,6 +6,7 @@ import '../../project_context.dart';
 import '../../screens/reverb/edit_reverb_preset.dart';
 import '../../screens/reverb/select_reverb.dart';
 import '../../util.dart';
+import '../push_widget_list_tile.dart';
 
 /// A list tile for changing a reverb preset.
 class ReverbListTile extends StatefulWidget {
@@ -68,25 +69,20 @@ class _ReverbListTileState extends State<ReverbListTile> {
           }
         }
       },
-      child: ListTile(
-        title: Text(widget.title),
-        subtitle: Text(
-          currentReverbPreset == null
-              ? 'Not Set'
-              : currentReverbPreset.reverbPreset.name,
-        ),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectReverb(
-            projectContext: widget.projectContext,
-            onDone: (final reverb) {
-              Navigator.pop(context);
-              widget.onDone(reverb);
-            },
-            reverbPresets: widget.reverbPresets,
-            currentReverbId: widget.currentReverbId,
-            nullable: widget.nullable,
-          ),
+      child: PushWidgetListTile(
+        title: widget.title,
+        subtitle: currentReverbPreset == null
+            ? 'Not Set'
+            : currentReverbPreset.reverbPreset.name,
+        builder: (final context) => SelectReverb(
+          projectContext: widget.projectContext,
+          onDone: (final reverb) {
+            Navigator.pop(context);
+            widget.onDone(reverb);
+          },
+          reverbPresets: widget.reverbPresets,
+          currentReverbId: widget.currentReverbId,
+          nullable: widget.nullable,
         ),
       ),
     );

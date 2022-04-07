@@ -9,6 +9,7 @@ import '../../screens/world_command/select_world_command.dart';
 import '../../util.dart';
 import '../../world_command_location.dart';
 import '../keyboard_shortcuts_list.dart';
+import '../push_widget_list_tile.dart';
 
 /// A list tile that allows the viewing and editing of a [currentId].
 class WorldCommandListTile extends StatefulWidget {
@@ -85,41 +86,36 @@ class _WorldCommandListTileState extends State<WorldCommandListTile> {
             }
           }
         },
-        child: ListTile(
+        child: PushWidgetListTile(
           autofocus: widget.autofocus,
-          title: Text(widget.title),
-          subtitle: Text(
-            location == null
-                ? 'Not set'
-                : '${location.category.name} -> ${location.command.name}',
-          ),
-          onTap: () => pushWidget(
-            context: context,
-            builder: (final context) => SelectCommandCategory(
-              projectContext: widget.projectContext,
-              onDone: (final commandCategory) {
-                if (widget.nullable == true && commandCategory == null) {
-                  Navigator.pop(context);
-                  return widget.onChanged(null);
-                }
-                pushWidget(
-                  context: context,
-                  builder: (final context) => SelectWorldCommand(
-                    projectContext: widget.projectContext,
-                    category: commandCategory!,
-                    onDone: (final worldCommand) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      widget.onChanged(worldCommand);
-                    },
-                    currentId: currentValue?.id,
-                    nullable: widget.nullable,
-                  ),
-                );
-              },
-              currentId: currentCategory?.id,
-              nullable: widget.nullable,
-            ),
+          title: widget.title,
+          subtitle: location == null
+              ? 'Not set'
+              : '${location.category.name} -> ${location.command.name}',
+          builder: (final context) => SelectCommandCategory(
+            projectContext: widget.projectContext,
+            onDone: (final commandCategory) {
+              if (widget.nullable == true && commandCategory == null) {
+                Navigator.pop(context);
+                return widget.onChanged(null);
+              }
+              pushWidget(
+                context: context,
+                builder: (final context) => SelectWorldCommand(
+                  projectContext: widget.projectContext,
+                  category: commandCategory!,
+                  onDone: (final worldCommand) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    widget.onChanged(worldCommand);
+                  },
+                  currentId: currentValue?.id,
+                  nullable: widget.nullable,
+                ),
+              );
+            },
+            currentId: currentCategory?.id,
+            nullable: widget.nullable,
           ),
         ),
       ),
