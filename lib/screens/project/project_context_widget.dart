@@ -14,6 +14,7 @@ import '../quest/edit_quest.dart';
 import '../terrain/edit_terrain.dart';
 import '../world_command/edit_command_category.dart';
 import '../zone/edit_zone.dart';
+import 'building_menu.dart';
 import 'project_asset_stores.dart';
 import 'project_command_categories.dart';
 import 'project_menus.dart';
@@ -22,7 +23,6 @@ import 'project_quests.dart';
 import 'project_settings.dart';
 import 'project_sound_settings.dart';
 import 'project_terrains.dart';
-import 'project_zones.dart';
 
 /// A widget for editing its [projectContext].
 class ProjectContextWidget extends StatefulWidget {
@@ -157,9 +157,9 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
         ),
         TabbedScaffoldTab(
-          title: 'Zones',
-          icon: const Icon(Icons.map_outlined),
-          builder: (final context) => ProjectZones(
+          title: 'Building',
+          icon: const Icon(Icons.build_circle_outlined),
+          builder: (final context) => BuildingMenu(
             projectContext: projectContext,
           ),
           floatingActionButton: FloatingActionButton(
