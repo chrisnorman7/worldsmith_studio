@@ -5,8 +5,6 @@ import '../../util.dart';
 import '../command_triggers_list_view.dart';
 import '../directions/directions_list.dart';
 import '../equipment/equipment_positions_menu.dart';
-import 'project_reverbs.dart';
-import 'project_scenes.dart';
 
 /// The "more" menu.
 class ProjectMoreMenu extends StatefulWidget {
@@ -33,19 +31,6 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
     return ListView(
       children: [
         ListTile(
-          autofocus: true,
-          title: const Text('Scenes'),
-          subtitle: Text('${world.scenes.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) =>
-                  ProjectScenes(projectContext: widget.projectContext),
-            );
-            setState(() {});
-          },
-        ),
-        ListTile(
           title: const Text('Equipment Positions'),
           subtitle: Text('${world.equipmentPositions.length}'),
           onTap: () async {
@@ -53,19 +38,6 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
               context: context,
               builder: (final context) =>
                   EquipmentPositionsMenu(projectContext: widget.projectContext),
-            );
-            setState(() {});
-          },
-        ),
-        ListTile(
-          title: const Text('Reverb Presets'),
-          subtitle: Text('${world.reverbs.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => ProjectReverbs(
-                projectContext: widget.projectContext,
-              ),
             );
             setState(() {});
           },

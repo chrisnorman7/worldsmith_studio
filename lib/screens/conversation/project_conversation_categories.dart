@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../constants.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../validators.dart';
+import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/searchable_list_view.dart';
@@ -35,8 +37,9 @@ class ProjectConversationCategoriesState
   Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
     final categories = world.conversationCategories;
+    final Widget child;
     if (categories.isEmpty) {
-      return const CenterText(text: 'There are no conversation categories.');
+      child = const CenterText(text: 'There are no conversation categories.');
     } else {
       final children = <SearchableListTile>[];
       for (var i = 0; i < categories.length; i++) {
@@ -103,8 +106,38 @@ class ProjectConversationCategoriesState
           ),
         );
       }
-      return SearchableListView(children: children);
+      child = SearchableListView(children: children);
     }
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Conversation Categories'),
+        ),
+        body: child,
+        floatingActionButton: FloatingActionButton(
+          autofocus: world.conversationCategories.isEmpty,
+          onPressed: () async {
+            final category = ConversationCategory(
+              id: newId(),
+              name: 'Untitled Category',
+              conversations: [],
+            );
+            world.conversationCategories.add(category);
+            widget.projectContext.save();
+            await pushWidget(
+              context: context,
+              builder: (final context) => EditConversationCategory(
+                projectContext: widget.projectContext,
+                conversationCategory: category,
+              ),
+            );
+            setState(() {});
+          },
+          tooltip: 'Add Conversation Category',
+          child: createIcon,
+        ),
+      ),
+    );
   }
 
   /// Save the project.

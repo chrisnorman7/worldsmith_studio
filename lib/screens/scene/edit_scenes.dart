@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
-import 'package:ziggurat/sound.dart';
 
 import '../../constants.dart';
 import '../../project_context.dart';
@@ -8,12 +7,12 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/searchable_list_view.dart';
-import '../reverb/edit_reverb_preset.dart';
+import 'edit_scene.dart';
 
-/// A widget for viewing and editing reverb preferences.
-class ProjectReverbs extends StatefulWidget {
+/// A widget for editing scenes.
+class EditScenes extends StatefulWidget {
   /// Create an instance.
-  const ProjectReverbs({
+  const EditScenes({
     required this.projectContext,
     final Key? key,
   }) : super(key: key);
@@ -23,35 +22,37 @@ class ProjectReverbs extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  ProjectReverbsState createState() => ProjectReverbsState();
+  EditScenesState createState() => EditScenesState();
 }
 
-/// State for [ProjectReverbs].
-class ProjectReverbsState extends State<ProjectReverbs> {
+/// State for [EditScenes].
+class EditScenesState extends State<EditScenes> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
-    final reverbPresets = widget.projectContext.world.reverbs;
+    final scenes = world.scenes;
     final Widget child;
-    if (reverbPresets.isEmpty) {
-      child = const CenterText(text: 'There are no reverb presets.');
+    if (scenes.isEmpty) {
+      child = const CenterText(text: 'There are no scenes to show.');
     } else {
       final children = <SearchableListTile>[];
-      for (var i = 0; i < reverbPresets.length; i++) {
-        final reverbReference = reverbPresets[i];
+      for (var i = 0; i < scenes.length; i++) {
+        final scene = scenes[i];
+        final n = scene.sections.length;
         children.add(
           SearchableListTile(
-            searchString: reverbReference.reverbPreset.name,
+            searchString: scene.name,
             child: ListTile(
               autofocus: i == 0,
-              title: Text(reverbReference.reverbPreset.name),
+              title: Text(scene.name),
+              subtitle: Text('$n ${n == 1 ? "section" : "sections"}'),
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (final context) => EditReverbPreset(
+                  builder: (final context) => EditScene(
                     projectContext: widget.projectContext,
-                    reverbPresetReference: reverbReference,
+                    scene: scene,
                   ),
                 );
                 setState(() {});
@@ -65,29 +66,22 @@ class ProjectReverbsState extends State<ProjectReverbs> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Reverb Presets'),
+          title: const Text('Scenes'),
         ),
         body: child,
         floatingActionButton: FloatingActionButton(
+          autofocus: scenes.isEmpty,
           onPressed: () async {
-            const reverbPreset = ReverbPreset(name: 'Untitled Reverb');
-            final reverbPresetReference = ReverbPresetReference(
+            final scene = Scene(
               id: newId(),
-              reverbPreset: reverbPreset,
+              name: 'Untitled Scene',
+              sections: [],
             );
-            world.reverbs.add(reverbPresetReference);
+            world.scenes.add(scene);
             widget.projectContext.save();
-            await pushWidget(
-              context: context,
-              builder: (final context) => EditReverbPreset(
-                projectContext: widget.projectContext,
-                reverbPresetReference: reverbPresetReference,
-              ),
-            );
             setState(() {});
           },
-          autofocus: world.reverbs.isEmpty,
-          tooltip: 'Add Reverb',
+          tooltip: 'Add Scene',
           child: createIcon,
         ),
       ),

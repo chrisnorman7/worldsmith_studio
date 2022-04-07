@@ -8,21 +8,14 @@ import '../../util.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/run_game.dart';
 import '../../widgets/tabbed_scaffold.dart';
-import '../conversation/edit_conversation_category.dart';
-import '../conversation/project_conversation_categories.dart';
-import '../quest/edit_quest.dart';
-import '../terrain/edit_terrain.dart';
 import '../world_command/edit_command_category.dart';
-import '../zone/edit_zone.dart';
 import 'building_menu.dart';
 import 'project_asset_stores.dart';
 import 'project_command_categories.dart';
 import 'project_menus.dart';
 import 'project_more_menu.dart';
-import 'project_quests.dart';
 import 'project_settings.dart';
 import 'project_sound_settings.dart';
-import 'project_terrains.dart';
 
 /// A widget for editing its [projectContext].
 class ProjectContextWidget extends StatefulWidget {
@@ -128,135 +121,10 @@ class ProjectContextWidgetState extends State<ProjectContextWidget> {
           ),
         ),
         TabbedScaffoldTab(
-          title: 'Conversations',
-          icon: const Icon(Icons.message_outlined),
-          builder: (final context) => ProjectConversationCategories(
-            projectContext: projectContext,
-          ),
-          floatingActionButton: FloatingActionButton(
-            autofocus: world.conversationCategories.isEmpty,
-            onPressed: () async {
-              final category = ConversationCategory(
-                id: newId(),
-                name: 'Untitled Category',
-                conversations: [],
-              );
-              world.conversationCategories.add(category);
-              projectContext.save();
-              await pushWidget(
-                context: context,
-                builder: (final context) => EditConversationCategory(
-                  projectContext: projectContext,
-                  conversationCategory: category,
-                ),
-              );
-              setState(() {});
-            },
-            tooltip: 'Add Conversation Category',
-            child: createIcon,
-          ),
-        ),
-        TabbedScaffoldTab(
           title: 'Building',
           icon: const Icon(Icons.build_circle_outlined),
           builder: (final context) => BuildingMenu(
             projectContext: projectContext,
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              if (world.terrains.isEmpty) {
-                return showError(
-                  context: context,
-                  message:
-                      'You must add at least 1 terrain before you can add a'
-                      ' zone.',
-                );
-              }
-              final zone = Zone(
-                id: newId(),
-                name: 'Untitled Zone',
-                boxes: [],
-                defaultTerrainId: world.terrains.first.id,
-              );
-              world.zones.add(zone);
-              projectContext.save();
-              await pushWidget(
-                context: context,
-                builder: (final context) => EditZone(
-                  projectContext: projectContext,
-                  zone: zone,
-                ),
-              );
-              setState(() {});
-            },
-            autofocus: world.zones.isEmpty,
-            tooltip: 'Add Zone',
-            child: createIcon,
-          ),
-        ),
-        TabbedScaffoldTab(
-          title: 'Quests',
-          icon: const Icon(Icons.elderly_outlined),
-          builder: (final context) => ProjectQuests(
-            projectContext: projectContext,
-          ),
-          floatingActionButton: FloatingActionButton(
-            autofocus: world.quests.isEmpty,
-            onPressed: () async {
-              final quest = Quest(
-                id: newId(),
-                name: 'Untitled Quest',
-                stages: [],
-              );
-              world.quests.add(quest);
-              projectContext.save();
-              await pushWidget(
-                context: context,
-                builder: (final context) => EditQuest(
-                  projectContext: projectContext,
-                  quest: quest,
-                ),
-              );
-              setState(() {});
-            },
-            tooltip: 'Add Quest',
-            child: createIcon,
-          ),
-        ),
-        TabbedScaffoldTab(
-          title: 'Terrain Types',
-          icon: const Icon(Icons.add_location_outlined),
-          builder: (final context) => ProjectTerrains(
-            projectContext: projectContext,
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              final terrain = Terrain(
-                id: newId(),
-                name: 'Untitled Terrain',
-                slowWalk: WalkingOptions(
-                  interval: 1000,
-                  joystickValue: 0.1,
-                ),
-                fastWalk: WalkingOptions(
-                  interval: 500,
-                  joystickValue: 0.5,
-                ),
-              );
-              world.terrains.add(terrain);
-              projectContext.save();
-              await pushWidget(
-                context: context,
-                builder: (final context) => EditTerrain(
-                  projectContext: projectContext,
-                  terrain: terrain,
-                ),
-              );
-              setState(() {});
-            },
-            autofocus: world.terrains.isEmpty,
-            tooltip: 'Add Terrain',
-            child: createIcon,
           ),
         ),
         TabbedScaffoldTab(

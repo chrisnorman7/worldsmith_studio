@@ -7,12 +7,12 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/searchable_list_view.dart';
-import '../scene/edit_scene.dart';
+import 'edit_quest.dart';
 
-/// A widget for editing scenes.
-class ProjectScenes extends StatefulWidget {
+/// A widget for viewing quests.
+class EditQuests extends StatefulWidget {
   /// Create an instance.
-  const ProjectScenes({
+  const EditQuests({
     required this.projectContext,
     final Key? key,
   }) : super(key: key);
@@ -22,37 +22,35 @@ class ProjectScenes extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  ProjectScenesState createState() => ProjectScenesState();
+  EditQuestsState createState() => EditQuestsState();
 }
 
-/// State for [ProjectScenes].
-class ProjectScenesState extends State<ProjectScenes> {
+/// State for [EditQuests].
+class EditQuestsState extends State<EditQuests> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
-    final scenes = world.scenes;
+    final quests = world.quests;
     final Widget child;
-    if (scenes.isEmpty) {
-      child = const CenterText(text: 'There are no scenes to show.');
+    if (quests.isEmpty) {
+      child = const CenterText(text: 'There are no quests to show.');
     } else {
       final children = <SearchableListTile>[];
-      for (var i = 0; i < scenes.length; i++) {
-        final scene = scenes[i];
-        final n = scene.sections.length;
+      for (var i = 0; i < world.quests.length; i++) {
+        final quest = world.quests[i];
         children.add(
           SearchableListTile(
-            searchString: scene.name,
+            searchString: quest.name,
             child: ListTile(
               autofocus: i == 0,
-              title: Text(scene.name),
-              subtitle: Text('$n ${n == 1 ? "section" : "sections"}'),
+              title: Text(quest.name),
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (final context) => EditScene(
+                  builder: (final context) => EditQuest(
                     projectContext: widget.projectContext,
-                    scene: scene,
+                    quest: quest,
                   ),
                 );
                 setState(() {});
@@ -66,25 +64,38 @@ class ProjectScenesState extends State<ProjectScenes> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Scenes'),
+          title: const Text('Quests'),
         ),
         body: child,
         floatingActionButton: FloatingActionButton(
-          autofocus: scenes.isEmpty,
+          autofocus: world.quests.isEmpty,
           onPressed: () async {
-            final scene = Scene(
+            final quest = Quest(
               id: newId(),
-              name: 'Untitled Scene',
-              sections: [],
+              name: 'Untitled Quest',
+              stages: [],
             );
-            world.scenes.add(scene);
+            world.quests.add(quest);
             widget.projectContext.save();
+            await pushWidget(
+              context: context,
+              builder: (final context) => EditQuest(
+                projectContext: widget.projectContext,
+                quest: quest,
+              ),
+            );
             setState(() {});
           },
-          tooltip: 'Add Scene',
+          tooltip: 'Add Quest',
           child: createIcon,
         ),
       ),
     );
+  }
+
+  /// Save the project.
+  void save() {
+    widget.projectContext.save();
+    setState(() {});
   }
 }

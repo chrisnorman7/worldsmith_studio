@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
+import '../../constants.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/searchable_list_view.dart';
-import '../zone/edit_zone.dart';
+import 'edit_zone.dart';
 
 /// A widget for displaying and editing [Zone] instances.
 class EditZones extends StatefulWidget {
@@ -84,6 +85,36 @@ class EditZonesState extends State<EditZones> {
           title: const Text('Zones'),
         ),
         body: child,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            if (world.terrains.isEmpty) {
+              return showError(
+                context: context,
+                message: 'You must add at least 1 terrain before you can add a'
+                    ' zone.',
+              );
+            }
+            final zone = Zone(
+              id: newId(),
+              name: 'Untitled Zone',
+              boxes: [],
+              defaultTerrainId: world.terrains.first.id,
+            );
+            world.zones.add(zone);
+            widget.projectContext.save();
+            await pushWidget(
+              context: context,
+              builder: (final context) => EditZone(
+                projectContext: widget.projectContext,
+                zone: zone,
+              ),
+            );
+            setState(() {});
+          },
+          autofocus: world.zones.isEmpty,
+          tooltip: 'Add Zone',
+          child: createIcon,
+        ),
       ),
     );
   }
