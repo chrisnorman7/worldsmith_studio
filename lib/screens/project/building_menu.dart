@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
+import '../../widgets/push_widget_list_tile.dart';
 import '../conversation/project_conversation_categories.dart';
 import '../npc/edit_npcs.dart';
 import '../quest/edit_quests.dart';
@@ -34,96 +34,56 @@ class BuildingMenuState extends State<BuildingMenu> {
     final world = widget.projectContext.world;
     return ListView(
       children: [
-        ListTile(
+        PushWidgetListTile(
+          title: 'Terrains',
+          builder: (final context) => EditTerrains(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.terrains.length}',
           autofocus: world.terrains.isEmpty,
-          title: const Text('Terrains'),
-          subtitle: Text('${world.terrains.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => EditTerrains(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
         ),
-        ListTile(
+        PushWidgetListTile(
+          title: 'Zones',
+          builder: (final context) => EditZones(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.zones.length}',
           autofocus: world.terrains.isNotEmpty,
-          title: const Text('Zones'),
-          subtitle: Text('${world.zones.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => EditZones(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
         ),
-        ListTile(
-          title: const Text('Scenes'),
-          subtitle: Text('${world.scenes.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) =>
-                  EditScenes(projectContext: widget.projectContext),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: 'Scenes',
+          builder: (final context) => EditScenes(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.scenes.length}',
         ),
-        ListTile(
-          title: const Text('Conversations'),
-          subtitle: Text('${world.conversations.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => ProjectConversationCategories(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: 'Conversations',
+          builder: (final context) => ProjectConversationCategories(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.conversations.length}',
         ),
-        ListTile(
-          title: const Text("NPC's"),
-          subtitle: Text('${world.npcs.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => EditNpcs(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: "NPC's",
+          builder: (final context) => EditNpcs(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.npcs.length}',
         ),
-        ListTile(
-          title: const Text('Quests'),
-          subtitle: Text('${world.quests.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) =>
-                  EditQuests(projectContext: widget.projectContext),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: 'Quests',
+          builder: (final context) => EditQuests(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.quests.length}',
         ),
-        ListTile(
-          title: const Text('Reverb Presets'),
-          subtitle: Text('${world.reverbs.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => EditReverbs(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: 'Reverb Presets',
+          builder: (final context) => EditReverbs(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.reverbs.length}',
         ),
       ],
     );
