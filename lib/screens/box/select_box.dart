@@ -12,6 +12,7 @@ class SelectBox extends StatelessWidget {
     this.currentBoxId,
     this.excludedBoxIds = const [],
     this.title = 'Select Box',
+    this.canClear = false,
     final Key? key,
   }) : super(key: key);
 
@@ -19,7 +20,7 @@ class SelectBox extends StatelessWidget {
   final Zone zone;
 
   /// The function to call with the selected box.
-  final ValueChanged<Box> onDone;
+  final ValueChanged<Box?> onDone;
 
   /// The ID of the currently-selected box.
   final String? currentBoxId;
@@ -30,6 +31,10 @@ class SelectBox extends StatelessWidget {
   /// The title of the resulting [Scaffold].
   final String title;
 
+  /// Whether or not the box can be cleared.
+  final bool canClear;
+
+  /// Build the widget.
   @override
   Widget build(final BuildContext context) {
     final boxes = zone.boxes
@@ -40,6 +45,16 @@ class SelectBox extends StatelessWidget {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            if (canClear == true)
+              ElevatedButton(
+                onPressed: () => onDone(null),
+                child: const Icon(
+                  Icons.clear,
+                  semanticLabel: 'Clear Box',
+                ),
+              )
+          ],
           title: Text(title),
         ),
         body: ListView.builder(

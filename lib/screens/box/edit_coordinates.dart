@@ -72,35 +72,45 @@ class EditCoordinatesState extends State<EditCoordinates> {
               ListTile(
                 autofocus: true,
                 title: const Text('Clamped To'),
-                subtitle: Text(
-                  widget.zone.getBox(clamp.boxId).name,
-                ),
-                onTap: () => pushWidget(
-                  context: context,
-                  builder: (final context) => SelectBox(
-                    zone: widget.zone,
-                    onDone: (final value) {
-                      Navigator.pop(context);
-                      setState(() => widget.value.clamp!.boxId = value.id);
-                    },
-                    currentBoxId: clamp.boxId,
-                    excludedBoxIds: [if (boxId != null) boxId],
-                  ),
-                ),
+                subtitle: Text(widget.zone.getBox(clamp.boxId).name),
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (final context) => SelectBox(
+                      zone: widget.zone,
+                      onDone: (final value) {
+                        Navigator.pop(context);
+                        final id = value?.id;
+                        if (id == null) {
+                          widget.value.clamp = null;
+                        } else {
+                          widget.value.clamp!.boxId = id;
+                        }
+                      },
+                      currentBoxId: clamp.boxId,
+                      excludedBoxIds: [if (boxId != null) boxId],
+                      canClear: true,
+                    ),
+                  );
+                  setState(() {});
+                },
               ),
               ListTile(
                 title: const Text('Clamp Corner'),
                 subtitle: Text(clamp.corner.name),
-                onTap: () => pushWidget(
-                  context: context,
-                  builder: (final context) => SelectBoxCorner(
-                    onDone: (final value) {
-                      Navigator.pop(context);
-                      setState(() => clamp.corner = value);
-                    },
-                    value: clamp.corner,
-                  ),
-                ),
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (final context) => SelectBoxCorner(
+                      onDone: (final value) {
+                        Navigator.pop(context);
+                        clamp.corner = value;
+                      },
+                      value: clamp.corner,
+                    ),
+                  );
+                  setState(() {});
+                },
               )
             ],
             if (clamp == null && widget.canChangeClamp == true) ...[
@@ -118,7 +128,7 @@ class EditCoordinatesState extends State<EditCoordinates> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             widget.value.clamp = CoordinateClamp(
-                              boxId: box.id,
+                              boxId: box!.id,
                               corner: corner,
                             );
                           },
@@ -145,6 +155,7 @@ class EditCoordinatesState extends State<EditCoordinates> {
                         ..x = value.x
                         ..y = value.y,
                     );
+                    widget.projectContext.save();
                   },
                   labelText:
                       clamp == null ? 'Coordinates' : 'Coordinates Offset',

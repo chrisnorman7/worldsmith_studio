@@ -4,7 +4,7 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../screens/box/edit_coordinates.dart';
-import '../push_widget_list_tile.dart';
+import '../../util.dart';
 
 /// What should happen to a coordinate.
 enum CoordinateModification {
@@ -130,20 +130,25 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
       },
       child: Actions(
         actions: {ModifyCoordinateIntent: modifyCoordinateAction},
-        child: PushWidgetListTile(
+        child: ListTile(
           autofocus: widget.autofocus,
-          title: widget.title,
-          subtitle: '${coordinates.x},${coordinates.y}',
-          builder: (final context) => EditCoordinates(
-            projectContext: widget.projectContext,
-            zone: widget.zone,
-            box: widget.box,
-            value: widget.value,
-            title: widget.title,
-            actions: widget.actions,
-            canChangeClamp: widget.canChangeClamp,
-          ),
-          onSetState: widget.projectContext.save,
+          title: Text(widget.title),
+          subtitle: Text('${coordinates.x},${coordinates.y}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (final context) => EditCoordinates(
+                projectContext: widget.projectContext,
+                zone: widget.zone,
+                box: widget.box,
+                value: widget.value,
+                title: widget.title,
+                actions: widget.actions,
+                canChangeClamp: widget.canChangeClamp,
+              ),
+            );
+            save();
+          },
         ),
       ),
     );

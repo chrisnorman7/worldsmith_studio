@@ -487,7 +487,7 @@ class EditZoneState extends State<EditZone> {
               onDone: (final corner) async {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                final clamp = CoordinateClamp(boxId: box.id, corner: corner);
+                final clamp = CoordinateClamp(boxId: box!.id, corner: corner);
                 final start = Coordinates(0, 0, clamp: clamp);
                 final end = Coordinates(0, 0, clamp: clamp);
                 final newBox = Box(
