@@ -18,8 +18,10 @@ import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/play_sound_semantics.dart';
+import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/reverb/reverb_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
+import '../../widgets/select_item.dart';
 import '../../widgets/sound/fade_time_list_tile.dart';
 import '../../widgets/sound/gain_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
@@ -31,6 +33,7 @@ import '../ambiance/edit_ambiances.dart';
 import '../box/edit_box.dart';
 import '../box/select_box.dart';
 import '../box/select_box_corner.dart';
+import '../npc/edit_zone_npc.dart';
 import '../terrain/select_terrain.dart';
 import '../zone_object/edit_zone_object.dart';
 import 'edit_location_marker.dart';
@@ -129,6 +132,59 @@ class EditZoneState extends State<EditZone> {
                 autofocus: widget.zone.objects.isEmpty,
                 tooltip: 'Add Object',
                 child: createIcon,
+              ),
+            ),
+            TabbedScaffoldTab(
+              title: "NPC's",
+              icon: const Icon(Icons.people_alt_outlined),
+              builder: getNpcList,
+              floatingActionButton: FloatingActionButton(
+                autofocus: widget.zone.npcs.isEmpty,
+                child: createIcon,
+                onPressed: () {
+                  final npcs = widget.projectContext.world.npcs;
+                  if (npcs.isEmpty) {
+                    showError(
+                      context: context,
+                      message: "There are no NPC's you can add to this zone.",
+                    );
+                  } else {
+                    final availableNpcs = npcs
+                        .where(
+                          (final npc) => widget.zone.npcs
+                              .where(
+                                (final zoneNpc) => zoneNpc.npcId == npc.id,
+                              )
+                              .isEmpty,
+                        )
+                        .toList();
+                    if (availableNpcs.isEmpty) {
+                      showError(
+                        context: context,
+                        message: "There are no NPC's to add.",
+                      );
+                    } else {
+                      pushWidget(
+                        context: context,
+                        builder: (final context) => SelectItem<Npc>(
+                          onDone: (final value) {
+                            Navigator.pop(context);
+                            final zoneNpc = ZoneNpc(
+                              npcId: value.id,
+                              initialCoordinates: Coordinates(0, 0),
+                            );
+                            widget.zone.npcs.add(zoneNpc);
+                            widget.projectContext.save();
+                          },
+                          values: availableNpcs,
+                          getItemWidget: (final npc) => Text(npc.name),
+                          title: 'Select NPC',
+                        ),
+                      );
+                    }
+                  }
+                },
+                tooltip: 'Select NPC',
               ),
             ),
             TabbedScaffoldTab(
@@ -842,5 +898,34 @@ class EditZoneState extends State<EditZone> {
       );
     }
     return SearchableListView(children: children);
+  }
+
+  /// Get the NPC list for the current zone.
+  Widget getNpcList(final BuildContext context) {
+    final npcs = widget.zone.npcs;
+    if (npcs.isEmpty) {
+      return const CenterText(text: "No NPC's have been added to this zone.");
+    }
+    return BuiltSearchableListView(
+      items: npcs,
+      builder: (final context, final index) {
+        final zoneNpc = npcs[index];
+        final npcId = zoneNpc.npcId;
+        final npc = widget.projectContext.world.getNpc(npcId);
+        return SearchableListTile(
+          searchString: npc.name,
+          child: PushWidgetListTile(
+            title: npc.name,
+            builder: (final context) => EditZoneNpc(
+              projectContext: widget.projectContext,
+              zone: widget.zone,
+              zoneNpc: zoneNpc,
+            ),
+            autofocus: index == 0,
+            onSetState: resetLevel,
+          ),
+        );
+      },
+    );
   }
 }

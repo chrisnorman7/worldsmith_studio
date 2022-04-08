@@ -39,6 +39,7 @@ class CoordinatesListTile extends StatefulWidget {
     required this.value,
     required this.onChanged,
     this.box,
+    this.autofocus = false,
     this.actions = const [],
     this.title = 'Coordinates',
     this.canChangeClamp = false,
@@ -53,6 +54,9 @@ class CoordinatesListTile extends StatefulWidget {
 
   /// The box which owns the coordinates.
   final Box? box;
+
+  /// Whether the resulting [ListTile] should be autofocused.
+  final bool autofocus;
 
   /// The coordinates to edit.
   final Coordinates value;
@@ -127,6 +131,7 @@ class _CoordinatesListTileState extends State<CoordinatesListTile> {
       child: Actions(
         actions: {ModifyCoordinateIntent: modifyCoordinateAction},
         child: PushWidgetListTile(
+          autofocus: widget.autofocus,
           title: widget.title,
           subtitle: '${coordinates.x},${coordinates.y}',
           builder: (final context) => EditCoordinates(
