@@ -4,8 +4,10 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
+import '../stats/edit_default_stats.dart';
 
 /// A widget for editing the given [npc].
 class EditNpc extends StatefulWidget {
@@ -62,7 +64,14 @@ class EditNpcState extends State<EditNpc> {
               looping: true,
               nullable: true,
               title: 'Ambiance',
-            )
+            ),
+            PushWidgetListTile(
+              title: 'Default Stats',
+              builder: (final context) => EditDefaultStats(
+                projectContext: widget.projectContext,
+                stats: widget.npc.stats.defaultStats,
+              ),
+            ),
           ],
         ),
       ),

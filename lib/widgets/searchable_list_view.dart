@@ -144,3 +144,29 @@ class _SearchableListViewState extends State<SearchableListView> {
     _controller.dispose();
   }
 }
+
+/// A widget that uses the given [builder] to build a [SearchableListView]
+/// instance.
+class BuiltSearchableListView<T> extends StatelessWidget {
+  /// Create an instance.
+  const BuiltSearchableListView({
+    required this.items,
+    required this.builder,
+    final Key? key,
+  }) : super(key: key);
+
+  /// The items to build from.
+  final Iterable<T> items;
+
+  /// The function to build with.
+  final SearchableListTile Function(BuildContext context, int index) builder;
+
+  /// Build the widget.
+  @override
+  Widget build(final BuildContext context) {
+    final children = [
+      for (var i = 0; i < items.length; i++) builder(context, i)
+    ];
+    return SearchableListView(children: children);
+  }
+}
