@@ -18,7 +18,6 @@ import '../../widgets/get_coordinates.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/play_sound_semantics.dart';
-import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/reverb/reverb_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
 import '../../widgets/select_item.dart';
@@ -167,7 +166,7 @@ class EditZoneState extends State<EditZone> {
                       pushWidget(
                         context: context,
                         builder: (final context) => SelectItem<Npc>(
-                          onDone: (final value) {
+                          onDone: (final value) async {
                             Navigator.pop(context);
                             final zoneNpc = ZoneNpc(
                               npcId: value.id,
@@ -175,6 +174,16 @@ class EditZoneState extends State<EditZone> {
                             );
                             widget.zone.npcs.add(zoneNpc);
                             widget.projectContext.save();
+                            await pushWidget(
+                              context: context,
+                              builder: (final context) => EditZoneNpc(
+                                projectContext: widget.projectContext,
+                                zone: widget.zone,
+                                zoneNpc: zoneNpc,
+                              ),
+                            );
+                            resetLevel();
+                            setState(() {});
                           },
                           values: availableNpcs,
                           getItemWidget: (final npc) => Text(npc.name),
@@ -914,15 +923,21 @@ class EditZoneState extends State<EditZone> {
         final npc = widget.projectContext.world.getNpc(npcId);
         return SearchableListTile(
           searchString: npc.name,
-          child: PushWidgetListTile(
-            title: npc.name,
-            builder: (final context) => EditZoneNpc(
-              projectContext: widget.projectContext,
-              zone: widget.zone,
-              zoneNpc: zoneNpc,
-            ),
+          child: ListTile(
+            title: Text(npc.name),
+            onTap: () async {
+              await pushWidget(
+                context: context,
+                builder: (final context) => EditZoneNpc(
+                  projectContext: widget.projectContext,
+                  zone: widget.zone,
+                  zoneNpc: zoneNpc,
+                ),
+              );
+              resetLevel();
+              setState(() {});
+            },
             autofocus: index == 0,
-            onSetState: resetLevel,
           ),
         );
       },

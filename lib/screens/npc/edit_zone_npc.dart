@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/push_widget_list_tile.dart';
+import 'edit_npc_moves.dart';
 
 /// A widget for editing the given [zoneNpc].
 class EditZoneNpc extends StatefulWidget {
@@ -36,6 +39,30 @@ class EditZoneNpcState extends State<EditZoneNpc> {
   Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  confirm(
+                    context: context,
+                    message:
+                        'Are you sure you want to unlink this NPC? The NPC '
+                        'will not be deleted.',
+                    yesCallback: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      widget.zone.npcs.removeWhere(
+                        (final element) =>
+                            element.npcId == widget.zoneNpc.npcId,
+                      );
+                    },
+                  );
+                },
+                child: const Icon(
+                  Icons.delete,
+                  semanticLabel: 'Unlink NPC',
+                ),
+              )
+            ],
             title: const Text('Edit ZoneNPC'),
           ),
           body: ListView(
@@ -48,7 +75,16 @@ class EditZoneNpcState extends State<EditZoneNpc> {
                 autofocus: true,
                 canChangeClamp: true,
                 title: 'Initial Coordinates',
-              )
+              ),
+              PushWidgetListTile(
+                title: 'Moves',
+                subtitle: '${widget.zoneNpc.moves.length}',
+                builder: (final context) => EditNpcMoves(
+                  projectContext: widget.projectContext,
+                  zone: widget.zone,
+                  zoneNpc: widget.zoneNpc,
+                ),
+              ),
             ],
           ),
         ),
