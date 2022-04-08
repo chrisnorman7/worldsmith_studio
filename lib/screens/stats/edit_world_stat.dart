@@ -4,12 +4,13 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/number_list_tile.dart';
 import '../../widgets/text_list_tile.dart';
 
 /// A widget for editing the given [stat].
-class EditWorldStatistic extends StatefulWidget {
+class EditWorldStat extends StatefulWidget {
   /// Create an instance.
-  const EditWorldStatistic({
+  const EditWorldStat({
     required this.projectContext,
     required this.stat,
     final Key? key,
@@ -23,11 +24,11 @@ class EditWorldStatistic extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  EditWorldStatisticState createState() => EditWorldStatisticState();
+  EditWorldStatState createState() => EditWorldStatState();
 }
 
-/// State for [EditWorldStatistic].
-class EditWorldStatisticState extends State<EditWorldStatistic> {
+/// State for [EditWorldStat].
+class EditWorldStatState extends State<EditWorldStat> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) => Cancel(
@@ -55,6 +56,16 @@ class EditWorldStatisticState extends State<EditWorldStatistic> {
                 },
                 header: 'Description',
                 validator: (final value) => validateNonEmptyValue(value: value),
+              ),
+              NumberListTile(
+                value: widget.stat.defaultValue.toDouble(),
+                onChanged: (final value) {
+                  widget.stat.defaultValue = value.floor();
+                  save();
+                },
+                modifier: 5,
+                title: 'Default Value',
+                subtitle: '${widget.stat.defaultValue}',
               )
             ],
           ),

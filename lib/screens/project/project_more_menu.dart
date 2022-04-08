@@ -6,7 +6,7 @@ import '../../widgets/push_widget_list_tile.dart';
 import '../command_triggers_list_view.dart';
 import '../directions/directions_list.dart';
 import '../equipment/equipment_positions_menu.dart';
-import '../stats/edit_world_statistics.dart';
+import '../stats/edit_world_stats.dart';
 
 /// The "more" menu.
 class ProjectMoreMenu extends StatefulWidget {
@@ -43,7 +43,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
         PushWidgetListTile(
           title: 'Stats',
           subtitle: '${world.stats.length}',
-          builder: (final context) => EditWorldStatistics(
+          builder: (final context) => EditWorldStats(
             projectContext: widget.projectContext,
           ),
         ),

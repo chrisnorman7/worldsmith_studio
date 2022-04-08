@@ -8,12 +8,12 @@ import '../../widgets/cancel.dart';
 import '../../widgets/center_text.dart';
 import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/searchable_list_view.dart';
-import 'edit_world_statistic.dart';
+import 'edit_world_stat.dart';
 
 /// A widget for viewing and changing statistics.
-class EditWorldStatistics extends StatefulWidget {
+class EditWorldStats extends StatefulWidget {
   /// Create an instance.
-  const EditWorldStatistics({
+  const EditWorldStats({
     required this.projectContext,
     final Key? key,
   }) : super(key: key);
@@ -23,11 +23,11 @@ class EditWorldStatistics extends StatefulWidget {
 
   /// Create state for this widget.
   @override
-  EditWorldStatisticsState createState() => EditWorldStatisticsState();
+  EditWorldStatsState createState() => EditWorldStatsState();
 }
 
-/// State for [EditWorldStatistics].
-class EditWorldStatisticsState extends State<EditWorldStatistics> {
+/// State for [EditWorldStats].
+class EditWorldStatsState extends State<EditWorldStats> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
@@ -46,7 +46,7 @@ class EditWorldStatisticsState extends State<EditWorldStatistics> {
               autofocus: i == 0,
               title: stat.name,
               subtitle: stat.description,
-              builder: (final context) => EditWorldStatistic(
+              builder: (final context) => EditWorldStat(
                 projectContext: widget.projectContext,
                 stat: stat,
               ),
@@ -71,7 +71,7 @@ class EditWorldStatisticsState extends State<EditWorldStatistics> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (final context) => EditWorldStatistic(
+              builder: (final context) => EditWorldStat(
                 projectContext: widget.projectContext,
                 stat: stat,
               ),
