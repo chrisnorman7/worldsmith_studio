@@ -48,12 +48,11 @@ class PushWidgetListTileState extends State<PushWidgetListTile> {
       subtitle: subtitle == null ? null : Text(subtitle),
       onTap: () async {
         await pushWidget(context: context, builder: widget.builder);
-        setState(() {
-          final f = widget.onSetState;
-          if (f != null) {
-            f();
-          }
-        });
+        final f = widget.onSetState;
+        if (f != null) {
+          f();
+        }
+        setState(() {});
       },
     );
   }
