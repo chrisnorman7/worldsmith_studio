@@ -7,6 +7,7 @@ import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/select_item.dart';
+import 'edit_npc_move.dart';
 
 /// A widget for editing NPC moves for the given [zoneNpc].
 class EditNpcMoves extends StatefulWidget {
@@ -59,6 +60,18 @@ class EditNpcMovesState extends State<EditNpcMoves> {
               child: ListTile(
                 autofocus: index == 0,
                 title: Text('${marker.message.text}'),
+                onTap: () async {
+                  await pushWidget(
+                    context: context,
+                    builder: (final context) => EditNpcMove(
+                      projectContext: widget.projectContext,
+                      zone: widget.zone,
+                      zoneNpc: widget.zoneNpc,
+                      npcMove: move,
+                    ),
+                  );
+                  setState(() {});
+                },
               ),
             );
           },
