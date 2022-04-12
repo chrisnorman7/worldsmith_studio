@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../widgets/cancel.dart';
+import '../../widgets/command/call_command_list_tile.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/push_widget_list_tile.dart';
@@ -52,81 +54,126 @@ class EditNpcMoveState extends State<EditNpcMove> {
     final assetReference = sound == null
         ? null
         : widget.projectContext.worldContext.getCustomSound(sound);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Move'),
-      ),
-      body: ListView(
-        children: [
-          PlaySoundSemantics(
-            soundChannel: widget.projectContext.game.interfaceSounds,
-            assetReference: assetReference,
-            gain: sound?.gain ?? 0,
-            child: PushWidgetListTile(
-              title: 'Location Marker',
-              builder: (final context) => SelectItem<LocationMarker>(
-                onDone: (final value) {
-                  widget.npcMove.locationMarkerId = value.id;
-                  save();
-                },
-                values: widget.zone.locationMarkers,
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Edit Move'),
+        ),
+        body: ListView(
+          children: [
+            PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: assetReference,
+              gain: sound?.gain ?? 0,
+              child: PushWidgetListTile(
+                title: 'Location Marker',
+                builder: (final context) => SelectItem<LocationMarker>(
+                  onDone: (final value) {
+                    widget.npcMove.locationMarkerId = value.id;
+                    save();
+                  },
+                  values: widget.zone.locationMarkers,
+                ),
+                autofocus: true,
+                subtitle: marker.message.text ?? 'Untitled Location Marker',
               ),
-              autofocus: true,
-              subtitle: marker.message.text ?? 'Untitled Location Marker',
             ),
-          ),
-          NumberListTile(
-            value: widget.npcMove.z,
-            onChanged: (final value) {
-              widget.npcMove.z = value;
-              save();
-            },
-            title: 'Z Coordinate',
-          ),
-          NumberListTile(
-            value: widget.npcMove.minMoveInterval.toDouble(),
-            onChanged: (final value) {
-              widget.npcMove.minMoveInterval = value.floor();
-              save();
-            },
-            min: 10,
-            max: widget.npcMove.maxMoveInterval.toDouble(),
-            modifier: _intervalModifier,
-            title: 'Minimum Move Interval',
-            subtitle: '${widget.npcMove.minMoveInterval} milliseconds',
-          ),
-          NumberListTile(
-            value: widget.npcMove.maxMoveInterval.toDouble(),
-            onChanged: (final value) {
-              widget.npcMove.maxMoveInterval = value.floor();
-              save();
-            },
-            min: widget.npcMove.minMoveInterval.toDouble(),
-            modifier: _intervalModifier,
-            title: 'Max Move Interval',
-            subtitle: '${widget.npcMove.maxMoveInterval} milliseconds',
-          ),
-          SoundListTile(
-            projectContext: widget.projectContext,
-            value: widget.npcMove.moveSound,
-            onDone: (final value) {
-              widget.npcMove.moveSound = value;
-              save();
-            },
-            assetStore: world.terrainAssetStore,
-            defaultGain: world.soundOptions.defaultGain,
-            nullable: true,
-            soundChannel: widget.projectContext.game.interfaceSounds,
-            title: 'Move Sound',
-          ),
-          WalkingModeListTile(
-            walkingMode: widget.npcMove.walkingMode,
-            onDone: (final value) {
-              widget.npcMove.walkingMode = value;
-              save();
-            },
-          )
-        ],
+            NumberListTile(
+              value: widget.npcMove.z,
+              onChanged: (final value) {
+                widget.npcMove.z = value;
+                save();
+              },
+              title: 'Z Coordinate',
+            ),
+            NumberListTile(
+              value: widget.npcMove.minMoveInterval.toDouble(),
+              onChanged: (final value) {
+                widget.npcMove.minMoveInterval = value.floor();
+                save();
+              },
+              min: 10,
+              max: widget.npcMove.maxMoveInterval.toDouble(),
+              modifier: _intervalModifier,
+              title: 'Minimum Move Interval',
+              subtitle: '${widget.npcMove.minMoveInterval} milliseconds',
+            ),
+            NumberListTile(
+              value: widget.npcMove.maxMoveInterval.toDouble(),
+              onChanged: (final value) {
+                widget.npcMove.maxMoveInterval = value.floor();
+                save();
+              },
+              min: widget.npcMove.minMoveInterval.toDouble(),
+              modifier: _intervalModifier,
+              title: 'Max Move Interval',
+              subtitle: '${widget.npcMove.maxMoveInterval} milliseconds',
+            ),
+            SoundListTile(
+              projectContext: widget.projectContext,
+              value: widget.npcMove.moveSound,
+              onDone: (final value) {
+                widget.npcMove.moveSound = value;
+                save();
+              },
+              assetStore: world.terrainAssetStore,
+              defaultGain: world.soundOptions.defaultGain,
+              nullable: true,
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              title: 'Move Sound',
+            ),
+            WalkingModeListTile(
+              walkingMode: widget.npcMove.walkingMode,
+              onDone: (final value) {
+                widget.npcMove.walkingMode = value;
+                save();
+              },
+            ),
+            NumberListTile(
+              value: widget.npcMove.stepSize ?? 0.0,
+              onChanged: (final value) {
+                if (value == 0.0) {
+                  widget.npcMove.stepSize = null;
+                } else {
+                  widget.npcMove.stepSize = value;
+                }
+                save();
+              },
+              modifier: 0.5,
+              subtitle: widget.npcMove.stepSize == null
+                  ? 'Default'
+                  : '${widget.npcMove.stepSize}',
+              title: 'Step Size',
+            ),
+            CallCommandListTile(
+              projectContext: widget.projectContext,
+              callCommand: widget.npcMove.startCommand,
+              onChanged: (final value) {
+                widget.npcMove.startCommand = value;
+                save();
+              },
+              title: 'Start Command',
+            ),
+            CallCommandListTile(
+              projectContext: widget.projectContext,
+              callCommand: widget.npcMove.moveCommand,
+              onChanged: (final value) {
+                widget.npcMove.moveCommand = value;
+                save();
+              },
+              title: 'MoveCommand',
+            ),
+            CallCommandListTile(
+              projectContext: widget.projectContext,
+              callCommand: widget.npcMove.endCommand,
+              onChanged: (final value) {
+                widget.npcMove.endCommand = value;
+                save();
+              },
+              title: 'End Command',
+            )
+          ],
+        ),
       ),
     );
   }
