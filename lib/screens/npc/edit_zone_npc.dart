@@ -5,6 +5,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/npc/npc_collision_list_tile.dart';
 import '../../widgets/push_widget_list_tile.dart';
 import 'edit_npc_moves.dart';
 
@@ -85,6 +86,14 @@ class EditZoneNpcState extends State<EditZoneNpc> {
                   zoneNpc: widget.zoneNpc,
                 ),
               ),
+              NpcCollisionListTile(
+                projectContext: widget.projectContext,
+                npcCollision: widget.zoneNpc.collision,
+                onChanged: (final value) {
+                  widget.zoneNpc.collision = value;
+                  save();
+                },
+              )
             ],
           ),
         ),
