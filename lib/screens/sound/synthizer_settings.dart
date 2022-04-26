@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +14,8 @@ class SynthizerSettings extends StatefulWidget {
   /// Create an instance.
   const SynthizerSettings({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

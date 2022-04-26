@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -18,8 +19,8 @@ class ReverbListTile extends StatefulWidget {
     this.currentReverbId,
     this.nullable = false,
     this.title = 'Reverb Preset',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to send to [SelectReverb].
   final ProjectContext projectContext;

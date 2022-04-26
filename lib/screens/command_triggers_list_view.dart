@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/command_triggers.dart';
 
@@ -7,7 +8,7 @@ import '../widgets/focus_text.dart';
 /// A widget that shows the supported command triggers.
 class CommandTriggersListView extends StatelessWidget {
   /// Create an instance.
-  const CommandTriggersListView({final Key? key}) : super(key: key);
+  const CommandTriggersListView({super.key});
 
   @override
   Widget build(final BuildContext context) {

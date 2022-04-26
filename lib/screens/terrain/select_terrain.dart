@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -11,8 +12,8 @@ class SelectTerrain extends StatelessWidget {
     required this.terrains,
     this.currentTerrainId,
     this.title = 'Select Terrain',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The function to call with the new value.
   final ValueChanged<Terrain> onDone;

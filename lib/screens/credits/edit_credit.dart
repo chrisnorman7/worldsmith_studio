@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -16,8 +17,8 @@ class EditCredit extends StatefulWidget {
   const EditCredit({
     required this.projectContext,
     required this.credit,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

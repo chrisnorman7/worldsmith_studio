@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 import 'dart:math';
 
@@ -26,8 +27,8 @@ import 'project/project_context_widget.dart';
 class HomePage extends StatefulWidget {
   /// Create an instance.
   const HomePage({
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();

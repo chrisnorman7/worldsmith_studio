@@ -1,10 +1,10 @@
-/// Provides the [CenterText] class.
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 /// A widget that centers [text].
 class CenterText extends StatelessWidget {
   /// Create an instance.
-  const CenterText({required this.text, final Key? key}) : super(key: key);
+  const CenterText({required this.text, super.key});
 
   /// The text to show.
   final String text;

@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class ImportDirectory extends StatefulWidget {
   const ImportDirectory({
     required this.projectContext,
     required this.assetStore,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -14,8 +15,8 @@ class PlayRumbleListTile extends StatefulWidget {
     required this.onChanged,
     this.title = 'Play Rumble',
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

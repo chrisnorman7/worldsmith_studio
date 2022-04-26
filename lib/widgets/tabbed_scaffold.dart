@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -73,8 +74,8 @@ class TabbedScaffold extends StatefulWidget {
   /// Create an instance.
   const TabbedScaffold({
     required this.tabs,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The tabs to use.
   final List<TabbedScaffoldTab> tabs;

@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'get_text.dart';
@@ -15,8 +16,8 @@ class TextListTile extends StatelessWidget {
     this.labelText,
     this.validator,
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The title of the list tile.
   final String header;

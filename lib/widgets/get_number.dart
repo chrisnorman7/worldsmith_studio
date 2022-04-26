@@ -1,4 +1,4 @@
-/// Provides the [GetNumber] class.
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'cancel.dart';
@@ -14,8 +14,8 @@ class GetNumber extends StatefulWidget {
     this.actions = const [],
     this.title = 'Enter Value',
     this.labelText = 'New value',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The initial value.
   final double value;

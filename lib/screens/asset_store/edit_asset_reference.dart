@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -16,8 +17,8 @@ class EditAssetReference extends StatefulWidget {
     required this.assetStore,
     required this.assetReferenceReference,
     required this.canDelete,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

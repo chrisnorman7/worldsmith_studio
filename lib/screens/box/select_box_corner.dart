@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -9,8 +10,8 @@ class SelectBoxCorner extends StatelessWidget {
   const SelectBoxCorner({
     required this.onDone,
     this.value,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The function to be called with the new corner.
   final ValueChanged<BoxCorner> onDone;

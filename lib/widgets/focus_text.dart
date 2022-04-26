@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 /// Text that can be focused.
@@ -6,8 +7,8 @@ class FocusText extends StatelessWidget {
   const FocusText({
     required this.text,
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The text to show.
   final String text;

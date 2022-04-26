@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -101,8 +102,8 @@ class EditReverbPreset extends StatefulWidget {
   const EditReverbPreset({
     required this.projectContext,
     required this.reverbPresetReference,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

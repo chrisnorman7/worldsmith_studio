@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -19,8 +20,8 @@ class SelectAsset extends StatefulWidget {
     this.currentId,
     this.nullable = false,
     this.title = 'Select Asset',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

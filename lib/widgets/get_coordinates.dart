@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -16,8 +17,8 @@ class GetCoordinates extends StatelessWidget {
     this.actions = const [],
     this.title = 'Get Coordinates',
     this.validator,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The function to be called when editing is complete.
   final ValueChanged<Point<int>> onDone;

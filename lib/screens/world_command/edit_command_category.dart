@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -20,8 +21,8 @@ class EditCommandCategory extends StatefulWidget {
   const EditCommandCategory({
     required this.projectContext,
     required this.category,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

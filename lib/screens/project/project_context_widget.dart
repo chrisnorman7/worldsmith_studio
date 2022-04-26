@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -22,8 +23,8 @@ class ProjectContextWidget extends StatefulWidget {
   /// Create an instance.
   const ProjectContextWidget({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

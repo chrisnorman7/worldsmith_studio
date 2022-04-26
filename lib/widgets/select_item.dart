@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'cancel.dart';
@@ -12,8 +13,8 @@ class SelectItem<T> extends StatelessWidget {
     this.title = 'Select Item',
     this.value,
     this.getItemWidget,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The function to call with the resulting value.
   final ValueChanged<T> onDone;

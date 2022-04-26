@@ -1,4 +1,4 @@
-/// Provides the [Cancel] class.
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../intents.dart';
@@ -6,7 +6,7 @@ import '../../intents.dart';
 /// A widget that can be cancelled with the escape key.
 class Cancel extends StatelessWidget {
   /// Create an instance.
-  const Cancel({required this.child, final Key? key}) : super(key: key);
+  const Cancel({required this.child, super.key});
 
   /// The child to use.
   final Widget child;

@@ -1,4 +1,4 @@
-import 'package:dart_synthizer/dart_synthizer.dart';
+// ignore_for_file: prefer_final_parameters
 import 'package:path/path.dart' as path;
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -8,15 +8,11 @@ import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 class ProjectSoundManager extends SoundManager {
   /// Create an instance.
   ProjectSoundManager({
-    required final Game game,
-    required final Context context,
+    required super.game,
+    required super.context,
     required this.soundsDirectory,
-    required final BufferCache bufferCache,
-  }) : super(
-          game: game,
-          context: context,
-          bufferCache: bufferCache,
-        );
+    required BufferCache super.bufferCache,
+  });
 
   /// The directory where sounds are stored.
   String soundsDirectory;

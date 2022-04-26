@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:convert';
 import 'dart:io';
 
@@ -30,8 +31,8 @@ class EditAssetStore extends StatefulWidget {
     required this.projectContext,
     required this.assetStore,
     required this.canDelete,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

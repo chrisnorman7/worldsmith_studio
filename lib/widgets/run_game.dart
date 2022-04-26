@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class RunGame extends StatefulWidget {
   /// Create an instance.
   const RunGame({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

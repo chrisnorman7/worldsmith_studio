@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -20,8 +21,8 @@ class EditCreditsMenu extends StatefulWidget {
   /// Create an instance.
   const EditCreditsMenu({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

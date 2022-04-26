@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../number_list_tile.dart';
@@ -10,8 +11,8 @@ class GainListTile extends StatefulWidget {
     required this.onChange,
     this.title = 'Gain',
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The initial gain value.
   final double gain;

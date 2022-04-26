@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -17,8 +18,8 @@ class SelectConversationBranchListTile extends StatelessWidget {
     required this.onChanged,
     this.title = 'Branch',
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

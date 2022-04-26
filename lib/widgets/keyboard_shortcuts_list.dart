@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -57,8 +58,8 @@ class KeyboardShortcuts extends StatelessWidget {
   const KeyboardShortcuts({
     required this.keyboardShortcuts,
     this.title = 'Keyboard Shortcuts',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The keyboard shortcuts list to use.
   final List<KeyboardShortcut> keyboardShortcuts;
@@ -108,8 +109,8 @@ class WithKeyboardShortcuts extends StatelessWidget {
   const WithKeyboardShortcuts({
     required this.child,
     required this.keyboardShortcuts,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The widget below this one in the tree.
   final Widget child;

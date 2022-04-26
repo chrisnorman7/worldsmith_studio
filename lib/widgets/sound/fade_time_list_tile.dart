@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../intents.dart';
@@ -14,8 +15,8 @@ class FadeTimeListTile extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.title = 'Fade Time',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The current fade time.
   final double? value;

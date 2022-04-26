@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../intents.dart';
@@ -23,8 +24,8 @@ class SearchableListView extends StatefulWidget {
   /// Create an instance.
   const SearchableListView({
     required this.children,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The list of children.
   final List<SearchableListTile> children;
@@ -152,8 +153,8 @@ class BuiltSearchableListView<T> extends StatelessWidget {
   const BuiltSearchableListView({
     required this.items,
     required this.builder,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The items to build from.
   final Iterable<T> items;

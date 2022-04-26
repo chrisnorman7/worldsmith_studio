@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -8,9 +9,9 @@ import '../../widgets/command/call_command_list_tile.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/play_sound_semantics.dart';
 import '../../widgets/push_widget_list_tile.dart';
-import '../../widgets/select_item.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../../widgets/zone/walking_mode_list_tile.dart';
+import '../zone/select_location_marker.dart';
 
 const _intervalModifier = 100.0;
 
@@ -22,8 +23,8 @@ class EditNpcMove extends StatefulWidget {
     required this.zone,
     required this.zoneNpc,
     required this.npcMove,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;
@@ -67,7 +68,9 @@ class EditNpcMoveState extends State<EditNpcMove> {
                 yesCallback: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  widget.zoneNpc.moves.remove(widget.npcMove);
+                  widget.zoneNpc.moves.removeWhere(
+                    (final element) => element.id == widget.npcMove.id,
+                  );
                 },
               ),
               child: const Icon(
@@ -86,25 +89,12 @@ class EditNpcMoveState extends State<EditNpcMove> {
               gain: sound?.gain ?? 0,
               child: PushWidgetListTile(
                 title: 'Location Marker',
-                builder: (final context) => SelectItem<LocationMarker>(
+                builder: (final context) => SelectLocationMarker(
+                  projectContext: widget.projectContext,
+                  locationMarkers: widget.zone.locationMarkers,
                   onDone: (final value) {
                     widget.npcMove.locationMarkerId = value.id;
                     save();
-                  },
-                  values: widget.zone.locationMarkers,
-                  getItemWidget: (final value) {
-                    final text = value.message.text;
-                    final sound = value.message.sound;
-                    final asset = sound == null
-                        ? null
-                        : widget.projectContext.worldContext
-                            .getCustomSound(sound);
-                    return PlaySoundSemantics(
-                      child: Text(text ?? 'Untitled Location Marker'),
-                      soundChannel: widget.projectContext.game.interfaceSounds,
-                      assetReference: asset,
-                      gain: sound?.gain ?? 0,
-                    );
                   },
                 ),
                 autofocus: true,

@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 import 'dart:math';
 
@@ -47,8 +48,8 @@ class EditZone extends StatefulWidget {
   const EditZone({
     required this.projectContext,
     required this.zone,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

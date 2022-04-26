@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -6,7 +7,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/play_sound_semantics.dart';
-import '../../widgets/select_item.dart';
+import '../zone/select_location_marker.dart';
 import 'edit_npc_move.dart';
 
 /// A widget for editing NPC moves for the given [zoneNpc].
@@ -16,8 +17,8 @@ class EditNpcMoves extends StatefulWidget {
     required this.projectContext,
     required this.zone,
     required this.zoneNpc,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;
@@ -90,17 +91,19 @@ class EditNpcMovesState extends State<EditNpcMoves> {
             } else {
               pushWidget(
                 context: context,
-                builder: (final context) => SelectItem<LocationMarker>(
+                builder: (final context) => SelectLocationMarker(
+                  projectContext: widget.projectContext,
+                  locationMarkers: markers,
                   onDone: (final value) async {
                     Navigator.pop(context);
-                    final move = NpcMove(locationMarkerId: value.id);
+                    final move = NpcMove(
+                      id: newId(),
+                      locationMarkerId: value.id,
+                    );
                     widget.zoneNpc.moves.add(move);
                     widget.projectContext.save();
                     setState(() {});
                   },
-                  values: widget.zone.locationMarkers,
-                  getItemWidget: (final value) =>
-                      Text(value.message.text ?? 'Untitled Location Marker'),
                 ),
               );
             }

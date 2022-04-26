@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class SoundListTile extends StatefulWidget {
     this.autofocus = false,
     this.playSound = true,
     this.soundChannel,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

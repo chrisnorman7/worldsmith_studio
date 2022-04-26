@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:ziggurat/sound.dart';
 
@@ -14,8 +15,8 @@ class MusicWidget extends StatefulWidget {
     required this.getFadeTime,
     this.actions = const [],
     this.floatingActionButton,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The title of the resulting [Scaffold].
   final String title;

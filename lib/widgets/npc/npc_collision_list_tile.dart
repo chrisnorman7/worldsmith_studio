@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -15,8 +16,8 @@ class NpcCollisionListTile extends StatelessWidget {
     required this.onChanged,
     this.autofocus = false,
     this.title = 'Collision',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

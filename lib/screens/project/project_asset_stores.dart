@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -9,8 +10,8 @@ class ProjectAssetStores extends StatefulWidget {
   /// Create an instance.
   const ProjectAssetStores({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

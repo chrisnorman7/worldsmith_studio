@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../util.dart';
@@ -11,8 +12,8 @@ class PushWidgetListTile extends StatefulWidget {
     this.onSetState,
     this.subtitle,
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The title for this widget.
   final String title;

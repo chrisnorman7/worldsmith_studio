@@ -1,4 +1,4 @@
-/// Provides the [GetText] class.
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'cancel.dart';
@@ -15,8 +15,8 @@ class GetText extends StatefulWidget {
     this.labelText = 'Text',
     this.icon = const Icon(Icons.done_rounded),
     this.tooltip = 'Done',
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// What to do with the resulting text.
   final ValueChanged<String> onDone;

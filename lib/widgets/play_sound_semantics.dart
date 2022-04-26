@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -11,8 +12,8 @@ class PlaySoundSemantics extends StatefulWidget {
     this.assetReference,
     this.gain = 0.7,
     this.looping = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Find an instance by the given [context].
   static PlaySoundSemanticsState? of(final BuildContext context) =>

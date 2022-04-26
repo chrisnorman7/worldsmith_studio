@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -19,8 +20,8 @@ class AddAsset extends StatefulWidget {
   const AddAsset({
     required this.projectContext,
     required this.assetStore,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

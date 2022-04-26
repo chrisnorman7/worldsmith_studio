@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -13,8 +14,8 @@ class SelectBox extends StatelessWidget {
     this.excludedBoxIds = const [],
     this.title = 'Select Box',
     this.canClear = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The zone which contains the boxes to choose from.
   final Zone zone;

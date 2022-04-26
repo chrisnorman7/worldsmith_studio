@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -8,7 +9,7 @@ void main() => runApp(const MyApp());
 /// The main app class.
 class MyApp extends StatelessWidget {
   /// Create an instance.
-  const MyApp({final Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override

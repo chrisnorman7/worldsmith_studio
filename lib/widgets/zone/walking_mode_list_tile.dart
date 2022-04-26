@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -12,8 +13,8 @@ class WalkingModeListTile extends StatelessWidget {
     required this.onDone,
     this.title = 'Walking Mode',
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The walking mode to use.
   final WalkingMode walkingMode;

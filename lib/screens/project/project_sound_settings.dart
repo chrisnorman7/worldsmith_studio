@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -11,8 +12,8 @@ class ProjectSoundSettings extends StatefulWidget {
   /// Create an instance.
   const ProjectSoundSettings({
     required this.projectContext,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

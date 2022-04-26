@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class EditCoordinates extends StatefulWidget {
     this.actions = const [],
     this.title = 'Edit Coordinates',
     this.canChangeClamp = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

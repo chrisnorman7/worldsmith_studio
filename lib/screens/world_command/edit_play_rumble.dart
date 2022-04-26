@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -15,8 +16,8 @@ class EditPlayRumble extends StatefulWidget {
     required this.projectContext,
     required this.playRumble,
     required this.onDone,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The project context to use.
   final ProjectContext projectContext;

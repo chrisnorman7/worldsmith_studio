@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../intents.dart';
@@ -16,8 +17,8 @@ class NumberListTile extends StatelessWidget {
     this.title = 'Number',
     this.subtitle,
     this.autofocus = false,
-    final Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The initial value.
   final double value;
