@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 preferences: preferences,
               ),
-          LaunchManualIntent.hotkey: () => launch(manualUrl)
+          LaunchManualIntent.hotkey: () => launchUrl(manualUrl)
         },
         child: WithKeyboardShortcuts(
           keyboardShortcuts: const [
@@ -171,8 +171,11 @@ class _HomePageState extends State<HomePage> {
               ),
               PopupMenuItem(
                 child: const Text('Visit GitHub'),
-                value: () =>
-                    launch('https://github.com/chrisnorman7/worldsmith_studio'),
+                value: () => launchUrl(
+                  Uri.parse(
+                    'https://github.com/chrisnorman7/worldsmith_studio',
+                  ),
+                ),
               ),
               PopupMenuItem(
                 child: const Text('About'),
@@ -425,8 +428,10 @@ class _HomePageState extends State<HomePage> {
                 child: const Text('Cancel'),
               ),
               TextButton(
-                onPressed: () => launch(
-                  'https://github.com/chrisnorman7/worldsmith_studio/releases/latest',
+                onPressed: () => launchUrl(
+                  Uri.parse(
+                    'https://github.com/chrisnorman7/worldsmith_studio/releases/latest',
+                  ),
                 ),
                 child: const Text('Download'),
               )

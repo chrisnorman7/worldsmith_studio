@@ -129,7 +129,7 @@ void deleteEquipmentPosition({
     );
 
 /// Launch the manual.
-void launchManual() => launch(manualUrl);
+void launchManual() => launchUrl(manualUrl);
 
 /// Report an issue.
 void launchReportIssue() {
@@ -145,7 +145,7 @@ void launchReportIssue() {
     },
     scheme: 'https',
   );
-  launch(uri.toString());
+  launchUrl(uri);
 }
 
 /// Get the latest tag from GitHub.

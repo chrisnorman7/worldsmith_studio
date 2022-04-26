@@ -17,8 +17,9 @@ import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/text_list_tile.dart';
 import 'reverb_setting.dart';
 
-const _synthizerReverbUrl =
-    'https://synthizer.github.io/object_reference/global_fdn_reverb.html';
+final _synthizerReverbUrl = Uri.parse(
+  'https://synthizer.github.io/object_reference/global_fdn_reverb.html',
+);
 const _meanFreePathSetting = ReverbSetting(
   name: 'The mean free path of the simulated environment',
   defaultValue: 0.1,
@@ -309,7 +310,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
                       tooltip: 'Delete Reverb Preset',
                     ),
                     IconButton(
-                      onPressed: () => launch(_synthizerReverbUrl),
+                      onPressed: () => launchUrl(_synthizerReverbUrl),
                       icon: const Icon(Icons.help_rounded),
                       tooltip: 'Synthizer Help',
                     ),

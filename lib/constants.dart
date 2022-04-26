@@ -41,7 +41,9 @@ const deleteIcon = Icon(
 typedef CanDelete<T> = String? Function(T value);
 
 /// The URL for the manual.
-const manualUrl = 'https://chrisnorman7.github.io/worldsmith_studio_manual';
+final manualUrl = Uri.parse(
+  'https://chrisnorman7.github.io/worldsmith_studio_manual',
+);
 
 /// The date formatter to use.
 final dateFormat = DateFormat.yMMMMEEEEd().add_Hms();

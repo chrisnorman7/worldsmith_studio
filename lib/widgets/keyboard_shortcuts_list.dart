@@ -73,7 +73,7 @@ class KeyboardShortcuts extends StatelessWidget {
           appBar: AppBar(
             actions: [
               ElevatedButton(
-                onPressed: () => launch(manualUrl),
+                onPressed: () => launchUrl(manualUrl),
                 child: const Icon(
                   Icons.help_outline,
                   semanticLabel: 'Open Manual',

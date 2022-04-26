@@ -58,7 +58,11 @@ class EditCreditState extends State<EditCredit> {
               child: deleteIcon,
             ),
             ElevatedButton(
-              onPressed: url == null ? null : () => launch(url),
+              onPressed: url == null
+                  ? null
+                  : () => launchUrl(
+                        Uri.parse(url),
+                      ),
               child: const Icon(
                 Icons.open_in_browser_outlined,
                 semanticLabel: 'Test URL',
