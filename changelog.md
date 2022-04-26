@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.12
+
+- Various fixes.
+
 ## 0.0.11
 
 - Added NPC editor.
