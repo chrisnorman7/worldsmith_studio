@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
+import '../../util.dart';
 import '../../widgets/cancel.dart';
 import '../../widgets/command/call_command_list_tile.dart';
 import '../../widgets/number_list_tile.dart';
@@ -57,6 +58,24 @@ class EditNpcMoveState extends State<EditNpcMove> {
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            ElevatedButton(
+              onPressed: () => confirm(
+                context: context,
+                message: 'Are you sure you want to delete this move?',
+                title: 'Delete Move',
+                yesCallback: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  widget.zoneNpc.moves.remove(widget.npcMove);
+                },
+              ),
+              child: const Icon(
+                Icons.delete,
+                semanticLabel: 'Delete Move',
+              ),
+            )
+          ],
           title: const Text('Edit Move'),
         ),
         body: ListView(
@@ -73,6 +92,20 @@ class EditNpcMoveState extends State<EditNpcMove> {
                     save();
                   },
                   values: widget.zone.locationMarkers,
+                  getItemWidget: (final value) {
+                    final text = value.message.text;
+                    final sound = value.message.sound;
+                    final asset = sound == null
+                        ? null
+                        : widget.projectContext.worldContext
+                            .getCustomSound(sound);
+                    return PlaySoundSemantics(
+                      child: Text(text ?? 'Untitled Location Marker'),
+                      soundChannel: widget.projectContext.game.interfaceSounds,
+                      assetReference: asset,
+                      gain: sound?.gain ?? 0,
+                    );
+                  },
                 ),
                 autofocus: true,
                 subtitle: marker.message.text ?? 'Untitled Location Marker',
