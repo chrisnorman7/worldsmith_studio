@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.11
+
+- Added NPC editor.
+
 ## 0.0.10
 
 - Fixed the version number.
