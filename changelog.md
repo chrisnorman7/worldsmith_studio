@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.13
+
+- Updated worldsmith, which means some of the UI will be different.
+
 ## 0.0.12
 
 - Various fixes.
