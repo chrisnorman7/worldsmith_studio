@@ -4,6 +4,7 @@ import 'package:dart_sdl/dart_sdl.dart';
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/world_context.dart';
 import 'package:worldsmith/worldsmith.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -110,21 +111,21 @@ class ProjectContext {
   /// `menuMoveSound`.
   PlaySoundSemantics getMenuMoveSemantics({
     required final Widget child,
-    final CustomSound? sound,
+    final Sound? sound,
   }) {
     final defaultGain = sound?.gain ??
         world.soundOptions.menuMoveSound?.gain ??
         world.soundOptions.defaultGain;
-    AssetReference? assetReference;
-    if (sound != null) {
-      assetReference = worldContext.getCustomSound(sound);
-    } else {
-      assetReference = world.menuMoveSound;
-    }
+    final assetReference = sound == null
+        ? world.menuMoveSound
+        : getAssetReferenceReference(
+            assets: world.interfaceSoundsAssets,
+            id: sound.id,
+          ).reference;
     return PlaySoundSemantics(
       soundChannel: game.interfaceSounds,
       assetReference: assetReference,
-      gain: world.pauseMenuOptions.music?.gain ?? defaultGain,
+      gain: defaultGain,
       child: child,
     );
   }

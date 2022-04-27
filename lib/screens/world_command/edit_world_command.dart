@@ -11,7 +11,6 @@ import '../../widgets/command/call_commands_list_tile.dart';
 import '../../widgets/command/play_rumble_list_tile.dart';
 import '../../widgets/command/return_to_main_menu_list_tile.dart';
 import '../../widgets/conversation/start_conversation_list_tile.dart';
-import '../../widgets/custom_message/custom_message_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/quest/quest_list_tile.dart';
@@ -144,10 +143,13 @@ class EditWorldCommandState extends State<EditWorldCommand> {
           subtitle: Text(widget.command.name),
           onTap: Actions.handler<RenameIntent>(context, _renameIntent),
         ),
-        CustomMessageListTile(
-          projectContext: widget.projectContext,
-          customMessage: widget.command.message,
-          title: 'Message',
+        TextListTile(
+          value: widget.command.text ?? '',
+          onChanged: (value) {
+            widget.command.text = value;
+            save();
+          },
+          header: 'Message',
         ),
         CallbackShortcuts(
           bindings: {

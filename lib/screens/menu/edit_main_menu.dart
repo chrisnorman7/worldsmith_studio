@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
+import '../../custom_message.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
@@ -34,6 +35,7 @@ class EditMainMenuState extends State<EditMainMenu> {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
     final options = world.mainMenuOptions;
+    final interfaceSoundsAssetStore = world.interfaceSoundsAssetStore;
     return Cancel(
       child: MusicWidget(
         getFadeTime: () => options.fadeTime,
@@ -75,34 +77,84 @@ class EditMainMenuState extends State<EditMainMenu> {
             ),
             const Divider(),
             CustomMessageListTile(
-              customMessage: options.newGameMessage,
+              customMessage: CustomMessage(
+                sound: options.newGameSound,
+                text: options.newGameString,
+              ),
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..newGameSound = value.sound
+                  ..newGameString = value.text;
+                save();
+              },
               projectContext: widget.projectContext,
               title: 'Play New Game Menu Item',
               assetReference: world.menuMoveSound,
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.savedGameMessage,
+              customMessage: CustomMessage(
+                sound: options.savedGameSound,
+                text: options.savedGameString,
+              ),
               title: 'Play Saved Game Menu Item',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..savedGameSound = value.sound
+                  ..savedGameString = value.text;
+                save();
+              },
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.creditsMessage,
+              customMessage: CustomMessage(
+                sound: options.creditsSound,
+                text: options.creditsString,
+              ),
               title: 'Show Credits Menu Item',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..creditsSound = value.sound
+                  ..creditsString = value.text;
+                save();
+              },
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.exitMessage,
+              customMessage: CustomMessage(
+                sound: options.exitSound,
+                text: options.exitString,
+              ),
               title: 'Exit Game Menu Item',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..exitSound = value.sound
+                  ..exitString = value.text;
+                save();
+              },
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.onExitMessage,
-              title: 'Game Exiting',
+              customMessage: CustomMessage(
+                sound: options.onExitSound,
+                text: options.onExitString,
+              ),
+              title: 'Game Exiting Message',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..onExitSound = value.sound
+                  ..onExitString = value.text;
+                save();
+              },
             )
           ],
         ),

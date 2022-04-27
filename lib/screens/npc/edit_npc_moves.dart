@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -50,17 +51,25 @@ class EditNpcMovesState extends State<EditNpcMoves> {
           itemBuilder: (final context, final index) {
             final move = moves[index];
             final marker = widget.zone.getLocationMarker(move.locationMarkerId);
-            final sound = marker.message.sound;
-            final assetReference =
-                sound == null ? null : worldContext.getCustomSound(sound);
+            final name = marker.name;
+            final sound = marker.sound;
+            final assetReference = sound == null
+                ? null
+                : getAssetReferenceReference(
+                    assets: worldContext.world.interfaceSoundsAssets,
+                    id: sound.id,
+                  ).reference;
             return PlaySoundSemantics(
               soundChannel: widget.projectContext.game.interfaceSounds,
               assetReference: assetReference,
               gain: sound?.gain ?? 0,
-              looping: true,
               child: ListTile(
                 autofocus: index == 0,
-                title: Text('${marker.message.text}'),
+                title: Text(name ?? 'Untitled Marker'),
+                subtitle: Text(
+                  '${move.minMoveInterval}-${move.maxMoveInterval} ms '
+                  '(${move.stepSize} step size)',
+                ),
                 onTap: () async {
                   await pushWidget(
                     context: context,

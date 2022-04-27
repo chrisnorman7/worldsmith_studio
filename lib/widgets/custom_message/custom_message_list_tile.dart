@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
-import 'package:worldsmith/worldsmith.dart';
+import 'package:worldsmith/util.dart';
 import 'package:ziggurat/ziggurat.dart';
+import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
+import '../../custom_message.dart';
 import '../../project_context.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
@@ -14,6 +16,8 @@ class CustomMessageListTile extends StatefulWidget {
   const CustomMessageListTile({
     required this.projectContext,
     required this.customMessage,
+    required this.assetStore,
+    required this.onChanged,
     required this.title,
     this.assetReference,
     this.autofocus = false,
@@ -26,6 +30,12 @@ class CustomMessageListTile extends StatefulWidget {
 
   /// The message to use.
   final CustomMessage customMessage;
+
+  /// The asset store to choose sounds from.
+  final AssetStore assetStore;
+
+  /// The function to call when [customMessage] changes.
+  final ValueChanged<CustomMessage> onChanged;
 
   /// The title of the resulting [ListTile].
   final String title;
@@ -55,7 +65,10 @@ class CustomMessageListTileState extends State<CustomMessageListTile> {
       soundChannel: widget.projectContext.game.interfaceSounds,
       assetReference: sound == null
           ? widget.assetReference
-          : widget.projectContext.worldContext.getCustomSound(sound),
+          : getAssetReferenceReference(
+              assets: widget.assetStore.assets,
+              id: sound.id,
+            ).reference,
       child: Builder(
         builder: (final context) => ListTile(
           autofocus: widget.autofocus,
@@ -68,6 +81,9 @@ class CustomMessageListTileState extends State<CustomMessageListTile> {
               builder: (final context) => EditCustomMessage(
                 projectContext: widget.projectContext,
                 customMessage: widget.customMessage,
+                assetStore: widget.assetStore,
+                onChanged: widget.onChanged,
+                validator: widget.validator,
               ),
             );
             widget.projectContext.save();

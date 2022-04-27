@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
@@ -848,7 +849,7 @@ class EditZoneState extends State<EditZone> {
   Future<void> addLocationMarker(final BuildContext context) async {
     final marker = LocationMarker(
       id: newId(),
-      message: CustomMessage(text: 'Untitled Marker'),
+      name: 'Untitled Marker',
       coordinates: Coordinates(0, 0),
     );
     widget.zone.locationMarkers.add(marker);
@@ -873,23 +874,26 @@ class EditZoneState extends State<EditZone> {
     final children = <SearchableListTile>[];
     for (var i = 0; i < markers.length; i++) {
       final marker = markers[i];
-      final message = marker.message;
-      final sound = message.sound;
+      final name = marker.name;
+      final sound = marker.sound;
       final assetReference = sound == null
           ? null
-          : widget.projectContext.worldContext.getCustomSound(sound);
+          : getAssetReferenceReference(
+              assets: widget.projectContext.world.interfaceSoundsAssets,
+              id: sound.id,
+            ).reference;
       final coordinates = widget.zone.getAbsoluteCoordinates(
         marker.coordinates,
       );
       children.add(
         SearchableListTile(
-          searchString: marker.message.text ?? '',
+          searchString: name ?? '',
           child: PlaySoundSemantics(
             soundChannel: widget.projectContext.game.interfaceSounds,
             assetReference: assetReference,
             child: ListTile(
               autofocus: i == 0,
-              title: Text(message.text ?? 'Untitled Marker'),
+              title: Text(name ?? 'Untitled Marker'),
               subtitle: Text('${coordinates.x},${coordinates.y}'),
               onTap: () async {
                 await pushWidget(

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
@@ -52,10 +53,14 @@ class EditNpcMoveState extends State<EditNpcMove> {
     final marker = widget.zone.getLocationMarker(
       widget.npcMove.locationMarkerId,
     );
-    final sound = marker.message.sound;
+    final name = marker.name;
+    final sound = marker.sound;
     final assetReference = sound == null
         ? null
-        : widget.projectContext.worldContext.getCustomSound(sound);
+        : getAssetReferenceReference(
+            assets: world.interfaceSoundsAssets,
+            id: sound.id,
+          ).reference;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -98,7 +103,7 @@ class EditNpcMoveState extends State<EditNpcMove> {
                   },
                 ),
                 autofocus: true,
-                subtitle: marker.message.text ?? 'Untitled Location Marker',
+                subtitle: name ?? 'Untitled Location Marker',
               ),
             ),
             NumberListTile(

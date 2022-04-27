@@ -53,7 +53,7 @@ class ProjectMenusState extends State<ProjectMenus> {
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             title: Text(
-              options.creditsMessage.text ?? world.creditsMenuOptions.title,
+              options.creditsString ?? world.creditsMenuOptions.title,
             ),
             onTap: () async {
               widget.projectContext.playActivateSound();
@@ -66,11 +66,12 @@ class ProjectMenusState extends State<ProjectMenus> {
               setState(() {});
             },
           ),
+          sound: options.creditsSound,
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
             title: Text(
-              options.soundOptionsMessage.text ?? world.soundMenuOptions.title,
+              options.soundOptionsString ?? world.soundMenuOptions.title,
             ),
             onTap: () async {
               widget.projectContext.playActivateSound();
@@ -83,6 +84,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               setState(() {});
             },
           ),
+          sound: options.soundOptionsSound,
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
@@ -10,15 +11,18 @@ import '../../widgets/select_item.dart';
 class SelectLocationMarker extends StatelessWidget {
   /// Create an instance.
   const SelectLocationMarker({
-  required this.projectContext,
+    required this.projectContext,
     required this.locationMarkers,
     required this.onDone,
     super.key,
   });
+
   /// The project context to use.
   final ProjectContext projectContext;
+
   /// The location markers to choose from.
   final List<LocationMarker> locationMarkers;
+
   /// The function to call with the resulting marker.
   final ValueChanged<LocationMarker> onDone;
 
@@ -28,11 +32,14 @@ class SelectLocationMarker extends StatelessWidget {
         onDone: onDone,
         values: locationMarkers,
         getItemWidget: (final value) {
-          final text = value.message.text;
-          final sound = value.message.sound;
+          final text = value.name;
+          final sound = value.sound;
           final asset = sound == null
               ? null
-              : projectContext.worldContext.getCustomSound(sound);
+              : getAssetReferenceReference(
+                  assets: projectContext.world.interfaceSoundsAssets,
+                  id: sound.id,
+                ).reference;
           return PlaySoundSemantics(
             child: Text(text ?? 'Untitled Location Marker'),
             soundChannel: projectContext.game.interfaceSounds,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
 import '../../constants.dart';
+import '../../custom_message.dart';
 import '../../intents.dart';
 import '../../project_context.dart';
 import '../../util.dart';
@@ -138,9 +139,19 @@ class EditSceneState extends State<EditScene> {
                   },
                   child: CustomMessageListTile(
                     projectContext: widget.projectContext,
-                    customMessage: section.message,
+                    customMessage: CustomMessage(
+                      sound: section.sound,
+                      text: section.text,
+                    ),
                     title: 'Section ${index + 1}',
                     autofocus: index == 0,
+                    assetStore: world.interfaceSoundsAssetStore,
+                    onChanged: (value) {
+                      section
+                        ..sound = value.sound
+                        ..text = value.text;
+                      save();
+                    },
                   ),
                 );
               },
@@ -150,14 +161,20 @@ class EditSceneState extends State<EditScene> {
               autofocus: sections.isEmpty,
               child: createIcon,
               onPressed: () async {
-                final section = SceneSection(message: CustomMessage());
-                sections.add(section);
-                widget.projectContext.save();
                 await pushWidget(
                   context: context,
                   builder: (final context) => EditCustomMessage(
                     projectContext: widget.projectContext,
-                    customMessage: section.message,
+                    customMessage: const CustomMessage(),
+                    assetStore: world.interfaceSoundsAssetStore,
+                    onChanged: (value) {
+                      final section = SceneSection(
+                        sound: value.sound,
+                        text: value.text,
+                      );
+                      sections.add(section);
+                      widget.projectContext.save();
+                    },
                   ),
                 );
                 setState(() {});

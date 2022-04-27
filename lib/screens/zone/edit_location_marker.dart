@@ -4,10 +4,10 @@ import 'package:worldsmith/worldsmith.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
-import '../../validators.dart';
 import '../../widgets/box/coordinates_list_tile.dart';
 import '../../widgets/cancel.dart';
-import '../../widgets/custom_message/custom_message_list_tile.dart';
+import '../../widgets/sound/sound_list_tile.dart';
+import '../../widgets/text_list_tile.dart';
 
 /// A widget for editing a location marker.
 class EditLocationMarker extends StatefulWidget {
@@ -37,40 +37,56 @@ class EditLocationMarker extends StatefulWidget {
 class EditLocationMarkerState extends State<EditLocationMarker> {
   /// Build a widget.
   @override
-  Widget build(final BuildContext context) => Cancel(
-        child: Scaffold(
-          appBar: AppBar(
-            actions: [
-              ElevatedButton(
-                onPressed: () => deleteLocationMarker(context),
-                child: const Icon(
-                  Icons.delete_outline,
-                  semanticLabel: 'Delete Location Marker',
-                ),
-              )
-            ],
-            title: const Text('Edit Location Marker'),
-          ),
-          body: ListView(
-            children: [
-              CustomMessageListTile(
-                projectContext: widget.projectContext,
-                customMessage: widget.locationMarker.message,
-                title: 'Message',
-                autofocus: true,
-                validator: (final value) => validateNonEmptyValue(value: value),
+  Widget build(final BuildContext context) {
+    final world = widget.projectContext.world;
+    return Cancel(
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            ElevatedButton(
+              onPressed: () => deleteLocationMarker(context),
+              child: const Icon(
+                Icons.delete_outline,
+                semanticLabel: 'Delete Location Marker',
               ),
-              CoordinatesListTile(
-                projectContext: widget.projectContext,
-                zone: widget.zone,
-                value: widget.locationMarker.coordinates,
-                onChanged: save,
-                canChangeClamp: true,
-              )
-            ],
-          ),
+            )
+          ],
+          title: const Text('Edit Location Marker'),
         ),
-      );
+        body: ListView(
+          children: [
+            TextListTile(
+              value: widget.locationMarker.name ?? '',
+              onChanged: (value) {
+                widget.locationMarker.name = value.isEmpty ? null : value;
+                save();
+              },
+              header: 'Name',
+              autofocus: true,
+            ),
+            SoundListTile(
+              projectContext: widget.projectContext,
+              value: widget.locationMarker.sound,
+              onDone: (value) {
+                widget.locationMarker.sound = value;
+                save();
+              },
+              assetStore: world.interfaceSoundsAssetStore,
+              defaultGain: world.soundOptions.defaultGain,
+              nullable: true,
+            ),
+            CoordinatesListTile(
+              projectContext: widget.projectContext,
+              zone: widget.zone,
+              value: widget.locationMarker.coordinates,
+              onChanged: save,
+              canChangeClamp: true,
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   /// Delete the location marker.
   void deleteLocationMarker(final BuildContext context) {

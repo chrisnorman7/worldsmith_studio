@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
+import '../../custom_message.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
@@ -34,6 +35,7 @@ class EditPauseMenuState extends State<EditPauseMenu> {
     final world = widget.projectContext.world;
     final defaultGain = world.soundOptions.defaultGain;
     final options = world.pauseMenuOptions;
+    final interfaceSoundsAssetStore = world.interfaceSoundsAssetStore;
     return Cancel(
       child: MusicWidget(
         getFadeTime: () => options.fadeTime,
@@ -76,21 +78,51 @@ class EditPauseMenuState extends State<EditPauseMenu> {
             const Divider(),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.zoneOverviewMessage,
+              customMessage: CustomMessage(
+                sound: options.zoneOverviewSound,
+                text: options.zoneOverviewString,
+              ),
               title: 'Zone Overview Label',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..zoneOverviewSound = value.sound
+                  ..zoneOverviewString = value.text;
+                save();
+              },
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.returnToGameMessage,
+              customMessage: CustomMessage(
+                sound: options.returnToGameSound,
+                text: options.returnToGameString,
+              ),
               title: 'Return To Game',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..returnToGameSound = value.sound
+                  ..returnToGameString = value.text;
+                save();
+              },
             ),
             CustomMessageListTile(
               projectContext: widget.projectContext,
-              customMessage: options.returnToMainMenuMessage,
+              customMessage: CustomMessage(
+                sound: options.returnToMainMenuSound,
+                text: options.returnToMainMenuString,
+              ),
               title: 'Return To Main Menu',
               assetReference: world.menuMoveSound,
+              assetStore: interfaceSoundsAssetStore,
+              onChanged: (value) {
+                options
+                  ..returnToMainMenuSound = value.sound
+                  ..returnToMainMenuString = value.text;
+                save();
+              },
             ),
             FadeTimeListTile(
               value: options.returnToMainMenuFadeTime,
