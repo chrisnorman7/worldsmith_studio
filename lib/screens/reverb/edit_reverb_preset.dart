@@ -155,11 +155,7 @@ class EditReverbPresetState extends State<EditReverbPreset> {
         projectContext: widget.projectContext,
         value: widget.reverbPresetReference.sound,
         title: 'Preview Sound',
-        onClear: () {
-          widget.reverbPresetReference.sound = null;
-          save();
-        },
-        onCreate: (final value) {
+        onChanged: (final value) {
           widget.reverbPresetReference.sound = value;
           save();
         },

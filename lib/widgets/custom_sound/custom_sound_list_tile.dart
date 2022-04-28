@@ -5,19 +5,19 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../screens/asset_store/select_asset.dart';
 import '../../screens/asset_store/select_asset_store.dart';
+import '../../screens/sound/edit_custom_sound.dart';
 import '../../util.dart';
 import '../play_sound_semantics.dart';
-import '../push_widget_list_tile.dart';
 
 /// A widget for displaying a [CustomSound].
-class CustomSoundListTile extends StatefulWidget {
+class CustomSoundListTile extends StatelessWidget {
   /// Create an instance.
   const CustomSoundListTile({
     required this.projectContext,
     required this.value,
-    required this.onCreate,
+    required this.onChanged,
     this.title = 'Sound',
-    this.onClear,
+    this.autofocus = false,
     super.key,
   });
 
@@ -27,129 +27,92 @@ class CustomSoundListTile extends StatefulWidget {
   /// The sound to view and edit.
   final CustomSound? value;
 
-  /// The function to call to create a new sound.
-  final ValueChanged<CustomSound> onCreate;
+  /// The function to call when editing [value].
+  final ValueChanged<CustomSound?> onChanged;
 
   /// The title for the resulting [ListTile].
   final String title;
 
-  /// A function to be called to set the [value] to `null`.
-  ///
-  /// If this value is `null`, then it will not be possible to clear the
-  /// [value].
-  final VoidCallback? onClear;
-
-  /// Create state for this widget.
-  @override
-  CustomSoundListTileState createState() => CustomSoundListTileState();
-}
-
-/// State for [CustomSoundListTile].
-class CustomSoundListTileState extends State<CustomSoundListTile> {
-  CustomSound? _sound;
+  /// Whether the resulting [ListTile] should be autofocused.
+  final bool autofocus;
 
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
-    final onClear = widget.onClear;
-    final sound = _sound ?? widget.value;
-    if (sound == null) {
-      return ListTile(
-        title: Text(widget.title),
-        subtitle: const Text('Not set'),
-        onTap: () => pushWidget(
-          context: context,
-          builder: (final context) => SelectAssetStore(
-            projectContext: widget.projectContext,
-            onDone: (final customAssetStore) {
-              if (customAssetStore == null) {
-                Navigator.pop(context);
-                return;
-              }
+    final worldContext = projectContext.worldContext;
+    final sound = value;
+    final assetStore =
+        sound == null ? null : worldContext.getAssetStore(sound.assetStore);
+    final assetReferenceReference = sound != null && assetStore != null
+        ? assetStore.assets.firstWhere(
+            (element) => element.variableName == sound.id,
+          )
+        : null;
+    final audioBusId = sound?.audioBusId;
+    final audioBus = audioBusId == null
+        ? null
+        : projectContext.world.getAudioBus(audioBusId);
+    final audioBusName = audioBus == null ? '' : ' (${audioBus.name})';
+    return PlaySoundSemantics(
+      child: Builder(
+        builder: (context) => ListTile(
+          autofocus: autofocus,
+          title: Text(title),
+          subtitle: Text(
+            sound == null
+                ? 'Not set'
+                : '${assetStore?.comment}/${assetReferenceReference?.comment}$audioBusName',
+          ),
+          onTap: () {
+            PlaySoundSemantics.of(context)?.stop();
+            if (sound == null) {
               pushWidget(
                 context: context,
-                builder: (final context) => SelectAsset(
-                  projectContext: widget.projectContext,
-                  assetStore: widget.projectContext.worldContext.getAssetStore(
-                    customAssetStore,
-                  ),
-                  onDone: (final reference) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    if (reference == null) {
-                      return;
+                builder: (context) => SelectAssetStore(
+                  projectContext: projectContext,
+                  onDone: (store) {
+                    if (store == null) {
+                      Navigator.pop(context);
+                    } else {
+                      pushWidget(
+                        context: context,
+                        builder: (context) => SelectAsset(
+                          projectContext: projectContext,
+                          assetStore: worldContext.getAssetStore(store),
+                          onDone: (asset) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            if (asset != null) {
+                              final customSound = CustomSound(
+                                assetStore: store,
+                                id: asset.variableName,
+                              );
+                              onChanged(customSound);
+                            }
+                          },
+                        ),
+                      );
                     }
-                    final sound = CustomSound(
-                      assetStore: customAssetStore,
-                      id: reference.variableName,
-                    );
-                    widget.onCreate(sound);
                   },
                 ),
               );
-            },
-          ),
-        ),
-      );
-    }
-    final assetStore = widget.projectContext.worldContext.getAssetStore(
-      sound.assetStore,
-    );
-    final reference = assetStore.assets.firstWhere(
-      (final element) => element.variableName == sound.id,
-    );
-    return PlaySoundSemantics(
-      soundChannel: widget.projectContext.game.interfaceSounds,
-      assetReference: reference.reference,
-      gain: sound.gain,
-      child: PushWidgetListTile(
-        title: widget.title,
-        subtitle: '${assetStore.comment}/${reference.comment}',
-        builder: (final context) => SelectAssetStore(
-          projectContext: widget.projectContext,
-          onDone: (final customSoundAssetStore) {
-            if (customSoundAssetStore == null) {
-              if (onClear != null) {
-                onClear();
-              }
-              Navigator.pop(context);
-              save();
             } else {
               pushWidget(
                 context: context,
-                builder: (final context) => SelectAsset(
-                  projectContext: widget.projectContext,
-                  assetStore: widget.projectContext.worldContext
-                      .getAssetStore(customSoundAssetStore),
-                  onDone: (final newAssetReference) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    if (newAssetReference == null) {
-                      if (onClear != null) {
-                        onClear();
-                      }
-                    } else {
-                      sound
-                        ..assetStore = customSoundAssetStore
-                        ..id = newAssetReference.variableName;
-                    }
-                    save();
-                  },
-                  currentId: sound.id,
-                  nullable: onClear != null,
+                builder: (context) => EditCustomSound(
+                  projectContext: projectContext,
+                  value: sound,
                 ),
               );
             }
           },
-          currentAssetStore: sound.assetStore,
         ),
       ),
+      soundChannel: audioBus == null
+          ? projectContext.game.interfaceSounds
+          : worldContext.getAudioBus(audioBus),
+      assetReference: assetReferenceReference?.reference,
+      gain: sound?.gain ?? 0.0,
     );
-  }
-
-  /// Save the project.
-  void save() {
-    widget.projectContext.save();
-    setState(() {});
   }
 }

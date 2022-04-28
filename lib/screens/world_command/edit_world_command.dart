@@ -11,6 +11,7 @@ import '../../widgets/command/call_commands_list_tile.dart';
 import '../../widgets/command/play_rumble_list_tile.dart';
 import '../../widgets/command/return_to_main_menu_list_tile.dart';
 import '../../widgets/conversation/start_conversation_list_tile.dart';
+import '../../widgets/custom_sound/custom_sound_list_tile.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/keyboard_shortcuts_list.dart';
 import '../../widgets/quest/quest_list_tile.dart';
@@ -150,6 +151,14 @@ class EditWorldCommandState extends State<EditWorldCommand> {
             save();
           },
           header: 'Message',
+        ),
+        CustomSoundListTile(
+          projectContext: widget.projectContext,
+          value: widget.command.sound,
+          onChanged: (value) {
+            widget.command.sound = value;
+            save();
+          },
         ),
         CallbackShortcuts(
           bindings: {
