@@ -40,7 +40,9 @@ class ProjectAudioBussesState extends State<ProjectAudioBusses> {
           return ListTile(
             autofocus: index == 0,
             title: Text(bus.name),
-            subtitle: Text(bus.panningType.name),
+            subtitle: Text(
+              '${bus.panningType.name} (${bus.x}, ${bus.y}, ${bus.z})',
+            ),
             onTap: () async {
               await pushWidget(
                 context: context,
