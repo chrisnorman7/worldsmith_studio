@@ -5,6 +5,7 @@ import 'package:worldsmith/worldsmith.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
+import '../../widgets/custom_sound/custom_sound_list_tile.dart';
 import '../../widgets/number_list_tile.dart';
 import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/reverb/reverb_list_tile.dart';
@@ -78,6 +79,15 @@ class EditAudioBusState extends State<EditAudioBus> {
         ),
         body: ListView(
           children: [
+            CustomSoundListTile(
+              projectContext: widget.projectContext,
+              value: widget.audioBus.testSound,
+              onChanged: (value) {
+                widget.audioBus.testSound = value;
+                save();
+              },
+              title: 'Test Sound',
+            ),
             TextListTile(
               value: widget.audioBus.name,
               onChanged: (final value) {
