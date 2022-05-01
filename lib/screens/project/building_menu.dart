@@ -6,7 +6,6 @@ import '../../widgets/push_widget_list_tile.dart';
 import '../conversation/project_conversation_categories.dart';
 import '../npc/edit_npcs.dart';
 import '../quest/edit_quests.dart';
-import '../reverb/edit_reverbs.dart';
 import '../scene/edit_scenes.dart';
 import '../terrain/edit_terrains.dart';
 import '../zone/edit_zones.dart';
@@ -78,13 +77,6 @@ class BuildingMenuState extends State<BuildingMenu> {
             projectContext: widget.projectContext,
           ),
           subtitle: '${world.quests.length}',
-        ),
-        PushWidgetListTile(
-          title: 'Reverb Presets',
-          builder: (final context) => EditReverbs(
-            projectContext: widget.projectContext,
-          ),
-          subtitle: '${world.reverbs.length}',
         ),
       ],
     );

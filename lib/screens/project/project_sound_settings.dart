@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
-import '../../util.dart';
+import '../../widgets/push_widget_list_tile.dart';
 import '../../widgets/sound/gain_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
 import '../audio_busses/project_audio_busses.dart';
+import '../reverb/edit_reverbs.dart';
 import '../sound/synthizer_settings.dart';
 
 /// A widget for configuring sound-related settings.
@@ -90,32 +91,28 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           nullable: true,
           title: 'Menu Cancel Sound',
         ),
-        ListTile(
-          title: const Text('Synthizer Settings'),
-          subtitle: const Text('(Requires restart)'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (final context) => SynthizerSettings(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
+        PushWidgetListTile(
+          title: 'Reverb Presets',
+          builder: (final context) => EditReverbs(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.reverbs.length}',
         ),
-        ListTile(
-          title: const Text('Audio Busses'),
-          subtitle: Text('${world.audioBusses.length}'),
-          onTap: () async {
-            await pushWidget(
-              context: context,
-              builder: (context) => ProjectAudioBusses(
-                projectContext: widget.projectContext,
-              ),
-            );
-            setState(() {});
-          },
-        )
+        PushWidgetListTile(
+          title: 'Synthizer Settings',
+          builder: (context) => SynthizerSettings(
+            projectContext: widget.projectContext,
+          ),
+          onSetState: widget.projectContext.save,
+          subtitle: '(Required restart)',
+        ),
+        PushWidgetListTile(
+          title: 'Audio Busses',
+          builder: (context) => ProjectAudioBusses(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.audioBusses.length}',
+        ),
       ],
     );
   }
