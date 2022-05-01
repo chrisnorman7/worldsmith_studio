@@ -99,19 +99,19 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
           subtitle: '${world.reverbs.length}',
         ),
         PushWidgetListTile(
+          title: 'Audio Busses',
+          builder: (context) => ProjectAudioBusses(
+            projectContext: widget.projectContext,
+          ),
+          subtitle: '${world.audioBusses.length}',
+        ),
+        PushWidgetListTile(
           title: 'Synthizer Settings',
           builder: (context) => SynthizerSettings(
             projectContext: widget.projectContext,
           ),
           onSetState: widget.projectContext.save,
           subtitle: '(Required restart)',
-        ),
-        PushWidgetListTile(
-          title: 'Audio Busses',
-          builder: (context) => ProjectAudioBusses(
-            projectContext: widget.projectContext,
-          ),
-          subtitle: '${world.audioBusses.length}',
         ),
       ],
     );
