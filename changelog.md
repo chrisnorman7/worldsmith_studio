@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.0.13
+## 0.1.0
 
 - Updated worldsmith, which means some of the UI will be different.
+- Add support for audio busses.
 
 ## 0.0.12
 
