@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
+import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
+import 'package:ziggurat/sound.dart';
 
+import '../../intents.dart';
 import '../../project_context.dart';
 import '../../validators.dart';
 import '../../widgets/cancel.dart';
@@ -35,6 +38,60 @@ class EditAudioBus extends StatefulWidget {
 
 /// State for [EditAudioBus].
 class EditAudioBusState extends State<EditAudioBus> {
+  PlaySound? _sound;
+  SoundChannel? _soundChannel;
+
+  /// Reset the sound channel.
+  SoundChannel resetSoundChannel() {
+    final world = widget.projectContext.world;
+    final reverbId = widget.audioBus.reverbId;
+    _soundChannel?.destroy();
+    final channel = widget.projectContext.game.createSoundChannel(
+      position: widget.audioBus.position,
+      gain: widget.audioBus.gain ?? world.soundOptions.defaultGain,
+      reverb: reverbId == null
+          ? null
+          : widget.projectContext.worldContext.getReverb(
+              world.getReverbPresetReference(
+                reverbId,
+              ),
+            ),
+    );
+    _soundChannel = channel;
+    return channel;
+  }
+
+  /// Play or pause the test sound.
+  void playPause() {
+    final sound = _sound;
+    final testSound = widget.audioBus.testSound;
+    if (testSound == null || sound != null) {
+      destroySoundObjects();
+    } else {
+      // Start playing.
+      final worldContext = widget.projectContext.worldContext;
+      final assetStore = worldContext.getAssetStore(testSound.assetStore);
+      final asset = getAssetReferenceReference(
+        assets: assetStore.assets,
+        id: testSound.id,
+      );
+      _sound = resetSoundChannel().playSound(
+        asset.reference,
+        keepAlive: true,
+        gain: testSound.gain,
+        looping: true,
+      );
+    }
+  }
+
+  /// Destroy sound-related objects.
+  void destroySoundObjects() {
+    _sound?.destroy();
+    _sound = null;
+    _soundChannel?.destroy();
+    _soundChannel = null;
+  }
+
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
@@ -73,114 +130,135 @@ class EditAudioBusState extends State<EditAudioBus> {
         break;
     }
     return Cancel(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Edit Audio Bus'),
-        ),
-        body: ListView(
-          children: [
-            CustomSoundListTile(
-              projectContext: widget.projectContext,
-              value: widget.audioBus.testSound,
-              onChanged: (value) {
-                widget.audioBus.testSound = value;
-                save();
-              },
-              title: 'Test Sound',
-            ),
-            TextListTile(
-              value: widget.audioBus.name,
-              onChanged: (final value) {
-                widget.audioBus.name = value;
-                save();
-              },
-              header: 'Name',
-              autofocus: true,
-              validator: (final value) => validateNonEmptyValue(value: value),
-            ),
-            GainListTile(
-              gain: widget.audioBus.gain ?? world.soundOptions.defaultGain,
-              onChange: (final value) {
-                widget.audioBus.gain = value;
-                save();
-              },
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
+      child: CallbackShortcuts(
+        bindings: {
+          PlayPauseIntent.hotkey: () {
+            playPause();
+            setState(() {});
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  playPause();
+                  setState(() {});
+                },
+                child: Icon(
+                  _sound == null ? Icons.play_arrow : Icons.pause,
+                  semanticLabel:
+                      _sound == null ? 'Play Test Sound' : 'Stop Test Sound',
+                ),
+              )
+            ],
+            title: const Text('Edit Audio Bus'),
+          ),
+          body: ListView(
+            children: [
+              CustomSoundListTile(
+                projectContext: widget.projectContext,
+                value: widget.audioBus.testSound,
+                onChanged: (value) {
+                  widget.audioBus.testSound = value;
+                  save();
+                },
+                title: 'Test Sound',
+              ),
+              TextListTile(
+                value: widget.audioBus.name,
+                onChanged: (final value) {
+                  widget.audioBus.name = value;
+                  save();
+                },
+                header: 'Name',
+                autofocus: true,
+                validator: (final value) => validateNonEmptyValue(value: value),
+              ),
+              GainListTile(
+                gain: widget.audioBus.gain ?? world.soundOptions.defaultGain,
+                onChange: (final value) {
+                  widget.audioBus.gain = value;
+                  save();
+                },
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      widget.audioBus.gain = null;
+                      save();
+                    },
+                    child: const Icon(
+                      Icons.clear,
+                      semanticLabel: 'Clear Gain',
+                    ),
+                  )
+                ],
+              ),
+              PushWidgetListTile(
+                title: 'Panning Type',
+                builder: (context) => SelectItem<PanningType>(
+                  onDone: (value) {
                     Navigator.pop(context);
-                    widget.audioBus.gain = null;
+                    widget.audioBus
+                      ..panningType = value
+                      ..x = 0.0
+                      ..y = 0.0
+                      ..z = 0.0;
                     save();
                   },
-                  child: const Icon(
-                    Icons.clear,
-                    semanticLabel: 'Clear Gain',
-                  ),
-                )
-              ],
-            ),
-            PushWidgetListTile(
-              title: 'Panning Type',
-              builder: (context) => SelectItem<PanningType>(
+                  values: PanningType.values,
+                  getItemWidget: (value) => Text(value.name),
+                  title: 'Select Panning Type',
+                  value: panningType,
+                ),
+                subtitle: panningType.name,
+              ),
+              if (xTitle != null)
+                NumberListTile(
+                  value: widget.audioBus.x,
+                  onChanged: (value) {
+                    widget.audioBus.x = value;
+                    save();
+                  },
+                  min: xMin,
+                  max: xMax,
+                  title: xTitle,
+                ),
+              if (yTitle != null)
+                NumberListTile(
+                  value: widget.audioBus.y,
+                  onChanged: (value) {
+                    widget.audioBus.y = value;
+                    save();
+                  },
+                  min: yMin,
+                  max: yMax,
+                  title: yTitle,
+                ),
+              if (zTitle != null)
+                NumberListTile(
+                  value: widget.audioBus.z,
+                  onChanged: (value) {
+                    widget.audioBus.z = value;
+                    save();
+                  },
+                  min: zMin,
+                  max: zMax,
+                  title: zTitle,
+                ),
+              ReverbListTile(
+                projectContext: widget.projectContext,
                 onDone: (value) {
-                  Navigator.pop(context);
-                  widget.audioBus
-                    ..panningType = value
-                    ..x = 0.0
-                    ..y = 0.0
-                    ..z = 0.0;
+                  widget.audioBus.reverbId = value?.id;
                   save();
                 },
-                values: PanningType.values,
-                getItemWidget: (value) => Text(value.name),
-                title: 'Select Panning Type',
-                value: panningType,
-              ),
-              subtitle: panningType.name,
-            ),
-            if (xTitle != null)
-              NumberListTile(
-                value: widget.audioBus.x,
-                onChanged: (value) {
-                  widget.audioBus.x = value;
-                  save();
-                },
-                min: xMin,
-                max: xMax,
-                title: xTitle,
-              ),
-            if (yTitle != null)
-              NumberListTile(
-                value: widget.audioBus.y,
-                onChanged: (value) {
-                  widget.audioBus.y = value;
-                  save();
-                },
-                min: yMin,
-                max: yMax,
-                title: yTitle,
-              ),
-            if (zTitle != null)
-              NumberListTile(
-                value: widget.audioBus.z,
-                onChanged: (value) {
-                  widget.audioBus.z = value;
-                  save();
-                },
-                min: zMin,
-                max: zMax,
-                title: zTitle,
-              ),
-            ReverbListTile(
-              projectContext: widget.projectContext,
-              onDone: (value) {
-                widget.audioBus.reverbId = value?.id;
-                save();
-              },
-              reverbPresets: world.reverbs,
-              currentReverbId: widget.audioBus.reverbId,
-              nullable: true,
-            )
-          ],
+                reverbPresets: world.reverbs,
+                currentReverbId: widget.audioBus.reverbId,
+                nullable: true,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -189,6 +267,18 @@ class EditAudioBusState extends State<EditAudioBus> {
   /// Save the project.
   void save() {
     widget.projectContext.save();
+    final playing = _sound != null;
+    destroySoundObjects();
+    if (playing) {
+      playPause();
+    }
     setState(() {});
+  }
+
+  /// Dispose of the widget.
+  @override
+  void dispose() {
+    super.dispose();
+    destroySoundObjects();
   }
 }
