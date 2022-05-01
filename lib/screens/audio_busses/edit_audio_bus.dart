@@ -57,6 +57,19 @@ class EditAudioBusState extends State<EditAudioBus> {
                 widget.audioBus.gain = value;
                 save();
               },
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.audioBus.gain = null;
+                    save();
+                  },
+                  child: const Icon(
+                    Icons.clear,
+                    semanticLabel: 'Clear Gain',
+                  ),
+                )
+              ],
             )
           ],
         ),
