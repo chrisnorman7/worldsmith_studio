@@ -96,7 +96,9 @@ class _SelectReverbState extends State<SelectReverb> {
                   }
                   stopSound();
                   final assetReference = getAssetReferenceReference(
-                    assets: widget.projectContext.world.interfaceSoundsAssets,
+                    assets: widget.projectContext.worldContext
+                        .getAssetStore(sound.assetStore)
+                        .assets,
                     id: sound.id,
                   ).reference;
                   _playSound = channel.playSound(
