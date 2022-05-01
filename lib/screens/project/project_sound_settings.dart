@@ -5,6 +5,7 @@ import '../../project_context.dart';
 import '../../util.dart';
 import '../../widgets/sound/gain_list_tile.dart';
 import '../../widgets/sound/sound_list_tile.dart';
+import '../audio_busses/project_audio_busses.dart';
 import '../sound/synthizer_settings.dart';
 
 /// A widget for configuring sound-related settings.
@@ -96,6 +97,19 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
             await pushWidget(
               context: context,
               builder: (final context) => SynthizerSettings(
+                projectContext: widget.projectContext,
+              ),
+            );
+            setState(() {});
+          },
+        ),
+        ListTile(
+          title: const Text('Audio Busses'),
+          subtitle: Text('${world.audioBusses.length}'),
+          onTap: () async {
+            await pushWidget(
+              context: context,
+              builder: (context) => ProjectAudioBusses(
                 projectContext: widget.projectContext,
               ),
             );
