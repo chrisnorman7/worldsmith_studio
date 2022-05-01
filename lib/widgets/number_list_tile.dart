@@ -17,6 +17,7 @@ class NumberListTile extends StatelessWidget {
     this.title = 'Number',
     this.subtitle,
     this.autofocus = false,
+    this.actions = const [],
     super.key,
   });
 
@@ -44,6 +45,10 @@ class NumberListTile extends StatelessWidget {
   /// Whether the resulting [ListTile] should be autofocused.
   final bool autofocus;
 
+  /// Actions for the resulting [GetNumber].
+  final List<Widget> actions;
+
+  /// Build the widget.
   @override
   Widget build(final BuildContext context) {
     final minValue = min;
@@ -85,9 +90,10 @@ class NumberListTile extends StatelessWidget {
             Navigator.pop(context);
             onChanged(value);
           },
-          max: max,
           min: min,
+          max: max,
           title: title,
+          actions: actions,
         ),
       ),
     );
