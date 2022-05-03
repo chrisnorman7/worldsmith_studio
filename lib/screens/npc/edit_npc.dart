@@ -36,6 +36,7 @@ class EditNpcState extends State<EditNpc> {
   @override
   Widget build(final BuildContext context) {
     final world = widget.projectContext.world;
+    final defaultGain = world.soundOptions.defaultGain;
     return Cancel(
       child: Scaffold(
         appBar: AppBar(
@@ -61,10 +62,22 @@ class EditNpcState extends State<EditNpc> {
                 save();
               },
               assetStore: world.ambianceAssetStore,
-              defaultGain: world.soundOptions.defaultGain,
+              defaultGain: defaultGain,
               looping: true,
               nullable: true,
               title: 'Ambiance',
+            ),
+            SoundListTile(
+              projectContext: widget.projectContext,
+              value: widget.npc.icon,
+              onDone: (value) {
+                widget.npc.icon = value;
+                save();
+              },
+              assetStore: world.interfaceSoundsAssetStore,
+              defaultGain: defaultGain,
+              nullable: true,
+              title: 'Look Around Icon',
             ),
             PushWidgetListTile(
               title: 'Default Stats',
