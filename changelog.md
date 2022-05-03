@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Allow changing look around icons.
+
 ## 0.1.0
 
 - Updated worldsmith, which means some of the UI will be different.
