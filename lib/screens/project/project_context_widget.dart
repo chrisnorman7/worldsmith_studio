@@ -19,6 +19,9 @@ import 'project_settings.dart';
 import 'project_sound_settings.dart';
 
 /// A widget for editing its [projectContext].
+///
+/// This widget forms the main screen that users see when they first open a
+/// [projectContext].
 class ProjectContextWidget extends StatefulWidget {
   /// Create an instance.
   const ProjectContextWidget({
