@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
-import 'package:worldsmith/command_triggers.dart';
 
 import '../../project_context.dart';
 import '../../widgets/push_widget_list_tile.dart';
@@ -57,8 +56,10 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
         ),
         PushWidgetListTile(
           title: 'Default Command Triggers',
-          subtitle: '${defaultTriggerMap.triggers.length}',
-          builder: (final context) => const CommandTriggersListView(),
+          subtitle: '${world.defaultCommandTriggers.length}',
+          builder: (final context) => CommandTriggersListView(
+            projectContext: widget.projectContext,
+          ),
         )
       ],
     );
