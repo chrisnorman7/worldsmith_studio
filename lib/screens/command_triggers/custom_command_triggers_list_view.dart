@@ -15,9 +15,9 @@ import '../../widgets/select_item.dart';
 import '../edit_command_keyboard_key.dart';
 
 /// A widget for viewing custom command triggers.
-class CustomCommandTriggers extends StatefulWidget {
+class CustomCommandTriggersListView extends StatefulWidget {
   /// Create an instance.
-  const CustomCommandTriggers({
+  const CustomCommandTriggersListView({
     required this.projectContext,
     super.key,
   });
@@ -27,11 +27,13 @@ class CustomCommandTriggers extends StatefulWidget {
 
   ///  Create state for this widget.
   @override
-  CustomCommandTriggersState createState() => CustomCommandTriggersState();
+  CustomCommandTriggersListViewState createState() =>
+      CustomCommandTriggersListViewState();
 }
 
-/// State for [CustomCommandTriggers].
-class CustomCommandTriggersState extends State<CustomCommandTriggers> {
+/// State for [CustomCommandTriggersListView].
+class CustomCommandTriggersListViewState
+    extends State<CustomCommandTriggersListView> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
@@ -51,7 +53,8 @@ class CustomCommandTriggersState extends State<CustomCommandTriggers> {
                   autofocus: true,
                 ),
                 FocusText(text: 'Controller Button'),
-                FocusText(text: 'Keyboard Key')
+                FocusText(text: 'Keyboard Key'),
+                FocusText(text: 'Edit Command')
               ],
             ),
             ...customCommandTriggers.map<TableRow>(
@@ -138,6 +141,11 @@ class CustomCommandTriggersState extends State<CustomCommandTriggers> {
                           },
                         ),
                       ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child:
+                          const Icon(Icons.edit, semanticLabel: 'Edit Command'),
                     )
                   ],
                 );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../widgets/push_widget_list_tile.dart';
-import '../command_triggers/custom_command_triggers.dart';
+import '../command_triggers/custom_command_triggers_list_view.dart';
 import '../command_triggers/default_command_triggers_list_view.dart';
 import '../directions/directions_list.dart';
 import '../equipment/equipment_positions_menu.dart';
@@ -64,7 +64,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
         ),
         PushWidgetListTile(
           title: 'Custom Command Triggers',
-          builder: (context) => CustomCommandTriggers(
+          builder: (context) => CustomCommandTriggersListView(
             projectContext: widget.projectContext,
           ),
           subtitle: '${world.customCommandTriggers.length}',
