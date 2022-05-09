@@ -3,19 +3,19 @@ import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:ziggurat/ziggurat.dart';
 
-import '../project_context.dart';
-import '../util.dart';
-import '../widgets/cancel.dart';
-import '../widgets/clickable.dart';
-import '../widgets/focus_text.dart';
-import '../widgets/get_text.dart';
-import '../widgets/select_item.dart';
-import 'edit_command_keyboard_key.dart';
+import '../../project_context.dart';
+import '../../util.dart';
+import '../../widgets/cancel.dart';
+import '../../widgets/clickable.dart';
+import '../../widgets/focus_text.dart';
+import '../../widgets/get_text.dart';
+import '../../widgets/select_item.dart';
+import '../edit_command_keyboard_key.dart';
 
 /// A widget that shows the supported command triggers.
-class CommandTriggersListView extends StatefulWidget {
+class DefaultCommandTriggersListView extends StatefulWidget {
   /// Create an instance.
-  const CommandTriggersListView({
+  const DefaultCommandTriggersListView({
     required this.projectContext,
     super.key,
   });
@@ -24,11 +24,12 @@ class CommandTriggersListView extends StatefulWidget {
   final ProjectContext projectContext;
 
   @override
-  State<CommandTriggersListView> createState() =>
-      _CommandTriggersListViewState();
+  State<DefaultCommandTriggersListView> createState() =>
+      _DefaultCommandTriggersListViewState();
 }
 
-class _CommandTriggersListViewState extends State<CommandTriggersListView> {
+class _DefaultCommandTriggersListViewState
+    extends State<DefaultCommandTriggersListView> {
   @override
   Widget build(final BuildContext context) {
     final defaultTriggers = widget.projectContext.world.defaultCommandTriggers;
