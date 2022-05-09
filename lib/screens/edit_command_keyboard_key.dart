@@ -42,6 +42,18 @@ class EditCommandKeyboardKeyState extends State<EditCommandKeyboardKey> {
   Widget build(final BuildContext context) => Cancel(
         child: Scaffold(
           appBar: AppBar(
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onChanged(null);
+                },
+                child: const Icon(
+                  Icons.clear,
+                  semanticLabel: 'Clear Key',
+                ),
+              )
+            ],
             title: const Text('Keyboard Key'),
           ),
           body: ListView(
