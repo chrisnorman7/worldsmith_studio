@@ -13,6 +13,7 @@ import '../../widgets/focus_text.dart';
 import '../../widgets/get_text.dart';
 import '../../widgets/select_item.dart';
 import '../edit_command_keyboard_key.dart';
+import 'edit_world_command_trigger.dart';
 
 /// A widget for viewing custom command triggers.
 class CustomCommandTriggersListView extends StatefulWidget {
@@ -54,7 +55,8 @@ class CustomCommandTriggersListViewState
                 ),
                 FocusText(text: 'Controller Button'),
                 FocusText(text: 'Keyboard Key'),
-                FocusText(text: 'Edit Command')
+                FocusText(text: 'Edit Command'),
+                FocusText(text: 'Delete Command'),
               ],
             ),
             ...customCommandTriggers.map<TableRow>(
@@ -143,9 +145,41 @@ class CustomCommandTriggersListViewState
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
-                      child:
-                          const Icon(Icons.edit, semanticLabel: 'Edit Command'),
+                      onPressed: () async {
+                        await pushWidget(
+                          context: context,
+                          builder: (context) => EditWorldCommandTrigger(
+                            projectContext: widget.projectContext,
+                            worldCommandTrigger: trigger,
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      child: const Icon(
+                        Icons.edit,
+                        semanticLabel: 'Edit Command',
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => confirm(
+                        context: context,
+                        message:
+                            'Are you sure you want to delete this command?',
+                        title: 'Delete Custom Command',
+                        yesCallback: () {
+                          Navigator.pop(context);
+                          customCommandTriggers.removeWhere(
+                            (element) =>
+                                element.commandTrigger.name ==
+                                trigger.commandTrigger.name,
+                          );
+                          save();
+                        },
+                      ),
+                      child: const Icon(
+                        Icons.delete,
+                        semanticLabel: 'Delete Command',
+                      ),
                     )
                   ],
                 );
