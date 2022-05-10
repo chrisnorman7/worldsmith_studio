@@ -127,6 +127,22 @@ class EditMainMenuState extends State<EditMainMenu> {
             CustomMessageListTile(
               projectContext: widget.projectContext,
               customMessage: CustomMessage(
+                sound: options.controlsMenuSound,
+                text: options.controlsMenuString,
+              ),
+              assetStore: interfaceSoundsAssetStore,
+              assetReference: world.menuMoveSound,
+              onChanged: (value) {
+                options
+                  ..controlsMenuSound = value.sound
+                  ..controlsMenuString = value.text;
+                save();
+              },
+              title: 'Show Game Controls Menu Item',
+            ),
+            CustomMessageListTile(
+              projectContext: widget.projectContext,
+              customMessage: CustomMessage(
                 sound: options.exitSound,
                 text: options.exitString,
               ),
