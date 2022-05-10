@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Allow more of the main menu to be configured.
+
 ## 0.1.1
 
 - Allow changing look around icons.

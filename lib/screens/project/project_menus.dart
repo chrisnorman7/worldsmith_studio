@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
 import '../../util.dart';
+import '../menu/edit_controls_menu.dart';
 import '../menu/edit_credits_menu.dart';
 import '../menu/edit_main_menu.dart';
 import '../menu/edit_pause_menu.dart';
@@ -67,6 +68,23 @@ class ProjectMenusState extends State<ProjectMenus> {
             },
           ),
           sound: options.creditsSound,
+        ),
+        widget.projectContext.getMenuMoveSemantics(
+          child: ListTile(
+            title: Text(
+              options.controlsMenuString ?? 'Show Game Controls',
+            ),
+            onTap: () async {
+              widget.projectContext.playActivateSound();
+              await pushWidget(
+                context: context,
+                builder: (context) => EditControlsMenu(
+                  projectContext: widget.projectContext,
+                ),
+              );
+              setState(() {});
+            },
+          ),
         ),
         widget.projectContext.getMenuMoveSemantics(
           child: ListTile(
