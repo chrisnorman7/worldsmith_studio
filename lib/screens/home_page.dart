@@ -100,7 +100,6 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 preferences: preferences,
               ),
-          LaunchManualIntent.hotkey: () => launchUrl(manualUrl)
         },
         child: WithKeyboardShortcuts(
           keyboardShortcuts: const [

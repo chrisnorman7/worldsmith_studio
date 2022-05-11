@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
+import 'intents.dart';
 import 'screens/home_page.dart';
+import 'util.dart';
 
 void main() => runApp(const MyApp());
 
@@ -20,5 +22,15 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const HomePage(),
+        actions: {
+          ...WidgetsApp.defaultActions,
+          LaunchManualIntent: CallbackAction<LaunchManualIntent>(
+            onInvoke: (intent) => launchManual(),
+          )
+        },
+        shortcuts: {
+          ...WidgetsApp.defaultShortcuts,
+          LaunchManualIntent.hotkey: const LaunchManualIntent()
+        },
       );
 }
