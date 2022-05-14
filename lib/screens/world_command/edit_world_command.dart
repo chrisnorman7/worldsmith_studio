@@ -18,6 +18,7 @@ import '../../widgets/quest/quest_list_tile.dart';
 import '../../widgets/scene/show_scene_list_tile.dart';
 import '../../widgets/select_item.dart';
 import '../../widgets/text_list_tile.dart';
+import '../custom_menu/edit_custom_menu.dart';
 import '../zone/edit_zone.dart';
 import '../zone/select_zone.dart';
 import 'edit_zone_teleport.dart';
@@ -136,6 +137,9 @@ class EditWorldCommandState extends State<EditWorldCommand> {
     final zone =
         zoneTeleport == null ? null : world.getZone(zoneTeleport.zoneId);
     final returnToMainMenu = widget.command.returnToMainMenu;
+    final customMenuId = widget.command.customMenuId;
+    final customMenu =
+        customMenuId == null ? null : world.getMenu(customMenuId);
     return ListView(
       children: [
         ListTile(
@@ -312,6 +316,57 @@ class EditWorldCommandState extends State<EditWorldCommand> {
             save();
           },
           header: 'Open URL',
+        ),
+        WithKeyboardShortcuts(
+          keyboardShortcuts: const [
+            KeyboardShortcut(
+              description: 'Edit the selected menu.',
+              keyName: 'E',
+              control: true,
+            )
+          ],
+          child: CallbackShortcuts(
+            bindings: {
+              EditIntent.hotkey: () async {
+                if (customMenu != null) {
+                  await pushWidget(
+                    context: context,
+                    builder: (context) => EditCustomMenu(
+                      projectContext: widget.projectContext,
+                      menu: customMenu,
+                    ),
+                  );
+                  setState(() {});
+                }
+              }
+            },
+            child: ListTile(
+              title: const Text('Show Custom Menu'),
+              subtitle: Text('${customMenu?.title}'),
+              onTap: () => pushWidget(
+                context: context,
+                builder: (context) => SelectItem<CustomMenu?>(
+                  onDone: (value) {
+                    Navigator.pop(context);
+                    widget.command.customMenuId = value?.id;
+                    save();
+                  },
+                  values: [null, ...world.menus],
+                  getItemWidget: (value) {
+                    final String label;
+                    if (value == null) {
+                      label = 'Clear';
+                    } else {
+                      label = value.title;
+                    }
+                    return Text(label);
+                  },
+                  title: 'Select Custom Menu',
+                  value: customMenu,
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );
