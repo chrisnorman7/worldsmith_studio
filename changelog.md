@@ -3,6 +3,7 @@
 ## 0.1.2
 
 - Allow more of the main menu to be configured.
+- Allow custom menus to be created and used.
 
 ## 0.1.1
 
