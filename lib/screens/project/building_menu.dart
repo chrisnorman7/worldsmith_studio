@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../project_context.dart';
 import '../../widgets/push_widget_list_tile.dart';
 import '../conversation/project_conversation_categories.dart';
+import '../custom_menu/edit_custom_menus.dart';
 import '../npc/edit_npcs.dart';
 import '../quest/edit_quests.dart';
 import '../scene/edit_scenes.dart';
@@ -78,6 +79,12 @@ class BuildingMenuState extends State<BuildingMenu> {
           ),
           subtitle: '${world.quests.length}',
         ),
+        PushWidgetListTile(
+          title: 'Custom Menus',
+          builder: (context) =>
+              EditCustomMenus(projectContext: widget.projectContext),
+          subtitle: '${world.menus.length}',
+        )
       ],
     );
   }
