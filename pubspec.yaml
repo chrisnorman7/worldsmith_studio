@@ -7,32 +7,33 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  cupertino_icons: ^1.0.2
-  dart_sdl: ^0.9.7
-  dart_synthizer: ^0.9.0
+  cupertino_icons: ^1.0.4
+  dart_sdl: ^0.10.0
+  dart_synthizer: ^0.10.0
   dio: ^4.0.6
-  file_picker: ^4.5.0
+  file_picker: ^4.5.1
   filesize: ^2.0.1
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  json_annotation: ^4.4.0
-  path: ^1.8.0
-  path_provider: ^2.0.9
-  shared_preferences: ^2.0.13
+  json_annotation: ^4.5.0
+  path: ^1.8.1
+  path_provider: ^2.0.10
+  shared_preferences: ^2.0.15
   short_uuids: ^2.0.0
-  url_launcher: ^6.1.0
+  url_launcher: ^6.1.2
   worldsmith:
     path: ../worldsmith
-  ziggurat: ^0.43.0
-  ziggurat_sounds: ^0.23.2
+  ziggurat: ^0.44.0
+  ziggurat_sounds: ^0.24.0
 
 dev_dependencies:
   analyzer: ^4.0.0
   build_runner: ^2.1.10
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-  json_serializable: ^6.1.6
+  json_serializable: ^6.2.0
+
 flutter:
   uses-material-design: true
