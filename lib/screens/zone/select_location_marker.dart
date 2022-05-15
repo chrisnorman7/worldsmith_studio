@@ -41,10 +41,10 @@ class SelectLocationMarker extends StatelessWidget {
                   id: sound.id,
                 ).reference;
           return PlaySoundSemantics(
-            child: Text(text ?? 'Untitled Location Marker'),
             soundChannel: projectContext.game.interfaceSounds,
             assetReference: asset,
             gain: sound?.gain ?? 0,
+            child: Text(text ?? 'Untitled Location Marker'),
           );
         },
       );

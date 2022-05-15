@@ -65,7 +65,6 @@ class EditWorldStatsState extends State<EditWorldStats> {
         body: child,
         floatingActionButton: FloatingActionButton(
           autofocus: stats.isEmpty,
-          child: createIcon,
           onPressed: () async {
             final stat = WorldStat(id: newId());
             stats.add(stat);
@@ -80,6 +79,7 @@ class EditWorldStatsState extends State<EditWorldStats> {
             setState(() {});
           },
           tooltip: 'Add Stat',
+          child: createIcon,
         ),
       ),
     );

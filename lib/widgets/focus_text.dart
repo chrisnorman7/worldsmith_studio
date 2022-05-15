@@ -19,7 +19,7 @@ class FocusText extends StatelessWidget {
   /// Build the widget.
   @override
   Widget build(final BuildContext context) => Focus(
-        child: Text(text),
         autofocus: autofocus,
+        child: Text(text),
       );
 }

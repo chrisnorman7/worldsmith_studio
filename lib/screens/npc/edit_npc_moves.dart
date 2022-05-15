@@ -89,7 +89,6 @@ class EditNpcMovesState extends State<EditNpcMoves> {
         ),
         floatingActionButton: FloatingActionButton(
           autofocus: moves.isEmpty,
-          child: createIcon,
           onPressed: () {
             final markers = widget.zone.locationMarkers;
             if (markers.isEmpty) {
@@ -118,6 +117,7 @@ class EditNpcMovesState extends State<EditNpcMoves> {
             }
           },
           tooltip: 'Add Move',
+          child: createIcon,
         ),
       ),
     );

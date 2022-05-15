@@ -26,8 +26,8 @@ class Clickable extends StatelessWidget {
           const SingleActivator(LogicalKeyboardKey.enter): onActivate,
         },
         child: GestureDetector(
-          child: child,
           onTap: onActivate,
+          child: child,
         ),
       );
 }

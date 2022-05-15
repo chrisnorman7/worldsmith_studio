@@ -141,7 +141,6 @@ class EditZoneState extends State<EditZone> {
               builder: getNpcList,
               floatingActionButton: FloatingActionButton(
                 autofocus: widget.zone.npcs.isEmpty,
-                child: createIcon,
                 onPressed: () {
                   final npcs = widget.projectContext.world.npcs;
                   if (npcs.isEmpty) {
@@ -196,6 +195,7 @@ class EditZoneState extends State<EditZone> {
                   }
                 },
                 tooltip: 'Select NPC',
+                child: createIcon,
               ),
             ),
             TabbedScaffoldTab(

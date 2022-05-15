@@ -160,7 +160,6 @@ class EditCustomMenuState extends State<EditCustomMenu> {
             actions: actions,
             floatingActionButton: FloatingActionButton(
               autofocus: items.isEmpty,
-              child: createIcon,
               onPressed: () async {
                 final item = CustomMenuItem(
                   id: newId(),
@@ -179,6 +178,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 setState(() {});
               },
               tooltip: 'New Menu Item',
+              child: createIcon,
             ),
           )
         ],

@@ -37,6 +37,21 @@ class EditControlsMenuState extends State<EditControlsMenu> {
     return Cancel(
       child: MusicWidget(
         title: options.title,
+        soundChannel: widget.projectContext.game.interfaceSounds,
+        getMusic: () {
+          final music = options.music;
+          if (music != null) {
+            return Music(
+              sound: getAssetReferenceReference(
+                assets: world.musicAssets,
+                id: music.id,
+              ).reference,
+              gain: music.gain,
+            );
+          }
+          return null;
+        },
+        getFadeTime: () => options.ambianceFadeTime,
         child: ListView(
           children: [
             TextListTile(
@@ -129,21 +144,6 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             )
           ],
         ),
-        soundChannel: widget.projectContext.game.interfaceSounds,
-        getMusic: () {
-          final music = options.music;
-          if (music != null) {
-            return Music(
-              sound: getAssetReferenceReference(
-                assets: world.musicAssets,
-                id: music.id,
-              ).reference,
-              gain: music.gain,
-            );
-          }
-          return null;
-        },
-        getFadeTime: () => options.ambianceFadeTime,
       ),
     );
   }

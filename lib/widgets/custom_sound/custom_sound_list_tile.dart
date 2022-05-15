@@ -54,6 +54,11 @@ class CustomSoundListTile extends StatelessWidget {
         : projectContext.world.getAudioBus(audioBusId);
     final audioBusName = audioBus == null ? '' : ' (${audioBus.name})';
     return PlaySoundSemantics(
+      soundChannel: audioBus == null
+          ? projectContext.game.interfaceSounds
+          : worldContext.getAudioBus(audioBus),
+      assetReference: assetReferenceReference?.reference,
+      gain: sound?.gain ?? 0.0,
       child: Builder(
         builder: (context) => ListTile(
           autofocus: autofocus,
@@ -108,11 +113,6 @@ class CustomSoundListTile extends StatelessWidget {
           },
         ),
       ),
-      soundChannel: audioBus == null
-          ? projectContext.game.interfaceSounds
-          : worldContext.getAudioBus(audioBus),
-      assetReference: assetReferenceReference?.reference,
-      gain: sound?.gain ?? 0.0,
     );
   }
 }

@@ -73,8 +73,8 @@ class ProjectAudioBussesState extends State<ProjectAudioBusses> {
             );
             setState(() {});
           },
-          child: createIcon,
           tooltip: 'Add Audio Bus',
+          child: createIcon,
         ),
       ),
     );

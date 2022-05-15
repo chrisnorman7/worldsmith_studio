@@ -112,6 +112,9 @@ class EditCustomSoundState extends State<EditCustomSound> {
               ),
             ),
             PlaySoundSemantics(
+              soundChannel: widget.projectContext.game.interfaceSounds,
+              assetReference: assetReferenceReference.reference,
+              gain: widget.value.gain,
               child: Builder(
                 builder: (context) => ListTile(
                   title: const Text('Asset'),
@@ -134,9 +137,6 @@ class EditCustomSoundState extends State<EditCustomSound> {
                   },
                 ),
               ),
-              soundChannel: widget.projectContext.game.interfaceSounds,
-              assetReference: assetReferenceReference.reference,
-              gain: widget.value.gain,
             ),
             GainListTile(
               gain: widget.value.gain,

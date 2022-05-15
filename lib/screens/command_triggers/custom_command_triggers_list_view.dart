@@ -202,8 +202,8 @@ class CustomCommandTriggersListViewState
             );
             save();
           },
-          child: createIcon,
           tooltip: 'Add Custom Command Trigger',
+          child: createIcon,
         ),
       ),
     );

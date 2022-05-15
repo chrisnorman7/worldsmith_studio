@@ -65,7 +65,6 @@ class EditNpcsState extends State<EditNpcs> {
         body: child,
         floatingActionButton: FloatingActionButton(
           autofocus: npcs.isEmpty,
-          child: createIcon,
           onPressed: () async {
             final npc = Npc(
               id: newId(),
@@ -84,6 +83,7 @@ class EditNpcsState extends State<EditNpcs> {
             setState(() {});
           },
           tooltip: 'Add NPC',
+          child: createIcon,
         ),
       ),
     );
