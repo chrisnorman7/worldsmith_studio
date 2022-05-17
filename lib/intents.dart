@@ -335,6 +335,19 @@ class CreateConversationResponseIntent extends Intent {
   );
 }
 
+/// An intent to create a new custom command trigger.
+class CreateCustomCommandTriggerIntent extends Intent {
+  /// Create an instance.
+  const CreateCustomCommandTriggerIntent();
+
+  /// The hotkey to use.
+  static final hotkey = SingleActivator(
+    LogicalKeyboardKey.keyN,
+    control: !Platform.isMacOS,
+    meta: Platform.isMacOS,
+  );
+}
+
 /// An intent to add something.
 class AddIntent extends Intent {
   /// Create an instance.
