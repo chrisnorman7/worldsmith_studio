@@ -87,12 +87,20 @@ void showError({
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            autofocus: true,
             child: const Text('OK'),
           )
         ],
         title: Text(title),
-        content: Text(message),
+        content: CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.enter): () =>
+                Navigator.pop(context)
+          },
+          child: Focus(
+            autofocus: true,
+            child: Text(message),
+          ),
+        ),
       ),
     );
 
