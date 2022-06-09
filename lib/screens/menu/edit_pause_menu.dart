@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../custom_message.dart';
@@ -85,7 +84,7 @@ class EditPauseMenuState extends State<EditPauseMenu> {
               title: 'Zone Overview Label',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..zoneOverviewSound = value.sound
                   ..zoneOverviewString = value.text;
@@ -101,7 +100,7 @@ class EditPauseMenuState extends State<EditPauseMenu> {
               title: 'Return To Game',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..returnToGameSound = value.sound
                   ..returnToGameString = value.text;
@@ -117,7 +116,7 @@ class EditPauseMenuState extends State<EditPauseMenu> {
               title: 'Return To Main Menu',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..returnToMainMenuSound = value.sound
                   ..returnToMainMenuString = value.text;

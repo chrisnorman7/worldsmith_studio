@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -150,7 +149,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         ),
         TextListTile(
           value: widget.command.text ?? '',
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.text = value;
             save();
           },
@@ -159,7 +158,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
         CustomSoundListTile(
           projectContext: widget.projectContext,
           value: widget.command.sound,
-          onChanged: (value) {
+          onChanged: (final value) {
             widget.command.sound = value;
             save();
           },
@@ -331,7 +330,7 @@ class EditWorldCommandState extends State<EditWorldCommand> {
                 if (customMenu != null) {
                   await pushWidget(
                     context: context,
-                    builder: (context) => EditCustomMenu(
+                    builder: (final context) => EditCustomMenu(
                       projectContext: widget.projectContext,
                       menu: customMenu,
                     ),
@@ -345,14 +344,14 @@ class EditWorldCommandState extends State<EditWorldCommand> {
               subtitle: Text('${customMenu?.title}'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => SelectItem<CustomMenu?>(
-                  onDone: (value) {
+                builder: (final context) => SelectItem<CustomMenu?>(
+                  onDone: (final value) {
                     Navigator.pop(context);
                     widget.command.customMenuId = value?.id;
                     save();
                   },
                   values: [null, ...world.menus],
-                  getItemWidget: (value) {
+                  getItemWidget: (final value) {
                     final String label;
                     if (value == null) {
                       label = 'Clear';

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -45,7 +44,7 @@ class CustomSoundListTile extends StatelessWidget {
         sound == null ? null : worldContext.getAssetStore(sound.assetStore);
     final assetReferenceReference = sound != null && assetStore != null
         ? assetStore.assets.firstWhere(
-            (element) => element.variableName == sound.id,
+            (final element) => element.variableName == sound.id,
           )
         : null;
     final audioBusId = sound?.audioBusId;
@@ -60,7 +59,7 @@ class CustomSoundListTile extends StatelessWidget {
       assetReference: assetReferenceReference?.reference,
       gain: sound?.gain ?? 0.0,
       child: Builder(
-        builder: (context) => ListTile(
+        builder: (final context) => ListTile(
           autofocus: autofocus,
           title: Text(title),
           subtitle: Text(
@@ -73,18 +72,18 @@ class CustomSoundListTile extends StatelessWidget {
             if (sound == null) {
               pushWidget(
                 context: context,
-                builder: (context) => SelectAssetStore(
+                builder: (final context) => SelectAssetStore(
                   projectContext: projectContext,
-                  onDone: (store) {
+                  onDone: (final store) {
                     if (store == null) {
                       Navigator.pop(context);
                     } else {
                       pushWidget(
                         context: context,
-                        builder: (context) => SelectAsset(
+                        builder: (final context) => SelectAsset(
                           projectContext: projectContext,
                           assetStore: worldContext.getAssetStore(store),
-                          onDone: (asset) {
+                          onDone: (final asset) {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             if (asset != null) {
@@ -104,7 +103,7 @@ class CustomSoundListTile extends StatelessWidget {
             } else {
               pushWidget(
                 context: context,
-                builder: (context) => EditCustomSound(
+                builder: (final context) => EditCustomSound(
                   projectContext: projectContext,
                   value: sound,
                 ),

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -74,7 +73,7 @@ class CustomCommandTriggersListViewState
                   ],
                 ),
                 ...customCommandTriggers.map<TableRow>(
-                  (trigger) {
+                  (final trigger) {
                     final commandTrigger = trigger.commandTrigger;
                     return TableRow(
                       children: [
@@ -82,8 +81,8 @@ class CustomCommandTriggersListViewState
                           child: FocusText(text: commandTrigger.description),
                           onActivate: () => pushWidget(
                             context: context,
-                            builder: (context) => GetText(
-                              onDone: (value) {
+                            builder: (final context) => GetText(
+                              onDone: (final value) {
                                 Navigator.pop(context);
                                 trigger.commandTrigger = CommandTrigger(
                                   name: commandTrigger.name,
@@ -104,9 +103,9 @@ class CustomCommandTriggersListViewState
                               FocusText(text: '${commandTrigger.button?.name}'),
                           onActivate: () => pushWidget(
                             context: context,
-                            builder: (context) =>
+                            builder: (final context) =>
                                 SelectItem<GameControllerButton?>(
-                              onDone: (button) {
+                              onDone: (final button) {
                                 Navigator.pop(context);
                                 trigger.commandTrigger = CommandTrigger(
                                   name: commandTrigger.name,
@@ -119,11 +118,11 @@ class CustomCommandTriggersListViewState
                               values: [
                                 null,
                                 ...GameControllerButton.values.where(
-                                  (element) =>
+                                  (final element) =>
                                       element != GameControllerButton.invalid,
                                 )
                               ],
-                              getItemWidget: (value) {
+                              getItemWidget: (final value) {
                                 final String text;
                                 if (value == null) {
                                   text = 'Clear';
@@ -145,10 +144,10 @@ class CustomCommandTriggersListViewState
                           ),
                           onActivate: () => pushWidget(
                             context: context,
-                            builder: (context) => EditCommandKeyboardKey(
+                            builder: (final context) => EditCommandKeyboardKey(
                               keyboardKey: trigger.commandTrigger.keyboardKey ??
                                   const CommandKeyboardKey(ScanCode.space),
-                              onChanged: (value) {
+                              onChanged: (final value) {
                                 trigger.commandTrigger = CommandTrigger(
                                   name: commandTrigger.name,
                                   description: commandTrigger.description,
@@ -164,7 +163,8 @@ class CustomCommandTriggersListViewState
                           onPressed: () async {
                             await pushWidget(
                               context: context,
-                              builder: (context) => EditWorldCommandTrigger(
+                              builder: (final context) =>
+                                  EditWorldCommandTrigger(
                                 projectContext: widget.projectContext,
                                 worldCommandTrigger: trigger,
                               ),
@@ -185,7 +185,7 @@ class CustomCommandTriggersListViewState
                             yesCallback: () {
                               Navigator.pop(context);
                               customCommandTriggers.removeWhere(
-                                (element) =>
+                                (final element) =>
                                     element.commandTrigger.name ==
                                     trigger.commandTrigger.name,
                               );

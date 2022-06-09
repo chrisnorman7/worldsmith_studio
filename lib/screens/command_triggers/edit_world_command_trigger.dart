@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -51,7 +50,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             CallCommandListTile(
               projectContext: widget.projectContext,
               callCommand: worldCommandTrigger.startCommand,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.startCommand = value;
                 save();
               },
@@ -61,7 +60,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             CallCommandListTile(
               projectContext: widget.projectContext,
               callCommand: worldCommandTrigger.stopCommand,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.worldCommandTrigger.stopCommand = value;
                 save();
               },
@@ -69,7 +68,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             NumberListTile(
               value: interval?.toDouble() ?? 0.0,
-              onChanged: (value) {
+              onChanged: (final value) {
                 if (value == 0) {
                   worldCommandTrigger.interval = null;
                 } else {
@@ -86,7 +85,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: zone,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.zone = value ?? false;
                 save();
               },
@@ -94,7 +93,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: mainMenu,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.mainMenu = value ?? false;
                 save();
               },
@@ -104,7 +103,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: pauseMenu,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.pauseMenu = value ?? false;
                 save();
               },
@@ -114,7 +113,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: lookAroundMenu,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.lookAroundMenu = value ?? false;
                 save();
               },
@@ -125,7 +124,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: zoneOverview,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.zoneOverview = value ?? false;
                 save();
               },
@@ -136,7 +135,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: soundOptionsMenu,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.soundOptionsMenu = value ?? false;
                 save();
               },
@@ -147,7 +146,7 @@ class EditWorldCommandTriggerState extends State<EditWorldCommandTrigger> {
             ),
             CheckboxListTile(
               value: scenes,
-              onChanged: (value) {
+              onChanged: (final value) {
                 worldCommandTrigger.scenes = value ?? false;
                 save();
               },

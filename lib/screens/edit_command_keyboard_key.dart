@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -78,7 +77,7 @@ class EditCommandKeyboardKeyState extends State<EditCommandKeyboardKey> {
               ),
               CheckboxListTile(
                 value: keyboardKey.controlKey,
-                onChanged: (value) => submitKey(
+                onChanged: (final value) => submitKey(
                   controlKey: value ?? false,
                 ),
                 title: Text(
@@ -88,7 +87,7 @@ class EditCommandKeyboardKeyState extends State<EditCommandKeyboardKey> {
               ),
               CheckboxListTile(
                 value: keyboardKey.shiftKey,
-                onChanged: (value) => submitKey(
+                onChanged: (final value) => submitKey(
                   shiftKey: value ?? false,
                 ),
                 title: Text(
@@ -97,7 +96,7 @@ class EditCommandKeyboardKeyState extends State<EditCommandKeyboardKey> {
               ),
               CheckboxListTile(
                 value: keyboardKey.altKey,
-                onChanged: (value) => submitKey(
+                onChanged: (final value) => submitKey(
                   altKey: value ?? false,
                 ),
                 title: Text(
@@ -111,10 +110,10 @@ class EditCommandKeyboardKeyState extends State<EditCommandKeyboardKey> {
 
   /// Submit a new key to the `onChanged` function.
   void submitKey({
-    ScanCode? scanCode,
-    bool? altKey,
-    bool? controlKey,
-    bool? shiftKey,
+    final ScanCode? scanCode,
+    final bool? altKey,
+    final bool? controlKey,
+    final bool? shiftKey,
   }) {
     keyboardKey = CommandKeyboardKey(
       scanCode ?? keyboardKey.scanCode,

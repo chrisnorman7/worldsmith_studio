@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'dart:io';
 import 'dart:math';
 
@@ -268,7 +267,10 @@ class _HomePageState extends State<HomePage> {
     world ??= World();
     var game = _game;
     if (game == null) {
-      game = Game(appName);
+      game = Game(
+        title: appName,
+        sdl: sdl,
+      );
       _game = game;
     }
     var soundManager = _soundManager;
@@ -329,7 +331,6 @@ class _HomePageState extends State<HomePage> {
       game: game,
       file: file,
       world: world,
-      sdl: sdl,
       audioContext: soundManager.context,
     );
     if (worldWasNull) {

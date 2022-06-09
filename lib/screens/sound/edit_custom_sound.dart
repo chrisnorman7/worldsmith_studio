@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -47,7 +46,7 @@ class EditCustomSoundState extends State<EditCustomSound> {
     final worldContext = widget.projectContext.worldContext;
     final assetStore = worldContext.getAssetStore(widget.value.assetStore);
     final assetReferenceReference = assetStore.assets.firstWhere(
-      (element) => element.variableName == widget.value.id,
+      (final element) => element.variableName == widget.value.id,
     );
     final audioBusId = widget.value.audioBusId;
     final audioBus =
@@ -78,22 +77,22 @@ class EditCustomSoundState extends State<EditCustomSound> {
               subtitle: Text('${assetStore.comment}'),
               onTap: () => pushWidget(
                 context: context,
-                builder: (context) => SelectAssetStore(
+                builder: (final context) => SelectAssetStore(
                   projectContext: widget.projectContext,
-                  onDone: (store) {
+                  onDone: (final store) {
                     if (store == null) {
                       Navigator.pop(context);
                     } else {
                       pushWidget(
                         context: context,
-                        builder: (context) {
+                        builder: (final context) {
                           final newAssetStore = worldContext.getAssetStore(
                             store,
                           );
                           return SelectAsset(
                             projectContext: widget.projectContext,
                             assetStore: newAssetStore,
-                            onDone: (asset) {
+                            onDone: (final asset) {
                               Navigator.pop(context);
                               Navigator.pop(context);
                               if (asset != null) {
@@ -116,17 +115,17 @@ class EditCustomSoundState extends State<EditCustomSound> {
               assetReference: assetReferenceReference.reference,
               gain: widget.value.gain,
               child: Builder(
-                builder: (context) => ListTile(
+                builder: (final context) => ListTile(
                   title: const Text('Asset'),
                   subtitle: Text('${assetReferenceReference.comment}'),
                   onTap: () {
                     PlaySoundSemantics.of(context)?.stop();
                     pushWidget(
                       context: context,
-                      builder: (context) => SelectAsset(
+                      builder: (final context) => SelectAsset(
                         projectContext: widget.projectContext,
                         assetStore: assetStore,
-                        onDone: (value) {
+                        onDone: (final value) {
                           widget.value.id = value!.variableName;
                           save();
                         },
@@ -140,7 +139,7 @@ class EditCustomSoundState extends State<EditCustomSound> {
             ),
             GainListTile(
               gain: widget.value.gain,
-              onChange: (value) {
+              onChange: (final value) {
                 widget.value.gain = value;
                 save();
               },
@@ -148,7 +147,7 @@ class EditCustomSoundState extends State<EditCustomSound> {
             AudioBusListTile(
               projectContext: widget.projectContext,
               audioBus: audioBus,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.value.audioBusId = value?.id;
                 save();
               },

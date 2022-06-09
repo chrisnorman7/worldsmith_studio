@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -146,7 +145,7 @@ class EditSceneState extends State<EditScene> {
                     title: 'Section ${index + 1}',
                     autofocus: index == 0,
                     assetStore: world.interfaceSoundsAssetStore,
-                    onChanged: (value) {
+                    onChanged: (final value) {
                       section
                         ..sound = value.sound
                         ..text = value.text;
@@ -167,7 +166,7 @@ class EditSceneState extends State<EditScene> {
                     projectContext: widget.projectContext,
                     customMessage: const CustomMessage(),
                     assetStore: world.interfaceSoundsAssetStore,
-                    onChanged: (value) {
+                    onChanged: (final value) {
                       final section = SceneSection(
                         sound: value.sound,
                         text: value.text,

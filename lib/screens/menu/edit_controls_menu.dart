@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:ziggurat/sound.dart';
@@ -56,7 +55,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
           children: [
             TextListTile(
               value: options.title,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.title = value;
                 save();
               },
@@ -67,7 +66,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: options.music,
-              onDone: (value) {
+              onDone: (final value) {
                 options.music = value;
                 save();
               },
@@ -79,7 +78,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             FadeTimeListTile(
               value: options.ambianceFadeTime,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.ambianceFadeTime = value;
                 save();
               },
@@ -88,7 +87,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: options.itemSound,
-              onDone: (value) {
+              onDone: (final value) {
                 options.itemSound = value;
                 save();
               },
@@ -99,7 +98,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             TextListTile(
               value: options.subMenuTitle,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.subMenuTitle = value;
                 save();
               },
@@ -108,7 +107,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             TextListTile(
               value: options.gameControllerButtonPrefix,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.gameControllerButtonPrefix = value;
                 save();
               },
@@ -117,7 +116,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             TextListTile(
               value: options.emptyGameControllerButtonMessage,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.emptyGameControllerButtonMessage = value;
                 save();
               },
@@ -126,7 +125,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             TextListTile(
               value: options.keyboardControlPrefix,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.keyboardControlPrefix = value;
                 save();
               },
@@ -135,7 +134,7 @@ class EditControlsMenuState extends State<EditControlsMenu> {
             ),
             TextListTile(
               value: options.emptyKeyboardControlMessage,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options.emptyKeyboardControlMessage = value;
                 save();
               },

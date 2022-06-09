@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:ziggurat_sounds/ziggurat_sounds.dart';
 
@@ -82,7 +81,7 @@ class EditCustomMessageState extends State<EditCustomMessage> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: sound,
-              onDone: (value) {
+              onDone: (final value) {
                 _customMessage = CustomMessage(
                   sound: value,
                   text: text,

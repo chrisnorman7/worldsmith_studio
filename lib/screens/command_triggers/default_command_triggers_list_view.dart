@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:dart_sdl/dart_sdl.dart';
 import 'package:flutter/material.dart';
 import 'package:ziggurat/ziggurat.dart';
@@ -58,8 +57,8 @@ class _DefaultCommandTriggersListViewState
                       child: FocusText(text: trigger.description),
                       onActivate: () => pushWidget(
                         context: context,
-                        builder: (context) => GetText(
-                          onDone: (value) {
+                        builder: (final context) => GetText(
+                          onDone: (final value) {
                             Navigator.pop(context);
                             alterCommandTrigger(
                               name: trigger.name,
@@ -77,8 +76,9 @@ class _DefaultCommandTriggersListViewState
                     Clickable(
                       onActivate: () => pushWidget(
                         context: context,
-                        builder: (context) => SelectItem<GameControllerButton?>(
-                          onDone: (value) {
+                        builder: (final context) =>
+                            SelectItem<GameControllerButton?>(
+                          onDone: (final value) {
                             Navigator.pop(context);
                             alterCommandTrigger(
                               name: trigger.name,
@@ -88,7 +88,7 @@ class _DefaultCommandTriggersListViewState
                             );
                           },
                           values: const [null, ...GameControllerButton.values],
-                          getItemWidget: (value) => Text(
+                          getItemWidget: (final value) => Text(
                             value == null ? 'Clear' : value.name,
                           ),
                           title: 'Game Controller Button',
@@ -100,10 +100,10 @@ class _DefaultCommandTriggersListViewState
                     Clickable(
                       onActivate: () => pushWidget(
                         context: context,
-                        builder: (context) => EditCommandKeyboardKey(
+                        builder: (final context) => EditCommandKeyboardKey(
                           keyboardKey: trigger.keyboardKey ??
                               const CommandKeyboardKey(ScanCode.space),
-                          onChanged: (value) => alterCommandTrigger(
+                          onChanged: (final value) => alterCommandTrigger(
                             name: trigger.name,
                             description: trigger.description,
                             button: trigger.button,
@@ -132,15 +132,15 @@ class _DefaultCommandTriggersListViewState
 
   /// Alter a default trigger.
   void alterCommandTrigger({
-    required String name,
-    required String description,
-    GameControllerButton? button,
-    CommandKeyboardKey? keyboardKey,
+    required final String name,
+    required final String description,
+    final GameControllerButton? button,
+    final CommandKeyboardKey? keyboardKey,
   }) {
     final defaultCommandTriggers =
         widget.projectContext.world.defaultCommandTriggers;
-    final index =
-        defaultCommandTriggers.indexWhere((element) => element.name == name);
+    final index = defaultCommandTriggers
+        .indexWhere((final element) => element.name == name);
     defaultCommandTriggers.removeAt(index);
     final newTrigger = CommandTrigger(
       name: name,

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -110,7 +109,7 @@ class EditZoneObjectState extends State<EditZoneObject> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.zoneObject.icon,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.zoneObject.icon = value;
                 save();
               },

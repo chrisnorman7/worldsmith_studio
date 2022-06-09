@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dart_sdl/dart_sdl.dart';
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
@@ -20,7 +19,6 @@ class ProjectContext {
     required this.file,
     required this.world,
     required this.game,
-    required this.sdl,
     required this.audioContext,
   });
 
@@ -28,7 +26,6 @@ class ProjectContext {
   ProjectContext.fromFile({
     required this.file,
     required this.game,
-    required this.sdl,
     required this.audioContext,
   }) : world = World.fromFilename(file.path);
 
@@ -43,9 +40,6 @@ class ProjectContext {
 
   /// The game to use for creating stuff.
   final Game game;
-
-  /// The sdl instance to use.
-  final Sdl sdl;
 
   /// The synthizer context to use.
   final Context audioContext;
@@ -139,9 +133,9 @@ class ProjectContext {
       final context = WorldContext(
         game: game,
         world: world,
-        sdl: sdl,
       );
       _worldContext = context;
+      final sdl = game.sdl;
       for (var i = 0; i < sdl.numJoysticks; i++) {
         sdl.openJoystick(i);
       }

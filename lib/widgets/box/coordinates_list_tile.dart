@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:worldsmith/worldsmith.dart';

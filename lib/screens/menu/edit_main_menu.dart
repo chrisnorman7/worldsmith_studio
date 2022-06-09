@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../custom_message.dart';
@@ -82,7 +81,7 @@ class EditMainMenuState extends State<EditMainMenu> {
                 text: options.newGameString,
               ),
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..newGameSound = value.sound
                   ..newGameString = value.text;
@@ -101,7 +100,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               title: 'Play Saved Game Menu Item',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..savedGameSound = value.sound
                   ..savedGameString = value.text;
@@ -117,7 +116,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               title: 'Show Credits Menu Item',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..creditsSound = value.sound
                   ..creditsString = value.text;
@@ -132,7 +131,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               ),
               assetStore: interfaceSoundsAssetStore,
               assetReference: world.menuMoveSound,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..controlsMenuSound = value.sound
                   ..controlsMenuString = value.text;
@@ -148,7 +147,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               ),
               assetStore: interfaceSoundsAssetStore,
               assetReference: world.menuMoveSound,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..soundOptionsSound = value.sound
                   ..soundOptionsString = value.text;
@@ -165,7 +164,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               title: 'Exit Game Menu Item',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..exitSound = value.sound
                   ..exitString = value.text;
@@ -181,7 +180,7 @@ class EditMainMenuState extends State<EditMainMenu> {
               title: 'Game Exiting Message',
               assetReference: world.menuMoveSound,
               assetStore: interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 options
                   ..onExitSound = value.sound
                   ..onExitString = value.text;

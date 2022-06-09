@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -41,7 +40,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
     final leftFrequency = widget.playRumble.leftFrequency;
     final rightFrequency = widget.playRumble.rightFrequency;
     final duration = widget.playRumble.duration;
-    final numberOfJoysticks = widget.projectContext.sdl.numJoysticks;
+    final numberOfJoysticks = widget.projectContext.game.sdl.numJoysticks;
     return CallbackShortcuts(
       bindings: {PlayPauseIntent.hotkey: playRumble},
       child: Cancel(
@@ -118,7 +117,7 @@ class EditPlayRumbleState extends State<EditPlayRumble> {
   /// Play the rumble effect.
   void playRumble() {
     final game = widget.projectContext.game;
-    final sdl = widget.projectContext.sdl;
+    final sdl = widget.projectContext.game.sdl;
     for (var i = 0; i < sdl.numJoysticks; i++) {
       var j = game.joysticks[i];
       if (j == null) {

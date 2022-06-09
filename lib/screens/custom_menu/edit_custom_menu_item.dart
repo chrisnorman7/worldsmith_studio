@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -55,7 +54,7 @@ class EditCustomMenuItemState extends State<EditCustomMenuItem> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   widget.customMenu.items.removeWhere(
-                    (element) => element.id == widget.customMenuItem.id,
+                    (final element) => element.id == widget.customMenuItem.id,
                   );
                   widget.projectContext.save();
                 },
@@ -73,7 +72,7 @@ class EditCustomMenuItemState extends State<EditCustomMenuItem> {
               projectContext: widget.projectContext,
               customMessage: message,
               assetStore: world.interfaceSoundsAssetStore,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.customMenuItem
                   ..sound = value.sound
                   ..label = value.text;
@@ -86,7 +85,7 @@ class EditCustomMenuItemState extends State<EditCustomMenuItem> {
             CallCommandListTile(
               projectContext: widget.projectContext,
               callCommand: widget.customMenuItem.activateCommand,
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.customMenuItem.activateCommand = value;
                 save();
               },

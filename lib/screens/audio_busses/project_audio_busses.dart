@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -48,7 +47,7 @@ class ProjectAudioBussesState extends State<ProjectAudioBusses> {
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditAudioBus(
+                  builder: (final context) => EditAudioBus(
                     projectContext: widget.projectContext,
                     audioBus: bus,
                   ),
@@ -66,7 +65,7 @@ class ProjectAudioBussesState extends State<ProjectAudioBusses> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (context) => EditAudioBus(
+              builder: (final context) => EditAudioBus(
                 projectContext: widget.projectContext,
                 audioBus: bus,
               ),

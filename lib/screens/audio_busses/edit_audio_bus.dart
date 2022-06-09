@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/util.dart';
 import 'package:worldsmith/worldsmith.dart';
@@ -159,7 +158,7 @@ class EditAudioBusState extends State<EditAudioBus> {
               CustomSoundListTile(
                 projectContext: widget.projectContext,
                 value: widget.audioBus.testSound,
-                onChanged: (value) {
+                onChanged: (final value) {
                   widget.audioBus.testSound = value;
                   save();
                 },
@@ -197,8 +196,8 @@ class EditAudioBusState extends State<EditAudioBus> {
               ),
               PushWidgetListTile(
                 title: 'Panning Type',
-                builder: (context) => SelectItem<PanningType>(
-                  onDone: (value) {
+                builder: (final context) => SelectItem<PanningType>(
+                  onDone: (final value) {
                     Navigator.pop(context);
                     widget.audioBus
                       ..panningType = value
@@ -208,7 +207,7 @@ class EditAudioBusState extends State<EditAudioBus> {
                     save();
                   },
                   values: PanningType.values,
-                  getItemWidget: (value) => Text(value.name),
+                  getItemWidget: (final value) => Text(value.name),
                   title: 'Select Panning Type',
                   value: panningType,
                 ),
@@ -217,7 +216,7 @@ class EditAudioBusState extends State<EditAudioBus> {
               if (xTitle != null)
                 NumberListTile(
                   value: widget.audioBus.x,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.audioBus.x = value;
                     save();
                   },
@@ -228,7 +227,7 @@ class EditAudioBusState extends State<EditAudioBus> {
               if (yTitle != null)
                 NumberListTile(
                   value: widget.audioBus.y,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.audioBus.y = value;
                     save();
                   },
@@ -239,7 +238,7 @@ class EditAudioBusState extends State<EditAudioBus> {
               if (zTitle != null)
                 NumberListTile(
                   value: widget.audioBus.z,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.audioBus.z = value;
                     save();
                   },
@@ -249,7 +248,7 @@ class EditAudioBusState extends State<EditAudioBus> {
                 ),
               ReverbListTile(
                 projectContext: widget.projectContext,
-                onDone: (value) {
+                onDone: (final value) {
                   widget.audioBus.reverbId = value?.id;
                   save();
                 },

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -64,7 +63,7 @@ class ProjectMoreMenuState extends State<ProjectMoreMenu> {
         ),
         PushWidgetListTile(
           title: 'Custom Command Triggers',
-          builder: (context) => CustomCommandTriggersListView(
+          builder: (final context) => CustomCommandTriggersListView(
             projectContext: widget.projectContext,
           ),
           subtitle: '${world.customCommandTriggers.length}',

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -100,14 +99,14 @@ class ProjectSoundSettingsState extends State<ProjectSoundSettings> {
         ),
         PushWidgetListTile(
           title: 'Audio Busses',
-          builder: (context) => ProjectAudioBusses(
+          builder: (final context) => ProjectAudioBusses(
             projectContext: widget.projectContext,
           ),
           subtitle: '${world.audioBusses.length}',
         ),
         PushWidgetListTile(
           title: 'Synthizer Settings',
-          builder: (context) => SynthizerSettings(
+          builder: (final context) => SynthizerSettings(
             projectContext: widget.projectContext,
           ),
           onSetState: widget.projectContext.save,

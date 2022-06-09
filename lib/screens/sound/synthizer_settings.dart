@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:dart_synthizer/dart_synthizer.dart';
 import 'package:flutter/material.dart';
 

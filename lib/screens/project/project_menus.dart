@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -78,7 +77,7 @@ class ProjectMenusState extends State<ProjectMenus> {
               widget.projectContext.playActivateSound();
               await pushWidget(
                 context: context,
-                builder: (context) => EditControlsMenu(
+                builder: (final context) => EditControlsMenu(
                   projectContext: widget.projectContext,
                 ),
               );

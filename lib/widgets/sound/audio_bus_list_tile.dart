@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -35,9 +34,9 @@ class AudioBusListTile extends StatelessWidget {
 
   /// Build the widget.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final audioBusses = [null, ...projectContext.world.audioBusses]..sort(
-        (a, b) {
+        (final a, final b) {
           if (a == null) {
             return -1;
           } else if (b == null) {
@@ -52,10 +51,10 @@ class AudioBusListTile extends StatelessWidget {
       subtitle: Text(audioBus?.name ?? 'Interface Sounds'),
       onTap: () => pushWidget(
         context: context,
-        builder: (context) => SelectItem<AudioBus?>(
+        builder: (final context) => SelectItem<AudioBus?>(
           onDone: onChanged,
           values: audioBusses,
-          getItemWidget: (value) => Text(
+          getItemWidget: (final value) => Text(
             value == null ? 'Interface Sounds' : value.name,
           ),
           title: 'Select Audio Bus',

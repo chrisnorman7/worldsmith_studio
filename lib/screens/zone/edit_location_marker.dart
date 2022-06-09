@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -57,7 +56,7 @@ class EditLocationMarkerState extends State<EditLocationMarker> {
           children: [
             TextListTile(
               value: widget.locationMarker.name ?? '',
-              onChanged: (value) {
+              onChanged: (final value) {
                 widget.locationMarker.name = value.isEmpty ? null : value;
                 save();
               },
@@ -67,7 +66,7 @@ class EditLocationMarkerState extends State<EditLocationMarker> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.locationMarker.sound,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.locationMarker.sound = value;
                 save();
               },

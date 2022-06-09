@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -92,11 +91,12 @@ class RunGameState extends State<RunGame> {
   /// Start the game running.
   Future<void> startGame() async {
     final world = widget.projectContext.world;
-    final sdl = widget.projectContext.sdl;
+    final sdl = widget.projectContext.game.sdl;
     BufferCache? bufferCache;
     try {
       final game = Game(
-        world.title,
+        title: world.title,
+        sdl: sdl,
         // ignore: prefer_const_constructors
         triggerMap: TriggerMap([]),
       );
@@ -114,7 +114,6 @@ class RunGameState extends State<RunGame> {
         soundsDirectory: widget.projectContext.directory.path,
       );
       final worldContext = WorldContext(
-        sdl: sdl,
         game: game,
         world: world,
       );

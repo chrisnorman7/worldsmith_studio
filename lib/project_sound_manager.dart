@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:path/path.dart' as path;
 import 'package:ziggurat/sound.dart';
 import 'package:ziggurat/ziggurat.dart';

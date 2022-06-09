@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -70,7 +69,7 @@ class EditNpcState extends State<EditNpc> {
             SoundListTile(
               projectContext: widget.projectContext,
               value: widget.npc.icon,
-              onDone: (value) {
+              onDone: (final value) {
                 widget.npc.icon = value;
                 save();
               },

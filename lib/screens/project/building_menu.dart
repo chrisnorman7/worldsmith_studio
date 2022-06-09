@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import '../../project_context.dart';
@@ -81,7 +80,7 @@ class BuildingMenuState extends State<BuildingMenu> {
         ),
         PushWidgetListTile(
           title: 'Custom Menus',
-          builder: (context) =>
+          builder: (final context) =>
               EditCustomMenus(projectContext: widget.projectContext),
           subtitle: '${world.menus.length}',
         )

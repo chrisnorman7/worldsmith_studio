@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -80,11 +79,11 @@ class EditCustomMenuState extends State<EditCustomMenu> {
           TabbedScaffoldTab(
             title: 'Settings',
             icon: const Icon(Icons.settings),
-            builder: (context) => ListView(
+            builder: (final context) => ListView(
               children: [
                 TextListTile(
                   value: widget.menu.title,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.menu.title = value;
                     save();
                   },
@@ -94,7 +93,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 SoundListTile(
                   projectContext: widget.projectContext,
                   value: widget.menu.music,
-                  onDone: (value) {
+                  onDone: (final value) {
                     widget.menu.music = value;
                     save();
                   },
@@ -106,7 +105,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 ),
                 CheckboxListTile(
                   value: widget.menu.cancellable,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.menu.cancellable = value ?? false;
                     save();
                   },
@@ -115,7 +114,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 ),
                 FadeTimeListTile(
                   value: widget.menu.fadeTime,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.menu.fadeTime = value;
                     save();
                   },
@@ -123,7 +122,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 CallCommandListTile(
                   projectContext: widget.projectContext,
                   callCommand: widget.menu.cancelCommand,
-                  onChanged: (value) {
+                  onChanged: (final value) {
                     widget.menu.cancelCommand = value;
                     save();
                   },
@@ -136,8 +135,8 @@ class EditCustomMenuState extends State<EditCustomMenu> {
           TabbedScaffoldTab(
             title: 'Items',
             icon: const Icon(Icons.notes),
-            builder: (context) => ListView.builder(
-              itemBuilder: (context, index) {
+            builder: (final context) => ListView.builder(
+              itemBuilder: (final context, final index) {
                 final item = items[index];
                 return ListTile(
                   autofocus: index == 0,
@@ -145,7 +144,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                   onTap: () async {
                     await pushWidget(
                       context: context,
-                      builder: (context) => EditCustomMenuItem(
+                      builder: (final context) => EditCustomMenuItem(
                         projectContext: widget.projectContext,
                         customMenu: widget.menu,
                         customMenuItem: item,
@@ -169,7 +168,7 @@ class EditCustomMenuState extends State<EditCustomMenu> {
                 widget.projectContext.save();
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditCustomMenuItem(
+                  builder: (final context) => EditCustomMenuItem(
                     projectContext: widget.projectContext,
                     customMenu: widget.menu,
                     customMenuItem: item,

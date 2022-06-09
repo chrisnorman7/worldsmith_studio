@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 import 'package:worldsmith/worldsmith.dart';
 
@@ -46,7 +45,7 @@ class EditCustomMenusState extends State<EditCustomMenus> {
               onTap: () async {
                 await pushWidget(
                   context: context,
-                  builder: (context) => EditCustomMenu(
+                  builder: (final context) => EditCustomMenu(
                     projectContext: widget.projectContext,
                     menu: menu,
                   ),
@@ -68,7 +67,7 @@ class EditCustomMenusState extends State<EditCustomMenus> {
             widget.projectContext.save();
             await pushWidget(
               context: context,
-              builder: (context) => EditCustomMenu(
+              builder: (final context) => EditCustomMenu(
                 projectContext: widget.projectContext,
                 menu: menu,
               ),

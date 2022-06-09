@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_final_parameters
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         actions: {
           ...WidgetsApp.defaultActions,
           LaunchManualIntent: CallbackAction<LaunchManualIntent>(
-            onInvoke: (intent) => launchManual(),
+            onInvoke: (final intent) => launchManual(),
           )
         },
         shortcuts: {
